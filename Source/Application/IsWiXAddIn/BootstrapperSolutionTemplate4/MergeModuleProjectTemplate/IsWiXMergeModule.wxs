@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\Deploy"?>
+  <Module Id="$wixsafeprojectname$" Language="1033" Version="1.0.0.0">
+    <Package Id="$guid2$" Manufacturer="$globalsafeprojectname$MM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder"/>
+    </Directory>
+    <ComponentGroupRef Id="Custom"/>
+  </Module>
+</Wix>

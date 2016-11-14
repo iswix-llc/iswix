@@ -1,0 +1,7 @@
+﻿Xml Editor Designer:
+Copyright 2013 ISWIX, LLC
+License Agreement: MS-PL
+
+XmlEditorControl 3.2:
+Copyright ©2000-2013 IC#SharpCode
+License Agreement: LGPL

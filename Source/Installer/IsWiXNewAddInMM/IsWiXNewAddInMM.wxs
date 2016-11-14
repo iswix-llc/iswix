@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\Deploy"?>
+  <Module Id="IsWiXNewAddInMM" Language="1033" Version="1.0.0.0">
+    <Package Id="0fbd1dd0-df10-44b8-a513-87a548dc8f43" Manufacturer="IsWiXNewAddInMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Directory Id="owd5B4135BE52966A93255847B9BF21308B" Name="IsWiXNewAddIn">
+          <Component Id="owc2520E328CD78AF7924382746CFB9137A" Guid="ba91f379-0f08-9bc4-335e-b3961a2e136b">
+            <File Id="owf2520E328CD78AF7924382746CFB9137A" Source="$(var.SourceDir)\IsWiXNewAddIn\extension.vsixmanifest" KeyPath="yes">
+              <CopyFile Id="dupe1a" DestinationProperty="EXTENSIONDIR2013" />
+              <CopyFile Id="dupe1b" DestinationProperty="EXTENSIONDIR2015" />
+            </File>
+          </Component>
+          <Component Id="owcCA23CB3538029C34AC5B8E25A586C517" Guid="425a4ff4-b9f0-3cc0-09b5-549dbebc5b2c">
+            <File Id="owfCA23CB3538029C34AC5B8E25A586C517" Source="$(var.SourceDir)\IsWiXNewAddIn\Icon.png" KeyPath="yes" >
+              <CopyFile Id="dupe2a" DestinationProperty="EXTENSIONDIR2013" />
+              <CopyFile Id="dupe2b" DestinationProperty="EXTENSIONDIR2015" />
+            </File>
+          </Component>
+          <Component Id="owc9ACB034825CA352A0F77BCC72713F5FA" Guid="a2dd8ac2-b951-0933-30c3-912a7e478e6e">
+            <File Id="owf9ACB034825CA352A0F77BCC72713F5FA" Source="$(var.SourceDir)\IsWiXNewAddIn\IsWiXNewAddIn.dll" KeyPath="yes">
+              <CopyFile Id="dupe3a" DestinationProperty="EXTENSIONDIR2013" />
+              <CopyFile Id="dupe3b" DestinationProperty="EXTENSIONDIR2015" />
+            </File>
+          </Component>
+          <Component Id="owc222911EE35769C24FC911A3C54323068" Guid="a57f46f6-27a4-db9a-1aea-28ae8633e9a5">
+            <File Id="owf222911EE35769C24FC911A3C54323068" Source="$(var.SourceDir)\IsWiXNewAddIn\IsWiXNewAddIn.pkgdef" KeyPath="yes">
+              <CopyFile Id="dupe4a" DestinationProperty="EXTENSIONDIR2013" />
+              <CopyFile Id="dupe4b" DestinationProperty="EXTENSIONDIR2015" />
+            </File>
+          </Component>
+          <Component Id="owc490F97050FC7A4C10C3F3262528BE597" Guid="0147ec98-643d-4f32-074c-5ea4315aa39b">
+            <File Id="owf490F97050FC7A4C10C3F3262528BE597" Source="$(var.SourceDir)\IsWiXNewAddIn\MS-PL.txt" KeyPath="yes">
+              <CopyFile Id="dupe5a" DestinationProperty="EXTENSIONDIR2013" />
+              <CopyFile Id="dupe5b" DestinationProperty="EXTENSIONDIR2015" />
+            </File>
+          </Component>
+          <Component Id="owcBFEC5C70CB5ABBBF8C9B36545E488F1A" Guid="8a818446-0227-6e32-38ad-5942ec132c38">
+            <File Id="owfBFEC5C70CB5ABBBF8C9B36545E488F1A" Source="$(var.SourceDir)\IsWiXNewAddIn\preview.png" KeyPath="yes">
+              <CopyFile Id="dupe6a" DestinationProperty="EXTENSIONDIR2013" />
+              <CopyFile Id="dupe6b" DestinationProperty="EXTENSIONDIR2015" />
+            </File>
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+    <ComponentGroupRef Id="Custom" />
+    <Property Id="VS2013_EXTENSIONS_DIR" SuppressModularization="yes" />
+    <Property Id="VS2015_EXTENSIONS_DIR" SuppressModularization="yes" />
+    <SetProperty Id="EXTENSIONDIR2013" Value="[VS2013_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2013_EXTENSIONS_DIR</SetProperty>
+    <SetProperty Id="EXTENSIONDIR2015" Value="[VS2015_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2015_EXTENSIONS_DIR</SetProperty>
+  </Module>
+</Wix>

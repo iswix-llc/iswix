@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e">
+    <Package InstallerVersion="301" Compressed="yes" InstallScope="perMachine" />
+    <MediaTemplate EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
+
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="[ProductName] requires .NET Framework 4.0.">Installed OR NETFRAMEWORK40FULL</Condition>
+
+    <DirectoryRef Id="INSTALLLOCATION"/>
+
+    <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
+    <UIRef Id="UI"/>
+
+    <!-- Used by AddInMM  Goes here due to merge constraints -->
+    <PropertyRef Id="VS2010_PROJECTTEMPLATES_DIR"  />
+    <PropertyRef Id="VS2012_PROJECTTEMPLATES_DIR"  />
+    <PropertyRef Id="VS2013_PROJECTTEMPLATES_DIR" />
+    <PropertyRef Id="VS2015_PROJECTTEMPLATES_DIR" />
+    <PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
+    <PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
+
+    
+    <Property Id="WIX3TARGETSFOUND" Secure="yes">
+      <DirectorySearch Id="findWIX3TARGETSDIR" Path="[ProgramFilesFolder]MSBuild\Microsoft\WiX\v3.x" Depth="0">
+        <FileSearch Id="findWIX3TARGETSFILE" Name="wix.targets" />
+      </DirectorySearch>
+    </Property>
+
+    <Property Id="WIX4TARGETSFOUND">
+      <DirectorySearch Id="findWIX4TARGETSDIR" Path="[ProgramFilesFolder]MSBuild\WiX Toolset\v4" Depth="0">
+        <FileSearch Id="findWIX4TARGETSFILE" Name="wix.targets" />
+      </DirectorySearch>
+    </Property>
+
+    <CustomActionRef Id="VS2010Setup" />
+    <CustomActionRef Id="VS2012Setup" />
+    <CustomActionRef Id="VS2013Setup" />
+    <CustomActionRef Id="VS2015Setup" />
+
+  </Product>
+</Wix>

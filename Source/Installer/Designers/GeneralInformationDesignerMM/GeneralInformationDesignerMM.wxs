@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <?define SourceDir="..\..\deploy"?>
+  <Module Id="GeneralInformationDesignerMM" Language="1033" Version="1.0.0.0">
+    <Package Id="7a670b27-2e37-408a-b936-d35b7345ed5a" Manufacturer="GeneralInformationDesignerMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Component Id="owc48E8640E18D343868CA7B814FE2E317A" Guid="031bcce9-3528-a3e7-bea0-cb8583777413">
+          <File Id="owf48E8640E18D343868CA7B814FE2E317A" Source="$(var.SourceDir)\GeneralInformationDesigner.dll" KeyPath="yes">
+          </File>
+        </Component>
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>

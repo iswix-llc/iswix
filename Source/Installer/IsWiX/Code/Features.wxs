@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <MergeRef Id="IsWiXMM" />
+      <Feature Id="IWD" Title="Designers" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+        <Feature Id="IWSFEATURES" Title="Features" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="FeaturesDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_GENERALINFORMATION" Title="General Information" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="GeneralInformationDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_NAMESPACES" Title="Namespaces" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="NamespacesDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_PROPERTIES" Title="Properties" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="PropertiesDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_FILESANDFOLDERS" Title="Files and Folders" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="FilesAndFoldersDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_SERVICES" Title="Services" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="ServicesDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_SHORTCUTS" Title="ShortCuts" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="ShortCutsDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_CUSTOMTABLES" Title="Custom Tables" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="CustomTablesDesignerMM" />
+        </Feature>
+        <Feature Id="IWD_XMLEDITOR" Title="XML Editor" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="XmlEditorDesignerMM" />
+        </Feature>
+      </Feature>
+    </Feature>
+    <Feature Id="ISWIXADDIN" Title="Visual Studio AddIn" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <MergeRef Id="IsWiXAddInMM" />
+      <MergeRef Id="IsWiXNewAddInMM" />
+    </Feature>
+    <Feature Id="ISWIXTEMPLATES" Title="VS Project Templates (WiX v3)" Level="1000" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <Condition Level="1">WIX3TARGETSFOUND</Condition>
+      <MergeRef Id="IsWiXProjectTemplatesMM" />
+    </Feature>
+    <Feature Id="ISWIXTEMPLATES4" Title="VS Project Templates (WiX v4)" Level="1000" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <Condition Level="1">WIX4TARGETSFOUND</Condition>
+      <MergeRef Id="IsWiXProjectTemplates4MM" />
+    </Feature>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="CompanyFolder" Name="ISWIX LLC">
+          <Directory Id="INSTALLLOCATION" Name="IsWiX">
+            <Merge Id="IsWiXMM" SourceFile="$(var.IsWiXMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="IsWiXAddInMM" SourceFile="$(var.IsWiXAddInMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="IsWiXNewAddInMM" SourceFile="$(var.IsWiXNewAddInMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="IsWiXProjectTemplatesMM" SourceFile="$(var.IsWiXProjectTemplatesMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="IsWiXProjectTemplates4MM" SourceFile="$(var.IsWiXProjectTemplates4MM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="FeaturesDesignerMM" SourceFile="$(var.FeaturesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="GeneralInformationDesignerMM" SourceFile="$(var.GeneralInformationDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="CustomTablesDesignerMM" SourceFile="$(var.CustomTablesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="FilesAndFoldersDesignerMM" SourceFile="$(var.FilesAndFoldersDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="NamespacesDesignerMM" SourceFile="$(var.NamespacesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="PropertiesDesignerMM" SourceFile="$(var.PropertiesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="ServicesDesignerMM" SourceFile="$(var.ServicesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="ShortCutsDesignerMM" SourceFile="$(var.ShortCutsDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="XmlEditorDesignerMM" SourceFile="$(var.XmlEditorDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+</Wix>

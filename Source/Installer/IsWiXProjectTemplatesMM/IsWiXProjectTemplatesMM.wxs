@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\Deploy"?>
+  <Module Id="IsWiXProjectTemplatesMM" Language="1033" Version="1.0.0.0">
+    <Package Id="06bfa105-ea14-4327-8a2a-e15885b25861" Manufacturer="IsWiXProjectTemplatesMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Directory Id="owd718CA523CB6406C8B5AB566C10D6C6AD" Name="VisualStudioProjectTemplates">
+          <Component Id="owcE1EB1B77A808A63F7139A1A33E5F1962" Guid="9f3817f3-65bf-ca00-f3e0-3a7b81103e33" Transitive="yes">
+            <File Id="owfE1EB1B77A808A63F7139A1A33E5F1962" Source="$(var.SourceDir)\IsWiXBootstrapperSolutionTemplate.zip" KeyPath="yes">
+              <CopyFile Id="dupe2012a" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2013a" DestinationProperty="VS2013_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2015a" DestinationProperty="VS2015_PROJECTTEMPLATES_DIR" />
+            </File>
+          </Component>
+          <Component Id="owcF3FE0A06ED052984A1ACC0D34D24B6D3" Guid="845613c7-d5c9-a2b2-04d5-cd4c7120e497" Transitive="yes">
+            <File Id="owfF3FE0A06ED052984A1ACC0D34D24B6D3" Source="$(var.SourceDir)\IsWiXMergeModuleProjectTemplate.zip" KeyPath="yes">
+              <CopyFile Id="dupe2012b" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2013b" DestinationProperty="VS2013_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2015b" DestinationProperty="VS2015_PROJECTTEMPLATES_DIR" />
+            </File>
+          </Component>
+          <Component Id="owc8AEE594609B56AF6A88F6DF7D758AEBB" Guid="860ff661-9a4d-8e3f-bdcb-90ef12a887d9" Transitive="yes">
+            <File Id="owf8AEE594609B56AF6A88F6DF7D758AEBB" Source="$(var.SourceDir)\IsWiXMSISolutionTemplate.zip" KeyPath="yes">
+              <CopyFile Id="dupe2010c" DestinationProperty="VS2010_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2012c" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2013c" DestinationProperty="VS2013_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupe2015c" DestinationProperty="VS2015_PROJECTTEMPLATES_DIR" />
+            </File>
+          </Component>
+          <Component Id="owc21E0468C397E76CB569F0E047501DABD" Guid="5f66f2c7-5061-0b5e-8849-db53c978a5e4" Transitive="yes">
+            <File Id="owf21E0468C397E76CB569F0E047501DABD" Source="$(var.SourceDir)\IsWiXSetupProjectTemplate.zip" KeyPath="yes">
+              <CopyFile Id="dupe2010d" DestinationProperty="VS2010_PROJECTTEMPLATES_DIR" />
+            </File>
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+    <Property Id="VS2010_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
+    <Property Id="VS2012_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
+    <Property Id="VS2013_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
+    <Property Id="VS2015_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
+    <ComponentGroupRef Id="Custom" />
+  </Module>
+</Wix>

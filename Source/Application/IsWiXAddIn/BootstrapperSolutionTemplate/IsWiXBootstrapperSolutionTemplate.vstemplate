@@ -1,0 +1,26 @@
+<VSTemplate Version="2.0.0" Type="ProjectGroup"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>IsWiX Bootstrapper Solution (v3)</Name>
+    <Description>A multiproject (.EXE/.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based EXE</Description>
+    <Icon>IsWiX.ico</Icon>
+    <ProjectType>WiX</ProjectType>
+    <DefaultName>ProductName</DefaultName>
+    <SortOrder>4</SortOrder>
+    <BuildOnLoad></BuildOnLoad>
+    <CreateNewFolder>false</CreateNewFolder>
+  </TemplateData>
+  <TemplateContent></TemplateContent>
+  <WizardExtension>
+    <Assembly>GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
+    <FullClassName>GlobalParams.WizardMPT</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <Settings>
+      <MappedProjectTemplate name="$projectname$MM" path="$projectname$MM" template="MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+      <MappedProjectTemplate name="$projectname$Setup" path="$projectname$Setup" template="SetupProjectTemplate\IsWixProject.vstemplate" />
+      <MappedProjectTemplate name="$projectname$Bootstrapper" path="$projectname$Bootstrapper" template="BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
+    </Settings>
+  </WizardData>
+
+</VSTemplate>

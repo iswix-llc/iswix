@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSetNamespaces" targetNamespace="http://tempuri.org/DataSetNamespaces.xsd" xmlns:mstns="http://tempuri.org/DataSetNamespaces.xsd" xmlns="http://tempuri.org/DataSetNamespaces.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSetNamespaces" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="DataSetNamespaces" msprop:Generator_DataSetName="DataSetNamespaces" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTableNamespaces" msprop:Generator_UserTableName="DataTableNamespaces" msprop:Generator_RowDeletedName="DataTableNamespacesRowDeleted" msprop:Generator_RowChangedName="DataTableNamespacesRowChanged" msprop:Generator_RowClassName="DataTableNamespacesRow" msprop:Generator_RowChangingName="DataTableNamespacesRowChanging" msprop:Generator_RowEvArgName="DataTableNamespacesRowChangeEvent" msprop:Generator_RowEvHandlerName="DataTableNamespacesRowChangeEventHandler" msprop:Generator_TableClassName="DataTableNamespacesDataTable" msprop:Generator_TableVarName="tableDataTableNamespaces" msprop:Generator_RowDeletingName="DataTableNamespacesRowDeleting" msprop:Generator_TablePropName="DataTableNamespaces">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="xmlns" msprop:Generator_UserColumnName="xmlns" msprop:Generator_ColumnVarNameInTable="columnxmlns" msprop:Generator_ColumnPropNameInRow="xmlns" msprop:Generator_ColumnPropNameInTable="xmlnsColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="uri" msprop:Generator_UserColumnName="uri" msprop:Generator_ColumnVarNameInTable="columnuri" msprop:Generator_ColumnPropNameInRow="uri" msprop:Generator_ColumnPropNameInTable="uriColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="selected" msprop:Generator_UserColumnName="selected" msprop:Generator_ColumnPropNameInRow="selected" msprop:Generator_ColumnVarNameInTable="columnselected" msprop:Generator_ColumnPropNameInTable="selectedColumn" type="xs:boolean" default="false" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

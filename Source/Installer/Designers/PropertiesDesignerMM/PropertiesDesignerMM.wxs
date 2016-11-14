@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <?define SourceDir="..\..\deploy"?>
+  <Module Id="PropertiesDesignerMM" Language="1033" Version="1.0.0.0">
+    <Package Id="b08f4fb5-5f7e-4ade-938e-32a5773b1625" Manufacturer="PropertiesDesignerMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Component Id="owcFD8BDBDCD23CAFAD1BE78CCDFE066536" Guid="7f0c3f46-8268-8ed7-9143-259214b2bf1c">
+          <File Id="owfFD8BDBDCD23CAFAD1BE78CCDFE066536" Source="$(var.SourceDir)\PropertiesDesigner.dll" KeyPath="yes">
+          </File>
+        </Component>
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>

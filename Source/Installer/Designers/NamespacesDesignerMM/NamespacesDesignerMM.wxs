@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <?define SourceDir="..\..\deploy"?>
+  <Module Id="NamespacesDesignerMM" Language="1033" Version="1.0.0.0">
+    <Package Id="972866e4-f77c-4eb6-857a-5dd329a8541d" Manufacturer="NamespacesDesignerMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Component Id="owc0DDB8C9C3ABC5B9FBBF91809955B48DC" Guid="a8eb84db-cd7a-092d-1d43-46c24be8f910">
+          <File Id="owf0DDB8C9C3ABC5B9FBBF91809955B48DC" Source="$(var.SourceDir)\NamespacesDesigner.dll" KeyPath="yes">
+          </File>
+        </Component>
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>
