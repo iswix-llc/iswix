@@ -31,6 +31,7 @@
             <File Id="owf80763B441A25CF22C569C01494AEE847" Source="$(var.SourceDir)\Schemas\complus.xsd" />
             <File Id="owf5A560AB272D2E105EA8974592FBE1BB3" Source="$(var.SourceDir)\Schemas\Dependency.xsd" />
             <File Id="owfA85FBD92B0B52CFB638696E7B4945064" Source="$(var.SourceDir)\Schemas\difxapp.xsd" />
+            <File Id="owf54AC52DE8226F52D5D4CC4FDE7AE842A" Source="$(var.SourceDir)\Schemas\fgappx.xsd" />
             <File Id="owf1DC7A836EE9788AF7814C377444E70B7" Source="$(var.SourceDir)\Schemas\firewall.xsd" />
             <File Id="owf234415BB8A6767EE94672DCEEF707B49" Source="$(var.SourceDir)\Schemas\gaming.xsd" />
             <File Id="owf4805C815DD86DD358621EF0AAB60BBD2" Source="$(var.SourceDir)\Schemas\iis.xsd" />

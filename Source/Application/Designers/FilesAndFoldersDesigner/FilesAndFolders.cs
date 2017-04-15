@@ -37,7 +37,9 @@ namespace WixShield.Designers.FilesAndFolders
         private const bool DoNotProcessPath = false;
         private const bool ProcessPath = true;
         private XNamespace WixNamespace;
-        
+        private bool Merge64;
+        private bool SkipSort;
+
         //private TreeNode OldSelectNode;
         private string OldSelectedNodeText;
         private string OldSelectedNodeTagText;
@@ -151,7 +153,9 @@ namespace WixShield.Designers.FilesAndFolders
             ns = _mgr.DocumentManager.Document.GetWiXNameSpace();
             WixNamespace = ns;
 
-            if(String.IsNullOrEmpty(_mgr.DocumentManager.DocumentPath))
+            Merge64 = Is64BitMergeModule();
+
+            if (String.IsNullOrEmpty(_mgr.DocumentManager.DocumentPath))
             {
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
@@ -289,26 +293,29 @@ namespace WixShield.Designers.FilesAndFolders
 
         public void SortData()
         {
-            var tempDocument = XDocument.Parse(_mgr.DocumentManager.Document.ToString());
-            var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
-            var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
-                                     orderby item.Attribute("Id").Value ascending
-                                     select item);
-            foreach (var directory in tempDirectoryList)
+            if (!SkipSort)
             {
-                if (IsASpecialDirectoryToIgnore(directory))
+                var tempDocument = XDocument.Parse(_mgr.DocumentManager.Document.ToString());
+                var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
+                var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
+                                         orderby item.Attribute("Id").Value ascending
+                                         select item);
+                foreach (var directory in tempDirectoryList)
                 {
-                    // ignore
+                    if (IsASpecialDirectoryToIgnore(directory))
+                    {
+                        // ignore
+                    }
+                    else
+                    {
+                        SortDirectoriesAndChildren(directory);
+                    }
                 }
-                else
-                {
-                    SortDirectoriesAndChildren(directory);
-                }
+                // put order by list into original document
+                var startingElement = FindDirectoryElement("SourceDir", "TARGETDIR");
+                startingElement.Elements().Remove();
+                startingElement.Add(tempDirectoryList);
             }
-            // put order by list into original document
-            var startingElement = FindDirectoryElement("SourceDir", "TARGETDIR");
-            startingElement.Elements().Remove();
-            startingElement.Add(tempDirectoryList);
         }
 
         private void SortDirectoriesAndChildren(XElement originalStartingDirectory)
@@ -1022,6 +1029,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private void lvDestination_DragDrop(object sender, DragEventArgs e)
         {
+
             if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
                 var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
@@ -1055,6 +1063,7 @@ namespace WixShield.Designers.FilesAndFolders
                     CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
                 }
             }
+
         }
 
         private void AddAllDirectoriesToDestination(TreeNode destinationNode, TreeNode sourceFolder)
@@ -1370,7 +1379,7 @@ namespace WixShield.Designers.FilesAndFolders
             var component = new XElement(WixNamespace + "Component", new XAttribute("Id", "owc" + dirHashResult),
                                          new XAttribute("Guid", componentGuid));
 
-            if (Is64BitMergeModule())
+            if (Merge64)
             {
                 component.Add(new XAttribute("Win64", "yes"));
             }
@@ -1406,7 +1415,7 @@ namespace WixShield.Designers.FilesAndFolders
             var component = new XElement(WixNamespace + "Component", new XAttribute("Id", "owc" + GetMd5Hash(newPath)),
                                          new XAttribute("Guid", Guid.NewGuid()));
 
-            if(Is64BitMergeModule())
+            if(Merge64)
             {
                 component.Add(new XAttribute("Win64", "yes"));
             }
@@ -1752,7 +1761,11 @@ namespace WixShield.Designers.FilesAndFolders
         private void tvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
         {
             DragSourceName = "tvSourceFiles";
+            SkipSort = true;
             tvSourceFiles.DoDragDrop(e.Item, DragDropEffects.Copy);
+            SkipSort = false;
+            SortData();
+            LoadDocument();
         }
 
         private void tvDestination_MouseUp(object sender, MouseEventArgs e)

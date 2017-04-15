@@ -136,7 +136,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
+signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
 </Project>

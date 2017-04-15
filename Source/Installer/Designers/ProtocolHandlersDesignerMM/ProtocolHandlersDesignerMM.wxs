@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\..\Deploy"?>
+  <Module Id="ProtocolHandlersDesignerMM" Language="1033" Version="1.0.0.0">
+    <Package Id="f42bd0d2-d9b3-461d-891f-ac2f50b8d533" Manufacturer="ProtocolHandlersDesignerMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Component Id="owc671C9ACD9390E0C001082C51187ED731" Guid="4b256ff3-df55-d842-3529-401076a32666">
+          <File Id="owf671C9ACD9390E0C001082C51187ED731" Source="$(var.SourceDir)\ProtocolHandlersDesigner.dll" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>

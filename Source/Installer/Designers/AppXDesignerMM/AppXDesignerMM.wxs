@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\..\Deploy"?>
+  <Module Id="AppXDesignerMM" Language="1033" Version="1.0.0.0">
+    <Package Id="3ced5ce9-cb0d-474a-b830-8dfaa0f86911" Manufacturer="AppXDesignerMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Component Id="owc5CAF0C0E04B4BFC3BC18A9CA96F5AC86" Guid="18c6264e-388b-d707-d778-9f6a71bf30b2">
+          <File Id="owf5CAF0C0E04B4BFC3BC18A9CA96F5AC86" Source="$(var.SourceDir)\AppXDesigner.dll" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>

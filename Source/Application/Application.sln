@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designers", "Designers", "{94BCBA4B-1D51-406B-BA90-63E42F7629A2}"
 EndProject
@@ -27,6 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiX", "IsWiX\IsWiX.csproj
 		{C7D00D62-5ABA-4E1E-BC18-44E40BF07407} = {C7D00D62-5ABA-4E1E-BC18-44E40BF07407}
 		{9AD79B6E-B90B-435B-A7DF-1B01C4D563DF} = {9AD79B6E-B90B-435B-A7DF-1B01C4D563DF}
 		{47390392-42C5-4EE6-885B-98C2E70DECD1} = {47390392-42C5-4EE6-885B-98C2E70DECD1}
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36} = {7C470E97-D17B-41A2-B1E2-9EC665300E36}
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974} = {461DDAB2-0B76-460D-9F3E-041CB88DF974}
 		{49ADFDB8-D7A2-40D7-8A22-DA540F2E8237} = {49ADFDB8-D7A2-40D7-8A22-DA540F2E8237}
 		{416B01C8-6E99-40A2-81D6-2F67B259C19E} = {416B01C8-6E99-40A2-81D6-2F67B259C19E}
@@ -83,6 +84,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeaturesDesigner", "Designers\FeaturesDesigner\FeaturesDesigner.csproj", "{9B75CED2-3FFA-4E40-9B7E-B8EB364D7008}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXNewAddIn", "IsWiXNewAddIn\IsWiXNewAddIn.csproj", "{47390392-42C5-4EE6-885B-98C2E70DECD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppXDesigner", "Designers\AppXDesigner\AppXDesigner.csproj", "{7C470E97-D17B-41A2-B1E2-9EC665300E36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -204,6 +207,14 @@ Global
 		{47390392-42C5-4EE6-885B-98C2E70DECD1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47390392-42C5-4EE6-885B-98C2E70DECD1}.Release|x86.ActiveCfg = Release|Any CPU
 		{47390392-42C5-4EE6-885B-98C2E70DECD1}.Release|x86.Build.0 = Release|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Debug|x86.Build.0 = Debug|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|x86.ActiveCfg = Release|Any CPU
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,9 +230,10 @@ Global
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974} = {27EDD51D-A5F3-430F-80B1-49B13F450C89}
 		{416B01C8-6E99-40A2-81D6-2F67B259C19E} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
 		{9B75CED2-3FFA-4E40-9B7E-B8EB364D7008} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
+		{7C470E97-D17B-41A2-B1E2-9EC665300E36} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://iswix.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -277,5 +289,9 @@ Global
 		SccProjectUniqueName14 = IsWiXNewAddIn\\IsWiXNewAddIn.csproj
 		SccProjectName14 = IsWiXNewAddIn
 		SccLocalPath14 = IsWiXNewAddIn
+		SccProjectUniqueName15 = Designers\\AppXDesigner\\AppXDesigner.csproj
+		SccProjectTopLevelParentUniqueName15 = Application.sln
+		SccProjectName15 = Designers/AppXDesigner
+		SccLocalPath15 = Designers\\AppXDesigner
 	EndGlobalSection
 EndGlobal

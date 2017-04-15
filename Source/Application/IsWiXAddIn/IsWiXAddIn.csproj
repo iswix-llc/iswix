@@ -146,7 +146,9 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /iery "$(ProjectDir)..\..\..\ExternalAssemblies\globalparams.dll" "."</PreBuildEvent>
-    <PostBuildEvent>CD "$(ProjectDir)MergeModuleProjectTemplate"
+    <PostBuildEvent>signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
+signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)
+CD "$(ProjectDir)MergeModuleProjectTemplate"
 "$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(TargetDir)IsWiXMergeModuleProjectTemplate.zip" *
 
 CD "$(ProjectDir)MergeModuleProjectTemplate4"

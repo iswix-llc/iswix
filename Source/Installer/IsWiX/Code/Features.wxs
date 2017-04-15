@@ -7,6 +7,9 @@
         <Feature Id="IWSFEATURES" Title="Features" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
           <MergeRef Id="FeaturesDesignerMM" />
         </Feature>
+        <Feature Id="IWD_APPX" Title="FireGiant WiX AppX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+          <MergeRef Id="AppXDesignerMM" />
+        </Feature>
         <Feature Id="IWD_GENERALINFORMATION" Title="General Information" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
           <MergeRef Id="GeneralInformationDesignerMM" />
         </Feature>
@@ -54,6 +57,7 @@
             <Merge Id="IsWiXNewAddInMM" SourceFile="$(var.IsWiXNewAddInMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="IsWiXProjectTemplatesMM" SourceFile="$(var.IsWiXProjectTemplatesMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="IsWiXProjectTemplates4MM" SourceFile="$(var.IsWiXProjectTemplates4MM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="AppXDesignerMM" SourceFile="$(var.AppXDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="FeaturesDesignerMM" SourceFile="$(var.FeaturesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="GeneralInformationDesignerMM" SourceFile="$(var.GeneralInformationDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="CustomTablesDesignerMM" SourceFile="$(var.CustomTablesDesignerMM.TargetPath)" DiskId="1" Language="1033" />

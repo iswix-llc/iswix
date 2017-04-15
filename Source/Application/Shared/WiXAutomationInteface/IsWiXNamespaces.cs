@@ -72,6 +72,13 @@ namespace IsWiXAutomationInterface
                         {
                             XDocument doc = XDocument.Load(file.FullName);
                             string targetNameSpace = doc.Root.Attribute("targetNamespace").Value;
+
+                            // Expedient hack to handle this XSD not following the pattern set by the others
+                            if (prefix.Equals("fgwixappx"))
+                            {
+                                prefix = "fga";
+                            }
+
                             _extensions.Add(prefix, targetNameSpace);
                         }
                     }
@@ -79,6 +86,7 @@ namespace IsWiXAutomationInterface
                 catch (Exception)
                 {
                 }
+
 
                 return _extensions;
             }

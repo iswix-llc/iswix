@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) FireGiant.  All Rights Reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:xse="http://schemas.microsoft.com/wix/2005/XmlSchemaExtension"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+    targetNamespace="http://www.firegiant.com/schemas/v3/wxs/fgappx.xsd"
+              xmlns="http://www.firegiant.com/schemas/v3/wxs/fgappx.xsd">
+  <xs:annotation>
+    <xs:documentation>
+      The schema for the FireGiant WiX Expansion Pack Appx Toolset Extension.
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:import namespace="http://schemas.microsoft.com/wix/2006/wi" />
+
+  <xs:element name="Appx">
+    <xs:annotation>
+      <xs:documentation>
+        Metadata required to create an AppX package.
+      </xs:documentation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Id" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>Identity of the AppX package.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Publisher" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>Publisher of the AppX package. Must be in the form of a certificate name, e.g. CN=FireGiant.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Target" type="TargetTypeUnion" use="required">
+        <xs:annotation>
+          <xs:documentation>Target device family for the AppX package.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="MainPackage" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The AppX package name (aka: Appx/@Id) of the parent package. Use this only when this package is to be referenced by a sparse bundle.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Description" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Overrides the description provided by the 'ARPCOMMENTS' Property. It is recommended to use the 'ARPCOMMENTS' Property instead of using this attribute.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="DisplayName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Overrides the display name provided by the Product/@Name. It is not recommended to use this attribute.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Manufacturer" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Overrides the manufacturer provided by the Product/@Manufacturer. It is not recommended to use this attribute.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="LogoFile" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Overrides the package icon provided by the 'ARPPRODUCTICON' with a path to a image file. It is recommended to use the 'ARPPRODUCTICON' Property instead of using this attribute.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Version" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Overrides the version provided by the Product/@Version. It is not recommended to use this attribute.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Dependency">
+    <xs:annotation>
+      <xs:documentation>
+        Metadata required to add a dependency on an AppX package.
+      </xs:documentation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Id" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>Identity of the AppX package to depend upon.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Publisher" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>Publisher of the AppX package to depend upon.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Version" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>Version of the AppX package to depend upon.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+    <xs:attribute name="ApplicationId">
+    <xs:annotation>
+      <xs:documentation>Allows you to specify the AppX Application identitiy for an executable.</xs:documentation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:attribute>
+
+  <xs:simpleType name="PreprocessorVariables">
+    <xs:annotation>
+      <xs:documentation>A type that represents that 1 or more preprocessor variables (as they appear in sources on disk, before preprocessor has run).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\$\(\w+\.(\w|[.])+\))+" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TargetTypeUnion">
+    <xs:annotation>
+      <xs:documentation>Values of this type will either be "desktop" or "server".</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="TargetType PreprocessorVariables"/>
+  </xs:simpleType>
+  <xs:simpleType name="TargetType">
+    <xs:annotation>
+      <xs:documentation>Values of this type will either be "desktop" or "server".</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="desktop" />
+      <xs:enumeration value="server" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="YesNoTypeUnion">
+    <xs:annotation>
+      <xs:documentation>Values of this type will either be "yes" or "no".</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="YesNoType PreprocessorVariables"/>
+  </xs:simpleType>
+  <xs:simpleType name="YesNoType">
+    <xs:annotation>
+      <xs:documentation>Values of this type will either be "yes" or "no".</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="no" />
+      <xs:enumeration value="yes" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
