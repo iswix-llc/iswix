@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+    <Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
       <MergeRef Id="IsWiXMM" />
       <Feature Id="IWD" Title="Designers" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
         <Feature Id="IWSFEATURES" Title="Features" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
@@ -35,19 +35,14 @@
           <MergeRef Id="XmlEditorDesignerMM" />
         </Feature>
       </Feature>
+      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2010 - 2017 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+        <MergeRef Id="IsWiXAddInMM" />
+        <MergeRef Id="IsWiXNewAddInMM" />
+        <MergeRef Id="IsWiXProjectTemplatesMM" />
+        <MergeRef Id="IsWiXProjectTemplates4MM" />
+      </Feature>
     </Feature>
-    <Feature Id="ISWIXADDIN" Title="Visual Studio AddIn" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-      <MergeRef Id="IsWiXAddInMM" />
-      <MergeRef Id="IsWiXNewAddInMM" />
-    </Feature>
-    <Feature Id="ISWIXTEMPLATES" Title="VS Project Templates (WiX v3)" Level="1000" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-      <Condition Level="1">WIX3TARGETSFOUND</Condition>
-      <MergeRef Id="IsWiXProjectTemplatesMM" />
-    </Feature>
-    <Feature Id="ISWIXTEMPLATES4" Title="VS Project Templates (WiX v4)" Level="1000" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-      <Condition Level="1">WIX4TARGETSFOUND</Condition>
-      <MergeRef Id="IsWiXProjectTemplates4MM" />
-    </Feature>
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="CompanyFolder" Name="ISWIX LLC">

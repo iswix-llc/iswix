@@ -9,6 +9,7 @@
       <ProgressText Action="VS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
       <ProgressText Action="VS2013Setup" Template="[1]">Updating Visual Studio 2013 registration</ProgressText>
       <ProgressText Action="VS2015Setup" Template="[1]">Updating Visual Studio 2015 registration</ProgressText>
+      <ProgressText Action="VS2017Setup" Template="[1]">Updating Visual Studio 2017 registration</ProgressText>
 
     </UI>
    </Fragment>

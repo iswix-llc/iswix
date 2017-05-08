@@ -1,6 +1,6 @@
 <VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name _locID="TSDATA_DUT_Name">IsWiX Setup Project (v4)</Name>
+    <Name _locID="TSDATA_DUT_Name">IsWiX Setup Project for WiX v4</Name>
     <Description _locID="TSDATA_DUT_Description">A project for creating an IsWiX / Windows Installer XML v4 based MSI file</Description>
     <Icon>Icon.ico</Icon>
     <ProjectType>WiX</ProjectType>

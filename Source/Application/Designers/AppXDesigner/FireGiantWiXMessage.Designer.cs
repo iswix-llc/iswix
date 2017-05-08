@@ -84,9 +84,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(380, 13);
+            this.label1.Size = new System.Drawing.Size(362, 13);
             this.label1.TabIndex = 4;
-            this.label1.Text = "This designer requires FireGiant WiX Extension Pack 3.10.300.13704 or newer.";
+            this.label1.Text = "This designer requires FireGiant WiX Extension Pack 3.10.3.4103 or newer.";
             // 
             // linkLabelRequirements
             // 

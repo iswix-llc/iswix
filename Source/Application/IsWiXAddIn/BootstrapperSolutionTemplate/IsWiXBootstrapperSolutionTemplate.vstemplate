@@ -1,7 +1,7 @@
 <VSTemplate Version="2.0.0" Type="ProjectGroup"
     xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>IsWiX Bootstrapper Solution (v3)</Name>
+    <Name>IsWiX Bootstrapper Solution for WiX v3</Name>
     <Description>A multiproject (.EXE/.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based EXE</Description>
     <Icon>IsWiX.ico</Icon>
     <ProjectType>WiX</ProjectType>

@@ -18,28 +18,15 @@
     <!-- Used by AddInMM  Goes here due to merge constraints -->
     <PropertyRef Id="VS2010_PROJECTTEMPLATES_DIR"  />
     <PropertyRef Id="VS2012_PROJECTTEMPLATES_DIR"  />
-    <PropertyRef Id="VS2013_PROJECTTEMPLATES_DIR" />
-    <PropertyRef Id="VS2015_PROJECTTEMPLATES_DIR" />
     <PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
     <PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
-
+    <PropertyRef Id="VS2017_EXTENSIONS_DIR"/>
     
-    <Property Id="WIX3TARGETSFOUND" Secure="yes">
-      <DirectorySearch Id="findWIX3TARGETSDIR" Path="[ProgramFilesFolder]MSBuild\Microsoft\WiX\v3.x" Depth="0">
-        <FileSearch Id="findWIX3TARGETSFILE" Name="wix.targets" />
-      </DirectorySearch>
-    </Property>
-
-    <Property Id="WIX4TARGETSFOUND">
-      <DirectorySearch Id="findWIX4TARGETSDIR" Path="[ProgramFilesFolder]MSBuild\WiX Toolset\v4" Depth="0">
-        <FileSearch Id="findWIX4TARGETSFILE" Name="wix.targets" />
-      </DirectorySearch>
-    </Property>
-
     <CustomActionRef Id="VS2010Setup" />
     <CustomActionRef Id="VS2012Setup" />
     <CustomActionRef Id="VS2013Setup" />
     <CustomActionRef Id="VS2015Setup" />
+    <CustomActionRef Id="VS2017Setup" />
 
   </Product>
 </Wix>

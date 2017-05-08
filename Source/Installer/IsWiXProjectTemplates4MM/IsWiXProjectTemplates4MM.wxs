@@ -10,29 +10,24 @@
         <Directory Id="owd718CA523CB6406C8B5AB566C10D6C6AD" Name="VisualStudioProjectTemplates">
           <Component Id="owc61933D605ABDBCBA7AC403CCFFFAEB5F" Guid="ab98656a-fc0f-5269-e2df-5f3d4c0bcdfd" Transitive="yes">
             <File Id="owf61933D605ABDBCBA7AC403CCFFFAEB5F" Source="$(var.SourceDir)\IsWiXBootstrapperSolutionTemplate4.zip" KeyPath="yes">
-              <CopyFile Id="dupe2012a" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2013a" DestinationProperty="VS2013_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2015a" DestinationProperty="VS2015_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupeboots2012" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
             </File>
           </Component>
           <Component Id="owcB4782C5E7C1D6131D5D9FDFC2AEAF91A" Guid="9d03c207-fa34-cc6b-d065-a9fcb86ef569" Transitive="yes">
             <File Id="owfB4782C5E7C1D6131D5D9FDFC2AEAF91A" Source="$(var.SourceDir)\IsWiXMergeModuleProjectTemplate4.zip" KeyPath="yes">
-              <CopyFile Id="dupe2012b" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2013b" DestinationProperty="VS2013_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2015b" DestinationProperty="VS2015_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupemm2010" DestinationProperty="VS2010_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupemm2012" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
             </File>
           </Component>
           <Component Id="owc9A104BA209C7D1AB99C1FE16516B5E6B" Guid="c731a8f8-69db-b3d1-070a-b21ff93e33a6" Transitive="yes">
             <File Id="owf9A104BA209C7D1AB99C1FE16516B5E6B" Source="$(var.SourceDir)\IsWiXMSISolutionTemplate4.zip" KeyPath="yes">
-              <CopyFile Id="dupe2010c" DestinationProperty="VS2010_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2012c" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2013c" DestinationProperty="VS2013_PROJECTTEMPLATES_DIR" />
-              <CopyFile Id="dupe2015c" DestinationProperty="VS2015_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupemsisln2012" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
             </File>
           </Component>
           <Component Id="owc3B371779267D23EFBB36153911066C8C" Guid="c450e8d1-2256-e487-3e44-2f90eeb2dbcd" Transitive="yes">
             <File Id="owf3B371779267D23EFBB36153911066C8C" Source="$(var.SourceDir)\IsWiXSetupProjectTemplate4.zip" KeyPath="yes">
-              <CopyFile Id="dupe2010d" DestinationProperty="VS2010_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupesetup2010" DestinationProperty="VS2010_PROJECTTEMPLATES_DIR" />
+              <CopyFile Id="dupesetup2012" DestinationProperty="VS2012_PROJECTTEMPLATES_DIR" />
             </File>
           </Component>
         </Directory>
@@ -40,8 +35,6 @@
     </Directory>
     <Property Id="VS2010_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
     <Property Id="VS2012_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
-    <Property Id="VS2013_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
-    <Property Id="VS2015_PROJECTTEMPLATES_DIR" SuppressModularization="yes" />
     <ComponentGroupRef Id="Custom" />
   </Module>
 </Wix>

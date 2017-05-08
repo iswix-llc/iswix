@@ -84,6 +84,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeaturesDesigner", "Designers\FeaturesDesigner\FeaturesDesigner.csproj", "{9B75CED2-3FFA-4E40-9B7E-B8EB364D7008}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXNewAddIn", "IsWiXNewAddIn\IsWiXNewAddIn.csproj", "{47390392-42C5-4EE6-885B-98C2E70DECD1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7D00D62-5ABA-4E1E-BC18-44E40BF07407} = {C7D00D62-5ABA-4E1E-BC18-44E40BF07407}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppXDesigner", "Designers\AppXDesigner\AppXDesigner.csproj", "{7C470E97-D17B-41A2-B1E2-9EC665300E36}"
 EndProject
