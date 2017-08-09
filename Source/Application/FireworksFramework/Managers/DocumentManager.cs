@@ -196,7 +196,7 @@ namespace FireworksFramework.Managers
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+                MessageBox.Show($"An error occurred loading '{filePath}'. Please make sure it's a valid XML file.");
                 ClearDocument();
             }
         }

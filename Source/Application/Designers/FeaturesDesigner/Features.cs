@@ -168,6 +168,7 @@ namespace FeaturesDesigner
             {
                 IsWiXFeature iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
                 feature.Read(iswixFeature);
+
                 UpdatePropertyGrid();
                 UpdateMergeModules();
 
@@ -308,8 +309,16 @@ namespace FeaturesDesigner
             IsWiXFeature feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
             feature.Delete();
             treeViewFeatures.SelectedNode.Remove();
-            ClearPropertyGrid();
-            UpdateMergeModules();
+
+            if (treeViewFeatures.Nodes.Count > 0)
+            {
+                _refresh = true;
+                treeViewFeatures.Select();
+                treeViewFeatures.SelectedNode = treeViewFeatures.Nodes[0];
+                treeViewFeatures.ExpandAll();
+
+            }
+
         }
 
         private void toolStripMenuItemMoveUp_Click(object sender, EventArgs e)
@@ -386,5 +395,6 @@ namespace FeaturesDesigner
                 toolStripMenuItemMoveDown.Enabled = false;
             }
         }
+
     }
 }
