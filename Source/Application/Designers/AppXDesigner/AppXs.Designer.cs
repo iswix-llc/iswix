@@ -64,11 +64,11 @@
             this.linkLabelRequirements.AutoSize = true;
             this.linkLabelRequirements.Location = new System.Drawing.Point(3, 9);
             this.linkLabelRequirements.Name = "linkLabelRequirements";
-            this.linkLabelRequirements.Size = new System.Drawing.Size(563, 13);
+            this.linkLabelRequirements.Size = new System.Drawing.Size(591, 13);
             this.linkLabelRequirements.TabIndex = 0;
             this.linkLabelRequirements.TabStop = true;
-            this.linkLabelRequirements.Text = "This designer requires Fire Giant WiX Expansion PackWiX3.10.300.13704  (or newer)" +
-    ".  Click here for more information.";
+            this.linkLabelRequirements.Text = "The AppX designer requires Fire Giant WiX Expansion PackWiX3.10.300.13704  (or ne" +
+    "wer).  Click here for more information.";
             this.linkLabelRequirements.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelRequirements_LinkClicked);
             // 
             // panel1

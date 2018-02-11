@@ -14,6 +14,7 @@ namespace WixShield.Designers.GeneralInformation
     {
         IsWiXDocument _document;
         IsWiXPackage _package;
+        string _id;
 
         public Package()
         {
@@ -30,7 +31,24 @@ namespace WixShield.Designers.GeneralInformation
         #region
         [CategoryAttribute("Package")]
         [Description(@"The package code GUID for a product or merge module. When compiling a product, this attribute should not be set in order to allow the package code to be generated for each build. When compiling a merge module, this attribute must be set to the modularization guid.")]
-        public String Id { get; set; }
+        public String Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _id = Guid.NewGuid().ToString("D");
+                }
+                else
+                {
+                    _id = value;
+                }
+            }
+        }
 
         [CategoryAttribute("Package")]
         [Description("The minimum version of the Windows Installer required to install this package. Take the major version of the required Windows Installer and multiply by a 100 then add the minor version of the Windows Installer. For example, \"200\" would represent Windows Installer 2.0 and \"405\" would represent Windows Installer 4.5. For 64-bit Windows Installer packages, this property must be set to 200 or greater. ")]

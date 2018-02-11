@@ -15,25 +15,6 @@ namespace AppXDesigner
         public FireGiantWiXMessage()
         {
             InitializeComponent();
-
-            if (Properties.Settings.Default.SuppressFireGiantMessage.Equals("true", StringComparison.InvariantCulture))
-            {
-                checkBox1.Checked = true;
-            }
-        }
-
-        private void checkBox1_Click(object sender, EventArgs e)
-        {
-
-            if (checkBox1.Checked)
-            {
-                Properties.Settings.Default.SuppressFireGiantMessage = "true";
-            }
-            else
-            {
-                Properties.Settings.Default.SuppressFireGiantMessage = "false";
-            }
-            Properties.Settings.Default.Save();
         }
 
         private void linkLabelRequirements_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

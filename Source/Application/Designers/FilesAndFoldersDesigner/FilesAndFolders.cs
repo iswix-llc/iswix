@@ -966,8 +966,8 @@ namespace WixShield.Designers.FilesAndFolders
             var realSourcePath = source.Replace(SourceDirVar, SourceStart);
             var sourceFileInfo = new FileInfo(realSourcePath);
 
-            var filename = source.Substring(source.LastIndexOf("\\")+1);
-            var extension = source.Substring(source.LastIndexOf("."));
+            var filename = sourceFileInfo.Name;// source.Substring(source.LastIndexOf("\\")+1);
+            var extension = sourceFileInfo.Extension; // source.Substring(source.LastIndexOf("\\"));
             var item = new ListViewItem(filename);
             item.SubItems.Add(extension.ToLower());
             item.SubItems.Add(source);
@@ -993,8 +993,11 @@ namespace WixShield.Designers.FilesAndFolders
             }
             if (!imageListFileIconsDst.Images.ContainsKey(extension.ToLower()))
             {
-                item.ImageKey = "stockdeletedimage";
-                item.ForeColor = Color.Red;
+                if (!string.IsNullOrEmpty(extension))
+                {
+                    item.ImageKey = "stockdeletedimage";
+                    item.ForeColor = Color.Red;
+                }
             }
             else
             {

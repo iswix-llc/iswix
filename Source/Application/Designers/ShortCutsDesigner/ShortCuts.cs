@@ -160,6 +160,8 @@ namespace ShortCutsDesigner
             {
                 throw exception;
             }
+            tvDestination.ExpandAll();
+
             Cursor = Cursors.Default;
         }
         private void AddDirectoryNodesToDestination(XElement element, TreeNode treeNode)

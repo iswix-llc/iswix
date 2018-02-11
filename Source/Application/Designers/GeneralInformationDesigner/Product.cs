@@ -14,6 +14,7 @@ namespace WixShield.Designers.GeneralInformation
     public partial class Product : Component
     {
         IsWiXProduct _product;
+        string _upgradeCode;
 
         public Product()
         {
@@ -49,7 +50,24 @@ namespace WixShield.Designers.GeneralInformation
 
         [CategoryAttribute("Product")]
         [Description(@"The upgrade code GUID for the product.")]
-        public string UpgradeCode { get; set; }
+        public string UpgradeCode
+        {
+            get
+            {
+                return _upgradeCode;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(_upgradeCode))
+                {
+                    _upgradeCode = Guid.NewGuid().ToString("D");
+                }
+                else
+                {
+                    _upgradeCode = value;
+                }
+            }
+        }
 
         [CategoryAttribute("Product")]
         [Description(@"The product's version string.")]

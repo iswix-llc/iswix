@@ -77,11 +77,7 @@ namespace AppXDesigner
 
         public void LoadData()
         {
-            if (!_fgWiXInstalled && !SuppressFireGiantMessage)
-            {
-                DisplayFGWiXMessage();
-            }
-            else
+            if (_fgWiXInstalled)
             {
                 linkLabelRequirements.Visible = false;
                 LoadDocument();
