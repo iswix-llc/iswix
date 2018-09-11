@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WixShield.Designers.FilesAndFolders
+namespace Designers.FilesAndFolders
 {
     class FileSizeFormatter : IFormatProvider, ICustomFormatter
     {

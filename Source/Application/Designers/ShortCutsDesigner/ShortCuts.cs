@@ -15,18 +15,19 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
+
 
 namespace ShortCutsDesigner
 {
     public partial class ShortCuts : UserControl, IFireworksDesigner
     {
-        IDesignerManager _mgr;
         private XNamespace WixNamespace;
         private const string DestinationPathPrefix = "Destination Computer\\[MergeRedirectFolder]\\";
         private const string MrfHashStringPrefix = "MergeRedirectFolder\\";
         IsWiXShortCuts _shortcuts;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
         private enum ImageLibrary
         {
@@ -81,17 +82,10 @@ namespace ShortCutsDesigner
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
 
         public bool IsValidContext()
         {
-            if (_mgr.DocumentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
             {
                 return true;
             }
@@ -122,7 +116,7 @@ namespace ShortCutsDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutsDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutsDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -144,15 +138,15 @@ namespace ShortCutsDesigner
         #endregion
         private void LoadDocument()
         {
-            WixNamespace = _mgr.DocumentManager.Document.GetWiXNameSpace();
-            _shortcuts = new IsWiXShortCuts(_mgr.DocumentManager.Document);
+            WixNamespace = _documentManager.Document.GetWiXNameSpace();
+            _shortcuts = new IsWiXShortCuts();
             Cursor = Cursors.WaitCursor;
             SortData();
             tvDestination.Nodes.Clear();
             //Ensure the XML file has any Directories.
             try
             {
-                var firstDirectory = _mgr.DocumentManager.Document.Descendants(WixNamespace + "Directory").First();
+                var firstDirectory = _documentManager.Document.Descendants(WixNamespace + "Directory").First();
                 AddDirectoryNodesToDestination(firstDirectory, null);
 
             }
@@ -487,13 +481,13 @@ namespace ShortCutsDesigner
 
         private XElement FindDirectoryElement(TreeNode treeNode)
         {
-            var selectedDirectory = FindDirectoryElement(_mgr.DocumentManager.Document, treeNode.Text, treeNode.Tag.ToString());
+            var selectedDirectory = FindDirectoryElement(_documentManager.Document, treeNode.Text, treeNode.Tag.ToString());
             return selectedDirectory;
         }
 
         private XElement FindDirectoryElement(string text, string tag)
         {
-            var selectedDirectory = FindDirectoryElement(_mgr.DocumentManager.Document, text, tag);
+            var selectedDirectory = FindDirectoryElement(_documentManager.Document, text, tag);
             return selectedDirectory;
         }
 
@@ -826,7 +820,7 @@ namespace ShortCutsDesigner
 
         public void SortData()
         {
-            var tempDocument = XDocument.Parse(_mgr.DocumentManager.Document.ToString());
+            var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
             var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
             var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
                                      orderby item.Attribute("Id").Value ascending
@@ -854,7 +848,7 @@ namespace ShortCutsDesigner
             var elementName = (originalStartingDirectory.Attribute("Name") != null) ? originalStartingDirectory.Attribute("Name").Value : "[" + originalStartingDirectory.Attribute("Id").Value + "]";
             var elementId = (originalStartingDirectory.Attribute("Id") != null) ? originalStartingDirectory.Attribute("Id").Value : String.Empty;
 
-            var tempDocument = XDocument.Parse(_mgr.DocumentManager.Document.ToString());
+            var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
             var tempStartingDirectory = FindDirectoryElement(tempDocument, elementName, elementId);
 
            

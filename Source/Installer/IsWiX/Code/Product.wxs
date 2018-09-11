@@ -6,24 +6,21 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
 
-    <PropertyRef Id="NETFRAMEWORK40FULL"/>
-    <Condition Message="[ProductName] requires .NET Framework 4.0.">Installed OR NETFRAMEWORK40FULL</Condition>
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"/>
+    <Condition Message="[ProductName] requires .NET Framework 4.6.2 or later.">Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED</Condition>
 
     <DirectoryRef Id="INSTALLLOCATION"/>
 
     <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
     <UIRef Id="UI"/>
-
+    <UIRef Id="WixUI_ErrorProgressText"/>
+    
     <!-- Used by AddInMM  Goes here due to merge constraints -->
-    <PropertyRef Id="VS2010_PROJECTTEMPLATES_DIR"  />
-    <PropertyRef Id="VS2012_PROJECTTEMPLATES_DIR"  />
     <PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
     <PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
     <PropertyRef Id="VS2017_EXTENSIONS_DIR"/>
     
-    <CustomActionRef Id="VS2010Setup" />
-    <CustomActionRef Id="VS2012Setup" />
     <CustomActionRef Id="VS2013Setup" />
     <CustomActionRef Id="VS2015Setup" />
     <CustomActionRef Id="VS2017Setup" />

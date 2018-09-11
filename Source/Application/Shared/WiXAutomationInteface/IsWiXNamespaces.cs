@@ -1,21 +1,22 @@
-﻿using System;
+﻿using FireworksFramework.Managers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class WiXNamespaces : Dictionary< string, string >
     {
-        XDocument _document;
         XNamespace _ns;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public WiXNamespaces(XDocument Document)
+        public WiXNamespaces()
         {
-            _document = Document;
-            _ns = _document.GetWiXNameSpace();
+            _ns = _documentManager.Document.GetWiXNameSpace();
 
             Load();
         }
@@ -24,7 +25,7 @@ namespace IsWiXAutomationInterface
         {
             foreach (var item in this.PossibleNamespaces)
             {
-                if (_document.NameSpaces().Keys.Contains(item.Key))
+                if (_documentManager.Document.NameSpaces().Keys.Contains(item.Key))
                 {
                     base.Add(item.Key, item.Value);
                 }
@@ -34,13 +35,15 @@ namespace IsWiXAutomationInterface
         public new void Add(string key, string uri)
         {
             base.Add(key, uri);
-            _document.Root.Add(new XAttribute(XNamespace.Xmlns + key, uri));
+            _documentManager.Document.Root.Add(new XAttribute(XNamespace.Xmlns + key, uri));
+            _documentManager.RefreshNamespaces();
         }
 
         public new void Remove(string key)
         {
             base.Remove(key);
-            _document.Root.Attribute(XNamespace.Xmlns + key).Remove();
+            _documentManager.Document.Root.Attribute(XNamespace.Xmlns + key).Remove();
+            _documentManager.RefreshNamespaces();
         }
 
         public Dictionary<string, string> PossibleNamespaces

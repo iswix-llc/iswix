@@ -1,0 +1,10 @@
+﻿Copyright 2010 - 2018 - ISWIX, LLC
+Microsoft Public License (Ms-PL)
+
+Third Party Code:
+
+XmlEditorControl 3.2
+Author: AlphaSierraPapa, Christoph Wille
+WebSite: http://www.icsharpcode.net/OpenSource/SD/Download/Default.aspx#SharpDevelop3x
+License:
+  LGPL

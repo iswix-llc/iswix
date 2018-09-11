@@ -10,14 +10,16 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
+
+
 namespace AppXDesigner
 {
     public partial class AppXs : UserControl, IFireworksDesigner
     {
-        IDesignerManager _mgr;
-        IsWiXDocument _document;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         bool _fgWiXInstalled;
         IsWiXFGAppXs _isWiXFGAppXs;
 
@@ -56,19 +58,12 @@ namespace AppXDesigner
                 return suppress;
             }
         }
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public bool IsValidContext()
         {
             bool valid = false;
-            _document = new IsWiXDocument(_mgr.DocumentManager.Document);
-            if (_document.DocumentType == IsWiXDocumentType.Product || _document.DocumentType == IsWiXDocumentType.Fragment)
+            IsWiXDocumentType documentType = _documentManager.Document.GetDocumentType();
+
+            if (documentType == IsWiXDocumentType.Product || documentType == IsWiXDocumentType.Fragment)
             {
                 valid = true;
             }
@@ -84,10 +79,10 @@ namespace AppXDesigner
             }
         }
 
-        private void LoadDocument()
+        private  void LoadDocument()
         {
             panelTop.Height = 0;
-            _isWiXFGAppXs = new IsWiXFGAppXs(_mgr.DocumentManager.Document);
+            _isWiXFGAppXs = new IsWiXFGAppXs(_documentManager.Document);
             contextMenuStripAppX.Items["toolStripMenuItemRename"].Enabled = false;
             contextMenuStripAppX.Items["toolStripMenuItemDelete"].Enabled = false;
 
@@ -141,7 +136,7 @@ namespace AppXDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("AppXDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("AppXDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -177,8 +172,8 @@ namespace AppXDesigner
 
         private void toolStripMenuItemNewFeature_Click(object sender, EventArgs e)
         {
-            IsWiXFGAppXs appxs = new IsWiXFGAppXs(_mgr.DocumentManager.Document);
-            string appxName = IsWiXFGAppXs.SuggestNextAppXName(_mgr.DocumentManager.Document);
+            IsWiXFGAppXs appxs = new IsWiXFGAppXs(_documentManager.Document);
+            string appxName = IsWiXFGAppXs.SuggestNextAppXName(_documentManager.Document);
             IsWiXFGAppX appx = appxs.Create(appxName, "CN=YourCompanyName", TargetType.desktop);
             TreeNode node = treeViewAppXs.Nodes.Add(appx.Id);
             node.SelectedImageIndex = (int)ImageLibrary.Services;

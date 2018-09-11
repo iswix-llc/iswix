@@ -1,6 +1,4 @@
-﻿using FireworksFramework.Types;
-
-namespace WixShield.Designers.GeneralInformation
+﻿namespace Designers.GeneralInformation
 {
     partial class GeneralInformation
     {
@@ -34,12 +32,12 @@ namespace WixShield.Designers.GeneralInformation
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.propertyGridProduct = new System.Windows.Forms.PropertyGrid();
-            this.product = new WixShield.Designers.GeneralInformation.Product(this.components);
+            this.product = new Designers.GeneralInformation.Product(this.components);
             this.propertyGridModule = new System.Windows.Forms.PropertyGrid();
-            this.module = new WixShield.Designers.GeneralInformation.Module(this.components);
+            this.module = new Designers.GeneralInformation.Module(this.components);
             this.propertyGridPackage = new System.Windows.Forms.PropertyGrid();
-            this.package = new WixShield.Designers.GeneralInformation.Package(this.components);
-            this.dependency = new GeneralInformationDesigner.Dependency();
+            this.package = new Designers.GeneralInformation.Package(this.components);
+            this.dependency = new Designers.GeneralInformation.Dependency();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -184,7 +182,7 @@ namespace WixShield.Designers.GeneralInformation
         private Package package;
         private Product product;
         protected System.Windows.Forms.PropertyGrid propertyGridProduct;
-        private GeneralInformationDesigner.Dependency dependency;
+        private Designers.GeneralInformation.Dependency dependency;
 
 
 

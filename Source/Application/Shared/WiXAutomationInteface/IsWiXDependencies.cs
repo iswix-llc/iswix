@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXDependencies : List<IsWiXDependency>
     {
         static XNamespace ns;
-        XDocument _document;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public IsWiXDependencies(XDocument Document)
+        public IsWiXDependencies()
         {
-            _document = Document;
             Load();
         }
 
         public void Load()
         {
-            ns = _document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
 
             try
             {
-                foreach (var dependencyElement in _document.Descendants(ns + "Dependency"))
+                foreach (var dependencyElement in _documentManager.Document.Descendants(ns + "Dependency"))
                 {
                     string RequiredId = dependencyElement.Attribute("RequiredId").Value;
                     string RequiredLanguage = dependencyElement.Attribute("RequiredLanguage").Value;
@@ -47,14 +47,14 @@ namespace IsWiXAutomationInterface
                     new XAttribute("RequiredVersion", Dependency.RequiredVersion
                         ));
 
-            _document.GetElementToAddAfterSelf("Dependency").AddAfterSelf(newdependency);
+            _documentManager.Document.GetElementToAddAfterSelf("Dependency").AddAfterSelf(newdependency);
 
 
-            var currentDependencies = from a in _document.Descendants(ns + "Dependency")
+            var currentDependencies = from a in _documentManager.Document.Descendants(ns + "Dependency")
                                       orderby (string)a.Attribute("RequiredId").Value, (string)a.Attribute("RequiredLanguage").Value ascending
                                       select new { dependency = a };
 
-            var temp = XDocument.Parse(_document.ToString());
+            var temp = XDocument.Parse(_documentManager.Document.ToString());
             temp.Descendants(ns + "Dependency").Remove();
 
             XElement previousNode = temp.Descendants(ns + "Package").First();
@@ -63,15 +63,15 @@ namespace IsWiXAutomationInterface
                 previousNode.AddAfterSelf(dependency.dependency);
                 previousNode = temp.Descendants(ns + "Dependency").Last();
             }
-            _document.Descendants(ns + "Dependency").Remove();
-            _document.GetElementToAddAfterSelf("Dependency").AddAfterSelf(temp.Descendants(ns + "Dependency"));
+            _documentManager.Document.Descendants(ns + "Dependency").Remove();
+            _documentManager.Document.GetElementToAddAfterSelf("Dependency").AddAfterSelf(temp.Descendants(ns + "Dependency"));
 
         }
 
         public new void Remove(IsWiXDependency Dependency)
         {
             base.Remove(Dependency);
-            _document.Descendants(ns + "Dependency").Where(x =>
+            _documentManager.Document.Descendants(ns + "Dependency").Where(x =>
                  (string)x.Attribute("RequiredId") == Dependency.RequiredId &&
                  (string)x.Attribute("RequiredLanguage") == Dependency.RequiredLanguage
                  ).Remove();

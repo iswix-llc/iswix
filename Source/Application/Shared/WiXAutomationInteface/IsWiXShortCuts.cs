@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXShortCuts : List<IsWiXShortCut>
     {
         XNamespace ns;
-        XDocument _document;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public IsWiXShortCuts(XDocument Document)
+        public IsWiXShortCuts()
         {
-            _document = Document;
-            ns = _document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
             Load();
         }
 
@@ -25,9 +25,9 @@ namespace IsWiXAutomationInterface
 
             try
             {
-                foreach (var shortcutElement in _document.GetProductModuleOrFragmentElement().Descendants(ns + "Shortcut"))
+                foreach (var shortcutElement in _documentManager.Document.GetProductModuleOrFragmentElement().Descendants(ns + "Shortcut"))
                 {
-                    IsWiXShortCut isWiXShortcut = new IsWiXShortCut(_document, shortcutElement);
+                    IsWiXShortCut isWiXShortcut = new IsWiXShortCut(_documentManager.Document, shortcutElement);
                     Add(isWiXShortcut);
                 }
             }
@@ -42,7 +42,7 @@ namespace IsWiXAutomationInterface
         {
             Dictionary<string, string> candidates = new Dictionary<string, string>();
 
-            var files = from f in _document.Descendants(ns + "File")
+            var files = from f in _documentManager.Document.Descendants(ns + "File")
                         select f;
             foreach (var file in files)
             {
@@ -59,7 +59,7 @@ namespace IsWiXAutomationInterface
             shortcutElement.SetAttributeValue("Name", name);
             shortcutElement.SetAttributeValue("Directory", directory);
 
-            var elements = from a in _document.Descendants(ns + "File")
+            var elements = from a in _documentManager.Document.Descendants(ns + "File")
                            where a.Attribute("Id").Value == fileId
                            select a;
 
@@ -67,7 +67,7 @@ namespace IsWiXAutomationInterface
 
             fileElement.Add(shortcutElement);
 
-            IsWiXShortCut iswixShortCut = new IsWiXShortCut(_document, shortcutElement);
+            IsWiXShortCut iswixShortCut = new IsWiXShortCut(_documentManager.Document, shortcutElement);
             this.Add(iswixShortCut);
             return iswixShortCut;
         

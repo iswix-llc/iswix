@@ -1,23 +1,23 @@
-﻿using System;
+﻿using FireworksFramework.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXPackage
     {
         XNamespace ns;
-        XDocument _document;
-        IsWiXDocument _iswixdoc;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         XElement _packageElement;
 
-        public IsWiXPackage(XDocument Document)
+        public IsWiXPackage()
         {
-            _document = Document;
-            ns = _document.GetWiXNameSpace();
-            _iswixdoc = new IsWiXDocument(_document);
-            _packageElement = _document.GetProductOrModuleElement().Element(ns + "Package");
+            ns = _documentManager.Document.GetWiXNameSpace();
+            _packageElement = _documentManager.Document.GetProductOrModuleElement().Element(ns + "Package");
         }
         
         public String Id 
@@ -25,7 +25,7 @@ namespace IsWiXAutomationInterface
             get{
 
                 string id;
-                if (_iswixdoc.DocumentType == IsWiXDocumentType.Product)
+                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
                 {
                     id = _packageElement.GetOptionalAttribute("Id");
                 }
@@ -42,7 +42,7 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                if (_iswixdoc.DocumentType == IsWiXDocumentType.Product)
+                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
                 {
                     if (string.IsNullOrEmpty(value))
                     {
@@ -70,7 +70,7 @@ namespace IsWiXAutomationInterface
             get
             {
                 string manufacturer;
-                if (_iswixdoc.DocumentType == IsWiXDocumentType.Product)
+                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
                 {
                     manufacturer = _packageElement.GetOptionalAttribute("Manufacturer");
                 }
@@ -138,7 +138,7 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                if ( value != null && _iswixdoc.DocumentType == IsWiXDocumentType.Module )
+                if ( value != null && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module )
                 {
                     throw new Exception("The commpressed attribute can not be set for a merge module.");
                 }

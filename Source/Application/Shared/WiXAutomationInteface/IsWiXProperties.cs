@@ -1,19 +1,20 @@
-﻿using System;
+﻿using FireworksFramework.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXProperties : List<IsWiXProperty>
     {
         XNamespace ns;
-        XDocument _document;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public IsWiXProperties(XDocument Document)
+        public IsWiXProperties()
         {
-            _document = Document;
-            ns = _document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
             Load();
         }
 
@@ -24,9 +25,9 @@ namespace IsWiXAutomationInterface
             try
             {
 
-                foreach (var element in _document.GetProductModuleOrFragmentElement().Elements(ns + "Property"))
+                foreach (var element in _documentManager.Document.GetProductModuleOrFragmentElement().Elements(ns + "Property"))
                 {
-                    IsWiXProperty iswixProperty = new IsWiXProperty(_document, element);
+                    IsWiXProperty iswixProperty = new IsWiXProperty(_documentManager.Document, element);
 
                     Add(iswixProperty);
                 }
@@ -41,7 +42,7 @@ namespace IsWiXAutomationInterface
 
             XElement propertyElement = new XElement(ns + "Property");
             propertyElement.SetAttributeValue("Id", id);
-            var baseProperty = _document.GetElementToAddAfterSelf("Property");
+            var baseProperty = _documentManager.Document.GetElementToAddAfterSelf("Property");
 
             if (baseProperty != null)
             {
@@ -49,19 +50,19 @@ namespace IsWiXAutomationInterface
             }
             else
             {
-                _document.GetProductModuleOrFragmentElement().Add(propertyElement);
+                _documentManager.Document.GetProductModuleOrFragmentElement().Add(propertyElement);
             }
 
-            IsWiXProperty iswixProperty = new IsWiXProperty(_document, propertyElement);
+            IsWiXProperty iswixProperty = new IsWiXProperty(_documentManager.Document, propertyElement);
             this.Add(iswixProperty);
             return iswixProperty;
         }
         public void SortXML()
         {
-            var properties = _document.GetProductModuleOrFragmentElement().Elements(ns + "Property")
+            var properties = _documentManager.Document.GetProductModuleOrFragmentElement().Elements(ns + "Property")
                             .OrderBy(s => (string)s.Attribute("Id").Value).ToArray();
-            _document.Descendants(ns + "Property").Remove();
-            var element =  _document.GetElementToAddAfterSelf("Property");
+            _documentManager.Document.Descendants(ns + "Property").Remove();
+            var element = _documentManager.Document.GetElementToAddAfterSelf("Property");
             foreach (var property in properties.Reverse())
             {
                 element.AddAfterSelf(property);

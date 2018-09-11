@@ -70,10 +70,12 @@ switch($VersionData.Count)
 $NewVersion = $VersionData[0]
 Write-Verbose "Version: $NewVersion"
 
+$Include=@("AssemblyInfo.*","IsWiXNewAddInPackage.cs")
+
 # Apply the version to the assembly property files
-$files = gci $Env:BUILD_SOURCESDIRECTORY -recurse -include "*Properties*","My Project" | 
+$files = gci $Env:BUILD_SOURCESDIRECTORY -recurse -include "*Properties*","My Project", "IsWiXNewAddIn" | 
     ?{ $_.PSIsContainer } | 
-    foreach { gci -Path $_.FullName -Recurse -include AssemblyInfo.* }
+    foreach { gci -Path $_.FullName -Recurse -include $Include }
 if($files)
 {
     Write-Verbose "Will apply $NewVersion to $($files.count) files."

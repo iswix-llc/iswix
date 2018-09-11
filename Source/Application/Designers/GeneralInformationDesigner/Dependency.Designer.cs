@@ -1,4 +1,4 @@
-﻿namespace GeneralInformationDesigner
+﻿namespace Designers.GeneralInformation
 {
     partial class Dependency
     {
@@ -36,7 +36,7 @@
             this.labelModuleDependencies = new System.Windows.Forms.Label();
             this.buttonRemove = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
-            this.dependencies = new WixShield.Designers.GeneralInformation.Dependencies();
+            this.dependencies = new Designers.GeneralInformation.Dependencies();
             this.dependenciesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.requiredIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.requiredLanguageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -206,7 +206,7 @@
         private System.Windows.Forms.Button buttonRemove;
         private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.BindingSource dependenciesBindingSource;
-        private WixShield.Designers.GeneralInformation.Dependencies dependencies;
+        private Designers.GeneralInformation.Dependencies dependencies;
         private System.Windows.Forms.DataGridViewTextBoxColumn requiredIdDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn requiredLanguageDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn requiredVersionDataGridViewTextBoxColumn;

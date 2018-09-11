@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace WixShield.Designers.FilesAndFolders
+namespace Designers.FilesAndFolders
 {
     class DirectoryObject
     {

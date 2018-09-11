@@ -149,14 +149,6 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\IsWiXAddInMM\IsWiXAddInMM.wixproj">
-      <Name>IsWiXAddInMM</Name>
-      <Project>{30ae5165-4046-4bd6-84cb-be52dca65e64}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
     <ProjectReference Include="..\IsWiXMM\IsWiXMM.wixproj">
       <Name>IsWiXMM</Name>
       <Project>{928e70f5-f50b-445f-9aa9-e8fbd5ecf85c}</Project>
@@ -173,26 +165,10 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\IsWiXProjectTemplates4MM\IsWiXProjectTemplates4MM.wixproj">
-      <Name>IsWiXProjectTemplates4MM</Name>
-      <Project>{6131a7b4-4e48-478c-a74d-faf425336012}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\IsWiXProjectTemplatesMM\IsWiXProjectTemplatesMM.wixproj">
-      <Name>IsWiXProjectTemplatesMM</Name>
-      <Project>{7be3d015-c280-40d2-a363-60851a080deb}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

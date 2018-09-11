@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IsWiX</RootNamespace>
     <AssemblyName>IsWiX</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -50,6 +50,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -60,6 +61,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -78,7 +80,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Content Include="IsWiX.ico" />
-    <EmbeddedResource Include="MS-PL.txt">
+    <EmbeddedResource Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <Content Include="Templates\WiX\MergeModule.wxs">
@@ -257,12 +259,15 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FireworksFramework\FireworksFramework.csproj">
+    <ProjectReference Include="..\Shared\FireworksFramework.Interfaces\FireworksFramework.Interfaces.csproj">
+      <Project>{c7c6634a-2317-49a9-92c3-f9552750e1ed}</Project>
+      <Name>FireworksFramework.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared\FireworksFramework\FireworksFramework.csproj">
       <Project>{c1e55196-2d92-4e26-9e70-df47dfe81894}</Project>
       <Name>FireworksFramework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -274,8 +279,8 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
-signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)
+    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
+IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)
 xcopy /iery "$(SolutionDir)\ExternalAssemblies\*.*" "$(TargetDir)"
 xcopy /iery "$(TargetDir)*.*" "$(SolutionDir)..\Installer\Deploy"</PostBuildEvent>
   </PropertyGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -13,14 +14,15 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
 namespace FeaturesDesigner
 {
     public partial class Features : UserControl, IFireworksDesigner
     {
-        IDesignerManager _mgr;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         bool _refresh = false;
         public Features()
         {
@@ -29,17 +31,9 @@ namespace FeaturesDesigner
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public bool IsValidContext()
         {
-            var docType = _mgr.DocumentManager.Document.GetDocumentType();
+            var docType = _documentManager.Document.GetDocumentType();
 
             if (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Fragment)
             {
@@ -65,7 +59,7 @@ namespace FeaturesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -94,7 +88,7 @@ namespace FeaturesDesigner
         private void LoadData2()
         {
             _refresh = false;
-            IsWiXFeatures features = new IsWiXFeatures(_mgr.DocumentManager.Document);
+            IsWiXFeatures features = new IsWiXFeatures();
 
             treeViewFeatures.Nodes.Clear();
             ClearPropertyGrid();
@@ -122,7 +116,7 @@ namespace FeaturesDesigner
 
         private void LoadDataRecurse(TreeNode parentNode, string parentId)
         {
-            IsWiXFeatures features = new IsWiXFeatures(_mgr.DocumentManager.Document, parentId);
+            IsWiXFeatures features = new IsWiXFeatures(parentId);
             foreach (var feature in features)
             {
                 var treeNode = parentNode.Nodes.Add(feature.Id, string.Format("{0}", feature.Id));
@@ -145,7 +139,7 @@ namespace FeaturesDesigner
             }
 
             treeViewMerges.Nodes.Clear();
-            IsWiXMerges merges = new IsWiXMerges(_mgr.DocumentManager.Document);
+            IsWiXMerges merges = new IsWiXMerges();
             foreach (var merge in merges)
             {
                 TreeNode mergeNode = treeViewMerges.Nodes.Add(merge.Id, merge.ToString(), 1);
@@ -258,8 +252,8 @@ namespace FeaturesDesigner
         {
             if (treeViewFeatures.SelectedNode == null)//|| treeViewFeatures.SelectedNode.Parent == null)
             {
-                IsWiXFeatures features = new IsWiXFeatures(_mgr.DocumentManager.Document);
-                string featureName = IsWiXFeatures.SuggestNextFeatureName(_mgr.DocumentManager.Document);
+                IsWiXFeatures features = new IsWiXFeatures();
+                string featureName = IsWiXFeatures.SuggestNextFeatureName();
                 IsWiXFeature feature = features.Create(featureName);
                 TreeNode node = treeViewFeatures.Nodes.Add(feature.Id);
                 node.Tag = feature;
@@ -268,8 +262,8 @@ namespace FeaturesDesigner
             }
             else
             {
-                IsWiXFeatures features = new IsWiXFeatures(_mgr.DocumentManager.Document);
-                string featureName = IsWiXFeatures.SuggestNextFeatureName(_mgr.DocumentManager.Document);
+                IsWiXFeatures features = new IsWiXFeatures();
+                string featureName = IsWiXFeatures.SuggestNextFeatureName();
                 var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
                 IsWiXFeature feature = features.Create(iswixFeature.Id, featureName);
 
@@ -287,8 +281,8 @@ namespace FeaturesDesigner
 
         private void toolStripMenuItemNewSubFeature_Click(object sender, EventArgs e)
         {
-            IsWiXFeatures features = new IsWiXFeatures(_mgr.DocumentManager.Document);
-            string featureName = IsWiXFeatures.SuggestNextFeatureName(_mgr.DocumentManager.Document);
+            IsWiXFeatures features = new IsWiXFeatures();
+            string featureName = IsWiXFeatures.SuggestNextFeatureName();
             var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
             IsWiXFeature feature = features.CreateSubFeature(iswixFeature.Id, featureName);
 

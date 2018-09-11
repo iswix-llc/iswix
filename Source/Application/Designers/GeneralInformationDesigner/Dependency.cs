@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using IsWiXAutomationInterface;
 
-namespace GeneralInformationDesigner
+namespace Designers.GeneralInformation
 {
     public partial class Dependency : UserControl
     {
@@ -21,9 +21,9 @@ namespace GeneralInformationDesigner
             InitializeComponent();
         }
 
-        public void Read( XDocument Document )
+        public void Read()
         {
-            _dependencies = new IsWiXDependencies(Document);
+            _dependencies = new IsWiXDependencies();
 
             dependencies.Tables[0].RowDeleting -= new DataRowChangeEventHandler(Dependencies_RowAddRemove);
             dependencies.Tables[0].RowChanging -= new DataRowChangeEventHandler(Dependencies_RowAddRemove);
@@ -111,6 +111,7 @@ namespace GeneralInformationDesigner
                 dataGridViewDependencies.Rows.Remove((DataGridViewRow)selectedRow);
             }      
         }
+
     }
 
 }

@@ -9,7 +9,7 @@ using System.Xml.Linq;
 using IsWiXAutomationInterface;
 
 
-namespace WixShield.Designers.GeneralInformation
+namespace Designers.GeneralInformation
 {
     public partial class Product : Component
     {

@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
 
 namespace ShortCutsDesigner

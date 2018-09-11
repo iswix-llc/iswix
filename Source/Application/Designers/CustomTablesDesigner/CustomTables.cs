@@ -13,24 +13,23 @@ using System.Xml.XPath;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
-
+using DocumentManagement.Managers;
 
 namespace CustomTablesDesigner
 {
     public partial class CustomTablesDesigner : UserControl, IFireworksDesigner
     {
         XNamespace ns;
-        IDesignerManager _mgr;
-        XDocument _document;
         DataTable _customTable = new DataTable();
         XElement _customTableElement;
+        DocumentManager _documentManager;
 
         public CustomTablesDesigner()
         {
             InitializeComponent();
             dataGridViewRows.DataSource = _customTable;
+            _documentManager = DocumentManager.DocumentManagerInstance;
         }
 
         void _customTable_RowChanged(object sender, DataRowChangeEventArgs e)
@@ -40,18 +39,10 @@ namespace CustomTablesDesigner
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public bool IsValidContext()
         {
 
-            IsWiXDocumentType docType = _mgr.DocumentManager.Document.GetDocumentType();
+            IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
 
             if (docType != IsWiXDocumentType.None)
             {
@@ -65,11 +56,10 @@ namespace CustomTablesDesigner
 
         public void LoadData()
         {
-            ns = _mgr.DocumentManager.Document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
 
             _customTable.RowChanged -= new DataRowChangeEventHandler(_customTable_RowChanged);
 
-            _document = _mgr.DocumentManager.Document;
             _customTable.Clear();
 
             listBoxTables.Items.Clear();
@@ -77,7 +67,7 @@ namespace CustomTablesDesigner
 
             try
             {
-                XElement moduleElement = _document.GetProductModuleOrFragmentElement();
+                XElement moduleElement = _documentManager.Document.GetProductModuleOrFragmentElement();
                 foreach (var tableElement in moduleElement.Elements(ns + "CustomTable"))
                 {
                     listBoxTables.Items.Add(tableElement.Attribute("Id").Value);
@@ -107,7 +97,7 @@ namespace CustomTablesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("CustomTablesDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("CustomTablesDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -151,7 +141,7 @@ namespace CustomTablesDesigner
             if (listBoxTables.SelectedItems.Count > 0)
             {
 
-                _customTableElement = (from item in _document.Descendants(ns + "CustomTable")
+                _customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
                                        where
                                            item.Attribute("Id") != null &&
                                            item.Attribute("Id").Value == listBoxTables.SelectedItem.ToString()
@@ -218,7 +208,7 @@ namespace CustomTablesDesigner
                     try
                     {
 
-                        XElement customTableElement = (from item in _document.Descendants(ns + "CustomTable")
+                        XElement customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
                                                        where
                                                            item.Attribute("Id") != null &&
                                                            item.Attribute("Id").Value == listBoxTables.Text
@@ -362,7 +352,7 @@ namespace CustomTablesDesigner
 
         private void SaveTable()
         {
-            XElement customTableElement = (from item in _document.Descendants(ns + "CustomTable")
+            XElement customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
                                            where
                                                item.Attribute("Id") != null &&
                                                item.Attribute("Id").Value == listBoxTables.Text
@@ -428,7 +418,7 @@ namespace CustomTablesDesigner
 
         private void toolStripMenuItemTableDrop_Click(object sender, EventArgs e)
         {
-            XElement customTableElement = (from item in _document.Descendants(ns + "CustomTable")
+            XElement customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
                                            where
                                                item.Attribute("Id") != null &&
                                                item.Attribute("Id").Value == listBoxTables.SelectedItem.ToString()
@@ -541,7 +531,7 @@ namespace CustomTablesDesigner
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                XElement previousElement = _document.GetElementToAddAfterSelf("CustomTable");
+                XElement previousElement = _documentManager.Document.GetElementToAddAfterSelf("CustomTable");
                 XElement newElement =    new XElement(ns + "CustomTable", new XAttribute("Id", dialog.TableName),
                     new XElement( ns + "Column",
                         new XAttribute( "Id", "Id" ),
@@ -553,7 +543,7 @@ namespace CustomTablesDesigner
 
                 if (previousElement == null)
                 {
-                    _document.GetProductModuleOrFragmentElement().AddFirst(newElement);
+                    _documentManager.Document.GetProductModuleOrFragmentElement().AddFirst(newElement);
                 }
                 else
                 {

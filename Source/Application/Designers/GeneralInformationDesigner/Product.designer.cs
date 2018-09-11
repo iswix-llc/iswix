@@ -1,4 +1,4 @@
-﻿namespace WixShield.Designers.GeneralInformation
+﻿namespace Designers.GeneralInformation
 {
     partial class Product
     {

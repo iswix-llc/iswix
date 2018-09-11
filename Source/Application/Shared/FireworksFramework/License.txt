@@ -1,0 +1,2 @@
+﻿Copyright 2010 - 2018 - ISWIX, LLC
+Microsoft Public License (Ms-PL)

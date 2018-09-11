@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
@@ -13,24 +14,7 @@ namespace IsWiXAutomationInterface
 
         public static Dictionary<string, XNamespace> NameSpaces( this XDocument Document )
         {
-                var schemas = new Dictionary<string, XNamespace>();
-                try
-                {
-                    var result = Document.Root.Attributes().
-                            Where(a => a.IsNamespaceDeclaration).
-                            GroupBy(a => a.Name.Namespace == XNamespace.None ? String.Empty : a.Name.LocalName,
-                                    a => XNamespace.Get(a.Value)).
-                                    ToDictionary(g => g.Key, g => g.First());
-                    foreach (var item in result)
-                    {
-                        schemas.Add(item.Key, item.Value);
-                    }
-                }
-                catch (Exception)
-                {
-                    schemas.Add("", XNamespace.None);
-                }
-                return schemas;
+            return DocumentManager.DocumentManagerInstance.NameSpaces;
         }
 
         public static string GetOptionalAttribute(this XElement Element, string AttributeName)

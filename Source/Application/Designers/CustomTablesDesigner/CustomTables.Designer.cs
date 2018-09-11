@@ -1,6 +1,4 @@
-﻿using FireworksFramework.Types;
-
-namespace CustomTablesDesigner
+﻿namespace CustomTablesDesigner
 {
     partial class CustomTablesDesigner
     {

@@ -7,12 +7,13 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
-namespace WixShield.Designers.GeneralInformation
+namespace Designers.GeneralInformation
 {
     public partial class Package : Component
     {
-        IsWiXDocument _document;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
         IsWiXPackage _package;
         string _id;
 
@@ -122,9 +123,8 @@ Set this value to declare that the package is an x64 package. This value require
 
         #endregion
 
-        public void Read(IsWiXDocument Document, IsWiXPackage Package )
+        public void Read(IsWiXPackage Package )
         {
-            _document = Document;
             _package = Package;
 
             try
@@ -166,7 +166,7 @@ Set this value to declare that the package is an x64 package. This value require
                     break;
 
                 case "Compressed":
-                    if (Compressed != null && _document.DocumentType == IsWiXDocumentType.Module)
+                    if (Compressed != null && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
                     {
                         MessageBox.Show("The compressed attribute cannot be set in a Merge Module.");
                         Compressed = null;

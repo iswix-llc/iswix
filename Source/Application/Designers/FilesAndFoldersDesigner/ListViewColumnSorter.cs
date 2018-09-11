@@ -3,7 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace WixShield.Designers.FilesAndFolders
+namespace Designers.FilesAndFolders
 {
     /// <summary>
     /// Implements the IComparer interface for the purpose of using the implementation to sort the 

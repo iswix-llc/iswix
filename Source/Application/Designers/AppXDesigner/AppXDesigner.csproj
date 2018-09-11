@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AppXDesigner</RootNamespace>
     <AssemblyName>AppXDesigner</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -76,16 +79,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FireworksFramework\FireworksFramework.csproj">
-      <Project>{c1e55196-2d92-4e26-9e70-df47dfe81894}</Project>
-      <Name>FireworksFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj">
-      <Project>{461ddab2-0b76-460d-9f3e-041cb88df974}</Project>
-      <Name>IsWiXAutomationInterface</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="AppXs.resx">
       <DependentUpon>AppXs.cs</DependentUpon>
     </EmbeddedResource>
@@ -99,7 +92,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MS-PL.txt" />
+    <EmbeddedResource Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -117,10 +110,28 @@
   <ItemGroup>
     <Content Include="fga-reference.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\DocumentManagement\DocumentManagement.csproj">
+      <Project>{e0b298ef-b44f-480b-acf5-458b7aeea039}</Project>
+      <Name>DocumentManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\FireworksFramework.Interfaces\FireworksFramework.Interfaces.csproj">
+      <Project>{c7c6634a-2317-49a9-92c3-f9552750e1ed}</Project>
+      <Name>FireworksFramework.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj">
+      <Project>{c1e55196-2d92-4e26-9e70-df47dfe81894}</Project>
+      <Name>FireworksFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj">
+      <Project>{461ddab2-0b76-460d-9f3e-041cb88df974}</Project>
+      <Name>IsWiXAutomationInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
-signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
+IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -121,7 +121,7 @@
     <value>IsWiX</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>Industrial Strength Windows Installer XML (IsWiX) http://iswix.codeplex.com</value>
+    <value>Industrial Strength Windows Installer XML (IsWiX) https://github.com/iswix-llc</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="400" type="System.Resources.ResXFileRef, System.Windows.Forms">

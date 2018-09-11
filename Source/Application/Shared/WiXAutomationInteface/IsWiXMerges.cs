@@ -1,29 +1,32 @@
-﻿using System;
+﻿using FireworksFramework.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
+
 namespace IsWiXAutomationInterface
 {
     public class IsWiXMerges : List<IsWiXMerge>
     {
         XNamespace ns;
-        XDocument _document;
-        public IsWiXMerges(XDocument Document)
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
+        public IsWiXMerges()
         {
-            _document = Document;
             Load();
         }
 
         private void Load()
         {
             Clear();
-            ns = _document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
 
             try
             {
 
-                foreach (var element in _document.Descendants(ns + "Merge"))
+                foreach (var element in _documentManager.Document.Descendants(ns + "Merge"))
                 {
                     Add(new IsWiXMerge(element));
                 }

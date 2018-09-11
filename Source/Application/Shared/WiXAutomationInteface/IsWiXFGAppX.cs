@@ -5,8 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
-
-
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {

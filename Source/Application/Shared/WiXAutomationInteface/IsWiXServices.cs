@@ -5,18 +5,18 @@ using System.IO;
 using System.Text;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
+using FireworksFramework.Managers;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXServices : List<IsWiXService>
     {
         XNamespace ns;
-        XDocument _document;
-
-        public IsWiXServices(XDocument Document)
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        public IsWiXServices()
         {
-            ns = Document.GetWiXNameSpace();
-            _document = Document;
+            ns = _documentManager.Document.GetWiXNameSpace();
             Load();
         }
 
@@ -26,9 +26,9 @@ namespace IsWiXAutomationInterface
 
             try
             {
-                foreach (var serviceInstallElement in _document.GetProductModuleOrFragmentElement().Descendants(ns + "ServiceInstall"))
+                foreach (var serviceInstallElement in _documentManager.Document.GetProductModuleOrFragmentElement().Descendants(ns + "ServiceInstall"))
                 {
-                    IsWiXServiceInstall isWiXServiceInstall = new IsWiXServiceInstall(_document, serviceInstallElement);
+                    IsWiXServiceInstall isWiXServiceInstall = new IsWiXServiceInstall(_documentManager.Document, serviceInstallElement);
 
                     //Autoinstantiate a ServiceControl element when one does not exist
                     if (serviceInstallElement.Parent.Descendants(ns + "ServiceControl").Count().Equals(0))
@@ -39,7 +39,7 @@ namespace IsWiXAutomationInterface
                          serviceInstallElement.AddAfterSelf(serviceControlElement);
                     }
 
-                    IsWiXServiceControl isWiXServiceControl = new IsWiXServiceControl(_document, serviceInstallElement.Parent.Descendants(ns + "ServiceControl").First());
+                    IsWiXServiceControl isWiXServiceControl = new IsWiXServiceControl(_documentManager.Document, serviceInstallElement.Parent.Descendants(ns + "ServiceControl").First());
                     IsWiXService isWiXService = new IsWiXService() { ServiceInstall = isWiXServiceInstall, ServiceControl = isWiXServiceControl };
                     Add(isWiXService);
                 }
@@ -54,7 +54,7 @@ namespace IsWiXAutomationInterface
         {
             Dictionary<string, string> candidates = new Dictionary<string, string>();
 
-            var files = from f in _document.Descendants(ns + "File")
+            var files = from f in _documentManager.Document.Descendants(ns + "File")
                         select f;
             foreach (var file in files)
             {
@@ -83,7 +83,7 @@ namespace IsWiXAutomationInterface
             serviceInstallElement.SetAttributeValue("Start", "auto");
             serviceInstallElement.SetAttributeValue("Type", "ownProcess");
 
-            var elements = from a in _document.Descendants(ns + "File")
+            var elements = from a in _documentManager.Document.Descendants(ns + "File")
                       where a.Attribute("Id").Value == fileId
                       select a;
 
@@ -102,8 +102,8 @@ namespace IsWiXAutomationInterface
             serviceInstallElement.AddAfterSelf(serviceControlElement);
 
 
-            IsWiXServiceInstall isWiXServiceInstall = new IsWiXServiceInstall(_document, serviceInstallElement);
-            IsWiXServiceControl isWiXServiceControl = new IsWiXServiceControl(_document, serviceControlElement);
+            IsWiXServiceInstall isWiXServiceInstall = new IsWiXServiceInstall(_documentManager.Document, serviceInstallElement);
+            IsWiXServiceControl isWiXServiceControl = new IsWiXServiceControl(_documentManager.Document, serviceControlElement);
             IsWiXService isWiXService = new IsWiXService() { ServiceInstall = isWiXServiceInstall, ServiceControl = isWiXServiceControl };
             this.Add(isWiXService);
             return isWiXService;

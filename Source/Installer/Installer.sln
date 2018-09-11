@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designers", "Designers", "{
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXMM", "IsWiXMM\IsWiXMM.wixproj", "{928E70F5-F50B-445F-9AA9-E8FBD5ECF85C}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXAddInMM", "IsWiXAddInMM\IsWiXAddInMM.wixproj", "{30AE5165-4046-4BD6-84CB-BE52DCA65E64}"
-EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "GeneralInformationDesignerMM", "Designers\GeneralInformationDesignerMM\GeneralInformationDesignerMM.wixproj", "{4A2E3486-B9FA-4A3D-870E-37BDB3C3BE29}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "CustomTablesDesignerMM", "Designers\CustomTablesDesignerMM\CustomTablesDesignerMM.wixproj", "{9660CB68-A424-4E25-BB0B-1A389BEF4868}"
@@ -30,10 +28,6 @@ EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "FeaturesDesignerMM", "Designers\FeaturesDesignerMM\FeaturesDesignerMM.wixproj", "{D91E59CE-6F3A-4124-B775-5493C2E65048}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXNewAddInMM", "IsWiXNewAddInMM\IsWiXNewAddInMM.wixproj", "{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXProjectTemplatesMM", "IsWiXProjectTemplatesMM\IsWiXProjectTemplatesMM.wixproj", "{7BE3D015-C280-40D2-A363-60851A080DEB}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXProjectTemplates4MM", "IsWiXProjectTemplates4MM\IsWiXProjectTemplates4MM.wixproj", "{6131A7B4-4E48-478C-A74D-FAF425336012}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AppXDesignerMM", "Designers\AppXDesignerMM\AppXDesignerMM.wixproj", "{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}"
 EndProject
@@ -57,16 +51,6 @@ Global
 		{928E70F5-F50B-445F-9AA9-E8FBD5ECF85C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{928E70F5-F50B-445F-9AA9-E8FBD5ECF85C}.Release|x86.ActiveCfg = Release|x86
 		{928E70F5-F50B-445F-9AA9-E8FBD5ECF85C}.Release|x86.Build.0 = Release|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Debug|x86.ActiveCfg = Debug|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Debug|x86.Build.0 = Debug|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Release|Any CPU.ActiveCfg = Release|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Release|Mixed Platforms.Build.0 = Release|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Release|x86.ActiveCfg = Release|x86
-		{30AE5165-4046-4BD6-84CB-BE52DCA65E64}.Release|x86.Build.0 = Release|x86
 		{4A2E3486-B9FA-4A3D-870E-37BDB3C3BE29}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{4A2E3486-B9FA-4A3D-870E-37BDB3C3BE29}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{4A2E3486-B9FA-4A3D-870E-37BDB3C3BE29}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -177,26 +161,6 @@ Global
 		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|x86.ActiveCfg = Release|x86
 		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|x86.Build.0 = Release|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Debug|x86.ActiveCfg = Debug|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Debug|x86.Build.0 = Debug|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Release|Any CPU.ActiveCfg = Release|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Release|Mixed Platforms.Build.0 = Release|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Release|x86.ActiveCfg = Release|x86
-		{7BE3D015-C280-40D2-A363-60851A080DEB}.Release|x86.Build.0 = Release|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Debug|x86.ActiveCfg = Debug|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Debug|x86.Build.0 = Debug|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Release|Any CPU.ActiveCfg = Release|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Release|Mixed Platforms.Build.0 = Release|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Release|x86.ActiveCfg = Release|x86
-		{6131A7B4-4E48-478C-A74D-FAF425336012}.Release|x86.Build.0 = Release|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -222,69 +186,5 @@ Global
 		{183014D8-0F6F-4ADD-8652-59658A85EC37} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
 		{D91E59CE-6F3A-4124-B775-5493C2E65048} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://iswix.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Designers\\CustomTablesDesignerMM\\CustomTablesDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName1 = Installer.sln
-		SccProjectName1 = Designers/CustomTablesDesignerMM
-		SccLocalPath1 = Designers\\CustomTablesDesignerMM
-		SccProjectUniqueName2 = Designers\\FilesAndFoldersDesignerMM\\FilesAndFoldersDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName2 = Installer.sln
-		SccProjectName2 = Designers/FilesAndFoldersDesignerMM
-		SccLocalPath2 = Designers\\FilesAndFoldersDesignerMM
-		SccProjectUniqueName3 = Designers\\GeneralInformationDesignerMM\\GeneralInformationDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName3 = Installer.sln
-		SccProjectName3 = Designers/GeneralInformationDesignerMM
-		SccLocalPath3 = Designers\\GeneralInformationDesignerMM
-		SccProjectUniqueName4 = Designers\\NamespacesDesignerMM\\NamespacesDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName4 = Installer.sln
-		SccProjectName4 = Designers/NamespacesDesignerMM
-		SccLocalPath4 = Designers\\NamespacesDesignerMM
-		SccProjectUniqueName5 = Designers\\PropertiesDesignerMM\\PropertiesDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName5 = Installer.sln
-		SccProjectName5 = Designers/PropertiesDesignerMM
-		SccLocalPath5 = Designers\\PropertiesDesignerMM
-		SccProjectUniqueName6 = Designers\\ServicesDesignerMM\\ServicesDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName6 = Installer.sln
-		SccProjectName6 = Designers/ServicesDesignerMM
-		SccLocalPath6 = Designers\\ServicesDesignerMM
-		SccProjectUniqueName7 = Designers\\ShortCutsDesignerMM\\ShortCutsDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName7 = Installer.sln
-		SccProjectName7 = Designers/ShortCutsDesignerMM
-		SccLocalPath7 = Designers\\ShortCutsDesignerMM
-		SccProjectUniqueName8 = IsWiXAddInMM\\IsWiXAddInMM.wixproj
-		SccProjectName8 = IsWiXAddInMM
-		SccLocalPath8 = IsWiXAddInMM
-		SccProjectUniqueName9 = IsWiXMM\\IsWiXMM.wixproj
-		SccProjectName9 = IsWiXMM
-		SccLocalPath9 = IsWiXMM
-		SccProjectUniqueName10 = Designers\\XmlEditorDesignerMM\\XmlEditorDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName10 = Installer.sln
-		SccProjectName10 = Designers/XmlEditorDesignerMM
-		SccLocalPath10 = Designers\\XmlEditorDesignerMM
-		SccProjectUniqueName11 = IsWiX\\IsWiX.wixproj
-		SccProjectName11 = IsWiX
-		SccLocalPath11 = IsWiX
-		SccProjectUniqueName12 = Designers\\FeaturesDesignerMM\\FeaturesDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName12 = Installer.sln
-		SccProjectName12 = Designers/FeaturesDesignerMM
-		SccLocalPath12 = Designers\\FeaturesDesignerMM
-		SccProjectUniqueName13 = IsWiXNewAddInMM\\IsWiXNewAddInMM.wixproj
-		SccProjectName13 = IsWiXNewAddInMM
-		SccLocalPath13 = IsWiXNewAddInMM
-		SccProjectUniqueName14 = IsWiXProjectTemplatesMM\\IsWiXProjectTemplatesMM.wixproj
-		SccProjectName14 = IsWiXProjectTemplatesMM
-		SccLocalPath14 = IsWiXProjectTemplatesMM
-		SccProjectUniqueName15 = IsWiXProjectTemplates4MM\\IsWiXProjectTemplates4MM.wixproj
-		SccProjectName15 = IsWiXProjectTemplates4MM
-		SccLocalPath15 = IsWiXProjectTemplates4MM
-		SccProjectUniqueName16 = Designers\\AppXDesignerMM\\AppXDesignerMM.wixproj
-		SccProjectTopLevelParentUniqueName16 = Installer.sln
-		SccProjectName16 = Designers/AppXDesignerMM
-		SccLocalPath16 = Designers\\AppXDesignerMM
 	EndGlobalSection
 EndGlobal

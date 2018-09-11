@@ -10,18 +10,18 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
 namespace PropertiesDesigner
 {
     public partial class Properties : UserControl, IFireworksDesigner
     {
-        IDesignerManager _mgr;
-        IsWiXDocument _document;
         IsWiXProperties _properties;
         string _selectedPropertyId;
-        
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
+
         public Properties()
         {
             InitializeComponent();
@@ -29,18 +29,9 @@ namespace PropertiesDesigner
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public bool IsValidContext()
         {
-            _document = new IsWiXDocument(_mgr.DocumentManager.Document);
-            if (_document.DocumentType == IsWiXDocumentType.None)
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.None)
             {
                 return false;
             }
@@ -73,7 +64,7 @@ namespace PropertiesDesigner
         {
             get 
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("PropertiesDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("PropertiesDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -96,7 +87,7 @@ namespace PropertiesDesigner
             dataSetProperties.Tables[0].Rows.Clear();
             try
             {
-                _properties = new IsWiXProperties(_mgr.DocumentManager.Document);
+                _properties = new IsWiXProperties();
                 foreach (var property in _properties)
                 {
                     dataSetProperties.Tables[0].Rows.Add(new object[] {

@@ -13,18 +13,17 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using Microsoft.Deployment.WindowsInstaller;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
-
-namespace WixShield.Designers.GeneralInformation
+namespace Designers.GeneralInformation
 {
     public partial class GeneralInformation : UserControl, IFireworksDesigner
     {
         XNamespace ns;
-        IDesignerManager _mgr;
-        XDocument _document;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
 
         public GeneralInformation()
         {
@@ -33,10 +32,9 @@ namespace WixShield.Designers.GeneralInformation
 
         public void LoadData()
         {
-            _document = _mgr.DocumentManager.Document;
-            ns = _document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
 
-            switch (_document.GetDocumentType())
+            switch (_documentManager.Document.GetDocumentType())
             {
                 case IsWiXDocumentType.Product:
                     dependency.Enabled = false;
@@ -65,7 +63,7 @@ namespace WixShield.Designers.GeneralInformation
         public void LoadProductData()
         {
             propertyGridProduct.PropertyValueChanged -= new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridProduct_PropertyValueChanged);
-            product.Read( new IsWiXProduct( _document));
+            product.Read( new IsWiXProduct());
             propertyGridProduct.Refresh();
             propertyGridProduct.Enabled = true;
             propertyGridProduct.Visible = true;
@@ -75,7 +73,7 @@ namespace WixShield.Designers.GeneralInformation
         public void LoadPackageData()
         {
             propertyGridPackage.PropertyValueChanged -= new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridPackage_PropertyValueChanged);
-            package.Read(new IsWiXDocument(_document), new IsWiXPackage(_document));
+            package.Read(new IsWiXPackage());
             propertyGridPackage.Refresh();
             propertyGridPackage.Enabled = true;
             propertyGridPackage.Visible = true;
@@ -85,7 +83,7 @@ namespace WixShield.Designers.GeneralInformation
         public void LoadModuleData()
         {
             propertyGridModule.PropertyValueChanged -= new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridModule_PropertyValueChanged);
-            module.Read( new IsWiXModule( _document) );
+            module.Read( new IsWiXModule() );
             propertyGridModule.Refresh();
             propertyGridModule.Enabled = true;
             propertyGridModule.Visible = true;
@@ -94,7 +92,7 @@ namespace WixShield.Designers.GeneralInformation
 
         private void LoadDependencies()
         {
-            dependency.Read(_document);
+            dependency.Read();
             dependency.Refresh();
             dependency.Enabled = true;
             dependency.Visible = true;
@@ -115,15 +113,6 @@ namespace WixShield.Designers.GeneralInformation
             product.Write(e.ChangedItem.Label);
         }
 
-
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public System.Drawing.Image PluginImage
         {
             get
@@ -138,7 +127,7 @@ namespace WixShield.Designers.GeneralInformation
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneralInformationDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneralInformationDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -154,7 +143,7 @@ namespace WixShield.Designers.GeneralInformation
 
         public bool IsValidContext()
         {
-            IsWiXDocumentType docType = _mgr.DocumentManager.Document.GetDocumentType();
+            IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
 
             if (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Module)
             {

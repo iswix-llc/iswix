@@ -1,42 +1,44 @@
-﻿using System;
+﻿using FireworksFramework.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXFeatures : List<IsWiXFeature>
     {
         static XNamespace ns;
-        XDocument _document;
-      
-        public IsWiXFeatures(XDocument Document)
-        {
-            _document = Document;
-            ns = Document.GetWiXNameSpace();
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-            Load(_document.GetProductOrFragmentElement());
+        public IsWiXFeatures()
+        {
+            ns = _documentManager.Document.GetWiXNameSpace();
+
+            Load(_documentManager.Document.GetProductOrFragmentElement());
         }
 
-        public IsWiXFeatures(XDocument Document, string parentId)
+        public IsWiXFeatures(string parentId)
         {
-            _document = Document;
-            var elements = from a in _document.Descendants(ns + "Feature")
+            var elements = from a in _documentManager.Document.Descendants(ns + "Feature")
                            where a.Attribute("Id").Value == parentId
                            select a;
             Load(elements.First());
 
         }
 
-        public static string SuggestNextFeatureName(XDocument document)
+        public static string SuggestNextFeatureName()
         {
-            ns = document.GetWiXNameSpace();
+            DocumentManager documentManager = DocumentManager.DocumentManagerInstance;
+
+            ns = documentManager.Document.GetWiXNameSpace();
 
             int i = 1;
             string suggestedFeatureName;
             bool found = false;
 
-            var featureNames = from f in document.Descendants(ns + "Feature")
+            var featureNames = from f in documentManager.Document.Descendants(ns + "Feature")
                                   select f.Attribute("Id").Value;
 
             suggestedFeatureName = string.Format("NewFeature{0}", i);
@@ -64,7 +66,7 @@ namespace IsWiXAutomationInterface
 
                 foreach (var element in startingElement.Elements(ns + "Feature"))
                 {
-                    Add(new IsWiXFeature(_document, element));
+                    Add(new IsWiXFeature(element));
                 }
             }
             catch (Exception ex)
@@ -78,7 +80,7 @@ namespace IsWiXAutomationInterface
 
             XElement featureElement = new XElement(ns+"Feature");
             featureElement.SetAttributeValue("Id", id);
-            var baseFeature =_document.GetElementToAddAfterSelf("Feature");
+            var baseFeature = _documentManager.Document.GetElementToAddAfterSelf("Feature");
             
             if(baseFeature!=null)
             {
@@ -86,10 +88,10 @@ namespace IsWiXAutomationInterface
             }
             else
             {
-                _document.GetProductModuleOrFragmentElement().Add(featureElement);
+                _documentManager.Document.GetProductModuleOrFragmentElement().Add(featureElement);
             }
             
-            IsWiXFeature iswixFeature = new IsWiXFeature(_document, featureElement);
+            IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             this.Add(iswixFeature);
             return iswixFeature;
         }
@@ -99,9 +101,9 @@ namespace IsWiXAutomationInterface
 
             XElement featureElement = new XElement(ns + "Feature");
             featureElement.SetAttributeValue("Id", id);
-            XElement insertAfterElement =_document.Descendants(ns+"Feature").First(vw => (string)vw.Attribute("Id") == insertAfter);
+            XElement insertAfterElement = _documentManager.Document.Descendants(ns+"Feature").First(vw => (string)vw.Attribute("Id") == insertAfter);
             insertAfterElement.AddAfterSelf(featureElement);
-            IsWiXFeature iswixFeature = new IsWiXFeature(_document, featureElement);
+            IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             this.Add(iswixFeature);
             return iswixFeature;
         }
@@ -110,9 +112,9 @@ namespace IsWiXAutomationInterface
 
             XElement featureElement = new XElement(ns + "Feature");
             featureElement.SetAttributeValue("Id", id);
-            XElement parentElement = _document.Descendants(ns + "Feature").First(vw => (string)vw.Attribute("Id") == parentId);
+            XElement parentElement = _documentManager.Document.Descendants(ns + "Feature").First(vw => (string)vw.Attribute("Id") == parentId);
             parentElement.Add(featureElement);
-            IsWiXFeature iswixFeature = new IsWiXFeature(_document, featureElement);
+            IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             return iswixFeature;
         }
     }
@@ -127,12 +129,12 @@ namespace IsWiXAutomationInterface
     {
         XNamespace ns;
         XElement _featureElement;
-        XDocument _document;
-        public IsWiXFeature(XDocument document, XElement featureElement)
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
+        public IsWiXFeature(XElement featureElement)
         {
-            _document = document;
             _featureElement = featureElement;
-            ns = _document.GetWiXNameSpace();
+            ns = _documentManager.Document.GetWiXNameSpace();
         }
         public string Id
         {
@@ -142,7 +144,7 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                var foo = from a in _document.Descendants(ns+"Feature")
+                var foo = from a in _documentManager.Document.Descendants(ns+"Feature")
                           where a.Attribute("Id").Value == value
                           select a;
 
@@ -347,7 +349,7 @@ namespace IsWiXAutomationInterface
 
         public void Delete()
         {
-            var foo = from a in _document.Descendants(ns + "Feature")
+            var foo = from a in _documentManager.Document.Descendants(ns + "Feature")
                       where a.Attribute("Id").Value == this.Id
                       select a;
             foo.First().Remove();

@@ -35,11 +35,8 @@
           <MergeRef Id="XmlEditorDesignerMM" />
         </Feature>
       </Feature>
-      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2010 - 2017 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-        <MergeRef Id="IsWiXAddInMM" />
+      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2013 - 2017 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
         <MergeRef Id="IsWiXNewAddInMM" />
-        <MergeRef Id="IsWiXProjectTemplatesMM" />
-        <MergeRef Id="IsWiXProjectTemplates4MM" />
       </Feature>
     </Feature>
 
@@ -48,10 +45,7 @@
         <Directory Id="CompanyFolder" Name="ISWIX LLC">
           <Directory Id="INSTALLLOCATION" Name="IsWiX">
             <Merge Id="IsWiXMM" SourceFile="$(var.IsWiXMM.TargetPath)" DiskId="1" Language="1033" />
-            <Merge Id="IsWiXAddInMM" SourceFile="$(var.IsWiXAddInMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="IsWiXNewAddInMM" SourceFile="$(var.IsWiXNewAddInMM.TargetPath)" DiskId="1" Language="1033" />
-            <Merge Id="IsWiXProjectTemplatesMM" SourceFile="$(var.IsWiXProjectTemplatesMM.TargetPath)" DiskId="1" Language="1033" />
-            <Merge Id="IsWiXProjectTemplates4MM" SourceFile="$(var.IsWiXProjectTemplates4MM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="AppXDesignerMM" SourceFile="$(var.AppXDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="FeaturesDesignerMM" SourceFile="$(var.FeaturesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="GeneralInformationDesignerMM" SourceFile="$(var.GeneralInformationDesignerMM.TargetPath)" DiskId="1" Language="1033" />

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 
 namespace IsWiX
 {
@@ -14,28 +13,14 @@ namespace IsWiX
         [STAThreadAttribute()]
         static void Main(string[] args)
         {
-//            try
-//            {
-                var fireworksManager = new FireworksManager(new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.bmp")));
-                fireworksManager.Start();
-//            }
-//            catch (Exception e)
-//            {
-//                MessageBox.Show(e.Message, Application.ProductName);
-//            }
+            var fireworksManager = new FireworksManager(new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.bmp")));
+            fireworksManager.Start();
         }
     }
     public class IsWiXDesigner : IFireworksDesigner
     {
         public void LoadData()
         {
-        }
-
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-            }
         }
 
         public PluginType PluginType { get { return PluginType.Application; } }
@@ -62,7 +47,7 @@ namespace IsWiX
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.License.txt")).ReadToEnd();
             }
         }
 

@@ -10,15 +10,16 @@ using System.Text;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
+
 
 namespace CustomTablesDesigner
 {
     public partial class Namespaces : UserControl, IFireworksDesigner
     {
-        XNamespace ns;
-        IDesignerManager _mgr;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         WiXNamespaces _namespaces;
 
         public Namespaces()
@@ -28,19 +29,9 @@ namespace CustomTablesDesigner
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-                ns = _mgr.DocumentManager.Document.GetWiXNameSpace();
-
-            }
-        }
-
         public bool IsValidContext()
         {
-            if (_mgr.DocumentManager.DefaultNamespace == ns)
+            if (_documentManager.DefaultNamespace == _documentManager.Document.GetWiXNameSpace())
             {
                 return true;
             }
@@ -62,7 +53,7 @@ namespace CustomTablesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("NamespacesDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("NamespacesDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -82,7 +73,7 @@ namespace CustomTablesDesigner
 
         public void LoadData()
         {
-            _namespaces = new WiXNamespaces(_mgr.DocumentManager.Document);
+            _namespaces = new WiXNamespaces();
 
             this.dataGridViewNamespaces.CurrentCellDirtyStateChanged -= new System.EventHandler(this.dataGridViewNamespaces_CurrentCellDirtyStateChanged);
             this.dataGridViewNamespaces.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewNamespaces_CellValueChanged);

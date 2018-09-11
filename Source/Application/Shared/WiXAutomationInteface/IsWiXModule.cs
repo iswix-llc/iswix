@@ -1,21 +1,22 @@
-﻿using System;
+﻿using FireworksFramework.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using DocumentManagement.Managers;
 
 namespace IsWiXAutomationInterface
 {
     public class IsWiXModule
     {
         XNamespace ns;
-        XDocument _document;
         XElement _moduleElement;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public IsWiXModule(XDocument Document)
+        public IsWiXModule()
         {
-            ns = Document.GetWiXNameSpace();
-            _document = Document;
-            _moduleElement = _document.Descendants(ns + "Module").First();
+            ns = _documentManager.Document.GetWiXNameSpace();
+            _moduleElement = _documentManager.Document.Descendants(ns + "Module").First();
         }
 
         public string Id

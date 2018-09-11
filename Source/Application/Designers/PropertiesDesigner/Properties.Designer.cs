@@ -1,6 +1,4 @@
-﻿using FireworksFramework.Types;
-
-namespace PropertiesDesigner
+﻿namespace PropertiesDesigner
 {
     partial class Properties
     {

@@ -1,4 +1,4 @@
-﻿namespace WixShield.Designers.FilesAndFolders
+﻿namespace Designers.FilesAndFolders
 {
     partial class FilesAndFolders
     {

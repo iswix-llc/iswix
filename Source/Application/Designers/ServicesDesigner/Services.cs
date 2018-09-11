@@ -13,13 +13,15 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
 namespace ServicesDesigner
 {
     public partial class Services : UserControl, IFireworksDesigner
     {
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         private enum ImageLibrary
         {
             FolderOpen,
@@ -36,7 +38,6 @@ namespace ServicesDesigner
             BlueFolderOpen
         }
 
-        IDesignerManager _mgr;
         IsWiXServices _services;
 
         public Services()
@@ -46,17 +47,9 @@ namespace ServicesDesigner
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public bool IsValidContext()
         {
-            if (_mgr.DocumentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
             {
                 return true;
             }
@@ -68,7 +61,7 @@ namespace ServicesDesigner
 
         public void LoadData()
         {
-            _services = new IsWiXServices(_mgr.DocumentManager.Document);
+            _services = new IsWiXServices();
 
             treeViewServices.Nodes.Clear();
             AddComputerDestinationNode();
@@ -136,7 +129,7 @@ namespace ServicesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ServicesDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ServicesDesigner.License.txt")).ReadToEnd();
             }
         }
 

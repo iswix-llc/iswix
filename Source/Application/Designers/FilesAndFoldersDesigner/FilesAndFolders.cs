@@ -13,20 +13,21 @@ using System.Xml.XPath;
 using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using FireworksFramework.Types;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
-namespace WixShield.Designers.FilesAndFolders
+namespace Designers.FilesAndFolders
 {
-    
+
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
     {
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         #region (------ Global Variables and Constants -----)
         // DirectoryObject directoryObject = new DirectoryObject();
         private const string Seperator = ";";
         private const string Wildcard = "*";
         private const string BaseExcludePattern = ""; // "*unittest*;*.pdb" <- We used to default this
-        private string WixSchemaNamespace;
         private const string DestinationPathPrefix = "Destination Computer\\[MergeRedirectFolder]\\";
         private const string DestinationFolderName = "Destination Computer";
         private const string MergeRedirectFolderName = "[MergeRedirectFolder]";
@@ -36,9 +37,9 @@ namespace WixShield.Designers.FilesAndFolders
         private string SourceStart;
         private const bool DoNotProcessPath = false;
         private const bool ProcessPath = true;
-        private XNamespace WixNamespace;
         private bool Merge64;
         private bool SkipSort;
+        XNamespace ns;
 
         //private TreeNode OldSelectNode;
         private string OldSelectedNodeText;
@@ -49,9 +50,6 @@ namespace WixShield.Designers.FilesAndFolders
         private string DragSourceName;
         protected string fileFilterPattern;
         protected string fileExcludePattern;
-
-        IDesignerManager _mgr;
-        XNamespace ns;
         
         private enum PopulateMode
         {
@@ -149,20 +147,19 @@ namespace WixShield.Designers.FilesAndFolders
 
         public void LoadData()
         {
-            WixSchemaNamespace = _mgr.DocumentManager.Document.GetWiXNameSpace().ToString();
-            ns = _mgr.DocumentManager.Document.GetWiXNameSpace();
-            WixNamespace = ns;
-
+            ns = _documentManager.Document.GetWiXNameSpace();
+               
             Merge64 = Is64BitMergeModule();
 
-            if (String.IsNullOrEmpty(_mgr.DocumentManager.DocumentPath))
+            if (String.IsNullOrEmpty(_documentManager.DocumentPath))
             {
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
+
             if (!FilePassesOurTest())
             {
-                _mgr.DocumentManager.Document.Descendants(ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\".\""));
+                _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\".\""));
             }
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
@@ -183,7 +180,7 @@ namespace WixShield.Designers.FilesAndFolders
             //Ensure the XML file has any Directories.
             try
             {
-                var firstDirectory = _mgr.DocumentManager.Document.Descendants(WixNamespace + "Directory").First();
+                var firstDirectory = _documentManager.Document.Descendants(ns + "Directory").First();
                 AddDirectoryNodesToDestination(firstDirectory, null);
 
                 if (!string.IsNullOrEmpty(OldSelectedNodeText) && !string.IsNullOrEmpty(OldSelectedNodeTagText))
@@ -213,7 +210,6 @@ namespace WixShield.Designers.FilesAndFolders
                 throw exception;
                 //CallMessageBox(exception.Message, "Load Document Exception");
             }
-
             Cursor = Cursors.Default;
         }
 
@@ -225,7 +221,7 @@ namespace WixShield.Designers.FilesAndFolders
             var sourceDirExistsOnFileSystem = false;
 
             rbOneToMany.Checked = true;
-            foreach (var node in _mgr.DocumentManager.Document.DescendantNodes())
+            foreach (var node in _documentManager.Document.DescendantNodes())
             {
                 var xpi = node as XProcessingInstruction;
                 if (xpi != null && xpi.Target == "define")
@@ -248,7 +244,7 @@ namespace WixShield.Designers.FilesAndFolders
             }
 
             FirstTest:
-            foreach (var node in _mgr.DocumentManager.Document.DescendantNodes())
+            foreach (var node in _documentManager.Document.DescendantNodes())
             {
                 var xpi = node as XProcessingInstruction;
                 if (xpi != null && xpi.Target == "define")
@@ -273,7 +269,7 @@ namespace WixShield.Designers.FilesAndFolders
             {
                 if (!rootPath.Contains(":"))
                 {
-                    var documentInfo = new FileInfo(_mgr.DocumentManager.DocumentPath);
+                    var documentInfo = new FileInfo(_documentManager.DocumentPath);
                     rootPath = Path.Combine(documentInfo.DirectoryName, rootPath);
                 }
 
@@ -295,9 +291,9 @@ namespace WixShield.Designers.FilesAndFolders
         {
             if (!SkipSort)
             {
-                var tempDocument = XDocument.Parse(_mgr.DocumentManager.Document.ToString());
+                var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
                 var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
-                var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
+                var tempDirectoryList = (from item in tempStartElement.Elements(ns + "Directory")
                                          orderby item.Attribute("Id").Value ascending
                                          select item);
                 foreach (var directory in tempDirectoryList)
@@ -324,7 +320,7 @@ namespace WixShield.Designers.FilesAndFolders
             var elementName = (originalStartingDirectory.Attribute("Name") != null) ? originalStartingDirectory.Attribute("Name").Value : "[" + originalStartingDirectory.Attribute("Id").Value + "]";
             var elementId = (originalStartingDirectory.Attribute("Id") != null) ? originalStartingDirectory.Attribute("Id").Value : String.Empty;
 
-            var tempDocument = XDocument.Parse(_mgr.DocumentManager.Document.ToString());
+            var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
             var tempStartingDirectory = FindDirectoryElement(tempDocument, elementName, elementId);
 
             if (HasComponents(originalStartingDirectory))
@@ -333,16 +329,16 @@ namespace WixShield.Designers.FilesAndFolders
                 // the temp document, removing the items from the original then inserting the sorted
                 // items into the original
                 var sortedPEComponents =
-                    (from a in tempStartingDirectory.Elements(WixNamespace + "Component")
-                     where a.Element(WixNamespace + "File").Attribute("KeyPath") != null
-                           && a.Element(WixNamespace + "File").Attribute("KeyPath").Value == "yes"
-                     orderby a.Element(WixNamespace + "File").Attribute("Source").Value, a.Attribute("Id").Value ascending
+                    (from a in tempStartingDirectory.Elements(ns + "Component")
+                     where a.Element(ns + "File").Attribute("KeyPath") != null
+                           && a.Element(ns + "File").Attribute("KeyPath").Value == "yes"
+                     orderby a.Element(ns + "File").Attribute("Source").Value, a.Attribute("Id").Value ascending
                      select a);
 
                 var currentPEComponents =
-                    (from a in originalStartingDirectory.Elements(WixNamespace + "Component")
-                     where a.Element(WixNamespace + "File").Attribute("KeyPath") != null
-                           && a.Element(WixNamespace + "File").Attribute("KeyPath").Value == "yes"
+                    (from a in originalStartingDirectory.Elements(ns + "Component")
+                     where a.Element(ns + "File").Attribute("KeyPath") != null
+                           && a.Element(ns + "File").Attribute("KeyPath").Value == "yes"
                      select a);
 
                 currentPEComponents.Remove();
@@ -350,12 +346,12 @@ namespace WixShield.Designers.FilesAndFolders
 
                 try
                 {
-                    var originalNonPEComponentList = (from item in originalStartingDirectory.Elements(WixNamespace + "Component")
-                                              where item.Element(WixNamespace + "File").Attribute("KeyPath") == null
+                    var originalNonPEComponentList = (from item in originalStartingDirectory.Elements(ns + "Component")
+                                              where item.Element(ns + "File").Attribute("KeyPath") == null
                                               select item);
 
-                    var tempNonPEComponentList = (from item in tempStartingDirectory.Elements(WixNamespace + "Component")
-                                         where item.Element(WixNamespace + "File").Attribute("KeyPath") == null
+                    var tempNonPEComponentList = (from item in tempStartingDirectory.Elements(ns + "Component")
+                                         where item.Element(ns + "File").Attribute("KeyPath") == null
                                          select item);
 
                     // tempNonPEComponent.Elements().Remove();
@@ -366,11 +362,11 @@ namespace WixShield.Designers.FilesAndFolders
                         var tempNonPEComponent = tempNonPEComponentList.First();
 
                         // sort files in the temporary non PE component
-                        var sortedFiles = from f in tempNonPEComponent.Elements(WixNamespace + "File")
+                        var sortedFiles = from f in tempNonPEComponent.Elements(ns + "File")
                                           orderby f.Attribute("Source").Value ascending
                                           select f;
 
-                        var originalFiles = from f in originalNonPEComponent.Elements(WixNamespace + "File")
+                        var originalFiles = from f in originalNonPEComponent.Elements(ns + "File")
                                           select f;
                         
                         originalFiles.Remove();
@@ -405,20 +401,20 @@ namespace WixShield.Designers.FilesAndFolders
                 // sorts the directories 
                 if (originalStartingDirectory.Attribute("Id") != null && originalStartingDirectory.Attribute("Id").Value== "TARGETDIR")
                 {
-                    originalSubDirectories = (from dir in originalStartingDirectory.Elements(WixNamespace + "Directory")
+                    originalSubDirectories = (from dir in originalStartingDirectory.Elements(ns + "Directory")
                                               select dir);
 
-                    sortedSubDirectories = (from dir in tempStartingDirectory.Elements(WixNamespace + "Directory")
+                    sortedSubDirectories = (from dir in tempStartingDirectory.Elements(ns + "Directory")
                                               orderby dir.Attribute("Id").Value ascending
                                               select dir);
                 }
                 else
                 {
-                    originalSubDirectories = (from dir in originalStartingDirectory.Elements(WixNamespace + "Directory")
+                    originalSubDirectories = (from dir in originalStartingDirectory.Elements(ns + "Directory")
                                               where dir.Attribute("Name") != null
                                               select dir);
                     
-                    sortedSubDirectories = (from dir in tempStartingDirectory.Elements(WixNamespace + "Directory")
+                    sortedSubDirectories = (from dir in tempStartingDirectory.Elements(ns + "Directory")
                                               where dir.Attribute("Name") != null
                                               orderby dir.Attribute("Name").Value ascending
                                               select dir);
@@ -603,12 +599,12 @@ namespace WixShield.Designers.FilesAndFolders
 
         private bool SubElementIsGoodComponent(XElement directoryElement)
         {
-            XElement subElement = directoryElement.Element(WixNamespace + "Component");
+            XElement subElement = directoryElement.Element(ns + "Component");
             if (subElement != null)
             {
                 // check if file or create folder
-                XElement childElementFile = subElement.Element(WixNamespace + "File");
-                XElement childElementCreateFolder = subElement.Element(WixNamespace + "CreateFolder");
+                XElement childElementFile = subElement.Element(ns + "File");
+                XElement childElementCreateFolder = subElement.Element(ns + "CreateFolder");
 
                 return (childElementFile != null) || (childElementCreateFolder != null);
             }
@@ -620,7 +616,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private bool SubElementIsDirectory(XElement directoryElement)
         {
-            XElement subElement = directoryElement.Element(WixNamespace + "Directory");
+            XElement subElement = directoryElement.Element(ns + "Directory");
             return subElement != null;
         }
 
@@ -795,18 +791,25 @@ namespace WixShield.Designers.FilesAndFolders
 
         private static FileInfo[] RemoveExcludedFiles(FileInfo[] files, string fileExclusionPattern)
         {
-            var updatedFileList = new List<FileInfo>(files);
-            var patterns = fileExclusionPattern.Split(Seperator.ToCharArray());
-            foreach (var pattern in patterns)
+            if (files != null)
             {
-                if (String.IsNullOrEmpty(pattern)) continue;
-                foreach (var file in files)
+                var updatedFileList = new List<FileInfo>(files);
+                var patterns = fileExclusionPattern.Split(Seperator.ToCharArray());
+                foreach (var pattern in patterns)
                 {
-                    if (FileNameContainsPattern(file.Name, pattern) && updatedFileList.Contains(file))
-                        updatedFileList.Remove(file);
+                    if (String.IsNullOrEmpty(pattern)) continue;
+                    foreach (var file in files)
+                    {
+                        if (FileNameContainsPattern(file.Name, pattern) && updatedFileList.Contains(file))
+                            updatedFileList.Remove(file);
+                    }
                 }
+                return updatedFileList.ToArray();
             }
-            return updatedFileList.ToArray();
+            else
+            {
+                return new List<FileInfo>().ToArray();
+            }
         }
 
         private static bool FileNameContainsPattern(string fileName, string pattern)
@@ -882,15 +885,13 @@ namespace WixShield.Designers.FilesAndFolders
 
         private void GetDirectories(XElement element, TreeNode treeNode)
         {
-            XNamespace xNamespace = WixSchemaNamespace;
-
             //ToDo: Rememeber to check if the Element xNamespace is not null also
 
             // IEnumerable<XElement> directories = element.Descendants(xNamespace + "Directory");
 
             try
             {
-                var dir = element.Descendants(xNamespace + "Directory").First();
+                var dir = element.Descendants(ns + "Directory").First();
                 var Id = (dir.Attribute("Id") != null) ? dir.Attribute("Id").Value : "foo";
                 var dirName = (dir.Attribute("Name") != null) ? dir.Attribute("Name").Value : "bar";
                 var subTreeNode = (treeNode == null) ? tvDestination.Nodes.Add(Id + " " + dirName) : treeNode.Nodes.Add(Id + " " + dirName);
@@ -941,21 +942,19 @@ namespace WixShield.Designers.FilesAndFolders
             {
                 var selectedDirectory = FindDirectoryElement(treeNode);
                 // find all the file elements for the directory element
-                var directoryComponets = selectedDirectory.Elements(WixNamespace + "Component");
+                var directoryComponets = selectedDirectory.Elements(ns + "Component");
                 // loop through them displaying the source name and display context sensitive icon
                 foreach (var component in directoryComponets)
                 {
-                    var files = component.Elements(WixNamespace + "File");
+                    var files = component.Elements(ns + "File");
                     foreach (var file in files)
                     {
                         itemList.Add(CreateDestinationItemFromFile(file));
                     }
                 }
             }
-            catch
+            catch(Exception)
             {
-                // if we catch an exeption due to link we will return a null list
-                itemList = null;
             }
             return itemList;
         }
@@ -963,7 +962,8 @@ namespace WixShield.Designers.FilesAndFolders
         private ListViewItem CreateDestinationItemFromFile(XElement file)
         {
             var source = file.Attribute("Source").Value;
-            var realSourcePath = source.Replace(SourceDirVar, SourceStart);
+            string temp = source.Replace(SourceDirVar + @"\", "");
+            var realSourcePath = Path.Combine(SourceStart, temp );
             var sourceFileInfo = new FileInfo(realSourcePath);
 
             var filename = sourceFileInfo.Name;// source.Substring(source.LastIndexOf("\\")+1);
@@ -1032,7 +1032,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private void lvDestination_DragDrop(object sender, DragEventArgs e)
         {
-
+            _documentManager.DisableChangeWatcher();
             if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
                 var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
@@ -1066,6 +1066,7 @@ namespace WixShield.Designers.FilesAndFolders
                     CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
                 }
             }
+            _documentManager.EnableChangeWatcher();
 
         }
 
@@ -1163,7 +1164,7 @@ namespace WixShield.Designers.FilesAndFolders
             var newDirectory = sourceFolder.Text;
             var input = CreateDirectoryStringForHash(path, newDirectory);
 
-            var directory = new XElement(WixNamespace + "Directory", 
+            var directory = new XElement(ns + "Directory", 
                                     new XAttribute("Id", "owd" + GetMd5Hash(input)),
                                     new XAttribute("Name", sourceFolder.Text));
             
@@ -1177,7 +1178,7 @@ namespace WixShield.Designers.FilesAndFolders
         private bool DestinationContainsFolder(TreeNode destinationFolder, TreeNode sourceFolder)
         {
             var directory = FindDirectoryElement(destinationFolder);
-            var subDirectories = directory.Elements(WixNamespace + "Directory");
+            var subDirectories = directory.Elements(ns + "Directory");
 
             foreach (var subDirectory in subDirectories)
             {
@@ -1221,7 +1222,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private void AddNonProgramExecutableFileToCorrectComponent(TreeNode treeNode, ListViewItem item, XElement directory)
         {
-            var directoryComponents = directory.Elements(WixNamespace + "Component");
+            var directoryComponents = directory.Elements(ns + "Component");
 
             var directoryComponentCount = directoryComponents.Count();
             if (directoryComponentCount == 0)
@@ -1242,13 +1243,13 @@ namespace WixShield.Designers.FilesAndFolders
         private void AddNonProgramExecutableFileToNewOrExistingComponent(TreeNode treeNode, ListViewItem item, XElement directory, IEnumerable<XElement> componentElements)
         {
             // find number files 
-            var componentFiles = componentElements.First().Elements(WixNamespace + "File");
+            var componentFiles = componentElements.First().Elements(ns + "File");
             var componentFileCount = componentFiles.Count();
             if (componentFileCount == 0) return; // no file elements, user created bad xml
             if (componentFileCount == 1)
             {
                 // check file contents
-                var existingFile = componentElements.First().Elements(WixNamespace + "File").First();
+                var existingFile = componentElements.First().Elements(ns + "File").First();
                 if (existingFile.Attribute("Source") != null)
                 {
                     if (IsProgramExecutable(existingFile.Attribute("Source").Value))
@@ -1273,7 +1274,7 @@ namespace WixShield.Designers.FilesAndFolders
             foreach (var component in componentElements)
             {
                 /* This is the old logic that found the component based on file extensions.
-                var componentFiles = component.Elements(WixNamespace + "File");
+                var componentFiles = component.Elements(ns + "File");
                 if (componentFiles.First().Attribute("Source") != null)
                 {
                     if (!IsProgramExecutable(componentFiles.First().Attribute("Source").Value))
@@ -1316,7 +1317,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private void RemoveCreateFolderComponentFromDirectory(XElement directory)
         {
-            var oldComponent = directory.Element(WixNamespace + "Component");
+            var oldComponent = directory.Element(ns + "Component");
             if (oldComponent != null) oldComponent.Remove();
         }
 
@@ -1335,10 +1336,10 @@ namespace WixShield.Designers.FilesAndFolders
         private bool ContainsCreateFolder(XElement directory)
         {
             XElement createFolder = null;
-            if (directory.Element(WixNamespace + "Component") != null)
+            if (directory.Element(ns + "Component") != null)
             {
-                createFolder = (from item in directory.Elements(WixNamespace + "Component")
-                                    select item).First().Element(WixNamespace + "CreateFolder");
+                createFolder = (from item in directory.Elements(ns + "Component")
+                                    select item).First().Element(ns + "CreateFolder");
             }
 
             return createFolder != null;
@@ -1379,7 +1380,7 @@ namespace WixShield.Designers.FilesAndFolders
                 componentGuid = Guid.NewGuid();
             }
 
-            var component = new XElement(WixNamespace + "Component", new XAttribute("Id", "owc" + dirHashResult),
+            var component = new XElement(ns + "Component", new XAttribute("Id", "owc" + dirHashResult),
                                          new XAttribute("Guid", componentGuid));
 
             if (Merge64)
@@ -1388,7 +1389,7 @@ namespace WixShield.Designers.FilesAndFolders
             }
 
 
-            var file = new XElement(WixNamespace + "File", new XAttribute("Id", "owf" + hashResult),
+            var file = new XElement(ns + "File", new XAttribute("Id", "owf" + hashResult),
                                     new XAttribute("Source", sourcePath));
 
             if (keyPath)
@@ -1415,7 +1416,7 @@ namespace WixShield.Designers.FilesAndFolders
         private XElement CreateNewComponentWithCreateFolder(string path, bool processPath)
         {
             var newPath = (processPath) ? CreateDirectoryStringForHash(path): path;
-            var component = new XElement(WixNamespace + "Component", new XAttribute("Id", "owc" + GetMd5Hash(newPath)),
+            var component = new XElement(ns + "Component", new XAttribute("Id", "owc" + GetMd5Hash(newPath)),
                                          new XAttribute("Guid", Guid.NewGuid()));
 
             if(Merge64)
@@ -1423,7 +1424,7 @@ namespace WixShield.Designers.FilesAndFolders
                 component.Add(new XAttribute("Win64", "yes"));
             }
 
-            var createFolder = new XElement(WixNamespace + "CreateFolder");
+            var createFolder = new XElement(ns + "CreateFolder");
 
             component.Add(createFolder);
             return component;
@@ -1435,7 +1436,7 @@ namespace WixShield.Designers.FilesAndFolders
             // var source = CreateSourcePath(treeNode.FullPath, item.Text);
             var filePathForHash = CreateFilePathForHash(treeNode.FullPath, item.Text);
 
-            var file = new XElement(WixNamespace + "File", new XAttribute("Id", "owf" + GetMd5Hash(filePathForHash)),
+            var file = new XElement(ns + "File", new XAttribute("Id", "owf" + GetMd5Hash(filePathForHash)),
                                     new XAttribute("Source", sourcePath));
             return file;
         }
@@ -1459,13 +1460,13 @@ namespace WixShield.Designers.FilesAndFolders
 
         private XElement FindDirectoryElement(TreeNode treeNode)
         {
-            var selectedDirectory = FindDirectoryElement(_mgr.DocumentManager.Document, treeNode.Text, treeNode.Tag.ToString());
+            var selectedDirectory = FindDirectoryElement(_documentManager.Document, treeNode.Text, treeNode.Tag.ToString());
             return selectedDirectory;
         }
 
         private XElement FindDirectoryElement(string text, string tag)
         {
-            var selectedDirectory = FindDirectoryElement(_mgr.DocumentManager.Document, text, tag);
+            var selectedDirectory = FindDirectoryElement(_documentManager.Document, text, tag);
             return selectedDirectory;
         }
 
@@ -1478,7 +1479,7 @@ namespace WixShield.Designers.FilesAndFolders
                 {
                     case "[MergeRedirectFolder]":
 
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
+                        selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                              where
                                                  item.Attribute("Id") != null &&
                                                  item.Attribute("Id").Value == "MergeRedirectFolder"
@@ -1486,35 +1487,35 @@ namespace WixShield.Designers.FilesAndFolders
                                              break;
 
                     case "[CommonFilesFolder]":
-                                             selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
+                                             selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                                                   where
                                                                       item.Attribute("Id") != null &&
                                                                       item.Attribute("Id").Value == "CommonFilesFolder"
                                                                   select item).First();
                                              break;
                     case "[CommonAppDataFolder]":
-                                             selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
+                                             selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                                                   where
                                                                       item.Attribute("Id") != null &&
                                                                       item.Attribute("Id").Value == "CommonAppDataFolder"
                                                                   select item).First();
                                              break;
                     case "[SystemFolder]":
-                                             selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
+                                             selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                                                   where
                                                                       item.Attribute("Id") != null &&
                                                                       item.Attribute("Id").Value == "SystemFolder"
                                                                   select item).First();
                                              break;
                     case "[System64Folder]":
-                                             selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
+                                             selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                                                   where
                                                                       item.Attribute("Id") != null &&
                                                                       item.Attribute("Id").Value == "System64Folder"
                                                                   select item).First();
                                              break;
                     default:
-                                             selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
+                                             selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                                                   where
                                                                       item.Attribute("Name") != null &&
                                                                       item.Attribute("Name").Value == text
@@ -1535,7 +1536,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private XElement FindFileElement(TreeNode treeNode)
         {
-            var selectedFile = (from item in _mgr.DocumentManager.Document.Descendants(WixNamespace + "Directory")
+            var selectedFile = (from item in _documentManager.Document.Descendants(ns + "Directory")
                                      where
                                          item.Attribute("Name") != null &&
                                          item.Attribute("Name").Value == treeNode.Text
@@ -1593,6 +1594,7 @@ namespace WixShield.Designers.FilesAndFolders
 
         private void tvDestination_DragDrop(object sender, DragEventArgs e)
         {
+            _documentManager.DisableChangeWatcher();
             if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
                 var point = ((TreeView) sender).PointToClient(new Point(e.X, e.Y));
@@ -1643,7 +1645,6 @@ namespace WixShield.Designers.FilesAndFolders
                             // Refresh the directory structure incase of delayed load or changes since loading
                             sourceFolder.Nodes.Clear();
                             PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
-
                             AddAllDirectoriesToDestination(dropNode, sourceFolder);
                             SortData();
                             LoadDocument();
@@ -1661,18 +1662,19 @@ namespace WixShield.Designers.FilesAndFolders
             }
             HoverNode.BackColor = Color.White;
             HoverNode.ForeColor = Color.Black;
+            _documentManager.EnableChangeWatcher();
         }
 
         private void RemoveItemFromDocument(TreeNode treeNode, ListViewItem item)
         {
             var directory = FindDirectoryElement(treeNode);
-            var directoryComponets = directory.Elements(WixNamespace + "Component");
+            var directoryComponets = directory.Elements(ns + "Component");
 
             var componentCount = directoryComponets.Count();
             foreach (var component in directoryComponets)
             {
                 var componentIsCandidateForDelete = false;
-                var files = component.Elements(WixNamespace + "File");
+                var files = component.Elements(ns + "File");
                 var fileCount = files.Count();
                 foreach (var file in files)
                 {
@@ -1698,7 +1700,7 @@ namespace WixShield.Designers.FilesAndFolders
                     else
                     {
                         // fill component with <CreateFolder />
-                        var createFolder = new XElement(WixNamespace + "CreateFolder");
+                        var createFolder = new XElement(ns + "CreateFolder");
                         component.Add(createFolder);
                     }
                 }
@@ -1707,12 +1709,12 @@ namespace WixShield.Designers.FilesAndFolders
 
         private bool HasSubDirectories(XElement directory)
         {
-            return directory.Elements(WixNamespace + "Directory").Count() > 0;
+            return directory.Elements(ns + "Directory").Count() > 0;
         }
 
         private bool HasComponents(XElement directory)
         {
-            return directory.Elements(WixNamespace + "Component").Elements(WixNamespace + "File").Count() > 0;
+            return directory.Elements(ns + "Component").Elements(ns + "File").Count() > 0;
         }
 
         private bool CanBeMoved(ListViewItem item, TreeNode dropNode)
@@ -1731,11 +1733,11 @@ namespace WixShield.Designers.FilesAndFolders
         private bool IsInDirectory(ListViewItem item, TreeNode dropNode)
         {
             var directory = FindDirectoryElement(dropNode);
-            var directoryComponets = directory.Elements(WixNamespace + "Component");
+            var directoryComponets = directory.Elements(ns + "Component");
 
             foreach (var component in directoryComponets)
             {
-                var files = component.Elements(WixNamespace + "File");
+                var files = component.Elements(ns + "File");
                 foreach (var file in files)
                 {
                     var newFileSourcePath = CreateSourcePath(item);
@@ -1881,7 +1883,7 @@ namespace WixShield.Designers.FilesAndFolders
             XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
 
             //add folder with folderId as the Id attribute value
-            XElement specialDirectory = new XElement(WixNamespace + "Directory", new XAttribute("Id", folderId));
+            XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId));
             destinationComputer.Add(specialDirectory);
 
             //reload the document so the new folder can be seen
@@ -1895,7 +1897,7 @@ namespace WixShield.Designers.FilesAndFolders
             XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
 
             //add folder with folderId as the Id attribute value
-            XElement specialDirectory = new XElement(WixNamespace + "Directory", new XAttribute("Id", folderId), new XAttribute("Name", folderName));
+            XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId), new XAttribute("Name", folderName));
             destinationComputer.Add(specialDirectory);
 
             //reload the document so the new folder can be seen
@@ -1974,7 +1976,7 @@ namespace WixShield.Designers.FilesAndFolders
         {
             // Check for existance of directories that contain the text 'New Folder'
             var directoryElement = FindDirectoryElement(tvDestination.SelectedNode);
-            var newFolderList = (from s in directoryElement.Elements(WixNamespace + "Directory")
+            var newFolderList = (from s in directoryElement.Elements(ns + "Directory")
                                  where s.Attribute("Name").Value.Contains("New Folder")
                                  select s);
             var newFolderName = "New Folder";
@@ -2060,12 +2062,12 @@ namespace WixShield.Designers.FilesAndFolders
             directoryElement.Attribute("Id").Value = "owd" + newIdHash;
 
             // recalculate hash for components
-            var componentList = directoryElement.Elements(WixNamespace + "Component");
+            var componentList = directoryElement.Elements(ns + "Component");
             foreach (XElement componentElement in componentList)
             {
                 var isPEComponent = false;
                 var filePath = String.Empty;
-                var fileList = componentElement.Elements(WixNamespace + "File");
+                var fileList = componentElement.Elements(ns + "File");
                 foreach (XElement fileElement in fileList)
                 {
                     // build new hash based on new path and filename
@@ -2090,7 +2092,7 @@ namespace WixShield.Designers.FilesAndFolders
             }
 
             // repeat the task for each subdirectory of directoryElement
-            var directoryList = directoryElement.Elements(WixNamespace + "Directory");
+            var directoryList = directoryElement.Elements(ns + "Directory");
             foreach (XElement subDirectory in directoryList)
             {
                 var newSubDirectoryPath = String.Format("{0}\\{1}", newDirectoryPath ,subDirectory.Attribute("Name").Value);
@@ -2200,11 +2202,11 @@ namespace WixShield.Designers.FilesAndFolders
         private void RemoveItemFromDirectory(TreeNode directory, ListViewItem file)
         {
             var directoryElement = FindDirectoryElement(directory);
-            var componentList = directoryElement.Elements(WixNamespace + "Component");
+            var componentList = directoryElement.Elements(ns + "Component");
             if (componentList.Count() == 1)
             {
                 // check files and possibly remove component
-                var fileList = componentList.First().Elements(WixNamespace + "File");
+                var fileList = componentList.First().Elements(ns + "File");
                 if (fileList.Count() == 1)
                 {
                     // remove the component and add component with CreateFolder if it is not a Root Directory
@@ -2235,12 +2237,12 @@ namespace WixShield.Designers.FilesAndFolders
             {
                 // check file count and if file is PE or non PE
                 var foundFile = (
-                    from fileItem in componentList.Descendants(WixNamespace + "File")
+                    from fileItem in componentList.Descendants(ns + "File")
                     where fileItem.Attribute("Source").Value.EndsWith("\\" + file.Text) 
                     //the componentItem has a file that has an attribute that ends with the file.txt;
                     select fileItem).First();
                 
-                if (foundFile.Parent.Elements(WixNamespace + "File").Count() > 1)
+                if (foundFile.Parent.Elements(ns + "File").Count() > 1)
                 {
                     foundFile.Remove();
                 }
@@ -2427,17 +2429,9 @@ namespace WixShield.Designers.FilesAndFolders
 
         #region IFireworksDesigner Members
 
-        public IDesignerManager DesignerManager
-        {
-            set
-            {
-                _mgr = value;
-            }
-        }
-
         public bool IsValidContext()
         {
-            if( _mgr.DocumentManager.Document.GetDocumentType() == IsWiXDocumentType.Module )
+            if( _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module )
             {
                 return true;
             }
@@ -2459,7 +2453,7 @@ namespace WixShield.Designers.FilesAndFolders
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.MS-PL.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -2526,7 +2520,7 @@ namespace WixShield.Designers.FilesAndFolders
                 componentRules = "\"OneToOne\"";
             }
 
-            foreach (var node in _mgr.DocumentManager.Document.DescendantNodes())
+            foreach (var node in _documentManager.Document.DescendantNodes())
             {
                 var xpi = node as XProcessingInstruction;
                 if (xpi != null && xpi.Target == "define")
@@ -2543,7 +2537,7 @@ namespace WixShield.Designers.FilesAndFolders
             
             if (!componentRulesExists)
             {
-                _mgr.DocumentManager.Document.Descendants(ns + "Wix").First().AddFirst(
+                _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(
                     new XProcessingInstruction("define", string.Format("ComponentRules={0}", componentRules)));
             }
         }
@@ -2551,7 +2545,7 @@ namespace WixShield.Designers.FilesAndFolders
         private bool Is64BitMergeModule()
         {
             bool is64Bit = false;
-            if(_mgr.DocumentManager.Document.Descendants(ns + "Package").First().GetOptionalAttribute("Platform").Contains("64"))
+            if(_documentManager.Document.Descendants(ns + "Package").First().GetOptionalAttribute("Platform").Contains("64"))
             {
                 is64Bit = true;
             }

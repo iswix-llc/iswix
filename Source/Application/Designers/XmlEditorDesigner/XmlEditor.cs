@@ -16,16 +16,17 @@ using System.Xml.Schema;
 using System.Text;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
-using FireworksFramework.Types;
 using ICSharpCode.XmlEditor;
 using ICSharpCode.Core;
 using IsWiXAutomationInterface;
+using DocumentManagement.Managers;
 
 namespace XmlEditorDesigner
 {
     public partial class XmlEditor : UserControl, IFireworksDesigner
     {
-        IDocumentManager _mgr;
+        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+
         XmlEditorControl editor;
         bool _validXML;
             
@@ -41,21 +42,21 @@ namespace XmlEditorDesigner
 
         public void LoadData()
         {
-            editor.Text = _mgr.Document.ToString();
+            editor.Text = _documentManager.Document.ToString();
             editor.TextEditorProperties.EnableFolding = true;
             editor.Document.FoldingManager.FoldingStrategy = new XmlFoldingStrategy();
             editor.Document.FoldingManager.UpdateFoldings("", null);
             this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
             editor.Validating += new CancelEventHandler(editor_Validating);
             this.editor.SetHighlighting("XML");
-            ValidateXML();
+            ValidateXML(false);
             XmlSchemaCompletionDataCollection schemas = new XmlSchemaCompletionDataCollection();
 
             string schemasDir;
             try
             {
 
-                if (_mgr.Document.GetWiXNameSpace() == "http://schemas.microsoft.com/wix/2006/wi")
+                if (_documentManager.Document.GetWiXNameSpace() == "http://schemas.microsoft.com/wix/2006/wi")
                 {
                     schemasDir = Path.Combine(PropertyService.DataDirectory, "Schemas");
                 }
@@ -77,23 +78,26 @@ namespace XmlEditorDesigner
 
         }
 
-        private void ValidateXML()
+        private void ValidateXML(bool textChanged)
         {
 
             _validXML = false;
 
             string xmlValidationMessage = string.Empty;
-            XDocument doc = new XDocument();
+            XDocument tempDocument = new XDocument();
 
             try
             {
-                doc = XDocument.Parse(editor.Text);
-                if (_mgr.Schemas.Contains(_mgr.DefaultNamespace.ToString()))
+                tempDocument = XDocument.Parse(editor.Text);
+                _validXML = true;
+                if (_documentManager.Schemas.Contains(_documentManager.DefaultNamespace.ToString()))
                 {
                     xmlValidationMessage = "Valid XML ( Validated against available schemas )";
-                    doc.Validate(_mgr.Schemas, (o, ex) => { _validXML = false; xmlValidationMessage = ex.Exception.Message; });
+                    tempDocument.Validate(_documentManager.Schemas, (o, ex) => {
+                        _validXML = false;
+                        xmlValidationMessage = ex.Exception.Message;
+                    });
                 }
-                _validXML = true;
             }
             catch (Exception ex)
             {
@@ -106,14 +110,21 @@ namespace XmlEditorDesigner
             if (_validXML)
             {
                 textBoxStatus.Text = xmlValidationMessage;
-                _mgr.DocumentText = editor.Text;
-                _mgr.CanSave = true;
+                if (textChanged)
+                {
+                    if (_documentManager.Document!= tempDocument )
+                    {
+                        _documentManager.Document = tempDocument;
+                        _documentManager.RefreshNamespaces();
+                    }
+                }
+                _documentManager.CanSave = true;
                 
             }
             else
             {
                 textBoxStatus.Text = xmlValidationMessage;
-                _mgr.CanSave = false;
+                _documentManager.CanSave = false;
             }
 
         }
@@ -123,12 +134,7 @@ namespace XmlEditorDesigner
         private void editor_TextChanged(object sender, EventArgs e)
         {
             editor.Document.FoldingManager.UpdateFoldings("", null);
-            ValidateXML();
-        }
-
-        public IDesignerManager DesignerManager
-        {
-            set { _mgr = value.DocumentManager; }
+            ValidateXML(true);
         }
 
         public string PluginName
@@ -154,7 +160,7 @@ namespace XmlEditorDesigner
 
         public string PluginInformation
         {
-            get { return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("XmlEditorDesigner.MS-PL.txt")).ReadToEnd(); }
+            get { return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("XmlEditorDesigner.License.txt")).ReadToEnd(); }
         }
 
         public bool IsValidContext()
@@ -181,7 +187,7 @@ namespace XmlEditorDesigner
                 }
                 else
                 {
-                    editor.Text = _mgr.Document.ToString();
+                    editor.Text = _documentManager.Document.ToString();
                 }
             }
         }
@@ -196,7 +202,7 @@ namespace XmlEditorDesigner
                 }
                 else
                 {
-                    editor.Text = _mgr.Document.ToString();
+                    editor.Text = _documentManager.Document.ToString();
                     
                 }
             }
