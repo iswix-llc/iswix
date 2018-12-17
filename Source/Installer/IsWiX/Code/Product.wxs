@@ -20,10 +20,12 @@
     <PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
     <PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
     <PropertyRef Id="VS2017_EXTENSIONS_DIR"/>
-    
+    <PropertyRef Id="VS2019_EXTENSIONS_DIR"/>
+
     <CustomActionRef Id="VS2013Setup" />
     <CustomActionRef Id="VS2015Setup" />
     <CustomActionRef Id="VS2017Setup" />
+    <CustomActionRef Id="VS2019Setup" />
 
   </Product>
 </Wix>
