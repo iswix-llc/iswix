@@ -31,6 +31,8 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXNewAddInMM", "IsWiXNew
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AppXDesignerMM", "Designers\AppXDesignerMM\AppXDesignerMM.wixproj", "{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MSIXDesignerMM", "Designers\MSIXDesignerMM\MSIXDesignerMM.wixproj", "{7EC5667F-54C7-4B39-A346-D55E0EC719DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,16 @@ Global
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Release|Mixed Platforms.Build.0 = Release|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Release|x86.ActiveCfg = Release|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Release|x86.Build.0 = Release|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Debug|x86.ActiveCfg = Debug|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Debug|x86.Build.0 = Debug|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Release|Any CPU.ActiveCfg = Release|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Release|x86.ActiveCfg = Release|x86
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,5 +198,6 @@ Global
 		{183014D8-0F6F-4ADD-8652-59658A85EC37} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
 		{D91E59CE-6F3A-4124-B775-5493C2E65048} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
+		{7EC5667F-54C7-4B39-A346-D55E0EC719DB} = {FAE52A10-13FE-4586-9C7C-B466FF61963E}
 	EndGlobalSection
 EndGlobal

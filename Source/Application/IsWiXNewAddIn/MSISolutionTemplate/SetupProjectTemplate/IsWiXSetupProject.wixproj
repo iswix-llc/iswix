@@ -9,12 +9,17 @@
 		<OutputType>Package</OutputType>
 		<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
 		<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-	  <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
-    <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(TF_BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
- 	  <!-- If MSIProductVersion still not known, try to get it from TFBuild Environments (V.Next Builds)-->
-    <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
-    <!-- If MSIProductVersion still not known, default to lowerbound 0.0.1 for developer builds.-->
-    <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
+  	    <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
+        <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(TF_BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
+ 	    <!-- If MSIProductVersion still not known, try to get it from TFBuild Environments (V.Next Builds)-->
+        <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
+        <!-- If MSIProductVersion still not known, default to lowerbound 0.0.1 for developer builds.-->
+        <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
+		<!-- The following allows one cert to be referenced from the certificate store for self-signing in localbuilds and another cert to be passed in during official builds. -->
+		<AppxCertificateThumbprint Condition=" '$(AppxCertificateThumbprint)' == '' "></AppxCertificateThumbprint>
+		<AppxTimestampUrl Condition=" '$(AppxTimestampUrl)' == '' "></AppxTimestampUrl>
+		<MsixCertificateThumbprint Condition=" '$(MsixCertificateThumbprint)' == '' "></MsixCertificateThumbprint>
+		<MsixTimestampUrl Condition=" '$(MsixTimestampUrl)' == '' "></MsixTimestampUrl>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
 		<OutputPath>bin\$(Configuration)\</OutputPath>

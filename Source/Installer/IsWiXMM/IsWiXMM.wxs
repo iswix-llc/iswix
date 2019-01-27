@@ -33,13 +33,14 @@
         <Component Id="owcF687CD25DBEA41F3A5555729AC19B5F6" Guid="615b5678-171b-e34b-353a-6d7999a14edf">
           <File Id="owfF687CD25DBEA41F3A5555729AC19B5F6" Source="$(var.SourceDir)\Microsoft.Deployment.WindowsInstaller.dll" KeyPath="yes"></File>
         </Component>
-         <Directory Id="owd878D183E2FFB0B60D5A8A3A3E2A04F73" Name="Schemas">
+        <Directory Id="owd878D183E2FFB0B60D5A8A3A3E2A04F73" Name="Schemas">
           <Component Id="owc878D183E2FFB0B60D5A8A3A3E2A04F73" Guid="27ec7e8d-f1e1-4c97-a2ac-acea8f0ea777" KeyPath="yes">
             <File Id="owfFDEE331E2DE8F1BCD7BEABD3751A01D5" Source="$(var.SourceDir)\Schemas\bal.xsd" />
             <File Id="owf80763B441A25CF22C569C01494AEE847" Source="$(var.SourceDir)\Schemas\complus.xsd" />
             <File Id="owf5A560AB272D2E105EA8974592FBE1BB3" Source="$(var.SourceDir)\Schemas\Dependency.xsd" />
             <File Id="owfA85FBD92B0B52CFB638696E7B4945064" Source="$(var.SourceDir)\Schemas\difxapp.xsd" />
             <File Id="owf54AC52DE8226F52D5D4CC4FDE7AE842A" Source="$(var.SourceDir)\Schemas\fgappx.xsd" />
+            <File Id="owf1F333185A02D610AE7C0D8CCB4B62661" Source="$(var.SourceDir)\Schemas\fgmsix.xsd" />
             <File Id="owf1DC7A836EE9788AF7814C377444E70B7" Source="$(var.SourceDir)\Schemas\firewall.xsd" />
             <File Id="owf234415BB8A6767EE94672DCEEF707B49" Source="$(var.SourceDir)\Schemas\gaming.xsd" />
             <File Id="owf4805C815DD86DD358621EF0AAB60BBD2" Source="$(var.SourceDir)\Schemas\iis.xsd" />

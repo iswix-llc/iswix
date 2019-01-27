@@ -14,14 +14,14 @@ using IsWiXAutomationInterface;
 using DocumentManagement.Managers;
 
 
-namespace AppXDesigner
+namespace MSIXDesigner
 {
-    public partial class AppXs : UserControl, IFireworksDesigner
+    public partial class MSIXs : UserControl, IFireworksDesigner
     {
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
         bool _fgWiXInstalled;
-        IsWiXFGAppXs _isWiXFGAppXs;
+        IsWiXFGMSIXs _isWiXFGMSIXs;
 
         private enum ImageLibrary
         {
@@ -40,10 +40,10 @@ namespace AppXDesigner
         }
 
 
-        public AppXs()
+        public MSIXs()
         {
             InitializeComponent();
-            _fgWiXInstalled = IsWiXFGAppXs.IsFGWiXInstalled();
+            _fgWiXInstalled = IsWiXFGMSIXs.IsFGWiXInstalled();
         }
 
         public bool SuppressFireGiantMessage
@@ -79,47 +79,47 @@ namespace AppXDesigner
             }
             else
             {
-                contextMenuStripAppX.Items.Clear();
+                contextMenuStripMSIX.Items.Clear();
             }
+
         }
 
         private  void LoadDocument()
         {
             panelTop.Height = 0;
-            _isWiXFGAppXs = new IsWiXFGAppXs(_documentManager.Document);
+            _isWiXFGMSIXs = new IsWiXFGMSIXs(_documentManager.Document);
+            contextMenuStripMSIX.Items["toolStripMenuItemRename"].Enabled = false;
+            contextMenuStripMSIX.Items["toolStripMenuItemDelete"].Enabled = false;
 
-            contextMenuStripAppX.Items["toolStripMenuItemRename"].Enabled = false;
-            contextMenuStripAppX.Items["toolStripMenuItemDelete"].Enabled = false;
-
-            treeViewAppXs.Nodes.Clear();
-            foreach (var isWiXFGAppX in _isWiXFGAppXs)
+            treeViewMSIXs.Nodes.Clear();
+            foreach (var isWiXFGMSIX in _isWiXFGMSIXs)
             {
-                contextMenuStripAppX.Items["toolStripMenuItemRename"].Enabled = true;
-                contextMenuStripAppX.Items["toolStripMenuItemDelete"].Enabled = true;
-                AddAppXNode(isWiXFGAppX);
+                contextMenuStripMSIX.Items["toolStripMenuItemRename"].Enabled = true;
+                contextMenuStripMSIX.Items["toolStripMenuItemDelete"].Enabled = true;
+                AddMSIXNode(isWiXFGMSIX);
             }
 
 
         }
 
 
-        private void AddAppXNode(IsWiXFGAppX isWiXFGAppX)
+        private void AddMSIXNode(IsWiXFGMSIX isWiXFGMSIX)
         {
-            var subTreeNode = treeViewAppXs.Nodes.Add(isWiXFGAppX.Id);
+            var subTreeNode = treeViewMSIXs.Nodes.Add(isWiXFGMSIX.Id);
             subTreeNode.ImageIndex = (int)ImageLibrary.Services;
             subTreeNode.SelectedImageIndex = (int)ImageLibrary.Services;
-            subTreeNode.Tag = isWiXFGAppX;
-            treeViewAppXs.ExpandAll();
-            treeViewAppXs.Select();
+            subTreeNode.Tag = isWiXFGMSIX;
+            treeViewMSIXs.ExpandAll();
+            treeViewMSIXs.Select();
             UpdatedSelectedNodeText();
         }
 
         private void UpdatedSelectedNodeText()
         {
-            IsWiXFGAppX appx = treeViewAppXs.SelectedNode.Tag as IsWiXFGAppX;
-            if (appx != null)
+            IsWiXFGMSIX msix = treeViewMSIXs.SelectedNode.Tag as IsWiXFGMSIX;
+            if (msix != null)
             {
-                treeViewAppXs.SelectedNode.Text = appx.Id;
+                treeViewMSIXs.SelectedNode.Text = msix.Id;
             }
         }
 
@@ -133,7 +133,7 @@ namespace AppXDesigner
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("AppXDesigner.AppX.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("MSIXDesigner.MSIX.ico"));
             }
         }
 
@@ -141,7 +141,7 @@ namespace AppXDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("AppXDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("MSIXDesigner.License.txt")).ReadToEnd();
             }
         }
 
@@ -149,12 +149,12 @@ namespace AppXDesigner
 
         public string PluginName
         {
-            get { return "AppX"; }
+            get { return "MSIX"; }
         }
 
         public string PluginOrder
         {
-            get { return "iswix_group2_appx"; }
+            get { return "iswix_group2_appx_msix"; }
         }
 
         private void linkLabelRequirements_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -162,66 +162,66 @@ namespace AppXDesigner
             DisplayFGWiXMessage();
         }
 
-        private void treeViewAppXs_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeViewMSIXs_AfterSelect(object sender, TreeViewEventArgs e)
         {
             propertyGrid1.Enabled = true;
-            propertyGrid1.SelectedObject = appX1;
-            appX1.Read(e.Node.Tag as IsWiXFGAppX);
+            propertyGrid1.SelectedObject = msix1;
+            msix1.Read(e.Node.Tag as IsWiXFGMSIX);
         }
 
         private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            appX1.Write(e.ChangedItem.Label);
+            msix1.Write(e.ChangedItem.Label);
             UpdatedSelectedNodeText();
         }
 
         private void toolStripMenuItemNewFeature_Click(object sender, EventArgs e)
         {
-            IsWiXFGAppXs appxs = new IsWiXFGAppXs(_documentManager.Document);
-            string appxName = IsWiXFGAppXs.SuggestNextAppXName(_documentManager.Document);
-            IsWiXFGAppX appx = appxs.Create(appxName, "CN=YourCompanyName", TargetType.desktop);
-            TreeNode node = treeViewAppXs.Nodes.Add(appx.Id);
+            IsWiXFGMSIXs msixs = new IsWiXFGMSIXs(_documentManager.Document);
+            string msixName = IsWiXFGMSIXs.SuggestNextMSIXName(_documentManager.Document);
+            IsWiXFGMSIX msix = msixs.Create(msixName, "CN=, O=, STREET=, L=, S=, PostalCode=, C=", TargetType.desktop);
+            TreeNode node = treeViewMSIXs.Nodes.Add(msix.Id);
             node.SelectedImageIndex = (int)ImageLibrary.Services;
             node.ImageIndex = (int)ImageLibrary.Services;
-            node.Tag = appx;
-            treeViewAppXs.SelectedNode = node;
-            contextMenuStripAppX.Items["toolStripMenuItemRename"].Enabled = true;
-            contextMenuStripAppX.Items["toolStripMenuItemDelete"].Enabled = true;
+            node.Tag = msix;
+            treeViewMSIXs.SelectedNode = node;
+            contextMenuStripMSIX.Items["toolStripMenuItemRename"].Enabled = true;
+            contextMenuStripMSIX.Items["toolStripMenuItemDelete"].Enabled = true;
 
-            _isWiXFGAppXs.SortXML();
+            _isWiXFGMSIXs.SortXML();
         }
 
         private void toolStripMenuItemRename_Click(object sender, EventArgs e)
         {
-            treeViewAppXs.SelectedNode.BeginEdit();
+            treeViewMSIXs.SelectedNode.BeginEdit();
         }
 
         private void toolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
-            IsWiXFGAppX isWiXFGAppX = treeViewAppXs.SelectedNode.Tag as IsWiXFGAppX;
-            isWiXFGAppX.Delete();
-            treeViewAppXs.SelectedNode.Remove();
-            if(treeViewAppXs.Nodes.Count>0)
+            IsWiXFGMSIX isWiXFGMSIX = treeViewMSIXs.SelectedNode.Tag as IsWiXFGMSIX;
+            isWiXFGMSIX.Delete();
+            treeViewMSIXs.SelectedNode.Remove();
+            if(treeViewMSIXs.Nodes.Count>0)
             {
-                treeViewAppXs.SelectedNode = treeViewAppXs.Nodes[0];
+                treeViewMSIXs.SelectedNode = treeViewMSIXs.Nodes[0];
             }
             else
             {
                 propertyGrid1.Enabled = false;
-                appX1 = new AppX();
-                propertyGrid1.SelectedObject = appX1;
+                msix1 = new MSIX();
+                propertyGrid1.SelectedObject = msix1;
             }
 
-            if(treeViewAppXs.Nodes.Count == 0)
+            if(treeViewMSIXs.Nodes.Count == 0)
             {
-                contextMenuStripAppX.Items["toolStripMenuItemRename"].Enabled = false;
-                contextMenuStripAppX.Items["toolStripMenuItemDelete"].Enabled = false;
+                contextMenuStripMSIX.Items["toolStripMenuItemRename"].Enabled = false;
+                contextMenuStripMSIX.Items["toolStripMenuItemDelete"].Enabled = false;
 
             }
-            _isWiXFGAppXs.SortXML();
+            _isWiXFGMSIXs.SortXML();
         }
 
-        private void treeViewAppXs_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        private void treeViewMSIXs_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             try
             {
@@ -231,9 +231,9 @@ namespace AppXDesigner
                 }
                 else
                 {
-                    IsWiXFGAppX isWiXFGAppX = treeViewAppXs.SelectedNode.Tag as IsWiXFGAppX;
-                    isWiXFGAppX.Id = e.Label;
-                    appX1.Id = isWiXFGAppX.Id;
+                    IsWiXFGMSIX isWiXFGMSIX = treeViewMSIXs.SelectedNode.Tag as IsWiXFGMSIX;
+                    isWiXFGMSIX.Id = e.Label;
+                    msix1.Id = isWiXFGMSIX.Id;
                 }
                 propertyGrid1.Refresh();
             }

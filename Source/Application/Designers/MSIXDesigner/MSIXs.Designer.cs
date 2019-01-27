@@ -1,6 +1,6 @@
-﻿namespace AppXDesigner
+﻿namespace MSIXDesigner
 {
-    partial class AppXs
+    partial class MSIXs
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AppXs));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MSIXs));
             this.panelTop = new System.Windows.Forms.Panel();
             this.linkLabelRequirements = new System.Windows.Forms.LinkLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.treeViewAppXs = new System.Windows.Forms.TreeView();
-            this.contextMenuStripAppX = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.treeViewMSIXs = new System.Windows.Forms.TreeView();
+            this.contextMenuStripMSIX = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemNewFeature = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRename = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,11 +43,11 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.iImageLibrary = new System.Windows.Forms.ImageList(this.components);
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.appX1 = new AppXDesigner.AppX(this.components);
+            this.msix1 = new MSIXDesigner.MSIX(this.components);
             this.panelTop.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.contextMenuStripAppX.SuspendLayout();
+            this.contextMenuStripMSIX.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -67,10 +67,10 @@
             this.linkLabelRequirements.Location = new System.Drawing.Point(0, 20);
             this.linkLabelRequirements.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabelRequirements.Name = "linkLabelRequirements";
-            this.linkLabelRequirements.Size = new System.Drawing.Size(614, 17);
+            this.linkLabelRequirements.Size = new System.Drawing.Size(612, 17);
             this.linkLabelRequirements.TabIndex = 0;
             this.linkLabelRequirements.TabStop = true;
-            this.linkLabelRequirements.Text = "The AppX designer requires the Fire Giant WiX Expansion Pack. Click here for more" +
+            this.linkLabelRequirements.Text = "The MSIX designer requires the Fire Giant WiX Expansion Pack. Click here for more" +
     " information.";
             this.linkLabelRequirements.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelRequirements_LinkClicked);
             // 
@@ -87,7 +87,7 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.treeViewAppXs);
+            this.panel2.Controls.Add(this.treeViewMSIXs);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -95,34 +95,34 @@
             this.panel2.Size = new System.Drawing.Size(399, 336);
             this.panel2.TabIndex = 0;
             // 
-            // treeViewAppXs
+            // treeViewMSIXs
             // 
-            this.treeViewAppXs.ContextMenuStrip = this.contextMenuStripAppX;
-            this.treeViewAppXs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewAppXs.ImageIndex = 0;
-            this.treeViewAppXs.ImageList = this.iImageLibrary;
-            this.treeViewAppXs.LabelEdit = true;
-            this.treeViewAppXs.Location = new System.Drawing.Point(0, 0);
-            this.treeViewAppXs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.treeViewAppXs.Name = "treeViewAppXs";
-            this.treeViewAppXs.SelectedImageIndex = 0;
-            this.treeViewAppXs.ShowNodeToolTips = true;
-            this.treeViewAppXs.Size = new System.Drawing.Size(399, 336);
-            this.treeViewAppXs.TabIndex = 1;
-            this.treeViewAppXs.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeViewAppXs_AfterLabelEdit);
-            this.treeViewAppXs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewAppXs_AfterSelect);
+            this.treeViewMSIXs.ContextMenuStrip = this.contextMenuStripMSIX;
+            this.treeViewMSIXs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewMSIXs.ImageIndex = 0;
+            this.treeViewMSIXs.ImageList = this.iImageLibrary;
+            this.treeViewMSIXs.LabelEdit = true;
+            this.treeViewMSIXs.Location = new System.Drawing.Point(0, 0);
+            this.treeViewMSIXs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.treeViewMSIXs.Name = "treeViewMSIXs";
+            this.treeViewMSIXs.SelectedImageIndex = 0;
+            this.treeViewMSIXs.ShowNodeToolTips = true;
+            this.treeViewMSIXs.Size = new System.Drawing.Size(399, 336);
+            this.treeViewMSIXs.TabIndex = 1;
+            this.treeViewMSIXs.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeViewMSIXs_AfterLabelEdit);
+            this.treeViewMSIXs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewMSIXs_AfterSelect);
             // 
-            // contextMenuStripAppX
+            // contextMenuStripMSIX
             // 
-            this.contextMenuStripAppX.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStripAppX.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStripMSIX.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripMSIX.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemNewFeature,
             this.toolStripSeparator1,
             this.toolStripMenuItemRename,
             this.toolStripMenuItemDelete,
             this.toolStripSeparator2});
-            this.contextMenuStripAppX.Name = "contextMenuStripFeatures";
-            this.contextMenuStripAppX.Size = new System.Drawing.Size(133, 88);
+            this.contextMenuStripMSIX.Name = "contextMenuStripFeatures";
+            this.contextMenuStripMSIX.Size = new System.Drawing.Size(133, 88);
             // 
             // toolStripMenuItemNewFeature
             // 
@@ -168,7 +168,7 @@
             this.iImageLibrary.Images.SetKeyName(4, "file_16x16.gif");
             this.iImageLibrary.Images.SetKeyName(5, "WEBFILE.ICO");
             this.iImageLibrary.Images.SetKeyName(6, "mdf_ndf_dbfiles.ico");
-            this.iImageLibrary.Images.SetKeyName(7, "AppX.ico");
+            this.iImageLibrary.Images.SetKeyName(7, "MSIX.ico");
             this.iImageLibrary.Images.SetKeyName(8, "smXML.gif");
             this.iImageLibrary.Images.SetKeyName(9, "blue_folder_closed");
             this.iImageLibrary.Images.SetKeyName(10, "delete_16x16.gif");
@@ -182,36 +182,39 @@
             this.propertyGrid1.Margin = new System.Windows.Forms.Padding(4);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.propertyGrid1.SelectedObject = this.appX1;
+            this.propertyGrid1.SelectedObject = this.msix1;
             this.propertyGrid1.Size = new System.Drawing.Size(494, 336);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
             // 
-            // appX1
+            // msix1
             // 
-            this.appX1.Description = null;
-            this.appX1.DisplayName = null;
-            this.appX1.LogoFile = null;
-            this.appX1.MainPackage = null;
-            this.appX1.Manufacturer = null;
-            this.appX1.Publisher = null;
-            this.appX1.Target = IsWiXAutomationInterface.TargetType.desktop;
-            this.appX1.Version = null;
+            this.msix1.Capabilities = null;
+            this.msix1.Description = null;
+            this.msix1.DisplayName = null;
+            this.msix1.LogoFile = null;
+            this.msix1.MainPackage = null;
+            this.msix1.Manufacturer = null;
+            this.msix1.MaximumTestedOS = null;
+            this.msix1.MinimumSupportedOS = null;
+            this.msix1.Publisher = null;
+            this.msix1.Target = IsWiXAutomationInterface.TargetType.desktop;
+            this.msix1.Version = null;
             // 
-            // AppXs
+            // MSIXs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelTop);
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.Name = "AppXs";
+            this.Name = "MSIXs";
             this.Size = new System.Drawing.Size(893, 373);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.contextMenuStripAppX.ResumeLayout(false);
+            this.contextMenuStripMSIX.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -222,11 +225,11 @@
         private System.Windows.Forms.LinkLabel linkLabelRequirements;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TreeView treeViewAppXs;
+        private System.Windows.Forms.TreeView treeViewMSIXs;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
-        private AppX appX1;
+        private MSIX msix1;
         private System.Windows.Forms.ImageList iImageLibrary;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripAppX;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripMSIX;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNewFeature;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRename;

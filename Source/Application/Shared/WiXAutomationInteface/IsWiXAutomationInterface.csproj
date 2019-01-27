@@ -79,6 +79,7 @@
     <Compile Include="IsWiXDependencies.cs" />
     <Compile Include="IsWiXFeatures.cs" />
     <Compile Include="IsWiXFGAppX.cs" />
+    <Compile Include="IsWiXFGMSIX.cs" />
     <Compile Include="IsWiXHelpers.cs" />
     <Compile Include="IsWiXLinqHelper.cs" />
     <Compile Include="IsWiXMergeRefs.cs" />

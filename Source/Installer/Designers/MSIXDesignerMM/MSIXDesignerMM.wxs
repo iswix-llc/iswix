@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\..\Deploy"?>
+  <Module Id="MSIXDesignerMM" Language="1033" Version="1.0.0.0">
+    <Package Id="d0b1d8e7-d41c-490f-900c-15c844b1ed41" Manufacturer="MSIXDesignerMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Component Id="owcBAE3B6A7E42D54771056DE78F1FAD23F" Guid="67a73a23-c2f5-0aa4-60d0-120c8821fa98">
+          <File Id="owfBAE3B6A7E42D54771056DE78F1FAD23F" Source="$(var.SourceDir)\MSIXDesigner.dll" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>
