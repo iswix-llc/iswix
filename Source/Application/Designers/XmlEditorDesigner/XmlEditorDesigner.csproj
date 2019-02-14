@@ -43,7 +43,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\IsWiX\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,7 +53,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\IsWiX\bin\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -76,8 +76,8 @@ IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.como
     <Reference Include="DiffPlex, Version=1.4.3.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DiffPlex.1.4.3\lib\net40\DiffPlex.dll</HintPath>
     </Reference>
-    <Reference Include="FireworksFramework, Version=5.0.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\fireworks.5.0.10\lib\net40\FireworksFramework.dll</HintPath>
+    <Reference Include="FireworksFramework, Version=5.0.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\fireworks.5.0.11\lib\net40\FireworksFramework.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.Core">
       <HintPath>..\..\..\..\ExternalAssemblies\ICSharpCode.Core.dll</HintPath>

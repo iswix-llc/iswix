@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using static FireworksFramework.Types.Enums;
@@ -15,7 +16,7 @@ namespace IsWiX
         static void Main(string[] args)
         {
             var fireworksManager = FireworksManager.FireworksManagerInstance;
-            // fireworksManager.BrandingBitMap = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.bmp");
+            fireworksManager.BrandingBitMap = new BitmapImage(new Uri(@"/IsWiX.bmp", UriKind.Relative));
             fireworksManager.ProductName = "IsWiX";
             fireworksManager.Start();
         }

@@ -5,20 +5,11 @@
     <Package Id="5e52a169-36a3-4249-9bc3-746f33dcefc5" Manufacturer="IsWiXMM" InstallerVersion="200" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="MergeRedirectFolder">
-        <Component Id="owcBE1ABBE4AE25F94C80505106439BBC27" Guid="24d15d39-3ed0-76f3-c06f-2885bb6d7358">
-          <File Id="owfBE1ABBE4AE25F94C80505106439BBC27" Source="$(var.SourceDir)\DifferencesViewer.dll" KeyPath="yes" />
-        </Component>
         <Component Id="owcA4438A641A1213607E904695886E3E2E" Guid="0ee33708-c7e8-ea49-541c-88330685a078">
           <File Id="owfA4438A641A1213607E904695886E3E2E" Source="$(var.SourceDir)\DiffPlex.dll" KeyPath="yes" />
         </Component>
-        <Component Id="owcD5B80D0BEF7C1A9631C10E41656C70A8" Guid="cafa90e8-ae24-90c3-a24b-c80c62a94711">
-          <File Id="owfD5B80D0BEF7C1A9631C10E41656C70A8" Source="$(var.SourceDir)\DocumentManagement.dll" KeyPath="yes" />
-        </Component>
         <Component Id="owc79F365426F60CB4BD1117CA4AACE12CA" Guid="e2252c94-5bc0-afc6-fa42-2bb25a9a3812">
           <File Id="owf79F365426F60CB4BD1117CA4AACE12CA" Source="$(var.SourceDir)\FireworksFramework.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc5D64E6C156499515EF85486A42983BFF" Guid="754a7f7d-72f2-d4f8-0448-8e7a8a8cdb17">
-          <File Id="owf5D64E6C156499515EF85486A42983BFF" Source="$(var.SourceDir)\FireworksFramework.Interfaces.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc86703B2304B821A42054FD71F23A59DC" Guid="e1ea7540-d959-33a8-d59b-83bf9f1ff14a">
           <File Id="owf86703B2304B821A42054FD71F23A59DC" Source="$(var.SourceDir)\IsWiX.exe" KeyPath="yes"></File>
