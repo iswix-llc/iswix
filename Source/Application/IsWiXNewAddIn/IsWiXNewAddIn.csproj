@@ -218,28 +218,28 @@ IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.como
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>CD "$(ProjectDir)MergeModuleProjectTemplate"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe"  a "$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip' -Force
 
 CD "$(ProjectDir)MergeModuleProjectTemplate4"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate4.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate4.zip' -Force
 
 CD "$(ProjectDir)MSISolutionTemplate"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate.zip' -Force
 
 CD "$(ProjectDir)MSISolutionTemplate4"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate4.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate4.zip' -Force
 
 CD "$(ProjectDir)BootstrapperSolutionTemplate"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip' -Force
 
 CD "$(ProjectDir)BootstrapperSolutionTemplate4"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate4.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate4.zip' -Force
 
 CD "$(ProjectDir)SetupProjectTemplate"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate.zip' -Force
 
 CD "$(ProjectDir)SetupProjectTemplate4"
-"$(ProjectDir)..\..\..\ExternalAssemblies\7za.exe" a "$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate4.zip" *
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate4.zip' -Force
 </PreBuildEvent>
   </PropertyGroup>
   <Target Name="UpdateVSIXVersion" BeforeTargets="PrepareForBuild">
