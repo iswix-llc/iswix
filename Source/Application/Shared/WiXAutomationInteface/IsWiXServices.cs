@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
 using FireworksFramework.Managers;
-using FireworksFramework.Managers;
 
 namespace IsWiXAutomationInterface
 {
