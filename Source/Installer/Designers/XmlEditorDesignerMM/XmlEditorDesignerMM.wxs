@@ -10,29 +10,11 @@ All Rights Reserved
     <Package Id="e99cad96-e5c9-41e7-97bb-12be68fd664c" Manufacturer="XmlEditorDesignerMM" InstallerVersion="200" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="MergeRedirectFolder">
-        <Component Id="owc16AB1C39236DE0150C7E57A8FCB9ADAB" Guid="2a6552d9-5aa0-617a-f8d0-5dc9a7ea2ed7">
-          <File Id="owf16AB1C39236DE0150C7E57A8FCB9ADAB" Source="$(var.SourceDir)\ICSharpCode.Core.dll" KeyPath="yes">
-          </File>
-        </Component>
-        <Component Id="owc0EF252EB8E42255681310F8FD6DC8C21" Guid="893a66cb-edb3-a52c-b782-374ec2760854">
-          <File Id="owf0EF252EB8E42255681310F8FD6DC8C21" Source="$(var.SourceDir)\ICSharpCode.Core.WinForms.dll" KeyPath="yes">
-          </File>
-        </Component>
-        <Component Id="owcDFC340B3C8A8CEB1BB94E6109DF52A0D" Guid="a4839731-eed3-c309-5da2-0cef9262b14a">
-          <File Id="owfDFC340B3C8A8CEB1BB94E6109DF52A0D" Source="$(var.SourceDir)\ICSharpCode.SharpDevelop.dll" KeyPath="yes">
-          </File>
-        </Component>
-        <Component Id="owc1A2E1DB2CEA5E2A9CD10D8F8628928B0" Guid="30686386-9517-aefc-2d09-93958178f6f9">
-          <File Id="owf1A2E1DB2CEA5E2A9CD10D8F8628928B0" Source="$(var.SourceDir)\ICSharpCode.TextEditor.dll" KeyPath="yes">
-          </File>
-        </Component>
-        <Component Id="owcEB765AA01B84822B16BD64BA16440252" Guid="e45587ed-f5c9-84f0-3b34-094dd3f5600d">
-          <File Id="owfEB765AA01B84822B16BD64BA16440252" Source="$(var.SourceDir)\XmlEditor.dll" KeyPath="yes">
-          </File>
+        <Component Id="owc873A6D1E46285DC1178C56A2CA3D0A4E" Guid="745c1a13-171f-eba8-1ca8-bb70ff66b1f3">
+          <File Id="owf873A6D1E46285DC1178C56A2CA3D0A4E" Source="$(var.SourceDir)\ICSharpCode.AvalonEdit.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc675848A23C77F45A718FDF2F184CED9E" Guid="9ba8f5e8-d869-5c13-4b67-080911ac4cc9">
-          <File Id="owf675848A23C77F45A718FDF2F184CED9E" Source="$(var.SourceDir)\XmlEditorDesigner.dll" KeyPath="yes">
-          </File>
+          <File Id="owf675848A23C77F45A718FDF2F184CED9E" Source="$(var.SourceDir)\XmlEditorDesigner.dll" KeyPath="yes"></File>
         </Component>
       </Directory>
     </Directory>

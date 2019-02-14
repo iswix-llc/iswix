@@ -12,6 +12,9 @@ namespace IsWiX
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
+
             var fireworksManager = FireworksManager.FireworksManagerInstance;
             fireworksManager.BrandingBitMap = new BitmapImage(new Uri(@"/IsWiX.bmp", UriKind.Relative));
 
@@ -23,5 +26,12 @@ namespace IsWiX
             fireworksManager.ProductName = "IsWiX";
             fireworksManager.Start();
         }
+
+        static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            MessageBox.Show($"An unhandled error occurred. {e.ToString()}", "IsWiX Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+        }
+
     }
 }
