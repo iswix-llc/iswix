@@ -3,8 +3,9 @@ Microsoft Public License (Ms-PL)
 
 Third Party Code:
 
-XmlEditorControl 3.2
-Author: AlphaSierraPapa, Christoph Wille
-WebSite: http://www.icsharpcode.net/OpenSource/SD/Download/Default.aspx#SharpDevelop3x
+AvalonEdit 5.0.4
+Author: AlphaSierraPapa
+WebSite: https://github.com/icsharpcode/AvalonEdit
 License:
-  LGPL
+  MIT License
+  https://opensource.org/licenses/MIT
