@@ -63,6 +63,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiffPlex, Version=1.4.3.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DiffPlex.1.4.3\lib\net40\DiffPlex.dll</HintPath>
+    </Reference>
+    <Reference Include="FireworksFramework, Version=5.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\fireworks.5.0.10\lib\net40\FireworksFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\ExternalAssemblies\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
@@ -136,6 +142,7 @@
     <None Include="Dependencies.xss">
       <DependentUpon>Dependencies.xsd</DependentUpon>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\ModuleDependency.datasource" />
   </ItemGroup>
   <ItemGroup>
@@ -168,18 +175,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\DocumentManagement\DocumentManagement.csproj">
-      <Project>{e0b298ef-b44f-480b-acf5-458b7aeea039}</Project>
-      <Name>DocumentManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\FireworksFramework.Interfaces\FireworksFramework.Interfaces.csproj">
-      <Project>{c7c6634a-2317-49a9-92c3-f9552750e1ed}</Project>
-      <Name>FireworksFramework.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj">
-      <Project>{c1e55196-2d92-4e26-9e70-df47dfe81894}</Project>
-      <Name>FireworksFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj">
       <Project>{461ddab2-0b76-460d-9f3e-041cb88df974}</Project>
       <Name>IsWiXAutomationInterface</Name>

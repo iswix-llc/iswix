@@ -19,7 +19,8 @@ using FireworksFramework.Interfaces;
 using ICSharpCode.XmlEditor;
 using ICSharpCode.Core;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
+using FireworksFramework.Managers;
+using static FireworksFramework.Types.Enums;
 
 namespace XmlEditorDesigner
 {

@@ -16,8 +16,8 @@ using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
-
+using FireworksFramework.Managers;
+using static FireworksFramework.Types.Enums;
 
 namespace ShortCutsDesigner
 {

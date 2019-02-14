@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using static FireworksFramework.Types.Enums;
 
 namespace IsWiX
 {
@@ -13,7 +14,9 @@ namespace IsWiX
         [STAThreadAttribute()]
         static void Main(string[] args)
         {
-            var fireworksManager = new FireworksManager(new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.bmp")));
+            var fireworksManager = FireworksManager.FireworksManagerInstance;
+            // fireworksManager.BrandingBitMap = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.bmp");
+            fireworksManager.ProductName = "IsWiX";
             fireworksManager.Start();
         }
     }

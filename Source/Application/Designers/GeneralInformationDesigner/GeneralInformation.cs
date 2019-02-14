@@ -15,7 +15,8 @@ using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using Microsoft.Deployment.WindowsInstaller;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
+using FireworksFramework.Managers;
+using static FireworksFramework.Types.Enums;
 
 namespace Designers.GeneralInformation
 {
