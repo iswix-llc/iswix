@@ -17,6 +17,16 @@ namespace IsWiX
         {
             var fireworksManager = FireworksManager.FireworksManagerInstance;
             fireworksManager.BrandingBitMap = new BitmapImage(new Uri(@"/IsWiX.bmp", UriKind.Relative));
+
+            if (args.Length > 0)
+            {
+                fireworksManager.FilePath = args[0];
+            }
+            else
+            {
+                fireworksManager.FilePath = string.Empty;
+            }
+
             fireworksManager.ProductName = "IsWiX";
             fireworksManager.Start();
         }
