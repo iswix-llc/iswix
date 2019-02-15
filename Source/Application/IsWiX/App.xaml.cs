@@ -30,7 +30,7 @@ namespace IsWiX
         static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
-            MessageBox.Show($"An unhandled error occurred. {e.ToString()}", "IsWiX Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+            MessageBox.Show($"An unhandled error occurred. {e.Message}", "IsWiX Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
         }
 
     }
