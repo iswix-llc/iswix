@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
 using FireworksFramework.Managers;
+using System.IO;
 
 namespace IsWiXAutomationInterface
 {
@@ -38,15 +39,19 @@ namespace IsWiXAutomationInterface
 
         }
 
-        public Dictionary<string, string> GetShortCutCandidates()
+        public List<ShortCutCandidate> GetShortCutCandidates()
         {
-            Dictionary<string, string> candidates = new Dictionary<string, string>();
+            List<ShortCutCandidate> candidates = new List<ShortCutCandidate>();
 
             var files = from f in _documentManager.Document.Descendants(ns + "File")
                         select f;
             foreach (var file in files)
             {
-                candidates.Add(file.Attribute("Id").Value, file.GetDestinationFilePath());
+                ShortCutCandidate scc = new ShortCutCandidate();
+                scc.FileKey = file.Attribute("Id").Value;
+                scc.DestinationFilePath = file.GetDestinationFilePath();
+                scc.FileName = Path.GetFileNameWithoutExtension(file.Attribute("Source").Value.Split('\\').Last());
+                candidates.Add(scc);
             }
             return candidates;
         }
@@ -76,6 +81,12 @@ namespace IsWiXAutomationInterface
 
     }
 
+    public class ShortCutCandidate
+    {
+        public string FileKey { get; set; }
+        public string FileName { get; set; }
+        public string DestinationFilePath { get; set; }
+    }
     public class IsWiXShortCut
     {
         XNamespace ns;

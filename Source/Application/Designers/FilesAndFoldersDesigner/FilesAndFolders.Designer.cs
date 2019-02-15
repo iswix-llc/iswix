@@ -50,6 +50,7 @@
             this.chExtension = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chFilePath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chKeyPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imageListFileIconsDst = new System.Windows.Forms.ImageList(this.components);
             this.cmsDestinationTreeDefault = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.createNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +80,6 @@
             this.lblComponentRules = new System.Windows.Forms.Label();
             this.rbOneToOne = new System.Windows.Forms.RadioButton();
             this.rbOneToMany = new System.Windows.Forms.RadioButton();
-            this.imageListFileIconsDst = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
             this.scMain.Panel2.SuspendLayout();
@@ -232,7 +232,7 @@
             // 
             // chSourcePath
             // 
-            this.chSourcePath.Text = "Source Path";
+            this.chSourcePath.Text = "Source Path ";
             this.chSourcePath.Width = 500;
             // 
             // imageListFileIcons
@@ -333,6 +333,12 @@
             // chKeyPath
             // 
             this.chKeyPath.Text = "Key";
+            // 
+            // imageListFileIconsDst
+            // 
+            this.imageListFileIconsDst.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageListFileIconsDst.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageListFileIconsDst.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // cmsDestinationTreeDefault
             // 
@@ -573,7 +579,7 @@
             // rbOneToOne
             // 
             this.rbOneToOne.AutoSize = true;
-            this.rbOneToOne.Location = new System.Drawing.Point(536, 4);
+            this.rbOneToOne.Location = new System.Drawing.Point(551, 5);
             this.rbOneToOne.Name = "rbOneToOne";
             this.rbOneToOne.Size = new System.Drawing.Size(84, 17);
             this.rbOneToOne.TabIndex = 1;
@@ -586,7 +592,7 @@
             // 
             this.rbOneToMany.AutoSize = true;
             this.rbOneToMany.Checked = true;
-            this.rbOneToMany.Location = new System.Drawing.Point(626, 4);
+            this.rbOneToMany.Location = new System.Drawing.Point(641, 5);
             this.rbOneToMany.Name = "rbOneToMany";
             this.rbOneToMany.Size = new System.Drawing.Size(90, 17);
             this.rbOneToMany.TabIndex = 0;
@@ -594,12 +600,6 @@
             this.rbOneToMany.Text = "One To Many";
             this.rbOneToMany.UseVisualStyleBackColor = true;
             this.rbOneToMany.Click += new System.EventHandler(this.rbOneToMany_Click);
-            // 
-            // imageListFileIconsDst
-            // 
-            this.imageListFileIconsDst.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageListFileIconsDst.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageListFileIconsDst.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // FilesAndFolders
             // 

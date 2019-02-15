@@ -915,7 +915,7 @@ namespace ShortCutsDesigner
                 {
                     string scDirectory = tvDestination.SelectedNode.Tag as string;
 
-                    string prefix = "NewShortcut";
+                    string prefix = picker.FileName;
                     int index = 0;
                     bool added = false;
                     do
@@ -938,7 +938,26 @@ namespace ShortCutsDesigner
 
                         if (exists == false)
                         {
-                            IsWiXShortCut shortCut = _shortcuts.Create(string.Format("{0}{1}", prefix, index), fileKey, scDirectory);
+                            string name = string.Format("{0}{1}", prefix, index);
+
+                            if (index==1)
+                            {
+                                foreach (var shortcut in _shortcuts)
+                                {
+                                    if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) && shortcut.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if(exists == false)
+                                {
+                                    name = prefix;
+                                }
+
+                            }
+
+                            IsWiXShortCut shortCut = _shortcuts.Create(name, fileKey, scDirectory);
                             AddShortcutNode(shortCut);
                             added = true;
                         }

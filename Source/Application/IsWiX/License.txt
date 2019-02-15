@@ -16,10 +16,3 @@ WebSite: https://github.com/wixtoolset/wix3
 License:
   Microsoft Reciprocal License (MS-RL)
   https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT
-
-AvalonEdit 5.0.4
-Author: AlphaSierraPapa
-WebSite: https://github.com/icsharpcode/AvalonEdit
-License:
-  MIT License
-  https://opensource.org/licenses/MIT
