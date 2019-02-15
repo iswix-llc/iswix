@@ -35,6 +35,8 @@ namespace XmlEditorDesigner
         bool _validXML;
         FoldingManager _foldingManager;
         XmlFoldingStrategy _foldingStrategy;
+        TextDocument _textDocument;
+        bool _previouslyLoaded = false;
 
         public XmlEditor()
         {
@@ -74,12 +76,19 @@ namespace XmlEditorDesigner
 
         public void LoadData()
         {
-            TextDocument textDocument = new TextDocument();
-            textDocument.Text = _documentManager.Document.ToString();
-            TextEditor.Document = textDocument;
-            _foldingManager = FoldingManager.Install(TextEditor.TextArea);
-            _foldingStrategy = new XmlFoldingStrategy();
+            if (!_previouslyLoaded)
+            {
+                _textDocument = new TextDocument();
+                TextEditor.Document = _textDocument;
+                _foldingManager = FoldingManager.Install(TextEditor.TextArea);
+                _foldingStrategy = new XmlFoldingStrategy();
+            }
+            _textDocument.Text = _documentManager.Document.ToString();
             _foldingStrategy.UpdateFoldings(_foldingManager, TextEditor.Document);
+            _previouslyLoaded = true;
+
+
+
         }
 
         private void ValidateXML(bool textChanged)
