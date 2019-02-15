@@ -41,7 +41,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\IsWiX\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -51,7 +51,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\IsWiX\bin\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -59,6 +59,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiffPlex, Version=1.4.3.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DiffPlex.1.4.3\lib\net40\DiffPlex.dll</HintPath>
+    </Reference>
+    <Reference Include="FireworksFramework, Version=5.1.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\fireworks.5.1.8\lib\net40\FireworksFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -120,22 +126,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\DocumentManagement\DocumentManagement.csproj">
-      <Project>{e0b298ef-b44f-480b-acf5-458b7aeea039}</Project>
-      <Name>DocumentManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\FireworksFramework.Interfaces\FireworksFramework.Interfaces.csproj">
-      <Project>{c7c6634a-2317-49a9-92c3-f9552750e1ed}</Project>
-      <Name>FireworksFramework.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj">
-      <Project>{c1e55196-2d92-4e26-9e70-df47dfe81894}</Project>
-      <Name>FireworksFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj">
       <Project>{461ddab2-0b76-460d-9f3e-041cb88df974}</Project>
       <Name>IsWiXAutomationInterface</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

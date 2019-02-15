@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -15,7 +14,7 @@ using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
+using static FireworksFramework.Types.Enums;
 
 namespace FeaturesDesigner
 {

@@ -15,6 +15,7 @@ namespace ShortCutsDesigner
     public partial class ComponentPicker : Form
     {
         string _fileKey = string.Empty;
+        string _fileName = string.Empty;
         IsWiXShortCuts _shortCuts;
 
         public string FileKey  
@@ -22,6 +23,14 @@ namespace ShortCutsDesigner
             get
             { 
                 return _fileKey;
+            }
+        }
+
+        public string FileName
+        {
+            get
+            {
+                return _fileName;
             }
         }
 
@@ -43,8 +52,8 @@ namespace ShortCutsDesigner
 
             foreach (var candidate in _shortCuts.GetShortCutCandidates())
             {
-                TreeNode node = treeView1.Nodes.Add(candidate.Value);
-                node.Tag = candidate.Key;
+                TreeNode node = treeView1.Nodes.Add(candidate.DestinationFilePath);
+                node.Tag = candidate;
             }
 
         }
@@ -52,7 +61,9 @@ namespace ShortCutsDesigner
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            _fileKey = treeView1.SelectedNode.Tag as string;
+            ShortCutCandidate scc = treeView1.SelectedNode.Tag as ShortCutCandidate;
+            _fileKey = scc.FileKey;
+            _fileName = scc.FileName;
             buttonSelect.Enabled = true;
         }
 

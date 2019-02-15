@@ -16,12 +16,22 @@ namespace ServicesDesigner
     {
         string _fileKey = string.Empty;
         IsWiXServices _services;
+        string _fileName = string.Empty;
 
         public string FileKey  
         { 
             get
             { 
                 return _fileKey;
+            }
+        }
+
+
+        public string FileName
+        {
+            get
+            {
+                return _fileName;
             }
         }
 
@@ -44,8 +54,8 @@ namespace ServicesDesigner
 
             foreach (var candidate in _services.GetServiceCandidates())
             {
-                TreeNode node = treeView1.Nodes.Add(candidate.Value);
-                node.Tag = candidate.Key;
+                TreeNode node = treeView1.Nodes.Add(candidate.DestinationFilePath);
+                node.Tag = candidate;
             }
 
         }
@@ -53,7 +63,10 @@ namespace ServicesDesigner
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            _fileKey = treeView1.SelectedNode.Tag as string;
+            ServiceCandidate sc=treeView1.SelectedNode.Tag as ServiceCandidate;
+            _fileKey = sc.Id;
+            _fileName = sc.FileName;
+
             buttonSelect.Enabled=true;
         }
 

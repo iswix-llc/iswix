@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28010.2019
+VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designers", "Designers", "{94BCBA4B-1D51-406B-BA90-63E42F7629A2}"
 EndProject
@@ -24,39 +24,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiX", "IsWiX\IsWiX.csproj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralInformationDesigner", "Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj", "{5875AECD-549F-4209-95ED-A95DF4F0FB21}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilesAndFoldersDesigner", "Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj", "{EC5ECF36-4F4C-45E2-A446-B331AC8126D5}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertiesDesigner", "Designers\PropertiesDesigner\PropertiesDesigner.csproj", "{9AD79B6E-B90B-435B-A7DF-1B01C4D563DF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTablesDesigner", "Designers\CustomTablesDesigner\CustomTablesDesigner.csproj", "{49ADFDB8-D7A2-40D7-8A22-DA540F2E8237}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamespacesDesigner", "Designers\NamespacesDesigner\NamespacesDesigner.csproj", "{D14BED47-FF47-49F4-B15E-E28E4607B757}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesDesigner", "Designers\ServicesDesigner\ServicesDesigner.csproj", "{4B733F56-A202-4813-9494-53B048FE07B6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShortCutsDesigner", "Designers\ShortCutsDesigner\ShortCutsDesigner.csproj", "{62EE9B37-D99A-4AC0-898A-EC822268467C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {C1E55196-2D92-4E26-9E70-DF47DFE81894}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlEditorDesigner", "Designers\XmlEditorDesigner\XmlEditorDesigner.csproj", "{416B01C8-6E99-40A2-81D6-2F67B259C19E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -67,15 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeaturesDesigner", "Designe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppXDesigner", "Designers\AppXDesigner\AppXDesigner.csproj", "{7C470E97-D17B-41A2-B1E2-9EC665300E36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DifferencesViewer", "Shared\DifferencesViewer\DifferencesViewer.csproj", "{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentManagement", "Shared\DocumentManagement\DocumentManagement.csproj", "{E0B298EF-B44F-480B-ACF5-458B7AEEA039}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireworksFramework", "Shared\FireworksFramework\FireworksFramework.csproj", "{C1E55196-2D92-4E26-9E70-DF47DFE81894}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXAutomationInterface", "Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj", "{461DDAB2-0B76-460D-9F3E-041CB88DF974}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireworksFramework.Interfaces", "Shared\FireworksFramework.Interfaces\FireworksFramework.Interfaces.csproj", "{C7C6634A-2317-49A9-92C3-F9552750E1ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSIXDesigner", "Designers\MSIXDesigner\MSIXDesigner.csproj", "{205BC85E-79EB-45ED-A861-ADC5CEBDF140}"
 EndProject
@@ -175,30 +146,6 @@ Global
 		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|x86.ActiveCfg = Release|Any CPU
 		{7C470E97-D17B-41A2-B1E2-9EC665300E36}.Release|x86.Build.0 = Release|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Debug|x86.Build.0 = Debug|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Release|x86.ActiveCfg = Release|Any CPU
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C}.Release|x86.Build.0 = Release|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Debug|x86.Build.0 = Debug|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Release|x86.ActiveCfg = Release|Any CPU
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039}.Release|x86.Build.0 = Release|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Debug|x86.Build.0 = Debug|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Release|x86.ActiveCfg = Release|Any CPU
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894}.Release|x86.Build.0 = Release|Any CPU
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -207,14 +154,6 @@ Global
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974}.Release|Any CPU.Build.0 = Release|Any CPU
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974}.Release|x86.ActiveCfg = Release|Any CPU
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974}.Release|x86.Build.0 = Release|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Debug|x86.Build.0 = Debug|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Release|x86.ActiveCfg = Release|Any CPU
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED}.Release|x86.Build.0 = Release|Any CPU
 		{205BC85E-79EB-45ED-A861-ADC5CEBDF140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{205BC85E-79EB-45ED-A861-ADC5CEBDF140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{205BC85E-79EB-45ED-A861-ADC5CEBDF140}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -238,11 +177,7 @@ Global
 		{416B01C8-6E99-40A2-81D6-2F67B259C19E} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
 		{9B75CED2-3FFA-4E40-9B7E-B8EB364D7008} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
 		{7C470E97-D17B-41A2-B1E2-9EC665300E36} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
-		{87F73BB8-AD12-473E-8AAA-B155D1BB0A9C} = {27EDD51D-A5F3-430F-80B1-49B13F450C89}
-		{E0B298EF-B44F-480B-ACF5-458B7AEEA039} = {27EDD51D-A5F3-430F-80B1-49B13F450C89}
-		{C1E55196-2D92-4E26-9E70-DF47DFE81894} = {27EDD51D-A5F3-430F-80B1-49B13F450C89}
 		{461DDAB2-0B76-460D-9F3E-041CB88DF974} = {27EDD51D-A5F3-430F-80B1-49B13F450C89}
-		{C7C6634A-2317-49A9-92C3-F9552750E1ED} = {27EDD51D-A5F3-430F-80B1-49B13F450C89}
 		{205BC85E-79EB-45ED-A861-ADC5CEBDF140} = {94BCBA4B-1D51-406B-BA90-63E42F7629A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

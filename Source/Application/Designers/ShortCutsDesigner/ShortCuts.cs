@@ -16,8 +16,7 @@ using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
-
+using static FireworksFramework.Types.Enums;
 
 namespace ShortCutsDesigner
 {
@@ -172,8 +171,8 @@ namespace ShortCutsDesigner
                     switch (subElement.Name.LocalName)
                     {
                         case "Directory":
-                            if(!IsASpecialDirectoryToIgnore(subElement.Attribute("Id").Value))
-                            { 
+                            if (!IsASpecialDirectoryToIgnore(subElement.Attribute("Id").Value))
+                            {
                                 var newNode = treeNode.Nodes.Add(CreateNodeName(subElement));
                                 var newNodeTag = GetElementId(subElement);
                                 newNode.ImageIndex = (int)ImageLibrary.FolderOpen;
@@ -354,12 +353,12 @@ namespace ShortCutsDesigner
                             cmsDestinationRoot.Show(tvDestination, p);
                             break;
                         default:
-                            if(node.ImageIndex.Equals(12))
+                            if (node.ImageIndex.Equals(12))
                             {
                                 cmsShortcut.Show(tvDestination, p);
                             }
                             else
-                            { 
+                            {
                                 cmsDestinationTreeDefault.Show(tvDestination, p);
                             }
                             break;
@@ -370,7 +369,7 @@ namespace ShortCutsDesigner
 
         private bool IsShortcutNode()
         {
-            if(tvDestination.SelectedNode.ImageIndex.Equals(12))
+            if (tvDestination.SelectedNode.ImageIndex.Equals(12))
             {
                 return true;
             }
@@ -769,7 +768,8 @@ namespace ShortCutsDesigner
             if (parent != null)
             {
                 tvDestination.SelectedNode = parent;
-                tvDestination.SelectedNode.Expand();            }
+                tvDestination.SelectedNode.Expand();
+            }
         }
         private bool ParentDirectoryNowEmpty(TreeNode directoryNode)
         {
@@ -851,7 +851,7 @@ namespace ShortCutsDesigner
             var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
             var tempStartingDirectory = FindDirectoryElement(tempDocument, elementName, elementId);
 
-           
+
 
             if (HasSubDirectories(originalStartingDirectory))
             {
@@ -916,7 +916,7 @@ namespace ShortCutsDesigner
                 {
                     string scDirectory = tvDestination.SelectedNode.Tag as string;
 
-                    string prefix = "NewShortcut";
+                    string prefix = picker.FileName;
                     int index = 0;
                     bool added = false;
                     do
@@ -939,7 +939,26 @@ namespace ShortCutsDesigner
 
                         if (exists == false)
                         {
-                            IsWiXShortCut shortCut = _shortcuts.Create(string.Format("{0}{1}", prefix, index), fileKey, scDirectory);
+                            string name = string.Format("{0}{1}", prefix, index);
+
+                            if (index == 1)
+                            {
+                                foreach (var shortcut in _shortcuts)
+                                {
+                                    if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) && shortcut.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if (exists == false)
+                                {
+                                    name = prefix;
+                                }
+
+                            }
+
+                            IsWiXShortCut shortCut = _shortcuts.Create(name, fileKey, scDirectory);
                             AddShortcutNode(shortCut);
                             added = true;
                         }
@@ -963,11 +982,11 @@ namespace ShortCutsDesigner
             UpdatedSelectedNodeText();
         }
 
-        private void UpdateShortcutDirectory( string oldId, string newId)
+        private void UpdateShortcutDirectory(string oldId, string newId)
         {
             foreach (var shortcut in _shortcuts)
             {
-                if(shortcut.Directory.Equals(oldId))
+                if (shortcut.Directory.Equals(oldId))
                 {
                     shortcut.Directory = newId;
                 }
@@ -980,12 +999,12 @@ namespace ShortCutsDesigner
             shortcut.Delete();
             tvDestination.SelectedNode.Remove();
             tvDestination.SelectedNode = tvDestination.Nodes[0];
-        
+
         }
 
         private void tvDestination_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if(IsShortcutNode())
+            if (IsShortcutNode())
             {
                 shortcut1.Read(e.Node.Tag as IsWiXShortCut);
                 propertyGridShortCut.SelectedObject = shortcut1;

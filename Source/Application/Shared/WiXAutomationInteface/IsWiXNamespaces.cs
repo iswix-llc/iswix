@@ -1,11 +1,10 @@
-﻿using FireworksFramework.Managers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using DocumentManagement.Managers;
+using FireworksFramework.Managers;
 
 namespace IsWiXAutomationInterface
 {

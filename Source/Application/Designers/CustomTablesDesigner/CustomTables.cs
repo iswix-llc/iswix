@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
+using static FireworksFramework.Types.Enums;
 
 namespace CustomTablesDesigner
 {

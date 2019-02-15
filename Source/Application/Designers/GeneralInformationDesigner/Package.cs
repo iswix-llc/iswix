@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
-using DocumentManagement.Managers;
+using FireworksFramework.Managers;
 
 namespace Designers.GeneralInformation
 {

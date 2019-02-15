@@ -16,4 +16,3 @@ WebSite: https://github.com/wixtoolset/wix3
 License:
   Microsoft Reciprocal License (MS-RL)
   https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT
-
