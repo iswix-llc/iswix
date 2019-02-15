@@ -65,7 +65,7 @@ namespace ServicesDesigner
 
             treeViewServices.Nodes.Clear();
             AddComputerDestinationNode();
-            
+
             foreach (var iswixService in _services)
             {
                 AddServiceNode(iswixService);
@@ -76,7 +76,7 @@ namespace ServicesDesigner
 
         private void AddComputerDestinationNode()
         {
-            var subTreeNode =  treeViewServices.Nodes.Add("Destination Computer");
+            var subTreeNode = treeViewServices.Nodes.Add("Destination Computer");
             subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
             subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
             treeViewServices.SelectedNode = subTreeNode;
@@ -91,7 +91,7 @@ namespace ServicesDesigner
             //subTreeNode.ToolTipText = iswixService.ServiceInstall.ParentComponentXML.ToString();
             treeViewServices.ExpandAll();
             var parentNode = treeViewServices.Nodes[0];
-            if(parentNode.Nodes.Count > 0)
+            if (parentNode.Nodes.Count > 0)
             {
                 treeViewServices.SelectedNode = parentNode.Nodes[0];
             }
@@ -112,7 +112,7 @@ namespace ServicesDesigner
             }
         }
 
-        private string CalculateSelectedNodeText( IsWiXService service)
+        private string CalculateSelectedNodeText(IsWiXService service)
         {
             return string.Format("{0} ({1})", service.ServiceInstall.Name, service.ServiceInstall.DestinationFilePath);
         }
@@ -164,7 +164,7 @@ namespace ServicesDesigner
                 propertyGridServiceInstall.Enabled = true;
                 propertyGridServiceInstall.SelectedObject = serviceInstall;
                 serviceInstall.Read(e.Node.Tag as IsWiXService);
-                
+
             }
         }
 
@@ -179,14 +179,13 @@ namespace ServicesDesigner
 
                 if (!string.IsNullOrEmpty(fileKey))
                 {
-                    string prefix = "NewService";
+                    string prefix = picker.FileName;
                     int index = 0;
                     bool added = false;
-
-                     do
+                    do
                     {
-                         index++;
-                         bool exists = false;
+                        index++;
+                        bool exists = false;
                         foreach (var existingService in _services)
                         {
                             string name = string.Format("{0}{1}", prefix, index);
@@ -200,12 +199,31 @@ namespace ServicesDesigner
 
                         if (exists == false)
                         {
-                            IsWiXService service = _services.Create(string.Format("{0}{1}",prefix,index), fileKey);
+                            string name = string.Format("{0}{1}", prefix, index);
+
+                            if (index == 1)
+                            {
+                                foreach (var existingService in _services)
+                                {
+                                    if (existingService.ServiceInstall.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if (exists == false)
+                                {
+                                    name = prefix;
+                                }
+
+                            }
+
+                            IsWiXService service = _services.Create(name, fileKey);
                             AddServiceNode(service);
                             added = true;
                         }
-                     }
-                     while (added == false);
+                    }
+                    while (added == false);
                 }
             }
         }

@@ -49,9 +49,11 @@ namespace IsWiXAutomationInterface
             }
         }
 
-        public Dictionary<string,string> GetServiceCandidates()
+        public List<ServiceCandidate> GetServiceCandidates()
         {
-            Dictionary<string, string> candidates = new Dictionary<string, string>();
+            List<ServiceCandidate> candidates = new List<ServiceCandidate>();
+
+            ServiceCandidate sc = new ServiceCandidate();
 
             var files = from f in _documentManager.Document.Descendants(ns + "File")
                         select f;
@@ -61,7 +63,10 @@ namespace IsWiXAutomationInterface
                 {
                     if(file.Attribute("Source").Value.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        candidates.Add(file.Attribute("Id").Value, file.GetDestinationFilePath());
+                        sc.Id = file.Attribute("Id").Value;
+                        sc.DestinationFilePath = file.GetDestinationFilePath();
+                        sc.FileName = Path.GetFileNameWithoutExtension(file.Attribute("Source").Value.Split('\\').Last());
+                        candidates.Add(sc); 
                     }
                 }
 
@@ -70,14 +75,15 @@ namespace IsWiXAutomationInterface
         }
 
 
+
         public IsWiXService Create(string name, string fileId)
         {
 
             XElement serviceInstallElement = new XElement(ns + "ServiceInstall");
             serviceInstallElement.SetAttributeValue("Id", "si" + IsWiXHelpers.GetMd5Hash(name));
             serviceInstallElement.SetAttributeValue("Name", name);
-            serviceInstallElement.SetAttributeValue("DisplayName", name);
-            serviceInstallElement.SetAttributeValue("Description", name);
+            serviceInstallElement.SetAttributeValue("DisplayName", $"{name} Service");
+            serviceInstallElement.SetAttributeValue("Description", $"{name} Service");
             serviceInstallElement.SetAttributeValue("ErrorControl", "normal");
             serviceInstallElement.SetAttributeValue("Start", "auto");
             serviceInstallElement.SetAttributeValue("Type", "ownProcess");
@@ -116,6 +122,13 @@ namespace IsWiXAutomationInterface
         public IsWiXServiceControl ServiceControl { get; set; }
     }
 
+    
+    public class ServiceCandidate
+    {
+        public string Id { get; set; }
+        public string FileName { get; set; }
+        public string DestinationFilePath { get; set; }
+    }
 
     public class IsWiXServiceInstall
     {

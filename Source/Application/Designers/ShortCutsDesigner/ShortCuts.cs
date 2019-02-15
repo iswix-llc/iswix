@@ -171,8 +171,8 @@ namespace ShortCutsDesigner
                     switch (subElement.Name.LocalName)
                     {
                         case "Directory":
-                            if(!IsASpecialDirectoryToIgnore(subElement.Attribute("Id").Value))
-                            { 
+                            if (!IsASpecialDirectoryToIgnore(subElement.Attribute("Id").Value))
+                            {
                                 var newNode = treeNode.Nodes.Add(CreateNodeName(subElement));
                                 var newNodeTag = GetElementId(subElement);
                                 newNode.ImageIndex = (int)ImageLibrary.FolderOpen;
@@ -353,12 +353,12 @@ namespace ShortCutsDesigner
                             cmsDestinationRoot.Show(tvDestination, p);
                             break;
                         default:
-                            if(node.ImageIndex.Equals(12))
+                            if (node.ImageIndex.Equals(12))
                             {
                                 cmsShortcut.Show(tvDestination, p);
                             }
                             else
-                            { 
+                            {
                                 cmsDestinationTreeDefault.Show(tvDestination, p);
                             }
                             break;
@@ -369,7 +369,7 @@ namespace ShortCutsDesigner
 
         private bool IsShortcutNode()
         {
-            if(tvDestination.SelectedNode.ImageIndex.Equals(12))
+            if (tvDestination.SelectedNode.ImageIndex.Equals(12))
             {
                 return true;
             }
@@ -768,7 +768,8 @@ namespace ShortCutsDesigner
             if (parent != null)
             {
                 tvDestination.SelectedNode = parent;
-                tvDestination.SelectedNode.Expand();            }
+                tvDestination.SelectedNode.Expand();
+            }
         }
         private bool ParentDirectoryNowEmpty(TreeNode directoryNode)
         {
@@ -850,7 +851,7 @@ namespace ShortCutsDesigner
             var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
             var tempStartingDirectory = FindDirectoryElement(tempDocument, elementName, elementId);
 
-           
+
 
             if (HasSubDirectories(originalStartingDirectory))
             {
@@ -940,7 +941,7 @@ namespace ShortCutsDesigner
                         {
                             string name = string.Format("{0}{1}", prefix, index);
 
-                            if (index==1)
+                            if (index == 1)
                             {
                                 foreach (var shortcut in _shortcuts)
                                 {
@@ -950,7 +951,7 @@ namespace ShortCutsDesigner
                                         break;
                                     }
                                 }
-                                if(exists == false)
+                                if (exists == false)
                                 {
                                     name = prefix;
                                 }
@@ -981,11 +982,11 @@ namespace ShortCutsDesigner
             UpdatedSelectedNodeText();
         }
 
-        private void UpdateShortcutDirectory( string oldId, string newId)
+        private void UpdateShortcutDirectory(string oldId, string newId)
         {
             foreach (var shortcut in _shortcuts)
             {
-                if(shortcut.Directory.Equals(oldId))
+                if (shortcut.Directory.Equals(oldId))
                 {
                     shortcut.Directory = newId;
                 }
@@ -998,12 +999,12 @@ namespace ShortCutsDesigner
             shortcut.Delete();
             tvDestination.SelectedNode.Remove();
             tvDestination.SelectedNode = tvDestination.Nodes[0];
-        
+
         }
 
         private void tvDestination_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if(IsShortcutNode())
+            if (IsShortcutNode())
             {
                 shortcut1.Read(e.Node.Tag as IsWiXShortCut);
                 propertyGridShortCut.SelectedObject = shortcut1;
