@@ -33,12 +33,36 @@
             </DockPanel>
             <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Width="30">
                 <StackPanel Orientation="Vertical">
-                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="+" Height="20" Width="20" Margin="0,10,0,10"></Button>
-                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="-" Height="20" Width="20" Margin="0,10,0,10"></Button>
+                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="+" Height="20" Width="20" Margin="0,10,0,10" Click="Button_Click"></Button>
+                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="-" Height="20" Width="20" Margin="0,10,0,10" Click="Button_Click_1" IsEnabled="{Binding RemoveEnabled}"></Button>
                 </StackPanel>
             </DockPanel>
             <DockPanel>
-                <DataGrid></DataGrid>
+                <DataGrid ItemsSource="{Binding Dependencies}" AutoGenerateColumns="False" IsReadOnly="True" x:Name="dataGridDependencies" SelectedValue="{Binding SelectedDependency}" SelectionChanged="DataGridDependencies_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="RequiredID"  Width="*" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RequiredId}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="RequiredLanguage"  IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RequiredLanguage}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="RequiredVersion"  IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RequiredVersion}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </DockPanel>
         </DockPanel>
     </Grid>

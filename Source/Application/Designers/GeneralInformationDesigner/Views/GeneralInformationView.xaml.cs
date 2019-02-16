@@ -1,4 +1,5 @@
-﻿using FireworksFramework.Interfaces;
+﻿using Designers.GeneralInformation.Models;
+using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
 using System.Drawing;
@@ -66,6 +67,21 @@ namespace GeneralInformationDesigner.Views
         public void LoadData()
         {
             viewModel.Load();
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            viewModel.AddDependency();
+        }
+
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+                viewModel.RemoveDependency();
+        }
+
+        private void DataGridDependencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            viewModel.ProcessSelectionChanged();
         }
     }
 }

@@ -116,7 +116,7 @@ namespace IsWiXAutomationInterface
             _requiredVersion = RequiredVersion;
         }
         public string RequiredId { get { return _requiredId; } }
-        public string RequiredVersion { get { return _requiredLanguage; } }
-        public string RequiredLanguage { get { return _requiredVersion; } }
+        public string RequiredVersion { get { return _requiredVersion; } }
+        public string RequiredLanguage { get { return _requiredLanguage; } }
     }
 }

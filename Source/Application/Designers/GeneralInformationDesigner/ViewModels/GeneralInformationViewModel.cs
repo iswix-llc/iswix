@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+﻿using System.Xml.Linq;  
 using System.Windows;
 using IsWiXAutomationInterface;
 using Designers.GeneralInformation.Models;
@@ -6,6 +6,11 @@ using FireworksFramework.Managers;
 using FireworksFramework.Types;
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Windows.Data;
+using System.Collections.ObjectModel;
+using Microsoft.Win32;
+using System.Linq;
 
 namespace GeneralInformationDesigner.ViewModels
 {
@@ -21,7 +26,13 @@ namespace GeneralInformationDesigner.ViewModels
         IsWiXProduct _iswixProduct;
         IsWiXModule _iswixModule;
         IsWiXPackage _iswixPackage;
-
+        IsWiXDependencies _iswixDependencies;
+        bool _removeEnabled;
+        DependencyModel _selectedDependency;
+        public bool RemoveEnabled { get { return _removeEnabled; } set { _removeEnabled = value; RaisePropertyChangedEvent("RemoveEnabled"); } }
+        public DependencyModel SelectedDependency { get { return _selectedDependency; } set { _selectedDependency = value; RaisePropertyChangedEvent("SelectedDependency"); } }
+        ObservableCollection<DependencyModel> _dependencies = new ObservableCollection<DependencyModel>();
+        public ObservableCollection<DependencyModel> Dependencies { get { return _dependencies; }set { _dependencies = value; RaisePropertyChangedEvent("Dependencies"); } }
         Visibility _productPropertyGridVisible = Visibility.Hidden;
         Visibility _modulePropertyGridVisible = Visibility.Hidden;
         Visibility _packagePropertyGridVisible = Visibility.Hidden;
@@ -77,6 +88,7 @@ namespace GeneralInformationDesigner.ViewModels
             }
 
             PackageModel package = new PackageModel();
+            Dependencies = LoadDependencies();
             Package = LoadPackage();
             PackagePropertyGridVisible = Visibility.Visible;
         }
@@ -114,6 +126,23 @@ namespace GeneralInformationDesigner.ViewModels
             package.SummaryCodepage = _iswixPackage.SummaryCodepage;
             package.PropertyChanged += Package_PropertyChanged;
             return package;
+        }
+
+        ObservableCollection<DependencyModel> LoadDependencies()
+        {
+            RemoveEnabled = false;
+            ObservableCollection<DependencyModel> dependencies = new ObservableCollection<DependencyModel>();
+            _iswixDependencies = new IsWiXDependencies();
+
+            foreach (var iswixDependency in _iswixDependencies)
+            {
+                DependencyModel dependency = new DependencyModel();
+                dependency.RequiredId = iswixDependency.RequiredId;
+                dependency.RequiredLanguage = iswixDependency.RequiredLanguage;
+                dependency.RequiredVersion = iswixDependency.RequiredVersion;
+                dependencies.Add(dependency);
+            }
+            return dependencies;
         }
 
         ProductModel LoadProduct()
@@ -253,6 +282,57 @@ namespace GeneralInformationDesigner.ViewModels
                 case "Version":
                     _iswixProduct.Version = Product.Version;
                     break;
+            }
+        }
+
+        public void AddDependency()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
+            fileDialog.FileName = "";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.Filter = "MSI Merge Modules (*.msm)|*.msm";
+            fileDialog.Multiselect = true;
+            if (fileDialog.ShowDialog()==true)
+            {
+                foreach (var fileName in fileDialog.FileNames)
+                {
+                    try
+                    {
+                        var iswixDependency = new IsWiXDependency(fileName);
+                        DependencyModel dependency = new DependencyModel();
+                        dependency.RequiredId = iswixDependency.RequiredId;
+                        dependency.RequiredLanguage = iswixDependency.RequiredLanguage;
+                        dependency.RequiredVersion = iswixDependency.RequiredVersion;
+                        _iswixDependencies.Add(iswixDependency);
+                        if (!Dependencies.Contains(dependency))
+                        {
+                            Dependencies.Add(dependency);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+        }
+
+        public void RemoveDependency()
+        {
+            _iswixDependencies.Remove(new IsWiXDependency(SelectedDependency.RequiredId, SelectedDependency.RequiredLanguage, SelectedDependency.RequiredVersion));
+            Dependencies.Remove(SelectedDependency);
+            if(Dependencies.Count==0)
+            {
+                RemoveEnabled = false;
+            }
+        }
+
+        public void ProcessSelectionChanged()
+        {
+            if(SelectedDependency!=null)
+            {
+                RemoveEnabled = true;
             }
         }
     }
