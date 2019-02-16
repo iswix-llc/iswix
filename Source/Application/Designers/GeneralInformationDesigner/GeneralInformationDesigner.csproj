@@ -115,6 +115,9 @@
     <Compile Include="Dependency.Designer.cs">
       <DependentUpon>Dependency.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModuleModel.cs" />
+    <Compile Include="Models\PackageModel.cs" />
+    <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Product.cs">
       <SubType>Component</SubType>
     </Compile>
