@@ -24,6 +24,21 @@
         <Component Id="owcF687CD25DBEA41F3A5555729AC19B5F6" Guid="615b5678-171b-e34b-353a-6d7999a14edf">
           <File Id="owfF687CD25DBEA41F3A5555729AC19B5F6" Source="$(var.SourceDir)\Microsoft.Deployment.WindowsInstaller.dll" KeyPath="yes"></File>
         </Component>
+        <Component Id="owc5DF5A02435B886620F61D1475E1EE506" Guid="0b8d6853-9bf2-1497-d28c-8fc631878086">
+          <File Id="owf5DF5A02435B886620F61D1475E1EE506" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owcE50E0EA961399A5C58E851C2509C2841" Guid="ebd0d707-f355-97c1-28f7-c6c55ccfbb1c">
+          <File Id="owfE50E0EA961399A5C58E851C2509C2841" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Aero.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc173B688D4A2873439CC8AAA15C62C194" Guid="c2f3249d-b135-4061-a322-c755be18c1c1">
+          <File Id="owf173B688D4A2873439CC8AAA15C62C194" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Metro.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owcA9CE4BE1CA2F111A2B97C15818DACE69" Guid="3ea611c2-a8b5-77aa-6db5-29ecc6742c2e">
+          <File Id="owfA9CE4BE1CA2F111A2B97C15818DACE69" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.VS2010.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc3C1C0346C36005991ED6F7FADAF49AF5" Guid="0fcabbf1-293d-508f-e3da-4b212a65fd8d">
+          <File Id="owf3C1C0346C36005991ED6F7FADAF49AF5" Source="$(var.SourceDir)\Xceed.Wpf.Toolkit.dll" KeyPath="yes" />
+        </Component>
         <Directory Id="owd878D183E2FFB0B60D5A8A3A3E2A04F73" Name="Schemas">
           <Component Id="owc878D183E2FFB0B60D5A8A3A3E2A04F73" Guid="27ec7e8d-f1e1-4c97-a2ac-acea8f0ea777" KeyPath="yes">
             <File Id="owfFDEE331E2DE8F1BCD7BEABD3751A01D5" Source="$(var.SourceDir)\Schemas\bal.xsd" />
