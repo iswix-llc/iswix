@@ -24,7 +24,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using static FireworksFramework.Types.Enums;
 
-namespace XmlEditorDesigner
+namespace XmlEditorDesigner.Views
 {
     /// <summary>
     /// Interaction logic for XmlEditor.xaml

@@ -103,8 +103,8 @@ IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.como
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlEditor.xaml.cs">
-      <DependentUpon>XmlEditor.xaml</DependentUpon>
+    <Compile Include="Views\XmlEditorView.xaml.cs">
+      <DependentUpon>XmlEditorView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +140,9 @@ IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.como
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="XmlEditor.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\XmlEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
 </Project>
