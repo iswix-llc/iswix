@@ -27,5 +27,19 @@
         <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridProduct" SelectedObject="{Binding Product}" Visibility="{Binding ProductPropertyGridVisible}"/>
         <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridModule" SelectedObject="{Binding Module}" Visibility="{Binding ModulePropertyGridVisible}"></xctk:PropertyGrid>
         <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridPackage" SelectedObject="{Binding Package}" Visibility="{Binding PackagePropertyGridVisible}"></xctk:PropertyGrid>
+        <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+            <DockPanel DockPanel.Dock="Top">
+                <Label Content="Dependencies:"/>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Width="30">
+                <StackPanel Orientation="Vertical">
+                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="+" Height="20" Width="20" Margin="0,10,0,10"></Button>
+                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="-" Height="20" Width="20" Margin="0,10,0,10"></Button>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel>
+                <DataGrid></DataGrid>
+            </DockPanel>
+        </DockPanel>
     </Grid>
 </UserControl>
