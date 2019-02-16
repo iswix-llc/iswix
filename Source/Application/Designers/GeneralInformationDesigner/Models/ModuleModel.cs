@@ -17,7 +17,7 @@ namespace Designers.GeneralInformation.Models
 
         [CategoryAttribute("Module")]
         [Description(@"The code page integer value or web name for the resulting MSM.")]
-        public string Codepage{get{return _codepage;}set { _codepage = value; RaisePropertyChangedEvent("CodePage"); } }
+        public string Codepage{get{return _codepage;}set { _codepage = value; RaisePropertyChangedEvent("Codepage"); } }
 
         [CategoryAttribute("Module")]
         [Description("The decimal language ID (LCID) of the merge module.")]

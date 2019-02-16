@@ -109,48 +109,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dependency.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Dependency.Designer.cs">
-      <DependentUpon>Dependency.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\DependencyModel.cs" />
     <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="Models\PackageModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
-    <Compile Include="Product.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Product.designer.cs">
-      <DependentUpon>Product.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dependencies.cs">
-      <DependentUpon>Dependencies.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Dependencies.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Dependencies.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="GeneralInformation.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GeneralInformation.designer.cs">
-      <DependentUpon>GeneralInformation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Module.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Module.designer.cs">
-      <DependentUpon>Module.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Package.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Package.designer.cs">
-      <DependentUpon>Package.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\GeneralInformationViewModel.cs" />
     <Compile Include="Views\GeneralInformationView.xaml.cs">
@@ -158,30 +120,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dependencies.xsc">
-      <DependentUpon>Dependencies.xsd</DependentUpon>
-    </None>
-    <None Include="Dependencies.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Dependencies.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Dependencies.xss">
-      <DependentUpon>Dependencies.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\ModuleDependency.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GeneralInformation.resx">
-      <DependentUpon>GeneralInformation.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Dependency.resx">
-      <DependentUpon>Dependency.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GeneralInformation.ico" />
   </ItemGroup>
   <ItemGroup>
