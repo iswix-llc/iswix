@@ -65,6 +65,7 @@ namespace GeneralInformationDesigner.Views
 
         public void LoadData()
         {
+            viewModel.Load();
         }
     }
 }
