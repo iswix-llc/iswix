@@ -69,9 +69,17 @@
     <Reference Include="FireworksFramework, Version=5.1.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\fireworks.5.1.10\lib\net40\FireworksFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Deployment.Compression, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\wix-libs.3.11.1\lib\net20\Microsoft.Deployment.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Deployment.Compression.Cab, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\wix-libs.3.11.1\lib\net20\Microsoft.Deployment.Compression.Cab.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\ExternalAssemblies\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+      <HintPath>..\..\packages\wix-libs.3.11.1\lib\net20\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Deployment.WindowsInstaller.Package, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\wix-libs.3.11.1\lib\net20\Microsoft.Deployment.WindowsInstaller.Package.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
