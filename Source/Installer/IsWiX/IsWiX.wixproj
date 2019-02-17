@@ -157,6 +157,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\ExtendedWpfToolkitMM\ExtendedWpfToolkitMM.wixproj">
+      <Name>ExtendedWpfToolkitMM</Name>
+      <Project>{2125b945-9a75-4092-9113-4a3e80285d2d}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\IsWiXMM\IsWiXMM.wixproj">
       <Name>IsWiXMM</Name>
       <Project>{928e70f5-f50b-445f-9aa9-e8fbd5ecf85c}</Project>

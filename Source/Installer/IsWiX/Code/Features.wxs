@@ -15,6 +15,7 @@
         </Feature>
         <Feature Id="IWD_GENERALINFORMATION" Title="General Information" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
           <MergeRef Id="GeneralInformationDesignerMM" />
+          <MergeRef Id="ExtendedWpfToolkitMM" />
         </Feature>
         <Feature Id="IWD_NAMESPACES" Title="Namespaces" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
           <MergeRef Id="NamespacesDesignerMM" />
@@ -60,6 +61,7 @@
             <Merge Id="ServicesDesignerMM" SourceFile="$(var.ServicesDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="ShortCutsDesignerMM" SourceFile="$(var.ShortCutsDesignerMM.TargetPath)" DiskId="1" Language="1033" />
             <Merge Id="XmlEditorDesignerMM" SourceFile="$(var.XmlEditorDesignerMM.TargetPath)" DiskId="1" Language="1033" />
+            <Merge Id="ExtendedWpfToolkitMM" SourceFile="$(var.ExtendedWpfToolkitMM.TargetPath)" DiskId="1" Language="1033" />
           </Directory>
         </Directory>
       </Directory>
