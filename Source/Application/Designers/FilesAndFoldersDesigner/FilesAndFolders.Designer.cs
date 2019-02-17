@@ -120,8 +120,8 @@
             // scMain.Panel2
             // 
             this.scMain.Panel2.Controls.Add(this.gbDestination);
-            this.scMain.Size = new System.Drawing.Size(843, 637);
-            this.scMain.SplitterDistance = 306;
+            this.scMain.Size = new System.Drawing.Size(1200, 666);
+            this.scMain.SplitterDistance = 364;
             this.scMain.TabIndex = 0;
             // 
             // gbSourceFiles
@@ -130,7 +130,7 @@
             this.gbSourceFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbSourceFiles.Location = new System.Drawing.Point(0, 0);
             this.gbSourceFiles.Name = "gbSourceFiles";
-            this.gbSourceFiles.Size = new System.Drawing.Size(843, 306);
+            this.gbSourceFiles.Size = new System.Drawing.Size(1200, 364);
             this.gbSourceFiles.TabIndex = 0;
             this.gbSourceFiles.TabStop = false;
             this.gbSourceFiles.Text = "Source Files";
@@ -138,7 +138,7 @@
             // scSourceFiles
             // 
             this.scSourceFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scSourceFiles.Location = new System.Drawing.Point(3, 16);
+            this.scSourceFiles.Location = new System.Drawing.Point(3, 22);
             this.scSourceFiles.Name = "scSourceFiles";
             // 
             // scSourceFiles.Panel1
@@ -148,8 +148,8 @@
             // scSourceFiles.Panel2
             // 
             this.scSourceFiles.Panel2.Controls.Add(this.lvSourceFiles);
-            this.scSourceFiles.Size = new System.Drawing.Size(837, 287);
-            this.scSourceFiles.SplitterDistance = 222;
+            this.scSourceFiles.Size = new System.Drawing.Size(1194, 339);
+            this.scSourceFiles.SplitterDistance = 263;
             this.scSourceFiles.TabIndex = 0;
             // 
             // tvSourceFiles
@@ -160,7 +160,7 @@
             this.tvSourceFiles.Location = new System.Drawing.Point(0, 0);
             this.tvSourceFiles.Name = "tvSourceFiles";
             this.tvSourceFiles.SelectedImageIndex = 0;
-            this.tvSourceFiles.Size = new System.Drawing.Size(222, 287);
+            this.tvSourceFiles.Size = new System.Drawing.Size(263, 339);
             this.tvSourceFiles.TabIndex = 0;
             this.tvSourceFiles.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvSourceFiles_BeforeExpand);
             this.tvSourceFiles.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvSourceFiles_ItemDrag);
@@ -196,7 +196,7 @@
             this.lvSourceFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvSourceFiles.Location = new System.Drawing.Point(0, 0);
             this.lvSourceFiles.Name = "lvSourceFiles";
-            this.lvSourceFiles.Size = new System.Drawing.Size(611, 287);
+            this.lvSourceFiles.Size = new System.Drawing.Size(927, 339);
             this.lvSourceFiles.SmallImageList = this.imageListFileIcons;
             this.lvSourceFiles.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvSourceFiles.TabIndex = 0;
@@ -247,7 +247,7 @@
             this.gbDestination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbDestination.Location = new System.Drawing.Point(0, 0);
             this.gbDestination.Name = "gbDestination";
-            this.gbDestination.Size = new System.Drawing.Size(843, 327);
+            this.gbDestination.Size = new System.Drawing.Size(1200, 298);
             this.gbDestination.TabIndex = 0;
             this.gbDestination.TabStop = false;
             this.gbDestination.Text = "Destination Files";
@@ -255,7 +255,7 @@
             // scDestination
             // 
             this.scDestination.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scDestination.Location = new System.Drawing.Point(3, 16);
+            this.scDestination.Location = new System.Drawing.Point(3, 22);
             this.scDestination.Name = "scDestination";
             // 
             // scDestination.Panel1
@@ -265,8 +265,8 @@
             // scDestination.Panel2
             // 
             this.scDestination.Panel2.Controls.Add(this.lvDestination);
-            this.scDestination.Size = new System.Drawing.Size(837, 308);
-            this.scDestination.SplitterDistance = 223;
+            this.scDestination.Size = new System.Drawing.Size(1194, 273);
+            this.scDestination.SplitterDistance = 264;
             this.scDestination.TabIndex = 0;
             // 
             // tvDestination
@@ -280,7 +280,7 @@
             this.tvDestination.Location = new System.Drawing.Point(0, 0);
             this.tvDestination.Name = "tvDestination";
             this.tvDestination.SelectedImageIndex = 0;
-            this.tvDestination.Size = new System.Drawing.Size(223, 308);
+            this.tvDestination.Size = new System.Drawing.Size(264, 273);
             this.tvDestination.TabIndex = 0;
             this.tvDestination.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvDestination_AfterLabelEdit);
             this.tvDestination.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvDestination_AfterSelect);
@@ -301,7 +301,7 @@
             this.lvDestination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvDestination.Location = new System.Drawing.Point(0, 0);
             this.lvDestination.Name = "lvDestination";
-            this.lvDestination.Size = new System.Drawing.Size(610, 308);
+            this.lvDestination.Size = new System.Drawing.Size(926, 273);
             this.lvDestination.SmallImageList = this.imageListFileIconsDst;
             this.lvDestination.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvDestination.TabIndex = 0;
@@ -342,6 +342,7 @@
             // 
             // cmsDestinationTreeDefault
             // 
+            this.cmsDestinationTreeDefault.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createNewFolderToolStripMenuItem,
             this.renameFolderToolStripMenuItem,
@@ -350,14 +351,14 @@
             this.expandAllToolStripMenuItem1,
             this.collapseAllToolStripMenuItem});
             this.cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
-            this.cmsDestinationTreeDefault.Size = new System.Drawing.Size(213, 120);
+            this.cmsDestinationTreeDefault.Size = new System.Drawing.Size(301, 160);
             // 
             // createNewFolderToolStripMenuItem
             // 
             this.createNewFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("createNewFolderToolStripMenuItem.Image")));
             this.createNewFolderToolStripMenuItem.Name = "createNewFolderToolStripMenuItem";
             this.createNewFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            this.createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(300, 30);
             this.createNewFolderToolStripMenuItem.Text = "Create New Folder";
             this.createNewFolderToolStripMenuItem.Click += new System.EventHandler(this.createNewFolderToolStripMenuItem_Click);
             // 
@@ -366,7 +367,7 @@
             this.renameFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("renameFolderToolStripMenuItem.Image")));
             this.renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
             this.renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(300, 30);
             this.renameFolderToolStripMenuItem.Text = "Rename Folder";
             this.renameFolderToolStripMenuItem.Click += new System.EventHandler(this.renameFolderToolStripMenuItem_Click);
             // 
@@ -375,20 +376,20 @@
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(300, 30);
             this.deleteToolStripMenuItem.Text = "Remove From Project";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(297, 6);
             // 
             // expandAllToolStripMenuItem1
             // 
             this.expandAllToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("expandAllToolStripMenuItem1.Image")));
             this.expandAllToolStripMenuItem1.Name = "expandAllToolStripMenuItem1";
-            this.expandAllToolStripMenuItem1.Size = new System.Drawing.Size(212, 22);
+            this.expandAllToolStripMenuItem1.Size = new System.Drawing.Size(300, 30);
             this.expandAllToolStripMenuItem1.Text = "Expand All";
             this.expandAllToolStripMenuItem1.Click += new System.EventHandler(this.expandAllToolStripMenuItem1_Click);
             // 
@@ -396,103 +397,108 @@
             // 
             this.collapseAllToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("collapseAllToolStripMenuItem.Image")));
             this.collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
-            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(300, 30);
             this.collapseAllToolStripMenuItem.Text = "Collapse All";
             this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
             // 
             // cmsMergeRedirectFolder
             // 
+            this.cmsMergeRedirectFolder.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsMergeRedirectFolder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createNewFolderToolStripMenuItem1,
             this.toolStripSeparator2,
             this.expandAllToolStripMenuItem});
             this.cmsMergeRedirectFolder.Name = "cmsMergeRedirectFolder";
-            this.cmsMergeRedirectFolder.Size = new System.Drawing.Size(194, 54);
+            this.cmsMergeRedirectFolder.Size = new System.Drawing.Size(273, 70);
             // 
             // createNewFolderToolStripMenuItem1
             // 
             this.createNewFolderToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("createNewFolderToolStripMenuItem1.Image")));
             this.createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             this.createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            this.createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(272, 30);
             this.createNewFolderToolStripMenuItem1.Text = "Create New Folder";
             this.createNewFolderToolStripMenuItem1.Click += new System.EventHandler(this.createNewFolderToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(190, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(269, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             this.expandAllToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("expandAllToolStripMenuItem.Image")));
             this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(272, 30);
             this.expandAllToolStripMenuItem.Text = "Expand All";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
             // cmsSourceTree
             // 
+            this.cmsSourceTree.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsSourceTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshSourceFilesToolStripMenuItem});
             this.cmsSourceTree.Name = "cmsSourceTree";
-            this.cmsSourceTree.Size = new System.Drawing.Size(133, 26);
+            this.cmsSourceTree.Size = new System.Drawing.Size(182, 34);
             // 
             // refreshSourceFilesToolStripMenuItem
             // 
             this.refreshSourceFilesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("refreshSourceFilesToolStripMenuItem.Image")));
             this.refreshSourceFilesToolStripMenuItem.Name = "refreshSourceFilesToolStripMenuItem";
             this.refreshSourceFilesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.refreshSourceFilesToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.refreshSourceFilesToolStripMenuItem.Size = new System.Drawing.Size(181, 30);
             this.refreshSourceFilesToolStripMenuItem.Text = "Refresh";
             this.refreshSourceFilesToolStripMenuItem.Click += new System.EventHandler(this.refreshSourceFilesToolStripMenuItem_Click);
             // 
             // cmsSourceFiles
             // 
+            this.cmsSourceFiles.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsSourceFiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshToolStripMenuItem});
             this.cmsSourceFiles.Name = "cmsSourceFiles";
-            this.cmsSourceFiles.Size = new System.Drawing.Size(133, 26);
+            this.cmsSourceFiles.Size = new System.Drawing.Size(182, 34);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("refreshToolStripMenuItem.Image")));
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
             this.refreshToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(181, 30);
             this.refreshToolStripMenuItem.Text = "Refresh";
             this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // cmsDestinationFiles
             // 
+            this.cmsDestinationFiles.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsDestinationFiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeFileFromProjectToolStripMenuItem});
             this.cmsDestinationFiles.Name = "cmsDestinationFiles";
-            this.cmsDestinationFiles.Size = new System.Drawing.Size(213, 26);
+            this.cmsDestinationFiles.Size = new System.Drawing.Size(301, 34);
             // 
             // removeFileFromProjectToolStripMenuItem
             // 
             this.removeFileFromProjectToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("removeFileFromProjectToolStripMenuItem.Image")));
             this.removeFileFromProjectToolStripMenuItem.Name = "removeFileFromProjectToolStripMenuItem";
             this.removeFileFromProjectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.removeFileFromProjectToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.removeFileFromProjectToolStripMenuItem.Size = new System.Drawing.Size(300, 30);
             this.removeFileFromProjectToolStripMenuItem.Text = "Remove From Project";
             this.removeFileFromProjectToolStripMenuItem.Click += new System.EventHandler(this.removeFileFromProjectToolStripMenuItem_Click);
             // 
             // cmsDestinationRoot
             // 
+            this.cmsDestinationRoot.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsDestinationRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.expandAllToolStripMenuItem2,
             this.collapseAllToolStripMenuItem1,
             this.toolStripSeparator3});
             this.cmsDestinationRoot.Name = "cmsDestinationRoot";
-            this.cmsDestinationRoot.Size = new System.Drawing.Size(137, 54);
+            this.cmsDestinationRoot.Size = new System.Drawing.Size(185, 70);
             // 
             // expandAllToolStripMenuItem2
             // 
             this.expandAllToolStripMenuItem2.Image = ((System.Drawing.Image)(resources.GetObject("expandAllToolStripMenuItem2.Image")));
             this.expandAllToolStripMenuItem2.Name = "expandAllToolStripMenuItem2";
-            this.expandAllToolStripMenuItem2.Size = new System.Drawing.Size(136, 22);
+            this.expandAllToolStripMenuItem2.Size = new System.Drawing.Size(184, 30);
             this.expandAllToolStripMenuItem2.Text = "Expand All";
             this.expandAllToolStripMenuItem2.Click += new System.EventHandler(this.expandAllToolStripMenuItem2_Click);
             // 
@@ -500,14 +506,14 @@
             // 
             this.collapseAllToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("collapseAllToolStripMenuItem1.Image")));
             this.collapseAllToolStripMenuItem1.Name = "collapseAllToolStripMenuItem1";
-            this.collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(136, 22);
+            this.collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(184, 30);
             this.collapseAllToolStripMenuItem1.Text = "Collapse All";
             this.collapseAllToolStripMenuItem1.Click += new System.EventHandler(this.collapseAllToolStripMenuItem1_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
             // 
             // splitContainer1
             // 
@@ -529,59 +535,59 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.scMain);
-            this.splitContainer1.Size = new System.Drawing.Size(843, 666);
-            this.splitContainer1.SplitterDistance = 25;
+            this.splitContainer1.Size = new System.Drawing.Size(1200, 700);
+            this.splitContainer1.SplitterDistance = 30;
             this.splitContainer1.TabIndex = 6;
             // 
             // textBoxExcludeFilter
             // 
-            this.textBoxExcludeFilter.Location = new System.Drawing.Point(272, 2);
+            this.textBoxExcludeFilter.Location = new System.Drawing.Point(313, -1);
             this.textBoxExcludeFilter.Name = "textBoxExcludeFilter";
-            this.textBoxExcludeFilter.Size = new System.Drawing.Size(158, 20);
+            this.textBoxExcludeFilter.Size = new System.Drawing.Size(158, 26);
             this.textBoxExcludeFilter.TabIndex = 7;
             this.textBoxExcludeFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExcludeFilter_KeyDown);
             // 
             // labelExcludeFilter
             // 
             this.labelExcludeFilter.AutoSize = true;
-            this.labelExcludeFilter.Location = new System.Drawing.Point(218, 5);
+            this.labelExcludeFilter.Location = new System.Drawing.Point(238, 2);
             this.labelExcludeFilter.Name = "labelExcludeFilter";
-            this.labelExcludeFilter.Size = new System.Drawing.Size(48, 13);
+            this.labelExcludeFilter.Size = new System.Drawing.Size(69, 20);
             this.labelExcludeFilter.TabIndex = 6;
             this.labelExcludeFilter.Text = "Exclude:";
             // 
             // labelIncludeFilter
             // 
             this.labelIncludeFilter.AutoSize = true;
-            this.labelIncludeFilter.Location = new System.Drawing.Point(3, 5);
+            this.labelIncludeFilter.Location = new System.Drawing.Point(3, 2);
             this.labelIncludeFilter.Name = "labelIncludeFilter";
-            this.labelIncludeFilter.Size = new System.Drawing.Size(45, 13);
+            this.labelIncludeFilter.Size = new System.Drawing.Size(65, 20);
             this.labelIncludeFilter.TabIndex = 4;
             this.labelIncludeFilter.Text = "Include:";
             // 
             // textBoxIncludeFilter
             // 
-            this.textBoxIncludeFilter.Location = new System.Drawing.Point(54, 2);
+            this.textBoxIncludeFilter.Location = new System.Drawing.Point(74, -1);
             this.textBoxIncludeFilter.Name = "textBoxIncludeFilter";
-            this.textBoxIncludeFilter.Size = new System.Drawing.Size(158, 20);
+            this.textBoxIncludeFilter.Size = new System.Drawing.Size(158, 26);
             this.textBoxIncludeFilter.TabIndex = 3;
             this.textBoxIncludeFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxIncludeFilter_KeyDown);
             // 
             // lblComponentRules
             // 
             this.lblComponentRules.AutoSize = true;
-            this.lblComponentRules.Location = new System.Drawing.Point(436, 5);
+            this.lblComponentRules.Location = new System.Drawing.Point(477, 2);
             this.lblComponentRules.Name = "lblComponentRules";
-            this.lblComponentRules.Size = new System.Drawing.Size(94, 13);
+            this.lblComponentRules.Size = new System.Drawing.Size(141, 20);
             this.lblComponentRules.TabIndex = 2;
             this.lblComponentRules.Text = "Component Rules:";
             // 
             // rbOneToOne
             // 
             this.rbOneToOne.AutoSize = true;
-            this.rbOneToOne.Location = new System.Drawing.Point(551, 5);
+            this.rbOneToOne.Location = new System.Drawing.Point(632, 0);
             this.rbOneToOne.Name = "rbOneToOne";
-            this.rbOneToOne.Size = new System.Drawing.Size(84, 17);
+            this.rbOneToOne.Size = new System.Drawing.Size(120, 24);
             this.rbOneToOne.TabIndex = 1;
             this.rbOneToOne.TabStop = true;
             this.rbOneToOne.Text = "One To One";
@@ -592,9 +598,9 @@
             // 
             this.rbOneToMany.AutoSize = true;
             this.rbOneToMany.Checked = true;
-            this.rbOneToMany.Location = new System.Drawing.Point(641, 5);
+            this.rbOneToMany.Location = new System.Drawing.Point(762, 0);
             this.rbOneToMany.Name = "rbOneToMany";
-            this.rbOneToMany.Size = new System.Drawing.Size(90, 17);
+            this.rbOneToMany.Size = new System.Drawing.Size(128, 24);
             this.rbOneToMany.TabIndex = 0;
             this.rbOneToMany.TabStop = true;
             this.rbOneToMany.Text = "One To Many";
@@ -605,7 +611,7 @@
             // 
             this.Controls.Add(this.splitContainer1);
             this.Name = "FilesAndFolders";
-            this.Size = new System.Drawing.Size(843, 666);
+            this.Size = new System.Drawing.Size(1200, 700);
             this.scMain.Panel1.ResumeLayout(false);
             this.scMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).EndInit();

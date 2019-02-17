@@ -551,8 +551,11 @@ namespace CustomTablesDesigner
                 }
                 LoadData();
             }
-        } 
+        }
 
+        private void labelName_Click(object sender, EventArgs e)
+        {
 
+        }
     }
 }
