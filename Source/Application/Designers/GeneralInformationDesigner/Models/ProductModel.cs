@@ -11,10 +11,10 @@ namespace Designers.GeneralInformation.Models
         [Description(@"The product code GUID for the product.")]
         public string Id { get { return _id; } set { _id = value; RaisePropertyChangedEvent("Id"); } }
 
-        string _codePage;
+        string _codepage;
         [CategoryAttribute("Product")]
         [Description(@"The code page integer value or web name for the resulting MSI.")]
-        public string Codepage { get { return _codePage; } set { _codePage = value; RaisePropertyChangedEvent("CodePage"); } }
+        public string Codepage { get { return _codepage; } set { _codepage = value; RaisePropertyChangedEvent("Codepage"); } }
 
         Int32 _language;
         [CategoryAttribute("Product")]

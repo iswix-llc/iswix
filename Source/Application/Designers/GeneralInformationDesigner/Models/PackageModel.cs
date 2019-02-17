@@ -88,9 +88,9 @@ x64 Set this value to declare that the package is an x64 package. This value req
         [Description(@"Set to 'yes' to have short filenames in the source.")]
         public YesNo? ShortNames { get { return _shortNames; } set { _shortNames = value; RaisePropertyChangedEvent("ShortNames"); } }
 
-        string _summaryCodePage;
+        string _summaryCodepage;
         [CategoryAttribute("Package")]
         [Description(@" The code page integer value or web name for summary info strings only. See remarks for more information.   ")]
-        public string SummaryCodepage { get { return _summaryCodePage; } set { _summaryCodePage = value; RaisePropertyChangedEvent("SummaryCodePage"); } }
+        public string SummaryCodepage { get { return _summaryCodepage; } set { _summaryCodepage = value; RaisePropertyChangedEvent("SummaryCodepage"); } }
     }
 }
