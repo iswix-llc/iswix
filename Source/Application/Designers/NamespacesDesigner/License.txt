@@ -1,11 +1,2 @@
-Copyright 2010 - 2018 - ISWIX, LLC
-Microsoft Public License (Ms-PL)
-
-Third Party Code:
-
-Windows Installer XML - Schema Definitions
-Author: .NET Foundation and contributors
-WebSite: https://github.com/wixtoolset/wix3
-License:
-  Microsoft Reciprocal License (MS-RL)
-  https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT
+Copyright 2010 - 2019 - ISWIX, LLC
+Microsoft Public License (MS-PL)

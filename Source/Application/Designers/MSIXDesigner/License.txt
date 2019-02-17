@@ -1,2 +1,11 @@
-﻿Copyright 2010 - 2018 - ISWIX, LLC
-Microsoft Public License (Ms-PL)
+﻿Copyright 2010 - 2019 - ISWIX, LLC
+Microsoft Public License (MS-PL)
+
+Third Party Code:
+
+FireGiant WiX Expansion Pack - Schema Definitions
+Author: FireGiant LLC
+WebSite: https://www.firegiant.com/products/wix-expansion-pack/
+
+License:
+  Permission obtained from Rob Mensching, FireGiant
