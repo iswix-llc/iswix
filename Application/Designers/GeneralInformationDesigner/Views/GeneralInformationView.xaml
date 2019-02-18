@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="GeneralInformationDesigner.Views.GeneralInformationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmmodels="clr-namespace:GeneralInformationDesigner.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:GeneralInformationDesigner.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmmodels:GeneralInformationViewModel x:Name="viewModel"/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" HorizontalAlignment="Stretch" />
+        <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridProduct" SelectedObject="{Binding Product}" Visibility="{Binding ProductPropertyGridVisible}"/>
+        <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridModule" SelectedObject="{Binding Module}" Visibility="{Binding ModulePropertyGridVisible}"></xctk:PropertyGrid>
+        <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridPackage" SelectedObject="{Binding Package}" Visibility="{Binding PackagePropertyGridVisible}" ></xctk:PropertyGrid>
+        <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+            <DockPanel DockPanel.Dock="Top">
+                <Label Content="Dependencies:"/>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Width="30">
+                <StackPanel Orientation="Vertical">
+                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="+" Height="20" Width="20" Margin="0,10,0,10" Click="Button_Click"></Button>
+                    <Button HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="-" Height="20" Width="20" Margin="0,10,0,10" Click="Button_Click_1" IsEnabled="{Binding RemoveEnabled}"></Button>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel>
+                <DataGrid ItemsSource="{Binding Dependencies}" AutoGenerateColumns="False" IsReadOnly="True" x:Name="dataGridDependencies" SelectedValue="{Binding SelectedDependency}" SelectionChanged="DataGridDependencies_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="RequiredID"  Width="*" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RequiredId}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="RequiredLanguage"  IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RequiredLanguage}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="RequiredVersion"  IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RequiredVersion}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

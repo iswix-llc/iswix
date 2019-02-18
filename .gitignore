@@ -331,5 +331,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-Source/Installer/Deploy
-/Source/Application/IsWiXNewAddIn/ProjectTemplates
+/Installer/Deploy
+/Application/IsWiXNewAddIn/ProjectTemplates

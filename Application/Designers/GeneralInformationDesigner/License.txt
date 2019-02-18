@@ -1,0 +1,18 @@
+Copyright 2010 - 2019 - ISWIX, LLC
+Microsoft Public License (MS-PL)
+
+Third Party Code:
+
+Extended WPF Toolkit
+Author: Xceed Software
+WebSite: https://github.com/xceedsoftware/wpftoolkit
+License:
+  Microsoft Public License (MS-PL)
+  https://github.com/xceedsoftware/wpftoolkit/blob/master/license.md
+
+Windows Installer XML - Deployment Tools Framework
+Author: .NET Foundation and contributors
+WebSite: https://github.com/wixtoolset/wix3
+License:
+  Microsoft Reciprocal License (MS-RL)
+  https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT

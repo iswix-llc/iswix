@@ -1,0 +1,11 @@
+﻿Copyright 2010 - 2019 - ISWIX, LLC
+Microsoft Public License (MS-PL)
+
+Third Party Code:
+
+AvalonEdit 5.0.4
+Author: AlphaSierraPapa
+WebSite: https://github.com/icsharpcode/AvalonEdit
+License:
+  MIT License
+  https://opensource.org/licenses/MIT
