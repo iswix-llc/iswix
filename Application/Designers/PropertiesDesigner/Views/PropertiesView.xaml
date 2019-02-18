@@ -11,7 +11,7 @@
         <viewmmodels:PropertiesViewModel x:Name="viewModel"/>
     </UserControl.DataContext>
     <DockPanel>
-        <DataGrid ItemsSource="{Binding Properties}" AutoGenerateColumns="False" IsReadOnly="True" x:Name="dataGridDependencies">
+        <DataGrid ItemsSource="{Binding Properties}" AutoGenerateColumns="False"  x:Name="dataGridDependencies">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" MinWidth="100">
                     <DataGridTemplateColumn.CellTemplate>

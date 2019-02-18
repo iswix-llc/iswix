@@ -20,7 +20,18 @@ namespace PropertiesDesigner.ViewModels
         IsWiXProperties _iswixProperties;
 
         ObservableCollection<PropertyModel> _properties = new ObservableCollection<PropertyModel>();
-        public ObservableCollection<PropertyModel> Properties { get { return _properties; } set { _properties = value; RaisePropertyChangedEvent("Properties"); } }
+        public ObservableCollection<PropertyModel> Properties
+        {
+            get
+            {
+                return _properties;
+            }
+            set
+            {
+                _properties = value;
+                RaisePropertyChangedEvent("Properties");
+            }
+        }
 
         public void Load()
         {
@@ -36,9 +47,15 @@ namespace PropertiesDesigner.ViewModels
                 propertyModel.Hidden = iswixProperty.Hidden;
                 propertyModel.Secure = iswixProperty.Secure;
                 propertyModel.SuppressModularization = iswixProperty.SuppressModularization;
+                propertyModel.PropertyChanged += PropertyModel_PropertyChanged;
                 properties.Add(propertyModel);
             }
             Properties = properties;
+        }
+
+        private void PropertyModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
