@@ -55,7 +55,6 @@ namespace PropertiesDesigner.ViewModels
 
         private void PropertyModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
         }
     }
 }
