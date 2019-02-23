@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Windows;
 
 namespace PropertiesDesigner.ViewModels
 {
@@ -71,7 +72,60 @@ namespace PropertiesDesigner.ViewModels
 
         private void PropertyModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("Test");
+            bool dupe = false;
+            PropertyModel newProperty = sender as PropertyModel;
+            
+            List<string> keysFound = new List<string>();
+            foreach (var property in _properties)
+            {
+                if(keysFound.Contains(property.Id))
+                {
+                    dupe = true;
+                    break;
+                }
+                else
+                {
+                    keysFound.Add(property.Id);
+                }
+            }
+
+            if(dupe)
+            {
+                MessageBox.Show("Dupe");
+                Load();
+            }
+            else
+            {
+                if(_iswixProperties.Any(s=>s.Id==newProperty.Id))
+                {
+                    IsWiXProperty iswixProperty = _iswixProperties.First(s=>s.Id==newProperty.Id);
+                    iswixProperty.Value = newProperty.Value;
+                    iswixProperty.Secure = newProperty.Secure;
+                    iswixProperty.Admin = newProperty.Admin;
+                    iswixProperty.SuppressModularization = newProperty.SuppressModularization;
+                    iswixProperty.Hidden = newProperty.Hidden;
+                }
+                else
+                {
+                    string oldId = string.Empty;
+                    foreach (var iswixProp in _iswixProperties)
+                    {
+                        if(!_properties.Any(s=>s.Id== iswixProp.Id))
+                        {
+                            oldId = iswixProp.Id;
+                            break;
+                        }
+                    }
+                    IsWiXProperty iswixProperty = _iswixProperties.First(s => s.Id == oldId);
+                    iswixProperty.Id = newProperty.Id;
+                    iswixProperty.Value = newProperty.Value;
+                    iswixProperty.Secure = newProperty.Secure;
+                    iswixProperty.Admin = newProperty.Admin;
+                    iswixProperty.SuppressModularization = newProperty.SuppressModularization;
+                    iswixProperty.Hidden = newProperty.Hidden;
+                }
+                _iswixProperties.SortXML();
+            }
         }
 
         public void Add()
@@ -105,6 +159,8 @@ namespace PropertiesDesigner.ViewModels
 
         public void Remove(PropertyModel selectedItem)
         {
+            IsWiXProperty iswixProperty = _iswixProperties.First(s => s.Id == selectedItem.Id);
+            iswixProperty.Delete();
             Properties.Remove(selectedItem);
         }
     }

@@ -11,8 +11,10 @@
         <viewmmodels:PropertiesViewModel x:Name="viewModel"/>
     </UserControl.DataContext>
     <DockPanel>
-        <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" >
+        <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" SelectionChanged="DataGridDependencies_SelectionChanged" >
             <DataGrid.Columns>
+                <DataGridTemplateColumn MinWidth="40">
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Id" MinWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -23,7 +25,7 @@
                 <DataGridTemplateColumn Header="Value" Width="*" x:Name="Test">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" BorderThickness="0"/>
+                            <TextBox Text="{Binding Value, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" HorizontalAlignment="Stretch" BorderThickness="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
