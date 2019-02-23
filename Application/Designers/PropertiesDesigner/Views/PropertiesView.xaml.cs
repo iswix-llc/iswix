@@ -1,6 +1,8 @@
-﻿using FireworksFramework.Interfaces;
+﻿
+using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
+using PropertiesDesigner.Models;
 using System;
 using System.Drawing;
 using System.IO;
@@ -65,5 +67,28 @@ namespace PropertiesDesigner.Views
         {
             viewModel.Load();
         }
+
+        private void DataGridDependencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dataGridDependencies.SelectedItems == null)
+            {
+                viewModel.EnableRemove = false;
+            }
+            else
+            {
+                viewModel.EnableRemove = true;
+            }
+        }
+
+        private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            viewModel.Add();
+        }
+
+        private void MenuItem_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+            viewModel.Remove(dataGridDependencies.SelectedItem as PropertyModel);
+        }
+
     }
 }

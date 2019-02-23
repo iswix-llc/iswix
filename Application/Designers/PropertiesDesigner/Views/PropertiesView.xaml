@@ -11,12 +11,12 @@
         <viewmmodels:PropertiesViewModel x:Name="viewModel"/>
     </UserControl.DataContext>
     <DockPanel>
-        <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies">
+        <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" MinWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"/>
+                            <TextBox Text="{Binding Id, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" BorderThickness="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -56,6 +56,12 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add" Click="MenuItem_Click" />
+                    <MenuItem Header="Remove" IsEnabled="{Binding EnableRemove}"  Click="MenuItem_Click_1" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
     </DockPanel>
 </UserControl>

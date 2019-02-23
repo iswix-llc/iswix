@@ -33,6 +33,21 @@ namespace PropertiesDesigner.ViewModels
             }
         }
 
+        bool _enableRemove = false;
+
+        public bool EnableRemove
+        {
+            get
+            {
+                return _enableRemove;
+            }
+            set
+            {
+                _enableRemove = value;
+                RaisePropertyChangedEvent("EnableRemove");
+            }
+        }
+
         public void Load()
         {
             ObservableCollection<PropertyModel> properties = new ObservableCollection<PropertyModel>();
@@ -51,10 +66,46 @@ namespace PropertiesDesigner.ViewModels
                 properties.Add(propertyModel);
             }
             Properties = properties;
+            EnableRemove = false;
         }
 
         private void PropertyModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            System.Windows.Forms.MessageBox.Show("Test");
+        }
+
+        public void Add()
+        {
+            bool added = false;
+            Int16 index = 0;
+
+            do
+            {
+                index++;
+                string proposedKey = "NewProperty" + index.ToString();
+
+                if (!_iswixProperties.Any(s=> s.Id == proposedKey))
+                {
+                    IsWiXProperty iswixProperty = _iswixProperties.Create("NewProperty" + index.ToString());
+                    PropertyModel propertyModel = new PropertyModel();
+                    propertyModel.Id = iswixProperty.Id;
+                    propertyModel.Value = iswixProperty.Value;
+                    propertyModel.Admin = iswixProperty.Admin;
+                    propertyModel.Hidden = iswixProperty.Hidden;
+                    propertyModel.Secure = iswixProperty.Secure;
+                    propertyModel.SuppressModularization = iswixProperty.SuppressModularization;
+                    propertyModel.PropertyChanged += PropertyModel_PropertyChanged;
+                    added = true;
+                    _iswixProperties.SortXML();
+                    Properties.Add(propertyModel);
+                }
+            }
+            while (added == false);
+        }
+
+        public void Remove(PropertyModel selectedItem)
+        {
+            Properties.Remove(selectedItem);
         }
     }
 }

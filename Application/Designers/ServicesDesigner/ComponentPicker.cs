@@ -52,7 +52,8 @@ namespace ServicesDesigner
         private void PopulateListBox()
         {
 
-            foreach (var candidate in _services.GetServiceCandidates())
+            List < ServiceCandidate > candidates = _services.GetServiceCandidates();
+            foreach (var candidate in candidates)
             {
                 TreeNode node = treeView1.Nodes.Add(candidate.DestinationFilePath);
                 node.Tag = candidate;
