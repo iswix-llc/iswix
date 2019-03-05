@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using IsWiXAutomationInterface;
 using FireworksFramework.Managers;
 using FireworksFramework.Types;
+using GeneralInformationDesigner.Views;
 
 namespace Designers.GeneralInformation.Models
 {
@@ -27,6 +28,7 @@ namespace Designers.GeneralInformation.Models
         YesNo? _adminImage;
         [CategoryAttribute("Package")]
         [Description(@"Set to 'yes' if the source is an admin image.")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public YesNo? AdminImage { get { return _adminImage; } set { _adminImage = value; RaisePropertyChangedEvent("AdminImage"); } }
 
         string _comments;
@@ -37,6 +39,7 @@ namespace Designers.GeneralInformation.Models
         YesNo? _compressed;
         [CategoryAttribute("Package")]
         [Description("Set to 'yes' to have compressed files in the source. This attribute cannot be set for merge modules. ")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public YesNo? Compressed { get { return _compressed; } set { _compressed = value; RaisePropertyChangedEvent("Compressed"); } }
 
         string _description;
@@ -46,6 +49,7 @@ namespace Designers.GeneralInformation.Models
 
         InstallPrivileges? _installPrivileges;
         [CategoryAttribute("Package")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         [Description(@"Use this attribute to specify the priviliges required to install the package on Windows Vista and above. This attribute's value must be one of the following:
 limited
 Set this value to declare that the package does not require elevated privileges to install. 
@@ -58,6 +62,7 @@ Set this value to declare that the package requires elevated privileges to insta
         [Description(@"Use this attribute to specify the installation scope of this package: per-machine or per-user. This attribute's value must be one of the following:
 perMachine Set this value to declare that the package is a per-machine installation and requires elevated privileges to install. Sets the ALLUSERS property to 1. 
 perUser Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to 'limited.'")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public InstallScope? InstallScope { get { return _installScope; } set { _installScope = value; RaisePropertyChangedEvent("InstallScope"); } }
 
         string _keywords;
@@ -76,21 +81,25 @@ perUser Set this value to declare that the package is a per-user installation an
 x86 Set this value to declare that the package is an x86 package. 
 ia64 Set this value to declare that the package is an ia64 package. This value requires that the InstallerVersion property be set to 200 or greater. 
 x64 Set this value to declare that the package is an x64 package. This value requires that the InstallerVersion property be set to 200 or greater. ")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public Platform? Platform { get { return _platform; } set { _platform = value; RaisePropertyChangedEvent("Platform"); } }
 
         YesNoDefault? _readOnly;
         [CategoryAttribute("Package")]
         [Description(@"The value of this attribute conveys whether the package should be opened as read-only. A database editing tool should not modify a read-only enforced database and should issue a warning at attempts to modify a read-only recommended database. ")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public YesNoDefault? ReadOnly { get { return _readOnly; } set { _readOnly = value; RaisePropertyChangedEvent("ReadOnly"); } }
 
         YesNo? _shortNames;
         [CategoryAttribute("Package")]
         [Description(@"Set to 'yes' to have short filenames in the source.")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public YesNo? ShortNames { get { return _shortNames; } set { _shortNames = value; RaisePropertyChangedEvent("ShortNames"); } }
 
         string _summaryCodepage;
         [CategoryAttribute("Package")]
         [Description(@" The code page integer value or web name for summary info strings only. See remarks for more information.   ")]
+        [Editor(typeof(CustomEditor), typeof(CustomEditor))]
         public string SummaryCodepage { get { return _summaryCodepage; } set { _summaryCodepage = value; RaisePropertyChangedEvent("SummaryCodepage"); } }
     }
 }

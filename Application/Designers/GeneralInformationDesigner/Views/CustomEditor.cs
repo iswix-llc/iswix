@@ -1,0 +1,59 @@
+﻿using IsWiXAutomationInterface;
+using System;
+using System.Collections;
+using System.Drawing.Imaging;
+using System.Globalization;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using Xceed.Wpf.Toolkit.PropertyGrid;
+
+namespace GeneralInformationDesigner.Views
+{
+    public class CustomEditor : Xceed.Wpf.Toolkit.PropertyGrid.Editors.ComboBoxEditor
+    {
+
+
+        protected override IValueConverter CreateValueConverter()
+        {
+            return new CustomValueConverter();
+        }
+
+        protected override ComboBox CreateEditor()
+        {
+            ComboBox comboBox = base.CreateEditor();
+            FrameworkElementFactory textBlock = new FrameworkElementFactory(typeof(TextBlock));
+            textBlock.SetBinding(TextBlock.TextProperty, new Binding(".") { Converter = new CustomValueConverter() });
+            comboBox.ItemTemplate = new DataTemplate() { VisualTree = textBlock };
+            return comboBox;
+        }
+
+        protected override IEnumerable CreateItemsSource(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem propertyItem)
+        {
+            return new string[1] { CustomValueConverter.Null }
+                .Concat(Enum.GetValues(typeof(YesNo)).OfType<YesNo>().Select(x => x.ToString()));
+        }
+    }
+
+    public class CustomValueConverter : IValueConverter
+    {
+        internal const string Null = "";
+        public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return Null;
+
+            return value.ToString();
+        }
+
+        public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
+        {
+            string s = value?.ToString();
+            if (s == Null)
+                return null;
+
+            return Enum.Parse(typeof(YesNo), s);
+        }
+    }
+}

@@ -7,6 +7,8 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Controls;
 using static FireworksFramework.Types.Enums;
+using System.Linq;
+using System.Drawing.Imaging;
 
 namespace GeneralInformationDesigner.Views
 {
@@ -67,6 +69,21 @@ namespace GeneralInformationDesigner.Views
         public void LoadData()
         {
             viewModel.Load();
+            bool enabled = true;
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            {
+                enabled = false;
+            }
+
+            foreach (Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem property in propertyGridPackage.Properties)
+            {
+                if (property.PropertyName == "Compressed")
+                {
+                    property.IsEnabled = enabled;
+                    break;
+                }
+            }
+
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
