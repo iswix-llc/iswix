@@ -66,8 +66,8 @@
     <Reference Include="DiffPlex, Version=1.4.3.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DiffPlex.1.4.3\lib\net40\DiffPlex.dll</HintPath>
     </Reference>
-    <Reference Include="FireworksFramework, Version=5.1.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\fireworks.5.1.10\lib\net40\FireworksFramework.dll</HintPath>
+    <Reference Include="FireworksFramework, Version=5.1.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\fireworks.5.1.11\lib\net40\FireworksFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Deployment.Compression, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <HintPath>..\..\packages\wix-libs.3.11.1\lib\net20\Microsoft.Deployment.Compression.dll</HintPath>
