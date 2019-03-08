@@ -11,32 +11,32 @@ using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace GeneralInformationDesigner.Views
 {
-    public class CustomEditor : Xceed.Wpf.Toolkit.PropertyGrid.Editors.ComboBoxEditor
+    public class CustomEditor<T> : Xceed.Wpf.Toolkit.PropertyGrid.Editors.ComboBoxEditor
     {
 
 
         protected override IValueConverter CreateValueConverter()
         {
-            return new CustomValueConverter();
+            return new CustomValueConverter<T>();
         }
 
         protected override ComboBox CreateEditor()
         {
             ComboBox comboBox = base.CreateEditor();
             FrameworkElementFactory textBlock = new FrameworkElementFactory(typeof(TextBlock));
-            textBlock.SetBinding(TextBlock.TextProperty, new Binding(".") { Converter = new CustomValueConverter() });
+            textBlock.SetBinding(TextBlock.TextProperty, new Binding(".") { Converter = new CustomValueConverter<T>() });
             comboBox.ItemTemplate = new DataTemplate() { VisualTree = textBlock };
             return comboBox;
         }
 
         protected override IEnumerable CreateItemsSource(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem propertyItem)
         {
-            return new string[1] { CustomValueConverter.Null }
-                .Concat(Enum.GetValues(typeof(YesNo)).OfType<YesNo>().Select(x => x.ToString()));
+            return new string[1] { CustomValueConverter<T>.Null }
+                .Concat(Enum.GetValues(typeof(T)).OfType<T>().Select(x => x.ToString()));
         }
     }
 
-    public class CustomValueConverter : IValueConverter
+    public class CustomValueConverter<T>: IValueConverter
     {
         internal const string Null = "";
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
@@ -53,7 +53,7 @@ namespace GeneralInformationDesigner.Views
             if (s == Null)
                 return null;
 
-            return Enum.Parse(typeof(YesNo), s);
+            return Enum.Parse(typeof(T), s);
         }
     }
 }
