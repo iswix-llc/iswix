@@ -66,8 +66,11 @@
     <Reference Include="DiffPlex, Version=1.4.3.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
       <HintPath>..\packages\DiffPlex.1.4.3\lib\net40\DiffPlex.dll</HintPath>
     </Reference>
-    <Reference Include="FireworksFramework, Version=5.1.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\fireworks.5.1.10\lib\net40\FireworksFramework.dll</HintPath>
+    <Reference Include="FireworksFramework, Version=5.1.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\fireworks.5.1.13\lib\net40\FireworksFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -79,6 +82,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="XmlEditorDesigner, Version=5.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\xmldesigner.5.1.4\lib\net40\XmlEditorDesigner.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -315,10 +321,6 @@
     <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj">
       <Project>{62ee9b37-d99a-4ac0-898a-ec822268467c}</Project>
       <Name>ShortCutsDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\XmlEditorDesigner\XmlEditorDesigner.csproj">
-      <Project>{416b01c8-6e99-40a2-81d6-2f67b259c19e}</Project>
-      <Name>XmlEditorDesigner</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj">
       <Project>{461ddab2-0b76-460d-9f3e-041cb88df974}</Project>

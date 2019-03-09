@@ -6,7 +6,6 @@
     <ProductVersion>3.7</ProductVersion>
     <ProjectGuid>{5d377fdd-482f-4ca9-9a1b-0b9c7f11c440}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>IsWiX</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -14,6 +13,7 @@
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- Default to 0.0.1 for developer builds -->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
+    <OutputName>IsWiX-$(MSIProductVersion)</OutputName>
     <SccProjectName>$/IsWiX/dev/alpha/Source/Installer/IsWiX</SccProjectName>
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
     <SccAuxPath>https://iswix.visualstudio.com/defaultcollection</SccAuxPath>

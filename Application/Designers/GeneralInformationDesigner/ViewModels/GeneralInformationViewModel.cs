@@ -196,15 +196,7 @@ namespace GeneralInformationDesigner.ViewModels
                     break;
 
                 case "Compressed":
-                    if (Package.Compressed != null && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-                    {
-                        MessageBox.Show("The compressed attribute cannot be set in a Merge Module.");
-                        Package.Compressed = null;
-                    }
-                    else
-                    {
-                        _iswixPackage.Compressed = Package.Compressed;
-                    }
+                    _iswixPackage.Compressed = Package.Compressed;
                     break;
 
                 case "Description":

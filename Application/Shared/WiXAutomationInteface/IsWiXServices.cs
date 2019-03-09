@@ -53,7 +53,6 @@ namespace IsWiXAutomationInterface
         {
             List<ServiceCandidate> candidates = new List<ServiceCandidate>();
 
-            ServiceCandidate sc = new ServiceCandidate();
 
             var files = from f in _documentManager.Document.Descendants(ns + "File")
                         select f;
@@ -63,6 +62,7 @@ namespace IsWiXAutomationInterface
                 {
                     if(file.Attribute("Source").Value.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
                     {
+                        ServiceCandidate sc = new ServiceCandidate();
                         sc.Id = file.Attribute("Id").Value;
                         sc.DestinationFilePath = file.GetDestinationFilePath();
                         sc.FileName = Path.GetFileNameWithoutExtension(file.Attribute("Source").Value.Split('\\').Last());
