@@ -65,6 +65,8 @@
     <Reference Include="FireworksFramework, Version=5.1.13.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\fireworks.5.1.13\lib\net40\FireworksFramework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -75,24 +77,20 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSetNamespaces.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataSetNamespaces.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Namespaces.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Namespaces.Designer.cs">
-      <DependentUpon>Namespaces.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Models\NamespaceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\NamespacesViewModel.cs" />
+    <Compile Include="Views\NamespacesView.xaml.cs">
+      <DependentUpon>NamespacesView.xaml</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -100,22 +98,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Namespaces.ico" />
-    <EmbeddedResource Include="Namespaces.resx">
-      <DependentUpon>Namespaces.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DataSetNamespaces.xsc">
-      <DependentUpon>DataSetNamespaces.xsd</DependentUpon>
-    </None>
-    <None Include="DataSetNamespaces.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSetNamespaces.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="DataSetNamespaces.xss">
-      <DependentUpon>DataSetNamespaces.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +125,13 @@
       <Name>IsWiXAutomationInterface</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\NamespacesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
