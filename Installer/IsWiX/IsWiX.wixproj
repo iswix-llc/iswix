@@ -165,6 +165,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\IsWiXActions\IsWiXActions.csproj">
+      <Name>IsWiXActions</Name>
+      <Project>{8146cdd3-8258-4d92-be57-7714846b4e45}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\IsWiXMM\IsWiXMM.wixproj">
       <Name>IsWiXMM</Name>
       <Project>{928e70f5-f50b-445f-9aa9-e8fbd5ecf85c}</Project>

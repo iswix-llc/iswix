@@ -27,5 +27,14 @@
     <CustomActionRef Id="VS2017Setup" />
     <CustomActionRef Id="VS2019Setup" />
 
+    <Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
+    <CustomAction Id="VSFindInstances2" BinaryKey="iswixActions" DllEntry="VSFindInstances2" Execute="firstSequence"/>
+    <InstallUISequence>
+      <Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
+    </InstallUISequence>
+    <InstallExecuteSequence>
+      <Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
+    </InstallExecuteSequence>
+
   </Product>
 </Wix>
