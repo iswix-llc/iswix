@@ -50,14 +50,23 @@ namespace IsWiXActions
             var instance2 = (ISetupInstance2)instance;
             var state = instance2.GetState();
             session.Log($"InstanceId: {instance2.GetInstanceId()} ({(state == InstanceState.Complete ? "Complete" : "Incomplete")})");
-            var installationVersion = instance.GetInstallationVersion();
-            var version = helper.ParseVersion(installationVersion);
 
-            session.Log($"InstallationVersion: {installationVersion} ({version})");
 
             if ((state & InstanceState.Local) == InstanceState.Local)
             {
+                var installationVersion = instance.GetInstallationVersion();
+                var version = helper.ParseVersion(installationVersion);
+                session.Log($"InstallationVersion: {installationVersion} ({version})");
                 session.Log($"InstallationPath: {instance2.GetInstallationPath()}");
+
+                if(installationVersion.StartsWith("15.") && string.IsNullOrEmpty(session["VS2017_ROOT_FOLDER]"]))
+                {
+                    session["VS2017_ROOT_FOLDER"] = instance2.GetInstallationPath();
+                }
+                if (installationVersion.StartsWith("16.") && string.IsNullOrEmpty(session["VS2019_ROOT_FOLDER]"]))
+                {
+                    session["VS2019_ROOT_FOLDER"] = instance2.GetInstallationPath();
+                }
             }
         }
     }
