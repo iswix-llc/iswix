@@ -65,14 +65,14 @@
                 <CopyFile Id="dupept1d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
-            <Component Id="owcFFCE0C513C44F110123EE656B8D9F632" Guid="74a035fd-96bd-0e85-a7f2-fb2820caefd6">
+            <!--<Component Id="owcFFCE0C513C44F110123EE656B8D9F632" Guid="74a035fd-96bd-0e85-a7f2-fb2820caefd6">
               <File Id="owfFFCE0C513C44F110123EE656B8D9F632" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXBootstrapperSolutionTemplate4.zip" KeyPath="yes">
                 <CopyFile Id="dupept2a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
                 <CopyFile Id="dupept2b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept2c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept2d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
-            </Component>
+            </Component>-->
             <Component Id="owc5593DF66E0082760BE5AC2E363544EA9" Guid="b92ee291-bf3b-27f0-1681-59e936e50dac">
               <File Id="owf5593DF66E0082760BE5AC2E363544EA9" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip" KeyPath="yes">
                 <CopyFile Id="dupept3a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
@@ -81,14 +81,14 @@
                 <CopyFile Id="dupept3d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
-            <Component Id="owc6088B64B2D730D8094431FAB4BE23C6A" Guid="bdaffc8a-a60d-23c8-6a74-ec44666ab8fa">
+            <!--<Component Id="owc6088B64B2D730D8094431FAB4BE23C6A" Guid="bdaffc8a-a60d-23c8-6a74-ec44666ab8fa">
               <File Id="owf6088B64B2D730D8094431FAB4BE23C6A" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMergeModuleProjectTemplate4.zip" KeyPath="yes">
                 <CopyFile Id="dupept4a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
                 <CopyFile Id="dupept4b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept4c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept4d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
-            </Component>
+            </Component>-->
             <Component Id="owcC642010536471D55215441CCF0E9194A" Guid="f97ca94f-0f7c-d965-c3e3-b91f1b0feb19">
               <File Id="owfC642010536471D55215441CCF0E9194A" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMSISolutionTemplate.zip" KeyPath="yes">
                 <CopyFile Id="dupept5a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
@@ -97,14 +97,14 @@
                 <CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
-            <Component Id="owcD1D0D576FB08CC72896DB47D4C3859C0" Guid="6acd5371-8202-9b23-1359-d77ad8978986">
+            <!--<Component Id="owcD1D0D576FB08CC72896DB47D4C3859C0" Guid="6acd5371-8202-9b23-1359-d77ad8978986">
               <File Id="owfD1D0D576FB08CC72896DB47D4C3859C0" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMSISolutionTemplate4.zip" KeyPath="yes">
                 <CopyFile Id="dupept6a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
                 <CopyFile Id="dupept6b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept6c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept6d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
-            </Component>
+            </Component>-->
           </Directory>
         </Directory>
       </Directory>
