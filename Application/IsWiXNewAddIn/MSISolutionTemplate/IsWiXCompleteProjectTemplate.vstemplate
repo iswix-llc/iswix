@@ -4,6 +4,10 @@
     <Name>IsWiX Solution for WiX v3</Name>
     <Description>A multiproject (.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based MSI</Description>
     <Icon>IsWiX.ico</Icon>
+    <LanguageTag Value="WiX" />
+    <PlatformTag Value="Windows" />
+    <ProjectTypeTag Value="MSM" />
+    <ProjectTypeTag Value="Package" />
     <ProjectType>WiX</ProjectType>
     <DefaultName>ProductName</DefaultName>
     <SortOrder>5</SortOrder>
