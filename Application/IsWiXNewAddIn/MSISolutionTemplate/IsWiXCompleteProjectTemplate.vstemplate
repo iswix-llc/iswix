@@ -6,7 +6,7 @@
     <Icon>IsWiX.ico</Icon>
     <LanguageTag Value="WiX" />
     <PlatformTag Value="Windows" />
-    <ProjectTypeTag Value="MSM" />
+    <ProjectTypeTag Value="MSI" />
     <ProjectTypeTag Value="Package" />
     <ProjectType>WiX</ProjectType>
     <DefaultName>ProductName</DefaultName>
