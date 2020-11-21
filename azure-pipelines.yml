@@ -31,15 +31,21 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: 'Application\Application.sln'
-    platform: 'Application'
+    platform: 'Any CPU'
     configuration: 'Release'
   displayName: 'Build Application'
+- task: VSBuild@1
+  inputs:
+    solution: 'Application\ApplicationAddIn.sln'
+    platform: 'Any CPU'
+    configuration: 'Release'
+  displayName: 'Build Application AddIn'
 
 - task: VSBuild@1
   inputs:
     solution: 'Installer\Installer.sln'
     platform: 'Installer'
-    configuration: 'Release'
+    configuration: 'Any CPU'
   displayName: 'Build Installer'
 
 - task: CopyPublishBuildArtifacts@1
