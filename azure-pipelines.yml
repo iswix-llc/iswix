@@ -39,6 +39,7 @@ steps:
     solution: 'Application\ApplicationAddIn.sln'
     platform: 'Any CPU'
     configuration: 'Release'
+    msbuildArchitecture: x86
   displayName: 'Build Application AddIn'
 
 - task: VSBuild@1
