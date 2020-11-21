@@ -45,6 +45,7 @@ steps:
   inputs:
     solution: 'Installer\Installer.sln'
     platform: 'Installer'
+    msbuildArgs: '/p:RunWixToolsOutOfProc=true'
     configuration: 'Any CPU'
   displayName: 'Build Installer'
 
