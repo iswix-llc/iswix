@@ -45,9 +45,9 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: 'Installer\Installer.sln'
-    platform: 'Installer'
+    platform: 'Any CPU'
     msbuildArgs: '/p:RunWixToolsOutOfProc=true'
-    configuration: 'Any CPU'
+    configuration: 'Release'
   displayName: 'Build Installer'
 
 - task: CopyPublishBuildArtifacts@1
