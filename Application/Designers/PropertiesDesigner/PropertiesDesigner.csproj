@@ -135,7 +135,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /tr http://timestamp.comodoca.com/ $(TargetPath)
-IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)
+IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
 </Project>
