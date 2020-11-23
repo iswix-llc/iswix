@@ -6,8 +6,11 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
 
-    <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"/>
-    <Condition Message="[ProductName] requires .NET Framework 4.6.2 or later.">Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED</Condition>
+    <PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
+     <SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch">
+      WIXNETFX4RELEASEINSTALLED >= "#528040 "
+    </SetProperty>
+    <Condition Message="[ProductName] requires .NET Framework 4.8 or later.">Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED</Condition>
 
     <DirectoryRef Id="INSTALLLOCATION"/>
 
