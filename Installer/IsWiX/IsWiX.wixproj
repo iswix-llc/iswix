@@ -192,8 +192,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)
-IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/%3ftd=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
