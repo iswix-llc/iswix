@@ -5,6 +5,10 @@
     <Description>A multiproject (.EXE/.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based EXE</Description>
     <Icon>IsWiX.ico</Icon>
     <ProjectType>WiX</ProjectType>
+    <PlatformTag Value="Windows" />
+    <ProjectTypeTag Value="EXE" />
+    <ProjectTypeTag Value="Bootstrapper" />
+    <ProjectTypeTag Value="Bundle" />
     <DefaultName>ProductName</DefaultName>
     <SortOrder>4</SortOrder>
     <BuildOnLoad></BuildOnLoad>

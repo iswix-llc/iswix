@@ -3,6 +3,10 @@
     <Name _locID="TSDATA_DUT_Name">IsWiX Merge Module Project for WiX v3</Name>
     <Description _locID="TSDATA_DUT_Description">A project for creating an IsWiX / Windows Installer XML v3 based MSM</Description>
     <Icon>IsWiX.ico</Icon>
+    <LanguageTag Value="WiX" />
+    <PlatformTag Value="Windows" />
+    <ProjectTypeTag Value="MSM" />
+    <ProjectTypeTag Value="Merge Module" />
     <ProjectType>WiX</ProjectType>
     <SortOrder>6</SortOrder>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
