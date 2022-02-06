@@ -3,7 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_4.0$(Rev:.r).0
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_4.15$(Rev:.r).0
 
 trigger:
 - dev
