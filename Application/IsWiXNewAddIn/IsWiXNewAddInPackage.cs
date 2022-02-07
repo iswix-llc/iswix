@@ -99,11 +99,14 @@ namespace ISWIXLLC.IsWiXNewAddIn
                 {
                     documentPath = "\"" + dte.ActiveDocument.FullName + "\"";
                 }
-                string isWiXPath = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\ISWIXLLC\\IsWiX","IsWiXFilePath", String.Empty).ToString();
-                if (string.IsNullOrEmpty(isWiXPath))
+                string isWiXPath = string.Empty; ;
+                using (RegistryKey local32Key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
                 {
-                    throw new Exception("IsWiX path not found in the registry.");
+                    using (RegistryKey isWiXKey = local32Key.OpenSubKey(@"SOFTWARE\ISWIXLLC\IsWiX", false))
+                    {
+                        isWiXPath = isWiXKey.GetValue("IsWiXFilePath", string.Empty).ToString();                    }
                 }
+
                 if (!File.Exists(isWiXPath))
                 {
                     throw new Exception("IsWiX.exe not found");
