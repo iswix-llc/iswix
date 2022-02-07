@@ -27,7 +27,7 @@
     </CustomParameters>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
+    <Assembly>GlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
     <FullClassName>GlobalParams.WizardMPT</FullClassName>
   </WizardExtension>
 </VSTemplate>

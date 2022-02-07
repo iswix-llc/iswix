@@ -5,7 +5,7 @@
 		<MediaTemplate EmbedCab="yes" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
-		<Property Id="REINSTALLMODE" Value="amus"/>
+
 		<PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
 		<SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch">
 			WIXNETFX4RELEASEINSTALLED >= "#528040 "
