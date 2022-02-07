@@ -40,7 +40,7 @@ namespace IsWiXActions
             }
             catch (Exception ex)
             {
-               session.Log($"Error 0x{ex.HResult:x8}: {ex.Message}");
+                session.Log($"Error 0x{ex.HResult:x8}: {ex.Message}");
             }
             return ActionResult.Success;
         }
@@ -72,6 +72,14 @@ namespace IsWiXActions
                     session["VS2022_ROOT_FOLDER"] = instance2.GetInstallationPath();
                 }
             }
+        }
+
+        [CustomAction]
+        public static ActionResult FixPaths(Session session)
+        {
+            session["VS2022_IDE_DIR"] = session["VS2022_IDE_DIR"].Replace(@"C:\Program Files\", @"C:\Progra~1\");
+            session["VS2022_EXTENSIONS_DIR"] = session["VS2022_EXTENSIONS_DIR"].Replace(@"C:\Program Files\", @"C:\Progra~1\");
+            return ActionResult.Success;
         }
     }
 }
