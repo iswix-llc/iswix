@@ -14,7 +14,7 @@
     </DirectoryRef>
     <DirectoryRef Id="TARGETDIR">
       <Directory Id="GlobalAssemblyCache" Name="GlobalAssemblyCache">
-        <Component Id="globalparams" Guid="{B07FF430-AAB4-49E6-8035-60142942F325}" Permanent="yes">
+        <Component Id="globalparams" Guid="{989B53E7-AE34-4BBA-85EF-3ED88B6D769C}" Permanent="yes">
           <File Id="globalparams" Source="..\Deploy\IsWiXNewAddIn\GlobalParams.dll" KeyPath="yes" Assembly=".net"/>
         </Component>
 		  <Component Id="visualstudiointerop" Guid="{B16AE4C9-28B4-427A-842C-A4830BFD7974}" Permanent="yes">
