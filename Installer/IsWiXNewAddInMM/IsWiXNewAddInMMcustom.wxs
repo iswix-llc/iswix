@@ -16,7 +16,10 @@
         <Component Id="globalparams" Guid="{B07FF430-AAB4-49E6-8035-60142942F325}" Permanent="yes">
           <File Id="globalparams" Source="..\Deploy\IsWiXNewAddIn\GlobalParams.dll" KeyPath="yes" Assembly=".net"/>
         </Component>
-      </Directory>
+		  <Component Id="visualstudiointerop" Guid="{B16AE4C9-28B4-427A-842C-A4830BFD7974}" Permanent="yes">
+			  <File Id="globalparams" Source="..\Deploy\IsWiXNewAddIn\Microsoft.VisualStudio.Interop.dll" KeyPath="yes" Assembly=".net"/>
+		  </Component>
+	  </Directory>
     </DirectoryRef>
   </Fragment>
 </Wix>
