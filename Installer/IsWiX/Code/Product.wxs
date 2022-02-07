@@ -32,7 +32,7 @@
     <CustomActionRef Id="VS2019Setup" />
     <CustomActionRef Id="VS2022Setup" />
 
-    <!--<Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
+    <Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
     <CustomAction Id="VSFindInstances2" BinaryKey="iswixActions" DllEntry="VSFindInstances2" Execute="firstSequence"/>
     <InstallUISequence>
       <Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
@@ -40,7 +40,7 @@
     <InstallExecuteSequence>
       <Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
     </InstallExecuteSequence>
-
+<!--
     <Property Id="VS2019_IDE_DIR" Secure="yes" SuppressModularization="yes">
       <DirectorySearch Id="VS2019DirectorySearch" Path="[VS2019_ROOT_FOLDER]">
         <DirectorySearch Id="VS2019EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
@@ -63,6 +63,29 @@
     <InstallExecuteSequence>
       <Custom Action="VS2019Setup" Before="InstallFinalize" Overridable="yes">VS2019DEVENV</Custom>
     </InstallExecuteSequence>-->
+
+	  <Property Id="VS2022_IDE_DIR" Secure="yes" SuppressModularization="yes">
+      <DirectorySearch Id="VS2022DirectorySearch" Path="[VS2022_ROOT_FOLDER]">
+        <DirectorySearch Id="VS2022EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
+      </DirectorySearch>
+    </Property>
+
+    <Property Id="VS2022_EXTENSIONS_DIR" Secure="yes" SuppressModularization="yes">
+      <DirectorySearchRef Id="VS2022EnvironmentDirectorySearch" Parent="VS2022DirectorySearch" Path="Common7\IDE">
+        <DirectorySearch Id="VS2022ExtensionsDirectorySearch" Path="Extensions" Depth="1" />
+      </DirectorySearchRef>
+    </Property>
+
+    <Property Id="VS2022DEVENV" Secure="yes" SuppressModularization="yes">
+      <DirectorySearchRef Id="VS2022EnvironmentDirectorySearch" Parent="VS2022DirectorySearch" Path="Common7\IDE">
+        <FileSearch Id="VS2022DevEnvSearch" Name="devenv.exe" />
+      </DirectorySearchRef>
+    </Property>
+
+    <CustomAction Id="VS2022Setup" Property="VS2022DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+    <InstallExecuteSequence>
+      <Custom Action="VS2022Setup" Before="InstallFinalize" Overridable="yes">VS2022DEVENV</Custom>
+    </InstallExecuteSequence>
 
   </Product>
 </Wix>
