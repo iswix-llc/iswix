@@ -14,7 +14,8 @@
               <CopyFile Id="dupe1b" DestinationProperty="EXTENSIONDIR2015" />
               <CopyFile Id="dupe1c" DestinationProperty="EXTENSIONDIR2017" />
               <CopyFile Id="dupe1d" DestinationProperty="EXTENSIONDIR2019" />
-            </File>
+			  <CopyFile Id="dupe1e" DestinationProperty="EXTENSIONDIR2022" />
+			</File>
           </Component>
           <Component Id="owcCA23CB3538029C34AC5B8E25A586C517" Guid="425a4ff4-b9f0-3cc0-09b5-549dbebc5b2c">
             <File Id="owfCA23CB3538029C34AC5B8E25A586C517" Source="$(var.SourceDir)\IsWiXNewAddIn\Icon.png" KeyPath="yes">
@@ -22,7 +23,8 @@
               <CopyFile Id="dupe2b" DestinationProperty="EXTENSIONDIR2015" />
               <CopyFile Id="dupe2c" DestinationProperty="EXTENSIONDIR2017" />
               <CopyFile Id="dupe2d" DestinationProperty="EXTENSIONDIR2019" />
-            </File>
+      		  <CopyFile Id="dupe2e" DestinationProperty="EXTENSIONDIR2022" />
+			</File>
           </Component>
           <Component Id="owc9ACB034825CA352A0F77BCC72713F5FA" Guid="a2dd8ac2-b951-0933-30c3-912a7e478e6e">
             <File Id="owf9ACB034825CA352A0F77BCC72713F5FA" Source="$(var.SourceDir)\IsWiXNewAddIn\IsWiXNewAddIn.dll" KeyPath="yes">
@@ -30,7 +32,8 @@
               <CopyFile Id="dupe3b" DestinationProperty="EXTENSIONDIR2015" />
               <CopyFile Id="dupe3c" DestinationProperty="EXTENSIONDIR2017" />
               <CopyFile Id="dupe3d" DestinationProperty="EXTENSIONDIR2019" />
-            </File>
+			  <CopyFile Id="dupe3e" DestinationProperty="EXTENSIONDIR2022" />
+			</File>
           </Component>
           <Component Id="owc222911EE35769C24FC911A3C54323068" Guid="a57f46f6-27a4-db9a-1aea-28ae8633e9a5">
             <File Id="owf222911EE35769C24FC911A3C54323068" Source="$(var.SourceDir)\IsWiXNewAddIn\IsWiXNewAddIn.pkgdef" KeyPath="yes">
@@ -38,7 +41,8 @@
               <CopyFile Id="dupe4b" DestinationProperty="EXTENSIONDIR2015" />
               <CopyFile Id="dupe4c" DestinationProperty="EXTENSIONDIR2017" />
               <CopyFile Id="dupe4d" DestinationProperty="EXTENSIONDIR2019" />
-            </File>
+			  <CopyFile Id="dupe4e" DestinationProperty="EXTENSIONDIR2022" />
+			</File>
           </Component>
           <Component Id="owc490F97050FC7A4C10C3F3262528BE597" Guid="0147ec98-643d-4f32-074c-5ea4315aa39b">
             <File Id="owf490F97050FC7A4C10C3F3262528BE597" Source="$(var.SourceDir)\IsWiXNewAddIn\MS-PL.txt" KeyPath="yes">
@@ -46,7 +50,8 @@
               <CopyFile Id="dupe5b" DestinationProperty="EXTENSIONDIR2015" />
               <CopyFile Id="dupe5c" DestinationProperty="EXTENSIONDIR2017" />
               <CopyFile Id="dupe5d" DestinationProperty="EXTENSIONDIR2019" />
-            </File>
+			  <CopyFile Id="dupe5e" DestinationProperty="EXTENSIONDIR2022" />
+			</File>
           </Component>
           <Component Id="owcBFEC5C70CB5ABBBF8C9B36545E488F1A" Guid="8a818446-0227-6e32-38ad-5942ec132c38">
             <File Id="owfBFEC5C70CB5ABBBF8C9B36545E488F1A" Source="$(var.SourceDir)\IsWiXNewAddIn\preview.png" KeyPath="yes">
@@ -54,7 +59,8 @@
               <CopyFile Id="dupe6b" DestinationProperty="EXTENSIONDIR2015" />
               <CopyFile Id="dupe6c" DestinationProperty="EXTENSIONDIR2017" />
               <CopyFile Id="dupe6d" DestinationProperty="EXTENSIONDIR2019" />
-            </File>
+			  <CopyFile Id="dupe6e" DestinationProperty="EXTENSIONDIR2022" />
+			</File>
           </Component>
           <Directory Id="owdF4721E31A25F373F7B4CEAF6BC6AA66A" Name="ProjectTemplates">
             <Component Id="owcEE06B22CFEB5F55C0E2C284CC02B799B" Guid="8398c482-ecde-87d0-3166-056be2521c87">
@@ -63,7 +69,8 @@
                 <CopyFile Id="dupept1b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept1c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept1d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
-              </File>
+				<CopyFile Id="dupept1e" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+			  </File>
             </Component>
             <!--<Component Id="owcFFCE0C513C44F110123EE656B8D9F632" Guid="74a035fd-96bd-0e85-a7f2-fb2820caefd6">
               <File Id="owfFFCE0C513C44F110123EE656B8D9F632" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXBootstrapperSolutionTemplate4.zip" KeyPath="yes">
@@ -71,6 +78,7 @@
                 <CopyFile Id="dupept2b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept2c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept2d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
+                <CopyFile Id="dupept2e" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
               </File>
             </Component>-->
             <Component Id="owc5593DF66E0082760BE5AC2E363544EA9" Guid="b92ee291-bf3b-27f0-1681-59e936e50dac">
@@ -79,7 +87,8 @@
                 <CopyFile Id="dupept3b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept3c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept3d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
-              </File>
+				<CopyFile Id="dupept3e" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+			  </File>
             </Component>
             <!--<Component Id="owc6088B64B2D730D8094431FAB4BE23C6A" Guid="bdaffc8a-a60d-23c8-6a74-ec44666ab8fa">
               <File Id="owf6088B64B2D730D8094431FAB4BE23C6A" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMergeModuleProjectTemplate4.zip" KeyPath="yes">
@@ -87,6 +96,7 @@
                 <CopyFile Id="dupept4b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept4c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept4d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
+                <CopyFile Id="dupept4e" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
               </File>
             </Component>-->
             <Component Id="owcC642010536471D55215441CCF0E9194A" Guid="f97ca94f-0f7c-d965-c3e3-b91f1b0feb19">
@@ -95,7 +105,8 @@
                 <CopyFile Id="dupept5b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept5c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
-              </File>
+				<CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+			  </File>
             </Component>
             <!--<Component Id="owcD1D0D576FB08CC72896DB47D4C3859C0" Guid="6acd5371-8202-9b23-1359-d77ad8978986">
               <File Id="owfD1D0D576FB08CC72896DB47D4C3859C0" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMSISolutionTemplate4.zip" KeyPath="yes">
@@ -103,6 +114,7 @@
                 <CopyFile Id="dupept6b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept6c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept6d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
+                <CopyFile Id="dupept6e" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
               </File>
             </Component>-->
           </Directory>
@@ -114,13 +126,16 @@
     <Property Id="VS2015_EXTENSIONS_DIR" SuppressModularization="yes" />
     <Property Id="VS2017_EXTENSIONS_DIR" SuppressModularization="yes" />
     <Property Id="VS2019_EXTENSIONS_DIR" SuppressModularization="yes" />
-    <SetProperty Id="EXTENSIONDIR2013" Value="[VS2013_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2013_EXTENSIONS_DIR</SetProperty>
+	<Property Id="VS2022_EXTENSIONS_DIR" SuppressModularization="yes" />
+	<SetProperty Id="EXTENSIONDIR2013" Value="[VS2013_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2013_EXTENSIONS_DIR</SetProperty>
     <SetProperty Id="EXTENSIONDIR2015" Value="[VS2015_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2015_EXTENSIONS_DIR</SetProperty>
     <SetProperty Id="EXTENSIONDIR2017" Value="[VS2017_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2017_EXTENSIONS_DIR</SetProperty>
     <SetProperty Id="EXTENSIONDIR2019" Value="[VS2019_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2019_EXTENSIONS_DIR</SetProperty>
-    <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2013" Value="[VS2013_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2013_EXTENSIONS_DIR</SetProperty>
+	<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
+	<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2013" Value="[VS2013_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2013_EXTENSIONS_DIR</SetProperty>
     <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2015" Value="[VS2015_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2015_EXTENSIONS_DIR</SetProperty>
     <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2017" Value="[VS2017_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2017_EXTENSIONS_DIR</SetProperty>
     <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2019" Value="[VS2019_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2019_EXTENSIONS_DIR</SetProperty>
+	<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
   </Module>
 </Wix>
