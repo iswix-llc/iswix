@@ -64,8 +64,8 @@
       <HintPath>..\packages\envdte.17.0.32112.339\lib\net472\envdte.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\GlobalParams.1.1.0\lib\net35\GlobalParams.dll</HintPath>
+    <Reference Include="GlobalParams">
+      <HintPath>..\Externals\GlobalParams.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Build.Framework.16.5.0\lib\net472\Microsoft.Build.Framework.dll</HintPath>
@@ -97,9 +97,8 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0">
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\VSSDK.TemplateWizardInterface.9.0.4\lib\net20\Microsoft.VisualStudio.TemplateWizardInterface.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface">
+      <HintPath>..\Externals\Microsoft.VisualStudio.TemplateWizardInterface.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" />
