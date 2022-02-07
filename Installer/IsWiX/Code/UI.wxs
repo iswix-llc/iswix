@@ -8,6 +8,7 @@
       <ProgressText Action="VS2015Setup" Template="[1]">Updating Visual Studio 2015 registration</ProgressText>
       <ProgressText Action="VS2017Setup" Template="[1]">Updating Visual Studio 2017 registration</ProgressText>
       <ProgressText Action="VS2019Setup" Template="[1]">Updating Visual Studio 2019 registration</ProgressText>
-    </UI>
+	  <ProgressText Action="VS2022Setup" Template="[1]">Updating Visual Studio 2022 registration</ProgressText>
+	</UI>
    </Fragment>
 </Wix>

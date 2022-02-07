@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e">
-    <Package InstallerVersion="301" Compressed="yes" InstallScope="perMachine" />
-    <MediaTemplate EmbedCab="yes" />
+	<Product Id="*" Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e">
+		<Package InstallerVersion="301" Compressed="yes" InstallScope="perMachine" />
+		<MediaTemplate EmbedCab="yes" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
 
-    <PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
-     <SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch">
-      WIXNETFX4RELEASEINSTALLED >= "#528040 "
-    </SetProperty>
-    <Condition Message="[ProductName] requires .NET Framework 4.8 or later.">Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED</Condition>
+		<PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
+		<SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch">
+			WIXNETFX4RELEASEINSTALLED >= "#528040 "
+		</SetProperty>
+		<Condition Message="[ProductName] requires .NET Framework 4.8 or later.">Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED</Condition>
 
-    <DirectoryRef Id="INSTALLLOCATION"/>
+		<DirectoryRef Id="INSTALLLOCATION"/>
 
-    <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
-    <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
-    <UIRef Id="UI"/>
-    <UIRef Id="WixUI_ErrorProgressText"/>
-    
-    <!-- Used by AddInMM  Goes here due to merge constraints -->
-    <PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
-    <PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
-    <PropertyRef Id="VS2017_EXTENSIONS_DIR"/>
-    <PropertyRef Id="VS2019_EXTENSIONS_DIR"/>
-    <PropertyRef Id="VS2022_EXTENSIONS_DIR"/>
+		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
+		<UIRef Id="UI"/>
+		<UIRef Id="WixUI_ErrorProgressText"/>
 
-    <CustomActionRef Id="VS2013Setup" />
-    <CustomActionRef Id="VS2015Setup" />
-    <CustomActionRef Id="VS2017Setup" />
-    <CustomActionRef Id="VS2019Setup" />
-    <CustomActionRef Id="VS2022Setup" />
+		<!-- Used by AddInMM  Goes here due to merge constraints -->
+		<PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
+		<PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
+		<PropertyRef Id="VS2017_EXTENSIONS_DIR"/>
+		<PropertyRef Id="VS2019_EXTENSIONS_DIR"/>
+		<PropertyRef Id="VS2022_EXTENSIONS_DIR"/>
 
-    <Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
-    <CustomAction Id="VSFindInstances2" BinaryKey="iswixActions" DllEntry="VSFindInstances2" Execute="firstSequence"/>
-    <InstallUISequence>
-      <Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
-    </InstallUISequence>
-    <InstallExecuteSequence>
-      <Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
-    </InstallExecuteSequence>
-<!--
+		<CustomActionRef Id="VS2013Setup" />
+		<CustomActionRef Id="VS2015Setup" />
+		<CustomActionRef Id="VS2017Setup" />
+		<CustomActionRef Id="VS2019Setup" />
+		<CustomActionRef Id="VS2022Setup" />
+
+		<Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
+		<CustomAction Id="VSFindInstances2" BinaryKey="iswixActions" DllEntry="VSFindInstances2" Execute="firstSequence"/>
+		<InstallUISequence>
+			<Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
+		</InstallUISequence>
+		<InstallExecuteSequence>
+			<Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
+		</InstallExecuteSequence>
+		<!--
     <Property Id="VS2019_IDE_DIR" Secure="yes" SuppressModularization="yes">
       <DirectorySearch Id="VS2019DirectorySearch" Path="[VS2019_ROOT_FOLDER]">
         <DirectorySearch Id="VS2019EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
@@ -64,28 +64,28 @@
       <Custom Action="VS2019Setup" Before="InstallFinalize" Overridable="yes">VS2019DEVENV</Custom>
     </InstallExecuteSequence>-->
 
-	  <Property Id="VS2022_IDE_DIR" Secure="yes" SuppressModularization="yes">
-      <DirectorySearch Id="VS2022DirectorySearch" Path="[VS2022_ROOT_FOLDER]">
-        <DirectorySearch Id="VS2022EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
-      </DirectorySearch>
-    </Property>
+		<Property Id="VS2022_IDE_DIR" Secure="yes" SuppressModularization="yes">
+			<DirectorySearch Id="VS2022DirectorySearch" Path="[VS2022_ROOT_FOLDER]">
+				<DirectorySearch Id="VS2022EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
+			</DirectorySearch>
+		</Property>
 
-    <Property Id="VS2022_EXTENSIONS_DIR" Secure="yes" SuppressModularization="yes">
-      <DirectorySearchRef Id="VS2022EnvironmentDirectorySearch" Parent="VS2022DirectorySearch" Path="Common7\IDE">
-        <DirectorySearch Id="VS2022ExtensionsDirectorySearch" Path="Extensions" Depth="1" />
-      </DirectorySearchRef>
-    </Property>
+		<Property Id="VS2022_EXTENSIONS_DIR" Secure="yes" SuppressModularization="yes">
+			<DirectorySearchRef Id="VS2022EnvironmentDirectorySearch" Parent="VS2022DirectorySearch" Path="Common7\IDE">
+				<DirectorySearch Id="VS2022ExtensionsDirectorySearch" Path="Extensions" Depth="1" />
+			</DirectorySearchRef>
+		</Property>
 
-    <Property Id="VS2022DEVENV" Secure="yes" SuppressModularization="yes">
-      <DirectorySearchRef Id="VS2022EnvironmentDirectorySearch" Parent="VS2022DirectorySearch" Path="Common7\IDE">
-        <FileSearch Id="VS2022DevEnvSearch" Name="devenv.exe" />
-      </DirectorySearchRef>
-    </Property>
+		<Property Id="VS2022DEVENV" Secure="yes" SuppressModularization="yes">
+			<DirectorySearchRef Id="VS2022EnvironmentDirectorySearch" Parent="VS2022DirectorySearch" Path="Common7\IDE">
+				<FileSearch Id="VS2022DevEnvSearch" Name="devenv.exe" />
+			</DirectorySearchRef>
+		</Property>
 
-    <CustomAction Id="VS2022Setup" Property="VS2022DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
-    <InstallExecuteSequence>
-      <Custom Action="VS2022Setup" Before="InstallFinalize" Overridable="yes">VS2022DEVENV</Custom>
-    </InstallExecuteSequence>
+		<CustomAction Id="VS2022Setup" Property="VS2022DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+		<InstallExecuteSequence>
+			<Custom Action="VS2022Setup" Before="InstallFinalize" Overridable="yes">VS2022DEVENV</Custom>
+		</InstallExecuteSequence>
 
-  </Product>
+	</Product>
 </Wix>
