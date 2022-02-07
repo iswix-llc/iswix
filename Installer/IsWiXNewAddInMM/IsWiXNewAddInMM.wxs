@@ -105,7 +105,7 @@
                 <CopyFile Id="dupept5b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
                 <CopyFile Id="dupept5c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
                 <CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
-				<CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+				<CopyFile Id="dupept5e" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 			  </File>
             </Component>
             <!--<Component Id="owcD1D0D576FB08CC72896DB47D4C3859C0" Guid="6acd5371-8202-9b23-1359-d77ad8978986">
