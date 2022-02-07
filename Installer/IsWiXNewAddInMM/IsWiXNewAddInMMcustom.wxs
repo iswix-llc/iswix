@@ -5,7 +5,8 @@
     <!-- Reference Custom Components Below -->
     <ComponentGroup Id="Custom">
       <ComponentRef Id="globalparams"/>
-    </ComponentGroup>
+		<ComponentRef Id="visualstudiointerop"/>
+	</ComponentGroup>
 
     <!-- Author Custom Components Below -->
     <DirectoryRef Id="MergeRedirectFolder">
@@ -17,7 +18,7 @@
           <File Id="globalparams" Source="..\Deploy\IsWiXNewAddIn\GlobalParams.dll" KeyPath="yes" Assembly=".net"/>
         </Component>
 		  <Component Id="visualstudiointerop" Guid="{B16AE4C9-28B4-427A-842C-A4830BFD7974}" Permanent="yes">
-			  <File Id="globalparams" Source="..\Deploy\IsWiXNewAddIn\Microsoft.VisualStudio.Interop.dll" KeyPath="yes" Assembly=".net"/>
+			  <File Id="visualstudiointerop" Source="..\Deploy\IsWiXNewAddIn\Microsoft.VisualStudio.Interop.dll" KeyPath="yes" Assembly=".net"/>
 		  </Component>
 	  </Directory>
     </DirectoryRef>
