@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
-    <CopyVsixExtensionLocation>..\..\Installer\Deploy\IsWiXNewAddIn</CopyVsixExtensionLocation>
+    <CopyVsixExtensionLocation>..\..\Installer\Deploy\IsWiXNewNewAddIn</CopyVsixExtensionLocation>
     <CreateVsixContainer>False</CreateVsixContainer>
     <DeployExtension>False</DeployExtension>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
