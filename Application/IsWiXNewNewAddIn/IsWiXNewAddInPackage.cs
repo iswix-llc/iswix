@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
 
-namespace ISWIXLLC.IsWiXNewAddIn
+namespace ISWIXLLC.IsWiXNewNewAddIn
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -31,8 +31,8 @@ namespace ISWIXLLC.IsWiXNewAddIn
     [InstalledProductRegistration("#110", "#112", "1.0.0.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GuidList.guidIsWiXNewAddInPkgString)]
-    public sealed class IsWiXNewAddInPackage : Package
+    [Guid(GuidList.guidIsWiXNewNewAddInPkgString)]
+    public sealed class IsWiXNewNewAddInPackage : Package
     {
         /// <summary>
         /// Default constructor of the package.
@@ -41,7 +41,7 @@ namespace ISWIXLLC.IsWiXNewAddIn
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-        public IsWiXNewAddInPackage()
+        public IsWiXNewNewAddInPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
         }
@@ -66,7 +66,7 @@ namespace ISWIXLLC.IsWiXNewAddIn
             if ( null != mcs )
             {
                 // Create the command for the menu item.
-                CommandID menuCommandID = new CommandID(GuidList.guidIsWiXNewAddInCmdSet, (int)PkgCmdIDList.cmdidLaunchIsWiX);
+                CommandID menuCommandID = new CommandID(GuidList.guidIsWiXNewNewAddInCmdSet, (int)PkgCmdIDList.cmdidLaunchIsWiX);
                 MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID );
                 mcs.AddCommand( menuItem );
             }
@@ -99,11 +99,14 @@ namespace ISWIXLLC.IsWiXNewAddIn
                 {
                     documentPath = "\"" + dte.ActiveDocument.FullName + "\"";
                 }
-                string isWiXPath = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\ISWIXLLC\\IsWiX","IsWiXFilePath", String.Empty).ToString();
-                if (string.IsNullOrEmpty(isWiXPath))
+                string isWiXPath = string.Empty; ;
+                using (RegistryKey local32Key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
                 {
-                    throw new Exception("IsWiX path not found in the registry.");
+                    using (RegistryKey isWiXKey = local32Key.OpenSubKey(@"SOFTWARE\ISWIXLLC\IsWiX", false))
+                    {
+                        isWiXPath = isWiXKey.GetValue("IsWiXFilePath", string.Empty).ToString();                    }
                 }
+
                 if (!File.Exists(isWiXPath))
                 {
                     throw new Exception("IsWiX.exe not found");

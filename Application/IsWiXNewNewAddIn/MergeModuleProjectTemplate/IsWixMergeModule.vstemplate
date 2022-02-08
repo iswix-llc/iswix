@@ -1,19 +1,24 @@
 <VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name _locID="TSDATA_DUT_Name">IsWiX Merge Module Project</Name>
-    <Description _locID="TSDATA_DUT_Description">An IsWiX customized project for creating a Windows Installer XML based MSM file</Description>
+    <Name _locID="TSDATA_DUT_Name">IsWiX Merge Module Project for WiX v3</Name>
+    <Description _locID="TSDATA_DUT_Description">A project for creating an IsWiX / Windows Installer XML v3 based MSM</Description>
     <Icon>IsWiX.ico</Icon>
+    <LanguageTag Value="WiX" />
+    <PlatformTag Value="Windows" />
+    <ProjectTypeTag Value="MSM" />
+    <ProjectTypeTag Value="Merge Module" />
     <ProjectType>WiX</ProjectType>
-    <SortOrder>2</SortOrder>
+    <SortOrder>6</SortOrder>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>MergeModule</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
+    <BuildOnLoad></BuildOnLoad>
   </TemplateData>
   <TemplateContent>
-    <Project File="IsWiXMergeModule.wixproj" TargetFileName="globalsafeprojectname$MM.wixproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$globalsafeprojectname$MM.wxs">IsWiXMergeModule.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$globalsafeprojectname$MMcustom.wxs">IsWiXMergeModuleCustom.wxs</ProjectItem>
+    <Project File="IsWiXMergeModule.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$.wxs">IsWiXMergeModule.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$safeprojectname$custom.wxs">IsWiXMergeModuleCustom.wxs</ProjectItem>
     </Project>
     <CustomParameters>
       <CustomParameter _locID="$loc_WXS_TODO1$" Name="$loc_WXS_TODO1$" Value="TODO: Remove the comments around this Component element in order to add resources to this module." />
@@ -22,8 +27,4 @@
       <CustomParameter _locID="$loc_WIXPROJ_TOMODIFY_LINE2$" Name="$loc_WIXPROJ_TOMODIFY_LINE2$" Value="Other similar extension points exist, see Wix.targets." />
     </CustomParameters>
   </TemplateContent>
-  <WizardExtension>
-    <Assembly>GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
-    <FullClassName>GlobalParams.WizardMPT</FullClassName>
-  </WizardExtension>
 </VSTemplate>
