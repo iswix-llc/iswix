@@ -25,6 +25,7 @@
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
     <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
     <SuppressPdbOutput>True</SuppressPdbOutput>
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>

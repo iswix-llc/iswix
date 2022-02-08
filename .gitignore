@@ -333,3 +333,7 @@ ASALocalRun/
 
 /Installer/Deploy
 /Application/IsWiXNewAddIn/ProjectTemplates
+Application/IsWiXNewNewAddIn/ProjectTemplates/IsWiXSetupProjectTemplate.zip
+Application/IsWiXNewNewAddIn/ProjectTemplates/IsWiXMSISolutionTemplate.zip
+Application/IsWiXNewNewAddIn/ProjectTemplates/IsWiXMergeModuleProjectTemplate.zip
+Application/IsWiXNewNewAddIn/ProjectTemplates/IsWiXBootstrapperSolutionTemplate.zip
