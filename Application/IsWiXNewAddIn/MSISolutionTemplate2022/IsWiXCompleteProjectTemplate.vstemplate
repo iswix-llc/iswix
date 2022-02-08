@@ -1,18 +1,17 @@
 <VSTemplate Version="2.0.0" Type="ProjectGroup"
     xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>IsWiX Bootstrapper Solution for WiX v3</Name>
-    <Description>A multiproject (.EXE/.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based EXE</Description>
+    <Name>IsWiX Solution for WiX v3</Name>
+    <Description>A multiproject (.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based MSI</Description>
     <Icon>IsWiX.ico</Icon>
-    <ProjectType>WiX</ProjectType>
+    <LanguageTag Value="WiX" />
     <PlatformTag Value="Windows" />
-    <ProjectTypeTag Value="EXE" />
-    <ProjectTypeTag Value="Bootstrapper" />
-    <ProjectTypeTag Value="Bundle" />
+    <ProjectTypeTag Value="MSI" />
+    <ProjectTypeTag Value="Package" />
+    <ProjectType>WiX</ProjectType>
     <DefaultName>ProductName</DefaultName>
-    <SortOrder>4</SortOrder>
+    <SortOrder>5</SortOrder>
     <BuildOnLoad></BuildOnLoad>
-    <CreateNewFolder>false</CreateNewFolder>
   </TemplateData>
   <TemplateContent></TemplateContent>
   <WizardExtension>
@@ -22,8 +21,7 @@
   <WizardData>
     <Settings>
       <MappedProjectTemplate name="$projectname$MM" path="$projectname$MM" template="MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
-      <MappedProjectTemplate name="$projectname$Setup" path="$projectname$Setup" template="SetupProjectTemplate\IsWixProject.vstemplate" />
-      <MappedProjectTemplate name="$projectname$Bootstrapper" path="$projectname$Bootstrapper" template="BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
+      <MappedProjectTemplate name="$projectname$" path="$projectname$" template="SetupProjectTemplate\IsWixProject.vstemplate" />
     </Settings>
   </WizardData>
 

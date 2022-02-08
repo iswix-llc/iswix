@@ -64,6 +64,9 @@
       <HintPath>..\packages\envdte.17.0.32112.339\lib\net472\envdte.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GlobalParams">
+      <HintPath>..\Externals\GlobalParams.dll</HintPath>
+    </Reference>
     <Reference Include="IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec, processorArchitecture=MSIL">
       <HintPath>..\Externals\IsWiXGlobalParams.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -164,24 +167,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\IsWiXMergeModuleProjectTemplate4.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\IsWiXSetupProjectTemplate4.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\IsWiXBootstrapperSolutionTemplate4.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\IsWiXMSISolutionTemplate4.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Content Include="ProjectTemplates\IsWiXBootstrapperSolutionTemplate2022.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\IsWiXMSISolutionTemplate2022.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\IsWiXSetupProjectTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -227,26 +226,20 @@ IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sect
 CD "$(ProjectDir)MergeModuleProjectTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip' -Force
 
-CD "$(ProjectDir)MergeModuleProjectTemplate4"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate4.zip' -Force
-
 CD "$(ProjectDir)MSISolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate.zip' -Force
-
-CD "$(ProjectDir)MSISolutionTemplate4"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate4.zip' -Force
 
 CD "$(ProjectDir)BootstrapperSolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip' -Force
 
-CD "$(ProjectDir)BootstrapperSolutionTemplate4"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate4.zip' -Force
-
 CD "$(ProjectDir)SetupProjectTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate.zip' -Force
 
-CD "$(ProjectDir)SetupProjectTemplate4"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate4.zip' -Force
+CD "$(ProjectDir)MSISolutionTemplate2022"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate2022.zip' -Force
+
+CD "$(ProjectDir)BootstrapperSolutionTemplate2022"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate2022.zip' -Force
 </PreBuildEvent>
   </PropertyGroup>
   <Target Name="UpdateVSIXVersion" BeforeTargets="PrepareForBuild">

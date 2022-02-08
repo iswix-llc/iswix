@@ -1,7 +1,7 @@
 <VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name _locID="TSDATA_DUT_Name">IsWiX Setup Project</Name>
-    <Description _locID="TSDATA_DUT_Description">A project for creating an IsWiX based MSI file</Description>
+    <Name _locID="TSDATA_DUT_Name">IsWiX Bootstrapper Project</Name>
+    <Description _locID="TSDATA_DUT_Description">A project for creating an IsWiX based EXE file</Description>
     <Icon>Icon.ico</Icon>
     <ProjectType>WiX</ProjectType>
     <SortOrder>20</SortOrder>
@@ -12,15 +12,10 @@
     <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
   </TemplateData>
   <TemplateContent>
-    <Project File="IsWiXSetupProject.wixproj" TargetFileName="$globalsafeprojectname$Setup.wixproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Code\Product.wxs">Product.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\Features.wxs">Features.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI.wxs">UI.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Banner.jpg">Banner.jpg</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Dialog.jpg">Dialog.jpg</ProjectItem>
+    <Project File="IsWiXBootstrapper.wixproj" TargetFileName="$globalsafeprojectname$Bootstrapper.wixproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Code\Bundle.wxs">Bundle.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.ico">Icon.ico</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.png">Icon.png</ProjectItem>
     </Project>
     <CustomParameters>
       <CustomParameter _locID="$loc_WXS_TODO1$" Name="$loc_WXS_TODO1$" Value="TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer." />
@@ -32,7 +27,7 @@
     </CustomParameters>
   </TemplateContent>
   <WizardExtension>
-  <Assembly>GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
-    <FullClassName>GlobalParams.WizardMPT</FullClassName>
-   </WizardExtension>
+    <Assembly>IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec</Assembly>
+    <FullClassName>IsWiXGlobalParams.WizardMPT</FullClassName>
+  </WizardExtension>
 </VSTemplate>

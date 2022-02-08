@@ -12,9 +12,10 @@
     <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
   </TemplateData>
   <TemplateContent>
-    <Project File="IsWiXSetupProject.wixproj" TargetFileName="$globalsafeprojectname$Setup.wixproj" ReplaceParameters="true">
+    <Project File="IsWiXSetupProject.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Code\Product.wxs">Product.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\Features.wxs">Features.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\IISMeta.wxs">IISMeta.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI.wxs">UI.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Banner.jpg">Banner.jpg</ProjectItem>
@@ -32,7 +33,7 @@
     </CustomParameters>
   </TemplateContent>
   <WizardExtension>
-  <Assembly>GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
+    <Assembly>GlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
     <FullClassName>GlobalParams.WizardMPT</FullClassName>
-   </WizardExtension>
+  </WizardExtension>
 </VSTemplate>
