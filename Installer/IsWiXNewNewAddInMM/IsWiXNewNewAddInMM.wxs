@@ -55,12 +55,7 @@
 								<CopyFile Id="dupe9a" DestinationProperty="EXTENSIONDIR2022" />
 							</File>
 						</Component>
-						<Component Id="owc6D02ED763F7547B3D15F0CA988C286BB" Guid="3c76c9ae-7e23-0705-4408-e69f2c9a24bb">
-							<File Id="owf6D02ED763F7547B3D15F0CA988C286BB" Source="$(var.SourceDir)\IsWiXNewNewAddIn\ProjectTemplates\IsWiXSetupProjectTemplate.zip" KeyPath="yes">
-								<CopyFile Id="dupe10a" DestinationProperty="EXTENSIONDIR2022" />
-							</File>
-						</Component>
-					</Directory>
+				</Directory>
 				</Directory>
 			</Directory>
 		</Directory>

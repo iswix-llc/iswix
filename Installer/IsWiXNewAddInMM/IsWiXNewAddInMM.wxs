@@ -81,14 +81,6 @@
                 <CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
-            <Component Id="owc01E5A644E63177C7AB3E156ACB4781A8" Guid="a9e86b21-8ca3-767a-463d-a366cbf0416b">
-				<File Id="owf01E5A644E63177C7AB3E156ACB4781A8" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXSetupProjectTemplate.zip" KeyPath="yes">
-					<CopyFile Id="dupept6a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
-					<CopyFile Id="dupept6b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
-					<CopyFile Id="dupept6c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
-					<CopyFile Id="dupept6d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
-				</File>
-            </Component>
           </Directory>
         </Directory>
       </Directory>
