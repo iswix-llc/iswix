@@ -42,17 +42,17 @@
 					<Directory Id="owd4B222DA07AAB9A3CFB08DC1B1DE90776" Name="ProjectTemplates">
 						<Component Id="owcCE6E393777541BC8CA0BCB321D6ACDE8" Guid="7a409616-fe43-4f70-e8a0-f43e065ef6d7">
 							<File Id="owfCE6E393777541BC8CA0BCB321D6ACDE8" Source="$(var.SourceDir)\IsWiXNewNewAddIn\ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip" KeyPath="yes">
-								<CopyFile Id="dupe7a" DestinationProperty="EXTENSIONDIR2022" />
+								<CopyFile Id="dupe7a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 							</File>
 						</Component>
 						<Component Id="owc328EDC9CEA8F2700278F9B75BE1826C1" Guid="7b195e40-e943-7baa-c1ac-651181377575">
 							<File Id="owf328EDC9CEA8F2700278F9B75BE1826C1" Source="$(var.SourceDir)\IsWiXNewNewAddIn\ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip" KeyPath="yes">
-								<CopyFile Id="dupe8a" DestinationProperty="EXTENSIONDIR2022" />
+								<CopyFile Id="dupe8a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 							</File>
 						</Component>
 						<Component Id="owc1E4A88EB9B8EBC814CB3C2C2EE2763FD" Guid="12426e58-34cb-4af1-2f47-90ac42fb64b6">
 							<File Id="owf1E4A88EB9B8EBC814CB3C2C2EE2763FD" Source="$(var.SourceDir)\IsWiXNewNewAddIn\ProjectTemplates\IsWiXMSISolutionTemplate.zip" KeyPath="yes">
-								<CopyFile Id="dupe9a" DestinationProperty="EXTENSIONDIR2022" />
+								<CopyFile Id="dupe9a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 							</File>
 						</Component>
 				</Directory>
