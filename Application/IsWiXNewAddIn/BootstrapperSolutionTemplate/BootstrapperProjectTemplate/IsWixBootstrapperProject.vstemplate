@@ -27,7 +27,7 @@
     </CustomParameters>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>GlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
-    <FullClassName>GlobalParams.WizardMPT</FullClassName>
+    <Assembly>IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec</Assembly>
+    <FullClassName>IsWiXGlobalParams.WizardMPT</FullClassName>
   </WizardExtension>
 </VSTemplate>
