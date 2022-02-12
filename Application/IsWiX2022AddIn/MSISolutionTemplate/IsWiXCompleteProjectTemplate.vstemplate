@@ -1,0 +1,28 @@
+<VSTemplate Version="2.0.0" Type="ProjectGroup"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>IsWiX Solution for WiX v3</Name>
+    <Description>A multiproject (.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v3 based MSI</Description>
+    <Icon>IsWiX.ico</Icon>
+    <LanguageTag Value="WiX" />
+    <PlatformTag Value="Windows" />
+    <ProjectTypeTag Value="MSI" />
+    <ProjectTypeTag Value="Package" />
+    <ProjectType>WiX</ProjectType>
+    <DefaultName>ProductName</DefaultName>
+    <SortOrder>5</SortOrder>
+    <BuildOnLoad></BuildOnLoad>
+  </TemplateData>
+  <TemplateContent></TemplateContent>
+  <WizardExtension>
+  <Assembly>IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec</Assembly>
+    <FullClassName>IsWiXGlobalParams.WizardMPT</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <Settings>
+      <MappedProjectTemplate name="$projectname$MM" path="$projectname$MM" template="MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+      <MappedProjectTemplate name="$projectname$" path="$projectname$" template="SetupProjectTemplate\IsWixProject.vstemplate" />
+    </Settings>
+  </WizardData>
+
+</VSTemplate>
