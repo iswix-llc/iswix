@@ -6,7 +6,7 @@
 name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_4.15$(Rev:.r).0
 
 trigger:
-- master
+- dev
 
 pool:
   vmImage: windows-2022
