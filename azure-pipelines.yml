@@ -9,7 +9,7 @@ trigger:
 - dev
 
 pool:
-  vmImage: windows-2019
+  name: 'default'
 
 variables:
   solution: '**/*.sln'
