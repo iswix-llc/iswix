@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="52b70414-66d7-4951-88e0-7f023e0fdce2" Version="0.0.1" Language="en-US" Publisher="ISWIX LLC" />
+        <Identity Id="52b70414-66d7-4951-88e0-7f023e0fdce2" Version="1.0" Language="en-US" Publisher="ISWIX LLC" />
         <DisplayName>IsWiX</DisplayName>
         <Description xml:space="preserve">Industrial Strength Windows Installer XML (IsWiX)</Description>
         <MoreInfo>https://github.com/iswix-llc</MoreInfo>

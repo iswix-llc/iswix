@@ -10,7 +10,7 @@
         <Icon>Icon.png</Icon>
         <PreviewImage>preview.png</PreviewImage>
     </Metadata>
-    <Installation>
+    <Installation AllUsers="true" InstalledByMsi="true">
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
