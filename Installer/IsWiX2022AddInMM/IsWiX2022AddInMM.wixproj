@@ -6,7 +6,7 @@
     <ProductVersion>3.7</ProductVersion>
     <ProjectGuid>{efa8e347-2372-413e-9e62-00ca15e392c0}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>IsWiXNewAddInMM</OutputName>
+    <OutputName>IsWiX2022AddInMM</OutputName>
     <OutputType>Module</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -20,7 +20,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
-    <SuppressValidation>True</SuppressValidation>
+    <SuppressValidation>False</SuppressValidation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -28,8 +28,8 @@
     <SuppressPdbOutput>True</SuppressPdbOutput>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IsWiXNewNewAddInMM.wxs" />
-    <Compile Include="IsWiXNewNewAddInMMcustom.wxs" />
+    <Compile Include="IsWiX2022AddInMM.wxs" />
+    <Compile Include="IsWiX2022AddInMMcustom.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

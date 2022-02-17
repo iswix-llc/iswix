@@ -5,7 +5,6 @@
 		<!-- Reference Custom Components Below -->
 		<ComponentGroup Id="Custom">
 			<ComponentRef Id="iswixglobalparams"/>
-			<ComponentRef Id="visualstudiointerop"/>
 		</ComponentGroup>
 
 		<!-- Author Custom Components Below -->
@@ -15,10 +14,7 @@
 		<DirectoryRef Id="TARGETDIR">
 			<Directory Id="GlobalAssemblyCache" Name="GlobalAssemblyCache">
 				<Component Id="iswixglobalparams" Guid="{A1D8FD12-A814-4E43-BCF1-7360C7E781FB}" Permanent="yes">
-					<File Id="iswixglobalparams" Source="..\Deploy\IsWiXNewNewAddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net"/>
-				</Component>
-				<Component Id="visualstudiointerop" Guid="{B16AE4C9-28B4-427A-842C-A4830BFD7974}" Permanent="yes">
-					<File Id="visualstudiointerop" Source="..\Deploy\IsWiXNewNewAddIn\Microsoft.VisualStudio.Interop.dll" KeyPath="yes" Assembly=".net"/>
+					<File Id="iswixglobalparams" Source="..\Deploy\IsWiX2022AddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net"/>
 				</Component>
 			</Directory>
 		</DirectoryRef>

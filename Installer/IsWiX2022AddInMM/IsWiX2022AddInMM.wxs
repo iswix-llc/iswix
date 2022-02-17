@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\Deploy"?>
+  <Module Id="IsWiXNewNewAddInMM" Language="1033" Version="1.0.0.0">
+    <Package Id="{D487A781-DB05-40E7-A236-DF808C08EA53}" Manufacturer="IsWiXNewAddInMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Directory Id="owd00D844FBB782F9390ED1740825A5270C" Name="IsWiX2022AddIn">
+          <Component Id="owc4AAB5D2EF980D11DC5191910D7C080DE" Guid="1b2775b5-9424-320c-3999-1d9ad637ed7b">
+			  <File Id="owf4AAB5D2EF980D11DC5191910D7C080DE" Source="$(var.SourceDir)\IsWiX2022AddIn\extension.vsixmanifest" KeyPath="yes">
+				  <CopyFile Id="dupe1a" DestinationProperty="EXTENSIONDIR2022" />
+			  </File>
+          </Component>
+          <Component Id="owcE46663FDDDFBF98B1B7530702DC5EF24" Guid="e990ff02-f400-19fc-74a4-487f6f14db9a">
+			  <File Id="owfE46663FDDDFBF98B1B7530702DC5EF24" Source="$(var.SourceDir)\IsWiX2022AddIn\Icon.png" KeyPath="yes">
+				  <CopyFile Id="dupe2a" DestinationProperty="EXTENSIONDIR2022" />
+			  </File>
+          </Component>
+          <Component Id="owc34168FEBA89897945A9308E46ABFFC5F" Guid="28fd1c7d-7855-b242-cb3d-0584222569e5">
+			  <File Id="owf34168FEBA89897945A9308E46ABFFC5F" Source="$(var.SourceDir)\IsWiX2022AddIn\IsWiX2022AddIn.dll" KeyPath="yes">
+				  <CopyFile Id="dupe3a" DestinationProperty="EXTENSIONDIR2022" />
+			  </File>
+          </Component>
+          <Component Id="owc6329581135AAE490C3D49C2C035A50CF" Guid="af11f09b-1f09-08d0-e5e2-e8f83e55e873">
+			  <File Id="owf6329581135AAE490C3D49C2C035A50CF" Source="$(var.SourceDir)\IsWiX2022AddIn\IsWiX2022AddIn.pkgdef" KeyPath="yes">
+				  <CopyFile Id="dupe4a" DestinationProperty="EXTENSIONDIR2022" />
+			  </File>
+          </Component>
+          <Component Id="owc8AAB1608643A4A491950CACAAAC080C3" Guid="3e58ceea-7ebb-ae64-a45e-eb1ccc0818fe">
+			  <File Id="owf8AAB1608643A4A491950CACAAAC080C3" Source="$(var.SourceDir)\IsWiX2022AddIn\MS-PL.txt" KeyPath="yes">
+				  <CopyFile Id="dupe5a" DestinationProperty="EXTENSIONDIR2022" />
+			  </File>
+          </Component>
+          <Component Id="owc8EF11C3B0CBE0B24D59759AC30A37A8B" Guid="93b3a4c4-efb5-2759-1182-1ce197dedb76">
+			  <File Id="owf8EF11C3B0CBE0B24D59759AC30A37A8B" Source="$(var.SourceDir)\IsWiX2022AddIn\preview.png" KeyPath="yes">
+				  <CopyFile Id="dupe6a" DestinationProperty="EXTENSIONDIR2022" />
+			  </File>
+          </Component>
+          <Directory Id="owd106575434686DDC2FAE6ED43DC75AE58" Name="ProjectTemplates">
+            <Component Id="owc149A027F907A0CAE7F3E5F0A876BA239" Guid="575dd880-1abf-06e6-e53c-fd5e67a3c0a6">
+				<File Id="owf149A027F907A0CAE7F3E5F0A876BA239" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip" KeyPath="yes">
+					<CopyFile Id="dupe7a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+				</File>
+            </Component>
+            <Component Id="owc87AECF5A214781F2325C1FFA7BA84FD5" Guid="4587eb22-9219-19e3-01d0-6aa06071b60c">
+				<File Id="owf87AECF5A214781F2325C1FFA7BA84FD5" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip" KeyPath="yes">
+					<CopyFile Id="dupe8a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+				</File>
+            </Component>
+            <Component Id="owcB45DE730E9CA4CD8893CE081B1FF5317" Guid="717b86a3-e5a1-2214-0f25-d3494e5f60b8">
+				<File Id="owfB45DE730E9CA4CD8893CE081B1FF5317" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\IsWiXMSISolutionTemplate.zip" KeyPath="yes">
+					<CopyFile Id="dupe9a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+				</File>
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+    <ComponentGroupRef Id="Custom" />
+    <Property Id="VS2022_EXTENSIONS_DIR" SuppressModularization="yes" />
+    <SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
+    <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
+  </Module>
+</Wix>

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiX2022AddIn", "IsWiX2022
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXNewAddIn", "IsWiXNewAddIn\IsWiXNewAddIn.csproj", "{47390392-42C5-4EE6-885B-98C2E70DECD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXNewNewAddIn", "IsWiXNewNewAddIn\IsWiXNewNewAddIn.csproj", "{3A24A77E-F197-4564-AB72-308542C89463}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,14 +31,6 @@ Global
 		{47390392-42C5-4EE6-885B-98C2E70DECD1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47390392-42C5-4EE6-885B-98C2E70DECD1}.Release|x86.ActiveCfg = Release|x86
 		{47390392-42C5-4EE6-885B-98C2E70DECD1}.Release|x86.Build.0 = Release|x86
-		{3A24A77E-F197-4564-AB72-308542C89463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A24A77E-F197-4564-AB72-308542C89463}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A24A77E-F197-4564-AB72-308542C89463}.Debug|x86.ActiveCfg = Debug|x86
-		{3A24A77E-F197-4564-AB72-308542C89463}.Debug|x86.Build.0 = Debug|x86
-		{3A24A77E-F197-4564-AB72-308542C89463}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A24A77E-F197-4564-AB72-308542C89463}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A24A77E-F197-4564-AB72-308542C89463}.Release|x86.ActiveCfg = Release|x86
-		{3A24A77E-F197-4564-AB72-308542C89463}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

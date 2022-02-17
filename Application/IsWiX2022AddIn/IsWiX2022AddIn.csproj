@@ -53,6 +53,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CreateVsixContainer>False</CreateVsixContainer>
+    <DeployExtension>False</DeployExtension>
+    <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
+    <CopyVsixExtensionLocation>..\..\Installer\Deploy\IsWiX2022AddIn</CopyVsixExtensionLocation>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandLaunchIsWiX.cs" />
@@ -85,10 +89,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\IsWiXSetupProjectTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -113,6 +113,10 @@
     <Content Include="Resources\CommandLaunchIsWiXPackage.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Externals\IsWiXGlobalParams.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -135,9 +139,6 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 
 CD "$(ProjectDir)BootstrapperSolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip' -Force
-
-CD "$(ProjectDir)SetupProjectTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate.zip' -Force
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
