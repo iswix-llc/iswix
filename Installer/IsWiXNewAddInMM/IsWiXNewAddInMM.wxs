@@ -10,75 +10,48 @@
         <Directory Id="owd5B4135BE52966A93255847B9BF21308B" Name="IsWiXNewAddIn">
           <Component Id="owc2520E328CD78AF7924382746CFB9137A" Guid="ba91f379-0f08-9bc4-335e-b3961a2e136b">
             <File Id="owf2520E328CD78AF7924382746CFB9137A" Source="$(var.SourceDir)\IsWiXNewAddIn\extension.vsixmanifest" KeyPath="yes">
-              <CopyFile Id="dupe1a" DestinationProperty="EXTENSIONDIR2013" />
-              <CopyFile Id="dupe1b" DestinationProperty="EXTENSIONDIR2015" />
-              <CopyFile Id="dupe1c" DestinationProperty="EXTENSIONDIR2017" />
-              <CopyFile Id="dupe1d" DestinationProperty="EXTENSIONDIR2019" />
+              <CopyFile Id="dupe1" DestinationProperty="EXTENSIONDIR2019" />
             </File>
           </Component>
           <Component Id="owcCA23CB3538029C34AC5B8E25A586C517" Guid="425a4ff4-b9f0-3cc0-09b5-549dbebc5b2c">
             <File Id="owfCA23CB3538029C34AC5B8E25A586C517" Source="$(var.SourceDir)\IsWiXNewAddIn\Icon.png" KeyPath="yes">
-              <CopyFile Id="dupe2a" DestinationProperty="EXTENSIONDIR2013" />
-              <CopyFile Id="dupe2b" DestinationProperty="EXTENSIONDIR2015" />
-              <CopyFile Id="dupe2c" DestinationProperty="EXTENSIONDIR2017" />
-              <CopyFile Id="dupe2d" DestinationProperty="EXTENSIONDIR2019" />
+              <CopyFile Id="dupe2" DestinationProperty="EXTENSIONDIR2019" />
             </File>
           </Component>
           <Component Id="owc9ACB034825CA352A0F77BCC72713F5FA" Guid="a2dd8ac2-b951-0933-30c3-912a7e478e6e">
             <File Id="owf9ACB034825CA352A0F77BCC72713F5FA" Source="$(var.SourceDir)\IsWiXNewAddIn\IsWiXNewAddIn.dll" KeyPath="yes">
-              <CopyFile Id="dupe3a" DestinationProperty="EXTENSIONDIR2013" />
-              <CopyFile Id="dupe3b" DestinationProperty="EXTENSIONDIR2015" />
-              <CopyFile Id="dupe3c" DestinationProperty="EXTENSIONDIR2017" />
-              <CopyFile Id="dupe3d" DestinationProperty="EXTENSIONDIR2019" />
+              <CopyFile Id="dupe3" DestinationProperty="EXTENSIONDIR2019" />
             </File>
           </Component>
           <Component Id="owc222911EE35769C24FC911A3C54323068" Guid="a57f46f6-27a4-db9a-1aea-28ae8633e9a5">
             <File Id="owf222911EE35769C24FC911A3C54323068" Source="$(var.SourceDir)\IsWiXNewAddIn\IsWiXNewAddIn.pkgdef" KeyPath="yes">
-              <CopyFile Id="dupe4a" DestinationProperty="EXTENSIONDIR2013" />
-              <CopyFile Id="dupe4b" DestinationProperty="EXTENSIONDIR2015" />
-              <CopyFile Id="dupe4c" DestinationProperty="EXTENSIONDIR2017" />
-              <CopyFile Id="dupe4d" DestinationProperty="EXTENSIONDIR2019" />
+              <CopyFile Id="dupe4" DestinationProperty="EXTENSIONDIR2019" />
             </File>
           </Component>
           <Component Id="owc490F97050FC7A4C10C3F3262528BE597" Guid="0147ec98-643d-4f32-074c-5ea4315aa39b">
             <File Id="owf490F97050FC7A4C10C3F3262528BE597" Source="$(var.SourceDir)\IsWiXNewAddIn\MS-PL.txt" KeyPath="yes">
-              <CopyFile Id="dupe5a" DestinationProperty="EXTENSIONDIR2013" />
-              <CopyFile Id="dupe5b" DestinationProperty="EXTENSIONDIR2015" />
-              <CopyFile Id="dupe5c" DestinationProperty="EXTENSIONDIR2017" />
-              <CopyFile Id="dupe5d" DestinationProperty="EXTENSIONDIR2019" />
+              <CopyFile Id="dupe5" DestinationProperty="EXTENSIONDIR2019" />
             </File>
           </Component>
           <Component Id="owcBFEC5C70CB5ABBBF8C9B36545E488F1A" Guid="8a818446-0227-6e32-38ad-5942ec132c38">
             <File Id="owfBFEC5C70CB5ABBBF8C9B36545E488F1A" Source="$(var.SourceDir)\IsWiXNewAddIn\preview.png" KeyPath="yes">
-              <CopyFile Id="dupe6a" DestinationProperty="EXTENSIONDIR2013" />
-              <CopyFile Id="dupe6b" DestinationProperty="EXTENSIONDIR2015" />
-              <CopyFile Id="dupe6c" DestinationProperty="EXTENSIONDIR2017" />
-              <CopyFile Id="dupe6d" DestinationProperty="EXTENSIONDIR2019" />
+              <CopyFile Id="dupe6" DestinationProperty="EXTENSIONDIR2019" />
             </File>
           </Component>
           <Directory Id="owdF4721E31A25F373F7B4CEAF6BC6AA66A" Name="ProjectTemplates">
             <Component Id="owcEE06B22CFEB5F55C0E2C284CC02B799B" Guid="8398c482-ecde-87d0-3166-056be2521c87">
               <File Id="owfEE06B22CFEB5F55C0E2C284CC02B799B" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip" KeyPath="yes">
-                <CopyFile Id="dupept1a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
-                <CopyFile Id="dupept1b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
-                <CopyFile Id="dupept1c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
-                <CopyFile Id="dupept1d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
+                <CopyFile Id="dupe7" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
             <Component Id="owc5593DF66E0082760BE5AC2E363544EA9" Guid="b92ee291-bf3b-27f0-1681-59e936e50dac">
               <File Id="owf5593DF66E0082760BE5AC2E363544EA9" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip" KeyPath="yes">
-                <CopyFile Id="dupept3a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
-                <CopyFile Id="dupept3b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
-                <CopyFile Id="dupept3c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
-                <CopyFile Id="dupept3d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
+                <CopyFile Id="dupe8" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
             <Component Id="owcC642010536471D55215441CCF0E9194A" Guid="f97ca94f-0f7c-d965-c3e3-b91f1b0feb19">
               <File Id="owfC642010536471D55215441CCF0E9194A" Source="$(var.SourceDir)\IsWiXNewAddIn\ProjectTemplates\IsWiXMSISolutionTemplate.zip" KeyPath="yes">
-                <CopyFile Id="dupept5a" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2013" />
-                <CopyFile Id="dupept5b" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2015" />
-                <CopyFile Id="dupept5c" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2017" />
-                <CopyFile Id="dupept5d" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
+                <CopyFile Id="dupe9" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2019" />
               </File>
             </Component>
           </Directory>

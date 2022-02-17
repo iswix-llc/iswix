@@ -20,15 +20,9 @@
 		<UIRef Id="WixUI_ErrorProgressText"/>
 
 		<!-- Used by AddInMM  Goes here due to merge constraints -->
-		<PropertyRef Id="VS2013_EXTENSIONS_DIR"/>
-		<PropertyRef Id="VS2015_EXTENSIONS_DIR"/>
-		<PropertyRef Id="VS2017_EXTENSIONS_DIR"/>
 		<PropertyRef Id="VS2019_EXTENSIONS_DIR"/>
 		<PropertyRef Id="VS2022_EXTENSIONS_DIR"/>
 
-		<CustomActionRef Id="VS2013Setup" />
-		<CustomActionRef Id="VS2015Setup" />
-		<CustomActionRef Id="VS2017Setup" />
 		<CustomActionRef Id="VS2019Setup" />
 		<CustomActionRef Id="VS2022Setup" />
 

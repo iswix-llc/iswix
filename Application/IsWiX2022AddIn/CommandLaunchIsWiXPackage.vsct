@@ -56,7 +56,7 @@
         <Parent guid="guidCommandLaunchIsWiXPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Invoke CommandLaunchIsWiX</ButtonText>
+          <ButtonText>Launch IsWiX</ButtonText>
         </Strings>
       </Button>
     </Buttons>

@@ -168,10 +168,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\IsWiXSetupProjectTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -223,9 +219,6 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 
 CD "$(ProjectDir)BootstrapperSolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip' -Force
-
-CD "$(ProjectDir)SetupProjectTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate.zip' -Force
 </PreBuildEvent>
   </PropertyGroup>
   <Target Name="UpdateVSIXVersion" BeforeTargets="PrepareForBuild">
