@@ -63,10 +63,10 @@ namespace IsWiXActions
                 //{
                 //    session["VS2017_ROOT_FOLDER"] = instance2.GetInstallationPath();
                 //}
-                //if (installationVersion.StartsWith("16.") && string.IsNullOrEmpty(session["VS2019_ROOT_FOLDER]"]))
-                //{
-                //    session["VS2019_ROOT_FOLDER"] = instance2.GetInstallationPath();
-                //}
+                if (installationVersion.StartsWith("16.") && string.IsNullOrEmpty(session["VS2019_ROOT_FOLDER]"]))
+                {
+                    session["VS2019_ROOT_FOLDER"] = instance2.GetInstallationPath();
+                }
                 if (installationVersion.StartsWith("17") && string.IsNullOrEmpty(session["VS2022_ROOT_FOLDER]"]))
                 {
                     session["VS2022_ROOT_FOLDER"] = instance2.GetInstallationPath();

@@ -43,29 +43,29 @@
 			<Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
 			<Custom Action="FixPaths" After="AppSearch"></Custom>
 		</InstallExecuteSequence>
-		<!--
-    <Property Id="VS2019_IDE_DIR" Secure="yes" SuppressModularization="yes">
-      <DirectorySearch Id="VS2019DirectorySearch" Path="[VS2019_ROOT_FOLDER]">
-        <DirectorySearch Id="VS2019EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
-      </DirectorySearch>
-    </Property>
 
-    <Property Id="VS2019_EXTENSIONS_DIR" Secure="yes" SuppressModularization="yes">
-      <DirectorySearchRef Id="VS2019EnvironmentDirectorySearch" Parent="VS2019DirectorySearch" Path="Common7\IDE">
-        <DirectorySearch Id="VS2019ExtensionsDirectorySearch" Path="Extensions" Depth="1" />
-      </DirectorySearchRef>
-    </Property>
+		<Property Id="VS2019_IDE_DIR" Secure="yes" SuppressModularization="yes">
+			<DirectorySearch Id="VS2019DirectorySearch" Path="[VS2019_ROOT_FOLDER]">
+				<DirectorySearch Id="VS2019EnvironmentDirectorySearch" Path="Common7\IDE" Depth="1" />
+			</DirectorySearch>
+		</Property>
 
-    <Property Id="VS2019DEVENV" Secure="yes" SuppressModularization="yes">
-      <DirectorySearchRef Id="VS2019EnvironmentDirectorySearch" Parent="VS2019DirectorySearch" Path="Common7\IDE">
-        <FileSearch Id="VS2019DevEnvSearch" Name="devenv.exe" />
-      </DirectorySearchRef>
-    </Property>
+		<Property Id="VS2019_EXTENSIONS_DIR" Secure="yes" SuppressModularization="yes">
+			<DirectorySearchRef Id="VS2019EnvironmentDirectorySearch" Parent="VS2019DirectorySearch" Path="Common7\IDE">
+				<DirectorySearch Id="VS2019ExtensionsDirectorySearch" Path="Extensions" Depth="1" />
+			</DirectorySearchRef>
+		</Property>
 
-    <CustomAction Id="VS2019Setup" Property="VS2019DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
-    <InstallExecuteSequence>
-      <Custom Action="VS2019Setup" Before="InstallFinalize" Overridable="yes">VS2019DEVENV</Custom>
-    </InstallExecuteSequence>-->
+		<Property Id="VS2019DEVENV" Secure="yes" SuppressModularization="yes">
+			<DirectorySearchRef Id="VS2019EnvironmentDirectorySearch" Parent="VS2019DirectorySearch" Path="Common7\IDE">
+				<FileSearch Id="VS2019DevEnvSearch" Name="devenv.exe" />
+			</DirectorySearchRef>
+		</Property>
+
+		<CustomAction Id="VS2019Setup" Property="VS2019DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+		<InstallExecuteSequence>
+			<Custom Action="VS2019Setup" Before="InstallFinalize" Overridable="yes">VS2019DEVENV</Custom>
+		</InstallExecuteSequence>
 
 		<Property Id="VS2022_IDE_DIR" Secure="yes" SuppressModularization="yes">
 			<DirectorySearch Id="VS2022DirectorySearch" Path="[VS2022_ROOT_FOLDER]">
