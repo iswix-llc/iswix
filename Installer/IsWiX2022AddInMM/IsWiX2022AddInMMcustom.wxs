@@ -14,7 +14,7 @@
 		<DirectoryRef Id="TARGETDIR">
 			<Directory Id="GlobalAssemblyCache" Name="GlobalAssemblyCache">
 				<Component Id="iswixglobalparams" Guid="{A1D8FD12-A814-4E43-BCF1-7360C7E781FB}" Permanent="yes">
-					<File Id="iswixglobalparams" Source="..\Deploy\IsWiXNewNewAddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net"/>
+					<File Id="iswixglobalparams" Source="..\Deploy\IsWiX2020AddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net"/>
 				</Component>
 			</Directory>
 		</DirectoryRef>
