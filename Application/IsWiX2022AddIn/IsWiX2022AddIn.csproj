@@ -113,6 +113,10 @@
     <Content Include="Resources\CommandLaunchIsWiXPackage.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Externals\IsWiXGlobalParams.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
