@@ -166,6 +166,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\IsWiX2022AddInMM\IsWiX2022AddInMM.wixproj">
+      <Name>IsWiX2022AddInMM</Name>
+      <Project>{efa8e347-2372-413e-9e62-00ca15e392c0}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\IsWiXActions\IsWiXActions.csproj">
       <Name>IsWiXActions</Name>
       <Project>{8146cdd3-8258-4d92-be57-7714846b4e45}</Project>
@@ -185,14 +193,6 @@
     <ProjectReference Include="..\IsWiXNewAddInMM\IsWiXNewAddInMM.wixproj">
       <Name>IsWiXNewAddInMM</Name>
       <Project>{4fc4fa20-b7b6-44f5-a82c-917aa8a26bf0}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\IsWiXNewNewAddInMM\IsWiXNewNewAddInMM.wixproj">
-      <Name>IsWiXNewNewAddInMM</Name>
-      <Project>{efa8e347-2372-413e-9e62-00ca15e392c0}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

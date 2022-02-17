@@ -135,9 +135,6 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 
 CD "$(ProjectDir)BootstrapperSolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip' -Force
-
-CD "$(ProjectDir)SetupProjectTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXSetupProjectTemplate.zip' -Force
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
