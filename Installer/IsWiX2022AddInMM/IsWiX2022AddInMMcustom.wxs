@@ -5,7 +5,6 @@
 		<!-- Reference Custom Components Below -->
 		<ComponentGroup Id="Custom">
 			<ComponentRef Id="iswixglobalparams"/>
-			<ComponentRef Id="visualstudiointerop"/>
 		</ComponentGroup>
 
 		<!-- Author Custom Components Below -->
