@@ -545,7 +545,6 @@ namespace Designers.FilesAndFolders
                     case SystemFolderProperty.MyPicturesFolder:
                     case SystemFolderProperty.PersonalFolder:
                     case SystemFolderProperty.ProgramFiles64Folder:
-                    case SystemFolderProperty.ProgramFilesFolder:
                     case SystemFolderProperty.ProgramMenuFolder:
                     case SystemFolderProperty.SendToFolder:
                     case SystemFolderProperty.StartupFolder:
@@ -556,6 +555,7 @@ namespace Designers.FilesAndFolders
                     case SystemFolderProperty.WindowsFolder:
                     case SystemFolderProperty.WindowsVolume:
                         return true;
+                    case SystemFolderProperty.ProgramFilesFolder:
                     case SystemFolderProperty.CommonAppDataFolder:
                     case SystemFolderProperty.CommonFilesFolder:
                     case SystemFolderProperty.MergeRedirectFolder:
@@ -1500,6 +1500,13 @@ namespace Designers.FilesAndFolders
                                                                       item.Attribute("Id").Value == "CommonAppDataFolder"
                                                                   select item).First();
                                              break;
+                    case "[ProgramFilesFolder]":
+                        selectedDirectory = (from item in document.Descendants(ns + "Directory")
+                                             where
+                                                 item.Attribute("Id") != null &&
+                                                 item.Attribute("Id").Value == "ProgramFilesFolder"
+                                             select item).First();
+                        break;
                     case "[SystemFolder]":
                                              selectedDirectory = (from item in document.Descendants(ns + "Directory")
                                                                   where
@@ -1795,6 +1802,7 @@ namespace Designers.FilesAndFolders
                         case "[CommonAppDataFolder]":
                         case "[CommonFilesFolder]":
                         case "[GlobalAssemblyCache]":
+                        case "[ProgramFilesFolder]":
                         case "[SystemFolder]":
                         case "[System64Folder]":
                         case "[MergeRedirectFolder]":
@@ -1859,6 +1867,9 @@ namespace Designers.FilesAndFolders
             {
                 case "CommonAppDataFolder":
                     AddSpecialFolder("CommonAppDataFolder", "CommonAppData");
+                    break;
+                case "ProgramFilesFolder":
+                    AddSpecialFolder("ProgramFilesFolder", "ProgramFilesFolder");
                     break;
                 case "SystemFolder":
                     AddSpecialFolder("SystemFolder", "SystemFolder");
