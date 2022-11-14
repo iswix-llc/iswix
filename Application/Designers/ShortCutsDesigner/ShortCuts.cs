@@ -138,6 +138,9 @@ namespace ShortCutsDesigner
         private void LoadDocument()
         {
             WixNamespace = _documentManager.Document.GetWiXNameSpace();
+
+            IsWixUpgradeFixer.Fix();
+
             _shortcuts = new IsWiXShortCuts();
             Cursor = Cursors.WaitCursor;
             SortData();

@@ -27,8 +27,6 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiX", "IsWiX\IsWiX.wixpro
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "FeaturesDesignerMM", "Designers\FeaturesDesignerMM\FeaturesDesignerMM.wixproj", "{D91E59CE-6F3A-4124-B775-5493C2E65048}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiXNewAddInMM", "IsWiXNewAddInMM\IsWiXNewAddInMM.wixproj", "{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}"
-EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AppXDesignerMM", "Designers\AppXDesignerMM\AppXDesignerMM.wixproj", "{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MSIXDesignerMM", "Designers\MSIXDesignerMM\MSIXDesignerMM.wixproj", "{7EC5667F-54C7-4B39-A346-D55E0EC719DB}"
@@ -38,6 +36,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXActions", "IsWiXActions\IsWiXActions.csproj", "{8146CDD3-8258-4D92-BE57-7714846B4E45}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiX2022AddInMM", "IsWiX2022AddInMM\IsWiX2022AddInMM.wixproj", "{EFA8E347-2372-413E-9E62-00CA15E392C0}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "IsWiX2019AddInMM", "IsWiX2019AddInMM\IsWiX2019AddInMM.wixproj", "{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,16 +159,6 @@ Global
 		{D91E59CE-6F3A-4124-B775-5493C2E65048}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D91E59CE-6F3A-4124-B775-5493C2E65048}.Release|x86.ActiveCfg = Release|x86
 		{D91E59CE-6F3A-4124-B775-5493C2E65048}.Release|x86.Build.0 = Release|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|x86.ActiveCfg = Debug|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|x86.Build.0 = Debug|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Any CPU.ActiveCfg = Release|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Mixed Platforms.Build.0 = Release|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|x86.ActiveCfg = Release|x86
-		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|x86.Build.0 = Release|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{22F8E6DE-161C-4BFD-A6AC-1B107DA85572}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -221,6 +211,18 @@ Global
 		{EFA8E347-2372-413E-9E62-00CA15E392C0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{EFA8E347-2372-413E-9E62-00CA15E392C0}.Release|x86.ActiveCfg = Release|x86
 		{EFA8E347-2372-413E-9E62-00CA15E392C0}.Release|x86.Build.0 = Release|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Any CPU.Build.0 = Debug|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|x86.ActiveCfg = Debug|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Debug|x86.Build.0 = Debug|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Any CPU.ActiveCfg = Release|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Any CPU.Build.0 = Release|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|x86.ActiveCfg = Release|x86
+		{4FC4FA20-B7B6-44F5-A82C-917AA8A26BF0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

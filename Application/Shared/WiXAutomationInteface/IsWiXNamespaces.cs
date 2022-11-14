@@ -56,18 +56,18 @@ namespace IsWiXAutomationInterface
                 {
                     string currentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
 
-                    string schemasDir;
-
+                    string schemasDir = Path.Combine(currentDirectory, "Schemas");
+                    string patternMatch = string.Empty;
                     if(_ns == "http://schemas.microsoft.com/wix/2006/wi")
                     {
-                        schemasDir = Path.Combine(currentDirectory, "Schemas");
+                        patternMatch = "*-v3.xsd";
                     }
                     else 
                     {
-                        schemasDir = Path.Combine(currentDirectory, @"Schemas\v4");
+                        patternMatch = "*-v4.xsd";
                     }
  
-                    foreach (var file in new DirectoryInfo(schemasDir).GetFiles("*.xsd"))
+                    foreach (var file in new DirectoryInfo(schemasDir).GetFiles(patternMatch))
                     {
                         string prefix = Path.GetFileNameWithoutExtension(file.Name).ToLower();
                         if (!prefix.Equals("wix"))

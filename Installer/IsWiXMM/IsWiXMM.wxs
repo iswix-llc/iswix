@@ -25,51 +25,44 @@
           <File Id="owfF687CD25DBEA41F3A5555729AC19B5F6" Source="$(var.SourceDir)\Microsoft.Deployment.WindowsInstaller.dll" KeyPath="yes"></File>
         </Component>
         <Directory Id="owd878D183E2FFB0B60D5A8A3A3E2A04F73" Name="Schemas">
-          <Component Id="owc878D183E2FFB0B60D5A8A3A3E2A04F73" Guid="27ec7e8d-f1e1-4c97-a2ac-acea8f0ea777" KeyPath="yes">
-            <File Id="owfFDEE331E2DE8F1BCD7BEABD3751A01D5" Source="$(var.SourceDir)\Schemas\bal.xsd" />
-            <File Id="owf80763B441A25CF22C569C01494AEE847" Source="$(var.SourceDir)\Schemas\complus.xsd" />
-            <File Id="owf5A560AB272D2E105EA8974592FBE1BB3" Source="$(var.SourceDir)\Schemas\Dependency.xsd" />
-            <File Id="owfA85FBD92B0B52CFB638696E7B4945064" Source="$(var.SourceDir)\Schemas\difxapp.xsd" />
-            <File Id="owf54AC52DE8226F52D5D4CC4FDE7AE842A" Source="$(var.SourceDir)\Schemas\fgappx.xsd" />
-            <File Id="owf1F333185A02D610AE7C0D8CCB4B62661" Source="$(var.SourceDir)\Schemas\fgmsix.xsd" />
-            <File Id="owf1DC7A836EE9788AF7814C377444E70B7" Source="$(var.SourceDir)\Schemas\firewall.xsd" />
-            <File Id="owf234415BB8A6767EE94672DCEEF707B49" Source="$(var.SourceDir)\Schemas\gaming.xsd" />
-            <File Id="owf4805C815DD86DD358621EF0AAB60BBD2" Source="$(var.SourceDir)\Schemas\iis.xsd" />
-            <File Id="owf88F93038785C653A16AE84A284AA5C63" Source="$(var.SourceDir)\Schemas\lux.xsd" />
-            <File Id="owf80C92C99246CCAF880C4DC0BC2342ECD" Source="$(var.SourceDir)\Schemas\msmq.xsd" />
-            <File Id="owf57CB83DED41663D4EE8497C98C65B984" Source="$(var.SourceDir)\Schemas\netfx.xsd" />
-            <File Id="owfA05FB3F29601C4D94D7007B7A1DF252D" Source="$(var.SourceDir)\Schemas\ps.xsd" />
-            <File Id="owfBD738245C92322AE9B05950EA6D30C16" Source="$(var.SourceDir)\Schemas\sql.xsd" />
-            <File Id="owfC6C0C69D9F047EC8997E7424D41CFE38" Source="$(var.SourceDir)\Schemas\tag.xsd" />
-            <File Id="owfA3C7355A175483977D378C4EFA23834C" Source="$(var.SourceDir)\Schemas\thmutil.xsd" />
-            <File Id="owf341205DB09F0A6909CF5318210BCB74F" Source="$(var.SourceDir)\Schemas\util.xsd" />
-            <File Id="owf07598CEBB8F6FA6FF954E365E3E79A57" Source="$(var.SourceDir)\Schemas\vs.xsd" />
-            <File Id="owf13020380D3DBFA5FFBE5FC2D27113E94" Source="$(var.SourceDir)\Schemas\wix.xsd" />
-            <File Id="owf52A951AD93DB9A29DE19E9D6E0AA2550" Source="$(var.SourceDir)\Schemas\wixloc.xsd" />
+          <Component Id="owc878D183E2FFB0B60D5A8A3A3E2A04F73" Guid="304ea067-4ec2-47e9-9360-d2287e33d11a" KeyPath="yes">
+            <File Id="owf758C6EECD752134066D453B810F89F66" Source="$(var.SourceDir)\Schemas\bal-v3.xsd" />
+            <File Id="owf4936792BDD57351ADD01C2D0AD06FF7A" Source="$(var.SourceDir)\Schemas\bal-v4.xsd" />
+            <File Id="owf5F69D55CD3B28280A89085CB3F4AFB60" Source="$(var.SourceDir)\Schemas\complus-v3.xsd" />
+            <File Id="owfD918EA0956FC0197E92C41ECD735F03F" Source="$(var.SourceDir)\Schemas\complus-v4.xsd" />
+            <File Id="owfB7F2A9A5A72F70384D69144AB8C44A27" Source="$(var.SourceDir)\Schemas\Dependency-v3.xsd" />
+            <File Id="owf5A13F947B1203FB405D44532920C43FB" Source="$(var.SourceDir)\Schemas\Dependency-v4.xsd" />
+            <File Id="owfAD0D437BB690AC47A7F8BF8814C8B5AC" Source="$(var.SourceDir)\Schemas\difxapp-v3.xsd" />
+            <File Id="owf7B85626AB0C522ED75FE6285C4D7D426" Source="$(var.SourceDir)\Schemas\difxapp-v4.xsd" />
+            <File Id="owf901EA240F3190962E2ABD561F76B2278" Source="$(var.SourceDir)\Schemas\fgappx-v3.xsd" />
+            <File Id="owfB0AABC373650390A08822B498C6C2F3F" Source="$(var.SourceDir)\Schemas\fgmsix-v3.xsd" />
+            <File Id="owfEB9E98C67AB22D06EA66F0775B38A8BF" Source="$(var.SourceDir)\Schemas\firewall-v3.xsd" />
+            <File Id="owf3FCC74D5472300F1AB32F3425CB4D6AC" Source="$(var.SourceDir)\Schemas\firewall-v4.xsd" />
+            <File Id="owf8D3AC1A04560B97233F1BBCF2A034483" Source="$(var.SourceDir)\Schemas\gaming-v3.xsd" />
+            <File Id="owf809DDE3449D3AE7B1FB119B84F0C3C65" Source="$(var.SourceDir)\Schemas\http-v4.xsd" />
+            <File Id="owf489F8751DB8E2B725874751863EF0D4E" Source="$(var.SourceDir)\Schemas\iis-v3.xsd" />
+            <File Id="owf71B0EC9056811D79251C6EAE686A531A" Source="$(var.SourceDir)\Schemas\iis-v4.xsd" />
+            <File Id="owfE204A97A88E4B1DBB763872F3CE939D5" Source="$(var.SourceDir)\Schemas\lux-v3.xsd" />
+            <File Id="owfF5EE10DC021FCCC80F4DCE82A184DEEF" Source="$(var.SourceDir)\Schemas\msmq-v3.xsd" />
+            <File Id="owfD3599F3A2702F798093F1F2EA3D7469F" Source="$(var.SourceDir)\Schemas\msmq-v4.xsd" />
+            <File Id="owfB86E17DD791DB3CFAD3287EDCF228B46" Source="$(var.SourceDir)\Schemas\netfx-v3.xsd" />
+            <File Id="owf8AF80A0DA0C4B753E5A2016A802E0C8B" Source="$(var.SourceDir)\Schemas\netfx-v4.xsd" />
+            <File Id="owf922E7402B06D5C46733E88461E24E60D" Source="$(var.SourceDir)\Schemas\ps-v3.xsd" />
+            <File Id="owf01976C82E1853FE1E783883B1A51E210" Source="$(var.SourceDir)\Schemas\ps-v4.xsd" />
+            <File Id="owf82DC6931A17DDBB6946EFB2982FD29C0" Source="$(var.SourceDir)\Schemas\sql-v3.xsd" />
+            <File Id="owfFCF80EA9CFDA5E6FA21152AAC33DF783" Source="$(var.SourceDir)\Schemas\sql-v4.xsd" />
+            <File Id="owf83D7B634372422F76B0C0251FA01E97C" Source="$(var.SourceDir)\Schemas\tag-v3.xsd" />
+            <File Id="owf9F51CE2CFA0853D201A2F3DF97A8BB86" Source="$(var.SourceDir)\Schemas\thmutil-v3.xsd" />
+            <File Id="owfD00EAE1A85DB1591AF0931117921EA6F" Source="$(var.SourceDir)\Schemas\thmutil-v4.xsd" />
+            <File Id="owf4308A6198DD85EF7CB6A91C5C4CB8AB7" Source="$(var.SourceDir)\Schemas\util-v3.xsd" />
+            <File Id="owfD928F1859DCB2BD81A8F40BE7D2ACC4A" Source="$(var.SourceDir)\Schemas\util-v4.xsd" />
+            <File Id="owf96BC8A67FCBB8DE8A0831E2A7AAD36D3" Source="$(var.SourceDir)\Schemas\vs-v3.xsd" />
+            <File Id="owfCF54E1EA36AA0094B3D7ABCA6BC1035D" Source="$(var.SourceDir)\Schemas\vs-v4.xsd" />
+            <File Id="owf9A9D1054524ACFD2E72BC80304E93890" Source="$(var.SourceDir)\Schemas\wixloc-v3.xsd" />
+            <File Id="owf489567B42FF334B92AF76EC199D51BAD" Source="$(var.SourceDir)\Schemas\wixloc-v4.xsd" />
+            <File Id="owf78F4B4D39C2656C2481BCB8BBE9D671A" Source="$(var.SourceDir)\Schemas\wix-v3.xsd" />
+            <File Id="owf5320F280DEEE65AFCC71E7E9FF29FCD8" Source="$(var.SourceDir)\Schemas\wix-v4.xsd" />
           </Component>
-          <Directory Id="owd3F7052C8B3D8E159DE690EA2E2DEE328" Name="v4">
-            <Component Id="owc3F7052C8B3D8E159DE690EA2E2DEE328" Guid="1d75efaa-a189-4bae-aff6-59bed860248e" KeyPath="yes">
-              <File Id="owfC632C96DFA9A0B4630606D662393F102" Source="$(var.SourceDir)\Schemas\v4\bal.xsd" />
-              <File Id="owf42A00FFC42D8F78C0DB4FA6FEDB82DC9" Source="$(var.SourceDir)\Schemas\v4\complus.xsd" />
-              <File Id="owf67AAAF2183C041607A5607FAE33AAA00" Source="$(var.SourceDir)\Schemas\v4\Dependency.xsd" />
-              <File Id="owfD3018102A277C2FA2CB78F5CC1258587" Source="$(var.SourceDir)\Schemas\v4\difxapp.xsd" />
-              <File Id="owfA801EBF2BBF88DDF00E59C2F8154D5C9" Source="$(var.SourceDir)\Schemas\v4\firewall.xsd" />
-              <File Id="owfDE6738C9C83D6969C9A96561B2676E44" Source="$(var.SourceDir)\Schemas\v4\gaming.xsd" />
-              <File Id="owf83E734080C77C1F1AA9654417BB39943" Source="$(var.SourceDir)\Schemas\v4\http.xsd" />
-              <File Id="owf16CF91E03179287EA2F0EC0A22B9AA3F" Source="$(var.SourceDir)\Schemas\v4\iis.xsd" />
-              <File Id="owfE39664A1A5C42851054ED7875C1DD619" Source="$(var.SourceDir)\Schemas\v4\lux.xsd" />
-              <File Id="owf099E6E4EF53515C3AA4C9C653794FE19" Source="$(var.SourceDir)\Schemas\v4\msmq.xsd" />
-              <File Id="owfDD720A0BA07CD0E5372221BBF262A713" Source="$(var.SourceDir)\Schemas\v4\netfx.xsd" />
-              <File Id="owf181B1489CF7D921DAF4DE07645C9B593" Source="$(var.SourceDir)\Schemas\v4\ps.xsd" />
-              <File Id="owf072939F49FC282211704FF501AAA22CC" Source="$(var.SourceDir)\Schemas\v4\sql.xsd" />
-              <File Id="owfA2825FA971336DA8A76C9A0E0781CFD0" Source="$(var.SourceDir)\Schemas\v4\tag.xsd" />
-              <File Id="owf2FD06DF44CB41CD3AF5B6E4DCA9AAFA5" Source="$(var.SourceDir)\Schemas\v4\thmutil.xsd" />
-              <File Id="owf3050130BA1C33426B8E5A9F320F04619" Source="$(var.SourceDir)\Schemas\v4\util.xsd" />
-              <File Id="owfAA6BE3A4A6C82D84FB1F2C5E7A27EB68" Source="$(var.SourceDir)\Schemas\v4\vs.xsd" />
-              <File Id="owf8CB25B1786F190A4C4F4E69DF1ACD99C" Source="$(var.SourceDir)\Schemas\v4\wix.xsd" />
-              <File Id="owf66C4A60D9544CB842091B5963BDAF52A" Source="$(var.SourceDir)\Schemas\v4\wixloc.xsd" />
-            </Component>
-          </Directory>
         </Directory>
         <Directory Id="owd12A58CC26E75581DB42F31C9D7B4C6D5" Name="Templates">
           <Directory Id="owdC2ADFF212487B37074CE0553E0161995" Name="WiX">

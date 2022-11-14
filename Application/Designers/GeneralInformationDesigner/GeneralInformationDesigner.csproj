@@ -85,9 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\DependencyModel.cs" />
+    <Compile Include="Models\Module4Model.cs" />
     <Compile Include="Models\ModuleModel.cs" />
+    <Compile Include="Models\Package4Model.cs" />
     <Compile Include="Models\PackageModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\SummaryInformation4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\GeneralInformationViewModel.cs" />
     <Compile Include="Views\CustomEditor.cs" />

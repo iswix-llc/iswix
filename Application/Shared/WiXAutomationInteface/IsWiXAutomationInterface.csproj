@@ -66,6 +66,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -92,6 +93,7 @@
     <Compile Include="IsWiXServices.cs" />
     <Compile Include="IsWiXShortCuts.cs" />
     <Compile Include="IsWiXValidationHelper.cs" />
+    <Compile Include="IsWixUpgradeFixer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

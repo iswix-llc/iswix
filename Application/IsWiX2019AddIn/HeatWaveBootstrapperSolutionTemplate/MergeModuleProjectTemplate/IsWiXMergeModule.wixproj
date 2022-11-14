@@ -1,0 +1,9 @@
+﻿<Project Sdk="WixToolset.Sdk/4.0.0-preview.1">
+  <PropertyGroup>
+    <ProductVersion>3.7</ProductVersion>
+    <OutputType>Module</OutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+</Project>

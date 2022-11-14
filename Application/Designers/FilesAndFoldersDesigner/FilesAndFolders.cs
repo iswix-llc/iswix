@@ -148,8 +148,16 @@ namespace Designers.FilesAndFolders
         public void LoadData()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-               
-            Merge64 = Is64BitMergeModule();
+
+            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v3)
+            {
+                Merge64 = Is64BitMergeModule();
+            }
+            else
+            {
+                // No longer needed in WiX v4
+                Merge64 = false;
+            }
 
             if (String.IsNullOrEmpty(_documentManager.DocumentPath))
             {
@@ -161,6 +169,8 @@ namespace Designers.FilesAndFolders
             {
                 _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\".\""));
             }
+
+            IsWixUpgradeFixer.Fix();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
             PopulateSource();

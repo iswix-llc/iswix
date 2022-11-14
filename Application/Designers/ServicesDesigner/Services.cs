@@ -61,6 +61,8 @@ namespace ServicesDesigner
 
         public void LoadData()
         {
+            IsWixUpgradeFixer.Fix();
+
             _services = new IsWiXServices();
 
             treeViewServices.Nodes.Clear();

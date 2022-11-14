@@ -77,15 +77,27 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip">
+    <Content Include="ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip">
+    <Content Include="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\IsWiXMSISolutionTemplate.zip">
+    <Content Include="ProjectTemplates\HeatWaveMSISolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\VotiveMergeModuleProjectTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\VotiveMSISolutionTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -131,14 +143,23 @@
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)ProjectTemplates" MKDIR "$(ProjectDir)ProjectTemplates"
 
-CD "$(ProjectDir)MergeModuleProjectTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMergeModuleProjectTemplate.zip' -Force
+CD "$(ProjectDir)VotiveMergeModuleProjectTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveMergeModuleProjectTemplate.zip' -Force
 
-CD "$(ProjectDir)MSISolutionTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXMSISolutionTemplate.zip' -Force
+CD "$(ProjectDir)VotiveMSISolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveMSISolutionTemplate.zip' -Force
 
-CD "$(ProjectDir)BootstrapperSolutionTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\IsWiXBootstrapperSolutionTemplate.zip' -Force
+CD "$(ProjectDir)VotiveBootstrapperSolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip' -Force
+
+CD "$(ProjectDir)HeatWaveMergeModuleProjectTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip' -Force
+
+CD "$(ProjectDir)HeatWaveMSISolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force
+
+CD "$(ProjectDir)HeatWaveBootstrapperSolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip' -Force
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

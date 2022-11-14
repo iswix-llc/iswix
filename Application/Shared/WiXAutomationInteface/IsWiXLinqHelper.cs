@@ -8,6 +8,7 @@ using FireworksFramework.Managers;
 namespace IsWiXAutomationInterface
 {
     public enum IsWiXDocumentType { Product, Module, Fragment, None };
+    public enum WiXVersion { v3, v4, Unknown};
 
     public static class IsWiXExtensionQueries
     {
@@ -17,15 +18,16 @@ namespace IsWiXAutomationInterface
             return DocumentManager.DocumentManagerInstance.NameSpaces;
         }
 
-        public static string GetOptionalAttribute(this XElement Element, string AttributeName)
+        public static string GetOptionalAttribute(this XElement element, string attributeName)
         {
             string value = string.Empty;
-            try
+            if (element != null && !String.IsNullOrEmpty(attributeName))
             {
-                value = Element.Attribute(AttributeName).Value;
-            }
-            catch (Exception)
-            {
+                XAttribute xAttribute = element.Attributes().Where(c => c.Name == attributeName).FirstOrDefault();
+                if (xAttribute != null)
+                {
+                    value = xAttribute.Value;
+                }
             }
             return value;
         }
@@ -67,7 +69,24 @@ namespace IsWiXAutomationInterface
 
             return finalNameSpace;
         }
-
+        public static WiXVersion GetWiXVersion(this XDocument Document)
+        {
+            WiXVersion version;
+            XNamespace nameSpace = NameSpaces(Document)[""];
+            switch(nameSpace.ToString())
+            {
+                case "http://schemas.microsoft.com/wix/2006/wi":
+                    version = WiXVersion.v3;
+                    break;
+                case "http://wixtoolset.org/schemas/v4/wxs":
+                    version = WiXVersion.v4;
+                    break;
+                default:
+                    version = WiXVersion.Unknown;
+                    break;
+            }
+            return version;
+        }
         public static IsWiXDocumentType GetDocumentType(this XDocument Document)
         {
             IsWiXDocumentType docType = IsWiXDocumentType.None;
@@ -110,6 +129,22 @@ namespace IsWiXAutomationInterface
             return element;
         }
 
+        public static XElement GetModuleElement(this XDocument Document)
+        {
+            XElement element;
+            XNamespace ns = GetWiXNameSpace(Document);
+            try
+            {
+                element = (from myitem in Document.Root.Elements()
+                           where myitem.Name == ns + "Module"
+                           select myitem).First();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("IsWix Query Error: " + ex.Message);
+            }
+            return element;
+        }
         public static XElement GetProductOrFragmentElement(this XDocument Document)
         {
             XElement element;

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\Deploy"?>
+  <Module Id="IsWiXNewAddInMM" Language="1033" Version="1.0.0.0">
+    <Package Id="0fbd1dd0-df10-44b8-a513-87a548dc8f43" Manufacturer="IsWiXNewAddInMM" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+        <Directory Id="owd1F5205F82B91550996531059DEAA9C87" Name="IsWiX2019AddIn">
+          <Component Id="owcBA2E1FA7F3F32F5A39F06065BA8C4ADD" Guid="ba91f379-0f08-9bc4-335e-b3961a2e136b">
+            <File Id="owfBA2E1FA7F3F32F5A39F06065BA8C4ADD" Source="$(var.SourceDir)\IsWiX2019AddIn\extension.vsixmanifest" KeyPath="yes">
+              <CopyFile Id="dupe1" DestinationProperty="EXTENSIONDIR2019" />
+            </File>
+          </Component>
+          <Component Id="owcC87FD3D86113FA5BC5A5CE921176B13B" Guid="425a4ff4-b9f0-3cc0-09b5-549dbebc5b2c">
+            <File Id="owfC87FD3D86113FA5BC5A5CE921176B13B" Source="$(var.SourceDir)\IsWiX2019AddIn\Icon.png" KeyPath="yes">
+              <CopyFile Id="dupe2" DestinationProperty="EXTENSIONDIR2019" />
+            </File>
+          </Component>
+          <Component Id="owcA869B8C7DCB2D705B616123684BAD1C4" Guid="a2dd8ac2-b951-0933-30c3-912a7e478e6e">
+            <File Id="owfA869B8C7DCB2D705B616123684BAD1C4" Source="$(var.SourceDir)\IsWiX2019AddIn\IsWiX2019AddIn.dll" KeyPath="yes">
+              <CopyFile Id="dupe3" DestinationProperty="EXTENSIONDIR2019" />
+            </File>
+          </Component>
+          <Component Id="owc9E21D7A984B7E206A62E4764368E1DDB" Guid="a57f46f6-27a4-db9a-1aea-28ae8633e9a5">
+            <File Id="owf9E21D7A984B7E206A62E4764368E1DDB" Source="$(var.SourceDir)\IsWiX2019AddIn\IsWiX2019AddIn.pkgdef" KeyPath="yes">
+              <CopyFile Id="dupe4" DestinationProperty="EXTENSIONDIR2019" />
+            </File>
+          </Component>
+          <Component Id="owc1680D3BFFE6D6D2FCBDC56B958300867" Guid="0147ec98-643d-4f32-074c-5ea4315aa39b">
+            <File Id="owf1680D3BFFE6D6D2FCBDC56B958300867" Source="$(var.SourceDir)\IsWiX2019AddIn\MS-PL.txt" KeyPath="yes">
+              <CopyFile Id="dupe5" DestinationProperty="EXTENSIONDIR2019" />
+            </File>
+          </Component>
+          <Component Id="owc655D08FFC30B31EBD0B5A368F74D6789" Guid="8a818446-0227-6e32-38ad-5942ec132c38">
+            <File Id="owf655D08FFC30B31EBD0B5A368F74D6789" Source="$(var.SourceDir)\IsWiX2019AddIn\preview.png" KeyPath="yes">
+              <CopyFile Id="dupe6" DestinationProperty="EXTENSIONDIR2019" />
+            </File>
+          </Component>
+          <Directory Id="owd9D8ED78B20587D1517BA30944721B05D" Name="ProjectTemplates">
+            <Component Id="owcD1A5FB1298EA9040899776D5920C2EE9" Guid="e79254de-21ec-1e2b-de84-68e6fc458dc8">
+              <File Id="owfD1A5FB1298EA9040899776D5920C2EE9" Source="$(var.SourceDir)\IsWiX2019AddIn\ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="HeatWaveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONDIR2019" />
+              </File>
+            </Component>
+            <Component Id="owcC3DDB831326EE6A36FBB4484D5C816C0" Guid="4d5a6418-382d-8d2b-ff7a-2f86099850f1">
+              <File Id="owfC3DDB831326EE6A36FBB4484D5C816C0" Source="$(var.SourceDir)\IsWiX2019AddIn\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
+                <CopyFile Id="HeatWaveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONDIR2019" />
+              </File>
+            </Component>
+            <Component Id="owcB363D0F86474BF66095C0A5362A9184F" Guid="ad3b0e1f-fd81-cde5-7905-c476f8a4a7b1">
+              <File Id="owfB363D0F86474BF66095C0A5362A9184F" Source="$(var.SourceDir)\IsWiX2019AddIn\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="HeatWaveMSISolutionTemplate" DestinationProperty="EXTENSIONDIR2019" />
+              </File>
+            </Component>
+            <Component Id="owcDC001DBB265F21E592009EA3A187D664" Guid="d48b1a21-9a81-cc76-43d3-e1f21b311f1e">
+              <File Id="owfDC001DBB265F21E592009EA3A187D664" Source="$(var.SourceDir)\IsWiX2019AddIn\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="VotiveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONDIR2019" />
+              </File>
+            </Component>
+            <Component Id="owcBA7FAF7EBBE0DC0816F5A4F80C49251A" Guid="721caf9a-8b1f-bebb-b26e-7ae8b578001c">
+              <File Id="owfBA7FAF7EBBE0DC0816F5A4F80C49251A" Source="$(var.SourceDir)\IsWiX2019AddIn\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes">
+                <CopyFile Id="VotiveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONDIR2019" />
+              </File>
+            </Component>
+            <Component Id="owc4B8695E59AA036C26B9C4E96D6C4BD06" Guid="f31aa207-ecd2-69c0-e61d-70c7c4088a15">
+              <File Id="owf4B8695E59AA036C26B9C4E96D6C4BD06" Source="$(var.SourceDir)\IsWiX2019AddIn\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="VotiveMSISolutionTemplate" DestinationProperty="EXTENSIONDIR2019" />
+              </File>
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+    <ComponentGroupRef Id="Custom" />
+    <Property Id="VS2019_EXTENSIONS_DIR" SuppressModularization="yes" />
+    <SetProperty Id="EXTENSIONDIR2019" Value="[VS2019_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2019_EXTENSIONS_DIR</SetProperty>
+    <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2019" Value="[VS2019_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2019_EXTENSIONS_DIR</SetProperty>
+  </Module>
+</Wix>

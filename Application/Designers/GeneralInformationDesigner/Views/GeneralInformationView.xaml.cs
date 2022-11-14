@@ -55,8 +55,9 @@ namespace GeneralInformationDesigner.Views
         public bool IsValidContext()
         {
             IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
+            WiXVersion wixVersion = _documentManager.Document.GetWiXVersion();
 
-            if (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Module)
+            if (wixVersion == WiXVersion.v3 && (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Module))
             {
                 return true;
             }

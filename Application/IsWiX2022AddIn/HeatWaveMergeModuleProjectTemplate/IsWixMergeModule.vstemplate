@@ -1,0 +1,22 @@
+﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+	<TemplateData>
+		<Name>IsWiX Merge Module Project (WiX v4)</Name>
+		<TemplateID>IsWiX.MergeModuleProject</TemplateID>
+		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based MSM file.</Description>
+		<Icon>IsWiX.ico</Icon>
+		<ProjectType>HeatWave</ProjectType>
+		<SortOrder>20</SortOrder>
+		<DefaultName>ProductName</DefaultName>
+		<SortOrder>4</SortOrder>
+		<BuildOnLoad></BuildOnLoad>
+		<CreateNewFolder>false</CreateNewFolder>
+		<ProjectTypeTag>HeatWave</ProjectTypeTag>
+		<LanguageTag>WiX</LanguageTag>
+	</TemplateData>
+	<TemplateContent>
+		<Project File="IsWiXMergeModule.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$.wxs">IsWiXMergeModule.wxs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$safeprojectname$custom.wxs">IsWiXMergeModuleCustom.wxs</ProjectItem>
+		</Project>
+	</TemplateContent>
+</VSTemplate>
