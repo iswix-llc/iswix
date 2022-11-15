@@ -86,12 +86,15 @@
     <Compile Include="IsWiXMergeRefs.cs" />
     <Compile Include="IsWiXMerges.cs" />
     <Compile Include="IsWiXModule.cs" />
+    <Compile Include="IsWiXModule4.cs" />
     <Compile Include="IsWiXNamespaces.cs" />
     <Compile Include="IsWiXPackage.cs" />
+    <Compile Include="IsWiXPackage4.cs" />
     <Compile Include="IsWiXProduct.cs" />
     <Compile Include="IsWiXProperties.cs" />
     <Compile Include="IsWiXServices.cs" />
     <Compile Include="IsWiXShortCuts.cs" />
+    <Compile Include="IsWiXSummaryInformation4.cs" />
     <Compile Include="IsWiXValidationHelper.cs" />
     <Compile Include="IsWixUpgradeFixer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

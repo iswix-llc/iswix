@@ -1,16 +1,13 @@
-﻿using System.Xml.Linq;  
+﻿using System;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Xml.Linq;  
 using System.Windows;
-using IsWiXAutomationInterface;
-using Designers.GeneralInformation.Models;
+using Microsoft.Win32;
 using FireworksFramework.Managers;
 using FireworksFramework.Types;
-using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Windows.Data;
-using System.Collections.ObjectModel;
-using Microsoft.Win32;
-using System.Linq;
+using IsWiXAutomationInterface;
+using Designers.GeneralInformation.Models;
 
 namespace GeneralInformationDesigner.ViewModels
 {
