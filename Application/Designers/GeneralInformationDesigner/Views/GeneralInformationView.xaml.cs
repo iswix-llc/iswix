@@ -55,7 +55,6 @@ namespace GeneralInformationDesigner.Views
         public bool IsValidContext()
         {
             IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
-            WiXVersion wixVersion = _documentManager.Document.GetWiXVersion();
 
             if (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Module)
             {
@@ -76,14 +75,14 @@ namespace GeneralInformationDesigner.Views
                 enabled = false;
             }
 
-            foreach (Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem property in propertyGridPackage.Properties)
-            {
-                if (property.PropertyName == "Compressed")
-                {
-                    property.IsEnabled = enabled;
-                    break;
-                }
-            }
+            //foreach (Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem property in propertyGridPackage.Properties)
+            //{
+            //    if (property.PropertyName == "Compressed")
+            //    {
+            //        property.IsEnabled = enabled;
+            //        break;
+            //    }
+            //}
 
         }
 

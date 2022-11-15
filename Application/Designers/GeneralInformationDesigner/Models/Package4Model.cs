@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Designers.GeneralInformation.Models
 {
-    public class Product4Model : ObservableObject
+    public class Package4Model : ObservableObject
     {
         string _codepage;
         [CategoryAttribute("Package")]

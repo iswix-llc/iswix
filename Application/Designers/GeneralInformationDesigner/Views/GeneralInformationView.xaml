@@ -25,7 +25,9 @@
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" HorizontalAlignment="Stretch" />
         <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridProduct" SelectedObject="{Binding Product}" Visibility="{Binding ProductPropertyGridVisible}"/>
+        <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridPackage4" SelectedObject="{Binding Package4}" Visibility="{Binding Package4PropertyGridVisible}"/>
         <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridModule" SelectedObject="{Binding Module}" Visibility="{Binding ModulePropertyGridVisible}"></xctk:PropertyGrid>
+        <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridModule4" SelectedObject="{Binding Module4}" Visibility="{Binding Module4PropertyGridVisible}"></xctk:PropertyGrid>
         <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridPackage" SelectedObject="{Binding Package, Mode=TwoWay}" Visibility="{Binding PackagePropertyGridVisible}" ></xctk:PropertyGrid>
         <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridSummaryInformation" SelectedObject="{Binding SummaryInformation4, Mode=TwoWay}" Visibility="{Binding SummaryInformation4PropertyGridVisible}" ></xctk:PropertyGrid>
          <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">

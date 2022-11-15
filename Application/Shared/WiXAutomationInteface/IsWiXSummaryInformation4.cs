@@ -21,16 +21,7 @@ namespace IsWiXAutomationInterface
         {
             get
             {
-                string codepage;
-                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
-                {
-                    codepage = _summaryInformationElement.GetOptionalAttribute("Codepage");
-                }
-                else
-                {
-                    codepage = _summaryInformationElement.Attribute("Codepage").Value;
-                }
-                return codepage;
+                return _summaryInformationElement.GetOptionalAttribute("Codepage");
             }
             set
             {
@@ -46,16 +37,7 @@ namespace IsWiXAutomationInterface
         {
             get
             {
-                string description;
-                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
-                {
-                    description = _summaryInformationElement.GetOptionalAttribute("Description");
-                }
-                else
-                {
-                    description = _summaryInformationElement.Attribute("Description").Value;
-                }
-                return description;
+                    return _summaryInformationElement.GetOptionalAttribute("Description");
             }
             set
             {
@@ -71,16 +53,7 @@ namespace IsWiXAutomationInterface
         {
             get
             {
-                string keywords;
-                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
-                {
-                    keywords = _summaryInformationElement.GetOptionalAttribute("Keywords");
-                }
-                else
-                {
-                    keywords = _summaryInformationElement.Attribute("Keywords").Value;
-                }
-                return keywords;
+                    return _summaryInformationElement.GetOptionalAttribute("Keywords");
             }
             set
             {
@@ -96,16 +69,7 @@ namespace IsWiXAutomationInterface
         {
             get
             {
-                string manufacturer;
-                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
-                {
-                    manufacturer = _summaryInformationElement.GetOptionalAttribute("Manufacturer");
-                }
-                else
-                {
-                    manufacturer = _summaryInformationElement.Attribute("Manufacturer").Value;
-                }
-                return manufacturer;
+                    return _summaryInformationElement.GetOptionalAttribute("Manufacturer");
             }
             set
             {

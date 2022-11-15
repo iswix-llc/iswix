@@ -65,15 +65,27 @@ namespace IsWiXAutomationInterface
             }
         }
 
-        public Int32 InstallerVersion
+        public Int32? InstallerVersion
         {
             get
             {
-                return Convert.ToInt32(_moduleElement.GetOptionalAttribute("InstallerVersion"));
+                Int32 temp;
+                Int32? installerVersion;
+                string value = _moduleElement.GetOptionalAttribute("InstallerVersion");
+
+                if(Int32.TryParse(value, out temp))
+                {
+                    installerVersion = temp;
+                }
+                else
+                {
+                    installerVersion = null;
+                }
+                return installerVersion;
             }
             set
             {
-                _moduleElement.Attribute("InstallerVersion").Value = Convert.ToString(value);
+                    _moduleElement.SetAttributeValue("InstallerVersion", value);
             }
         }
 
@@ -82,7 +94,7 @@ namespace IsWiXAutomationInterface
         {
             get
             {
-                return Convert.ToInt32(_moduleElement.GetOptionalAttribute("Language"));
+                return int.Parse(_moduleElement.GetOptionalAttribute("Language"));
             }
             set
             {
