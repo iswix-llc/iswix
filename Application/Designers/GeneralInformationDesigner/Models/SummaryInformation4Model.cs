@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Designers.GeneralInformation.Models
 {
-    public class SummaryInformationModel : ObservableObject
+    public class SummaryInformation4Model : ObservableObject
     {
 
         string _codepage;

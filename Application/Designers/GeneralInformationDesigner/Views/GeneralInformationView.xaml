@@ -27,7 +27,8 @@
         <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridProduct" SelectedObject="{Binding Product}" Visibility="{Binding ProductPropertyGridVisible}"/>
         <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridModule" SelectedObject="{Binding Module}" Visibility="{Binding ModulePropertyGridVisible}"></xctk:PropertyGrid>
         <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridPackage" SelectedObject="{Binding Package, Mode=TwoWay}" Visibility="{Binding PackagePropertyGridVisible}" ></xctk:PropertyGrid>
-        <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+        <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridSummaryInformation" SelectedObject="{Binding SummaryInformation4, Mode=TwoWay}" Visibility="{Binding SummaryInformation4PropertyGridVisible}" ></xctk:PropertyGrid>
+         <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
             <DockPanel DockPanel.Dock="Top">
                 <Label Content="Dependencies:"/>
             </DockPanel>

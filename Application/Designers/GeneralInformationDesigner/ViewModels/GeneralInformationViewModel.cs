@@ -20,6 +20,7 @@ namespace GeneralInformationDesigner.ViewModels
         ProductModel _product;
         ModuleModel _module;
         PackageModel _package;
+        SummaryInformation4Model summaryInformation4Model;
         IsWiXProduct _iswixProduct;
         IsWiXModule _iswixModule;
         IsWiXPackage _iswixPackage;
@@ -32,7 +33,10 @@ namespace GeneralInformationDesigner.ViewModels
         public ObservableCollection<DependencyModel> Dependencies { get { return _dependencies; }set { _dependencies = value; RaisePropertyChangedEvent("Dependencies"); } }
         Visibility _productPropertyGridVisible = Visibility.Hidden;
         Visibility _modulePropertyGridVisible = Visibility.Hidden;
+        Visibility _productProperty4GridVisible = Visibility.Hidden;
+        Visibility _summaryInformation4PropertyGridVisible = Visibility.Hidden;
         Visibility _packagePropertyGridVisible = Visibility.Hidden;
+        Visibility _package4PropertyGridVisible = Visibility.Hidden;
         public ProductModel Product { get { return _product; } set { _product = value; RaisePropertyChangedEvent("Product"); } }
         public ModuleModel Module
         {
@@ -47,7 +51,9 @@ namespace GeneralInformationDesigner.ViewModels
             }
         }
         public PackageModel Package { get { return _package; } set { _package = value; RaisePropertyChangedEvent("Package"); } }
+        public SummaryInformation4Model SummaryInformation4 { get { return summaryInformation4Model; } set { summaryInformation4Model = value; RaisePropertyChangedEvent("SummaryInformation4"); } }
         public Visibility ProductPropertyGridVisible { get { return _productPropertyGridVisible; } set { _productPropertyGridVisible = value; RaisePropertyChangedEvent("ProductPropertyGridVisible"); } }
+        public Visibility SummaryInformation4PropertyGridVisible { get { return _summaryInformation4PropertyGridVisible; } set { _productProperty4GridVisible = value; RaisePropertyChangedEvent("SummaryInformation4PropertyGridVisible"); } }
         public Visibility ModulePropertyGridVisible
         {
             get
@@ -60,34 +66,85 @@ namespace GeneralInformationDesigner.ViewModels
                 RaisePropertyChangedEvent("ModulePropertyGridVisible");
             }
         }
+        public Visibility Module4PropertyGridVisible
+        {
+            get
+            {
+                return _modulePropertyGridVisible;
+            }
+            set
+            {
+                _modulePropertyGridVisible = value;
+                RaisePropertyChangedEvent("ModulePropertyGridVisible");
+            }
+        }
         public Visibility PackagePropertyGridVisible { get { return _packagePropertyGridVisible; } set { _packagePropertyGridVisible = value; RaisePropertyChangedEvent("PackagePropertyGridVisible"); } }
+        public Visibility Package4PropertyGridVisible { get { return _package4PropertyGridVisible; } set { _package4PropertyGridVisible = value; RaisePropertyChangedEvent("PackagePropertyGridVisible"); } }
 
         public void Load()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
 
-            switch (_documentManager.Document.GetDocumentType())
+            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v3)
             {
-                case IsWiXDocumentType.Product:
-                    ProductPropertyGridVisible = Visibility.Visible;
-                    ModulePropertyGridVisible = Visibility.Hidden;
-                    Product = LoadProduct();
-                    break;
+                switch (_documentManager.Document.GetDocumentType())
+                {
+                    case IsWiXDocumentType.Product:
+                        ProductPropertyGridVisible = Visibility.Visible;
+                        ModulePropertyGridVisible = Visibility.Hidden;
+                        Package4PropertyGridVisible = Visibility.Hidden;
+                        Module4PropertyGridVisible = Visibility.Hidden;
+                        Product = LoadProduct();
+                        break;
 
-                case IsWiXDocumentType.Module:
-                    ProductPropertyGridVisible = Visibility.Hidden;
-                    ModulePropertyGridVisible = Visibility.Visible;
-                    Module = LoadModule();
-                    break;
+                    case IsWiXDocumentType.Module:
+                        ProductPropertyGridVisible = Visibility.Hidden;
+                        ModulePropertyGridVisible = Visibility.Visible;
+                        Package4PropertyGridVisible = Visibility.Hidden;
+                        Module4PropertyGridVisible = Visibility.Hidden;
+                        Module = LoadModule();
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+
+                PackageModel package = new PackageModel();
+                Dependencies = LoadDependencies();
+                Package = LoadPackage();
+                PackagePropertyGridVisible = Visibility.Visible;
             }
+            else
+            {
+                switch (_documentManager.Document.GetDocumentType())
+                {
+                    case IsWiXDocumentType.Product:
+                        ProductPropertyGridVisible = Visibility.Hidden;
+                        ModulePropertyGridVisible = Visibility.Hidden;
+                        Package4PropertyGridVisible = Visibility.Visible;
+                        Module4PropertyGridVisible = Visibility.Hidden;
 
-            PackageModel package = new PackageModel();
-            Dependencies = LoadDependencies();
-            Package = LoadPackage();
-            PackagePropertyGridVisible = Visibility.Visible;
+                        Product = LoadProduct();
+                        break;
+
+                    case IsWiXDocumentType.Module:
+                        ProductPropertyGridVisible = Visibility.Hidden;
+                        ModulePropertyGridVisible = Visibility.Hidden;
+                        Package4PropertyGridVisible = Visibility.Hidden;
+                        Module4PropertyGridVisible = Visibility.Visible;
+
+                        Module = LoadModule();
+                        break;
+
+                    default:
+                        break;
+                }
+
+                PackageModel package = new PackageModel();
+                Dependencies = LoadDependencies();
+                Package = LoadPackage();
+                PackagePropertyGridVisible = Visibility.Visible;
+            }
         }
 
         ModuleModel LoadModule()
