@@ -1,4 +1,4 @@
-Copyright 2010 - 2019 - ISWIX, LLC
+Copyright 2010 - 2022 - ISWIX, LLC
 Microsoft Public License (MS-PL)
 
 Third Party Code:
@@ -10,9 +10,9 @@ License:
   Microsoft Public License (MS-PL)
   https://github.com/xceedsoftware/wpftoolkit/blob/master/license.md
 
-Windows Installer XML - Deployment Tools Framework
+WiXToolset - Deployment Tools Framework
 Author: .NET Foundation and contributors
-WebSite: https://github.com/wixtoolset/wix3
+WebSite: https://github.com/wixtoolset/
 License:
   Microsoft Reciprocal License (MS-RL)
-  https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT
+  https://github.com/wixtoolset/wix4/blob/develop/LICENSE.TXT
