@@ -8,9 +8,9 @@ namespace Designers.GeneralInformation.Models
     {
         string _id;
         string _codepage;
-        string _langauge;
+        Int32 _langauge;
         string _version;
-        Int32 _installerVersion;
+        Int32? _installerVersion;
         string _guid;
 
         [CategoryAttribute("Module")]
@@ -27,7 +27,7 @@ namespace Designers.GeneralInformation.Models
 
         [CategoryAttribute("Module")]
         [Description("The minimum version of the Windows Installer required to install this package. Take the major version of the required Windows Installer and multiply by a 100 then add the minor version of the Windows Installer. For example, \"200\" would represent Windows Installer 2.0 and \"405\" would represent Windows Installer 4.5. For 64-bit Windows Installer packages, this property must be set to 200 or greater. ")]
-        public Int32 InstallerVersion { get { return _installerVersion; } set { _installerVersion = value; RaisePropertyChangedEvent("InstallerVersion"); } }
+        public Int32? InstallerVersion { get { return _installerVersion; } set { _installerVersion = value; RaisePropertyChangedEvent("InstallerVersion"); } }
 
         [CategoryAttribute("Module")]
         [Description(@"The code page integer value or web name for the resulting MSM.")]
@@ -35,7 +35,7 @@ namespace Designers.GeneralInformation.Models
 
         [CategoryAttribute("Module")]
         [Description("The decimal language ID (LCID) of the merge module.")]
-        public String Language { get { return _langauge; } set { _langauge = value; RaisePropertyChangedEvent("Language"); } }
+        public Int32 Language { get { return _langauge; } set { _langauge = value; RaisePropertyChangedEvent("Language"); } }
 
     }
 }

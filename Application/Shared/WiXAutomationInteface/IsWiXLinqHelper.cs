@@ -98,6 +98,10 @@ namespace IsWiXAutomationInterface
                     case "Product":
                         docType = IsWiXDocumentType.Product;
                         break;
+                    case "Package":
+                        // Intentional
+                        docType = IsWiXDocumentType.Product;
+                        break;
                     case "Module":
                         docType = IsWiXDocumentType.Module;
                         break;
@@ -128,6 +132,40 @@ namespace IsWiXAutomationInterface
             }
             return element;
         }
+        public static XElement GetProductPackageOrModuleElement(this XDocument Document)
+        {
+            XElement element;
+            XNamespace ns = GetWiXNameSpace(Document);
+            try
+            {
+                element = (from myitem in Document.Root.Elements()
+                           where myitem.Name == ns + "Module" || myitem.Name == ns + "Product" || myitem.Name == ns + "Package"
+                           select myitem).First();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("IsWix Query Error: " + ex.Message);
+            }
+            return element;
+        }
+
+        public static XElement GetProductPackageModuleOrFragmentElement(this XDocument Document)
+        {
+            XElement element;
+            XNamespace ns = GetWiXNameSpace(Document);
+            try
+            {
+                element = (from myitem in Document.Root.Elements()
+                           where myitem.Name == ns + "Module" || myitem.Name == ns + "Product" || myitem.Name == ns + "Package" || myitem.Name == ns + "Fragment"
+                           select myitem).First();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("IsWix Query Error: " + ex.Message);
+            }
+            return element;
+        }
+
 
         public static XElement GetModuleElement(this XDocument Document)
         {
@@ -157,7 +195,7 @@ namespace IsWiXAutomationInterface
             }
             catch (Exception ex)
             {
-                throw new Exception("IsWix Query Error: " + ex.Message);
+                 throw new Exception("IsWix Query Error: " + ex.Message);
             }
             return element;
         }
@@ -190,23 +228,23 @@ namespace IsWiXAutomationInterface
             {
                 case IsWiXDocumentType.Module:
                     elementsInOrder =
-                        "Package,AppId,Binary,Component,ComponentGroupRef,ComponentRef,Configuration,CustomAction,CustomActionRef,CustomTable,Dependency," +
-                        "Directory,DirectoryRef,EmbeddedChainer,EmbeddedChainerRef,EnsureTable,Exclusion,Icon,IgnoreModularization,IgnoreTable,Property,PropertyRef,SetDirectory," +
+                        "SummaryInformation,Package,MediaTemplate,Majorupgrade,PropertyRef,Laumch,AppId,Binary,Component,ComponentGroupRef,ComponentRef,Configuration,CustomAction,CustomActionRef,CustomTable,Dependency," +
+                        "Directory,DirectoryRef,EmbeddedChainer,EmbeddedChainerRef,EnsureTable,Exclusion,Icon,IgnoreModularization,IgnoreTable,Property,SetDirectory," +
                         "SetProperty,SFPCatalog,Substitution,UI,UIRef,WixVariable,InstallExecuteSequence,InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
                     break;
 
                 case IsWiXDocumentType.Product:
                     elementsInOrder =
-                        "Package,AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef," +
+                        "SummaryInformation,Package,MediaTemplate,Majorupgrade,AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef," +
                         "EmbeddedChainer,EmbeddedChainerRef,EnsureTable,Feature,FeatureGroupRef,FeatureRef,Icon,InstanceTransforms,Media,PackageCertificates," +
-                        "PatchCertificates,Property,PropertyRef,SetDirectory,SetProperty,SFPCatalog,SymbolPath,UI,UIRef,Upgrade,WixVariable,InstallExecuteSequence," +
+                        "PatchCertificates,SetDirectory,SetProperty,SFPCatalog,SymbolPath,UI,UIRef,Upgrade,WixVariable,InstallExecuteSequence," +
                         "InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
                     break;
 
                 case IsWiXDocumentType.Fragment:
                     elementsInOrder =
-                        "AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef,EmbeddedChainer,EmbeddedChainerRef," +
-                        "EnsureTable,Feature,FeatureGroup,FeatureRef,Icon,IgnoreModularization,Media,PackageCertificates,PatchCertificates,PatchFamily,Property,PropertyRef,SetDirectory," +
+                        "MediaTemplate,Majorupgrade,AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef,EmbeddedChainer,EmbeddedChainerRef," +
+                        "EnsureTable,Feature,FeatureGroup,FeatureRef,Icon,IgnoreModularization,Media,PackageCertificates,PatchCertificates,PatchFamily,SetDirectory," +
                         "SetProperty,SFPCatalog,UI,UIRef,Upgrade,WixVariable,Sequence,InstallExecuteSequence,InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
                     break;
             }
@@ -220,7 +258,7 @@ namespace IsWiXAutomationInterface
             {
                 try
                 {
-                    var test = Document.GetProductModuleOrFragmentElement();
+                    var test = Document.GetProductPackageModuleOrFragmentElement();
                     element = test.Elements(ns + item).Last();
                     break;
                 }
