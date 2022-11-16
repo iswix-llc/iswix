@@ -28,13 +28,17 @@ namespace IsWiXAutomationInterface
                     }
                     foreach (var element in module.Elements(ns + "StandardDirectory"))
                     {
-                        targetDir.Add(new XElement(ns + "Directory", new XAttribute("Id", element.Attribute("Id").Value)));
+                        XElement newDirectory = new XElement(ns + "Directory", new XAttribute("Id", element.Attribute("Id").Value));
+                        foreach (var subElement in element.Elements())
+                        {
+                            newDirectory.Add(subElement);
+                        }
+                        targetDir.Add(newDirectory);
                         element.Remove();
                     }
                     module.Add(targetDir);
                 }
             }
         }      
-
     }
 }

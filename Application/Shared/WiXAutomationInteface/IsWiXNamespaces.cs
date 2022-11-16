@@ -69,7 +69,7 @@ namespace IsWiXAutomationInterface
  
                     foreach (var file in new DirectoryInfo(schemasDir).GetFiles(patternMatch))
                     {
-                        string prefix = Path.GetFileNameWithoutExtension(file.Name).ToLower();
+                        string prefix = Path.GetFileNameWithoutExtension(file.Name).ToLower().Split('-').First();
                         if (!prefix.Equals("wix"))
                         {
                             XDocument doc = XDocument.Load(file.FullName);
