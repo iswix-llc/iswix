@@ -70,8 +70,6 @@ namespace GeneralInformationDesigner.ViewModels
                 RaisePropertyChangedEvent("Module4");
             }
         }
-
-
         public PackageModel Package { get { return _package; } set { _package = value; RaisePropertyChangedEvent("Package"); } }
         public SummaryInformation4Model SummaryInformation4 { get { return summaryInformation4Model; } set { summaryInformation4Model = value; RaisePropertyChangedEvent("SummaryInformation4"); } }
         public Visibility ProductPropertyGridVisible { get { return _productPropertyGridVisible; } set { _productPropertyGridVisible = value; RaisePropertyChangedEvent("ProductPropertyGridVisible"); } }
@@ -101,7 +99,7 @@ namespace GeneralInformationDesigner.ViewModels
             }
         }
         public Visibility PackagePropertyGridVisible { get { return _packagePropertyGridVisible; } set { _packagePropertyGridVisible = value; RaisePropertyChangedEvent("PackagePropertyGridVisible"); } }
-        public Visibility Package4PropertyGridVisible { get { return _package4PropertyGridVisible; } set { _package4PropertyGridVisible = value; RaisePropertyChangedEvent("PackagePropertyGridVisible"); } }
+        public Visibility Package4PropertyGridVisible { get { return _package4PropertyGridVisible; } set { _package4PropertyGridVisible = value; RaisePropertyChangedEvent("Package4PropertyGridVisible"); } }
 
         public void Load()
         {
@@ -226,6 +224,7 @@ namespace GeneralInformationDesigner.ViewModels
             summaryInformation4Model.Description = _iswixSummaryInformation4.Description;
             summaryInformation4Model.Keywords = _iswixSummaryInformation4.Keywords;
             summaryInformation4Model.Manufacturer = _iswixSummaryInformation4.Manufacturer;
+            summaryInformation4Model.PropertyChanged += SummaryInformation_PropertyChanged;
             return summaryInformation4Model;
         }
 
@@ -277,6 +276,7 @@ namespace GeneralInformationDesigner.ViewModels
             package.ProductCode = _iswixPackage4.ProductCode;
             package.Scope = _iswixPackage4.Scope;
             package.ShortNames = _iswixPackage4.ShortNames;
+            package.PropertyChanged += Package4_PropertyChanged;
             return package;
         }
         private void Module_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -314,7 +314,18 @@ namespace GeneralInformationDesigner.ViewModels
                 case "Language":
                     _iswixModule4.Language =Module4.Language;
                     break;
-
+                case "Version":
+                    _iswixModule4.Version = Module4.Version;
+                    break;
+                case "Codepage":
+                    _iswixModule4.Codepage = Module4.Codepage;
+                    break;
+                case "Id":
+                    _iswixModule4.Id = Module4.Id;
+                    break;
+                case "Guid":
+                    _iswixModule4.Guid = Module4.Guid;
+                    break;
             }
 
         }
@@ -413,6 +424,64 @@ namespace GeneralInformationDesigner.ViewModels
             }
         }
 
+        private void Package4_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Scope":
+                    _iswixPackage4.Scope = Package4.Scope;
+                    break;
+                case "Manufacturer":
+                    _iswixPackage4.Manufacturer = Package4.Manufacturer;
+                    break;
+                case "Version":
+                    _iswixPackage4.Version = Package4.Version;
+                    break;
+                case "InstallerVersion":
+                    _iswixPackage4.InstallerVersion = Package4.InstallerVersion;
+                    break;
+                case "Language":
+                    _iswixPackage4.Language = Package4.Language;
+                    break;
+                case "Codepage":
+                    _iswixPackage4.Codepage = Package4.Codepage;
+                    break;
+                case "Compressed":
+                    _iswixPackage4.Compressed = Package4.Compressed;
+                    break;
+                case "ShortNames":
+                    _iswixPackage4.ShortNames = Package4.ShortNames;
+                    break;
+                case "Name":
+                    _iswixPackage4.Name = Package4.Name;
+                    break;
+                case "ProductCode":
+                    _iswixPackage4.ProductCode = Package4.ProductCode;
+                    break;
+                case "UpgradeCode":
+                    _iswixPackage4.UpgradeCode = Package4.UpgradeCode;
+                    break;
+            }
+        }
+
+        private void SummaryInformation_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Manufacturer":
+                    _iswixSummaryInformation4.Manufacturer = SummaryInformation4.Manufacturer;
+                    break;
+                case "Description":
+                    _iswixSummaryInformation4.Description = SummaryInformation4.Description;
+                    break;
+                case "Codepage":
+                    _iswixSummaryInformation4.Codepage = SummaryInformation4.Codepage;
+                    break;
+                case "Keywords":
+                    _iswixSummaryInformation4.Keywords = SummaryInformation4.Keywords;
+                    break;
+            }
+        }
         public void AddDependency()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();

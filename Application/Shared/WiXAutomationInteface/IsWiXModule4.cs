@@ -40,7 +40,7 @@ namespace IsWiXAutomationInterface
             {
 
                 string guid;
-                guid = _moduleElement.Attribute("Id").Value;
+                guid = _moduleElement.Attribute("Guid").Value;
                 if (guid == "00000000-0000-0000-0000-000000000000")
                 {
                     guid = System.Guid.NewGuid().ToString();

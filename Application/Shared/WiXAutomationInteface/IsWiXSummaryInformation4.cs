@@ -1,5 +1,6 @@
 ﻿using FireworksFramework.Managers;
 using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace IsWiXAutomationInterface
@@ -14,7 +15,12 @@ namespace IsWiXAutomationInterface
         public IsWiXSummaryInformation4()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-            _summaryInformationElement = _documentManager.Document.GetProductOrModuleElement().Element(ns + "SummaryInformation");
+            _summaryInformationElement = _documentManager.Document.GetProductPackageOrModuleElement().Element(ns + "SummaryInformation");
+            if (_summaryInformationElement == null) 
+            {
+                XElement summaryInformationElement = new XElement(ns + "SummaryInformation");
+                _documentManager.Document.GetProductPackageOrModuleElement().Elements().First().AddBeforeSelf(summaryInformationElement);
+            }
         }
 
         public string Codepage
@@ -61,7 +67,7 @@ namespace IsWiXAutomationInterface
                 {
                     value = null;
                 }
-                _summaryInformationElement.SetAttributeValue("Codepage", value);
+                _summaryInformationElement.SetAttributeValue("Keywords", value);
             }
         }
 

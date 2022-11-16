@@ -19,10 +19,10 @@ namespace Designers.GeneralInformation.Models
         [Editor(typeof(CustomEditor<YesNo>), typeof(CustomEditor<YesNo>))]
         public YesNo? Compressed { get { return _compressed; } set { _compressed = value; RaisePropertyChangedEvent("Compressed"); } }
 
-        Int32 _installerVersion;
+        Int32? _installerVersion;
         [CategoryAttribute("Package")]
         [Description("The minimum version of the Windows Installer required to install this package. Take the major version of the required Windows Installer and multiply by a 100 then add the minor version of the Windows Installer. For example, \"200\" would represent Windows Installer 2.0 and \"405\" would represent Windows Installer 4.5. For 64-bit Windows Installer packages, this property must be set to 200 or greater. ")]
-        public Int32 InstallerVersion { get { return _installerVersion; } set { _installerVersion = value; RaisePropertyChangedEvent("InstallerVersion"); } }
+        public Int32? InstallerVersion { get { return _installerVersion; } set { _installerVersion = value; RaisePropertyChangedEvent("InstallerVersion"); } }
 
         Int32 _language;
         [CategoryAttribute("Package")]

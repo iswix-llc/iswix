@@ -16,7 +16,7 @@ namespace IsWiXAutomationInterface
         public IsWiXPackage4()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-            _packageElement = _documentManager.Document.GetProductOrModuleElement().Element(ns + "Package");
+            _packageElement = _documentManager.Document.GetProductPackageOrModuleElement();
         }
 
         public string Codepage
@@ -65,15 +65,30 @@ namespace IsWiXAutomationInterface
             }
         }
 
-        public Int32 InstallerVersion
+        public Int32? InstallerVersion
         {
             get
             {
-                return Convert.ToInt32(_packageElement.GetOptionalAttribute("InstallerVersion"));
+                string installerVersion = _packageElement.GetOptionalAttribute("InstallerVersion");
+                if (string.IsNullOrEmpty(installerVersion))
+                {
+                    return null;
+                }
+                else
+                {
+                    return Convert.ToInt32(installerVersion);
+                }
             }
             set
             {
-                _packageElement.Attribute("InstallerVersion").Value = Convert.ToString(value);
+                if (value == null)
+                {
+                    _packageElement.Attribute("InstallerVersion").Value = null;
+                }
+                else
+                {
+                    _packageElement.SetAttributeValue("InstallerVersion", value.ToString());
+                }
             }
         }
 
@@ -85,7 +100,7 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                _packageElement.Attribute("Language").Value = Convert.ToString(value);
+                _packageElement.SetAttributeValue("Language", value.ToString());
             }
         }
 
@@ -214,7 +229,7 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                _packageElement.Attribute("UpgradeCode").Value = value;
+                _packageElement.SetAttributeValue("UpgradeCode", value);
             }
         }
 
@@ -226,7 +241,7 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                _packageElement.Attribute("Version").Value = value;
+                _packageElement.SetAttributeValue("Version", value);
             }
         }
 
