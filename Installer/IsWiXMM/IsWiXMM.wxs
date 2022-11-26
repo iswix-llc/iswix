@@ -753,21 +753,6 @@
         <Component Id="owc693D66F39A6EF282B6636183125F426E" Guid="478e5d88-3f1c-3775-431e-a15548e032c5">
           <File Id="owf693D66F39A6EF282B6636183125F426E" Source="$(var.SourceDir)\wpfgfx_cor3.dll" KeyPath="yes" />
         </Component>
-        <Component Id="owc2295A120BB2F733D97A8B4D71B51D681" Guid="a3054625-f699-dbf2-022b-15c7ce850857">
-          <File Id="owf2295A120BB2F733D97A8B4D71B51D681" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.NET5.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc81C372DE3E4A991CCFF9ADA8AC9E6A51" Guid="aec2bcdd-7388-fbef-5738-e7b5f515ccb9">
-          <File Id="owf81C372DE3E4A991CCFF9ADA8AC9E6A51" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Aero.NET5.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc0DD1881259A961619DEC968ABAFED51C" Guid="b9afa59d-d203-08cd-a22b-4a785e1371e5">
-          <File Id="owf0DD1881259A961619DEC968ABAFED51C" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Metro.NET5.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owcC74CEFEA8DE20B56CFD7A92DE9A423ED" Guid="103ef1e6-68ca-6d65-1959-9872935d46b9">
-          <File Id="owfC74CEFEA8DE20B56CFD7A92DE9A423ED" Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.VS2010.NET5.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc0A26A2C72278D9ABC5752607D54704E3" Guid="9eeb1476-5730-88d8-a234-fd676eb84266">
-          <File Id="owf0A26A2C72278D9ABC5752607D54704E3" Source="$(var.SourceDir)\Xceed.Wpf.Toolkit.NET5.dll" KeyPath="yes" />
-        </Component>
         <Component Id="owcA75C358225DA6B164B9B94E25644162A" Guid="0c752f6d-15f2-e50f-b406-95c3ad570d57">
           <File Id="owfA75C358225DA6B164B9B94E25644162A" Source="$(var.SourceDir)\XmlDesignerCore.dll" KeyPath="yes" />
         </Component>
