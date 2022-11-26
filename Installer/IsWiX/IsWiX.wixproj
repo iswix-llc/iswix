@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -7,17 +7,11 @@
     <ProjectGuid>{5d377fdd-482f-4ca9-9a1b-0b9c7f11c440}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- Default to 0.0.1 for developer builds -->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
     <OutputName>IsWiX-$(MSIProductVersion)</OutputName>
-    <SccProjectName>$/IsWiX/dev/alpha/Source/Installer/IsWiX</SccProjectName>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
-    <SccAuxPath>https://iswix.visualstudio.com/defaultcollection</SccAuxPath>
-    <SccLocalPath>.</SccLocalPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -70,102 +64,6 @@
     <Content Include="Resources\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Designers\AppXDesignerMM\AppXDesignerMM.wixproj">
-      <Name>AppXDesignerMM</Name>
-      <Project>{22f8e6de-161c-4bfd-a6ac-1b107da85572}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\CustomTablesDesignerMM\CustomTablesDesignerMM.wixproj">
-      <Name>CustomTablesDesignerMM</Name>
-      <Project>{9660cb68-a424-4e25-bb0b-1a389bef4868}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\FeaturesDesignerMM\FeaturesDesignerMM.wixproj">
-      <Name>FeaturesDesignerMM</Name>
-      <Project>{d91e59ce-6f3a-4124-b775-5493c2e65048}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\FilesAndFoldersDesignerMM\FilesAndFoldersDesignerMM.wixproj">
-      <Name>FilesAndFoldersDesignerMM</Name>
-      <Project>{d3b4a07b-7de2-433e-a01b-ca970814c9c9}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\GeneralInformationDesignerMM\GeneralInformationDesignerMM.wixproj">
-      <Name>GeneralInformationDesignerMM</Name>
-      <Project>{4a2e3486-b9fa-4a3d-870e-37bdb3c3be29}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\MSIXDesignerMM\MSIXDesignerMM.wixproj">
-      <Name>MSIXDesignerMM</Name>
-      <Project>{7ec5667f-54c7-4b39-a346-d55e0ec719db}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\NamespacesDesignerMM\NamespacesDesignerMM.wixproj">
-      <Name>NamespacesDesignerMM</Name>
-      <Project>{f141f1ee-99ab-4606-9d9e-5ead2214d4a9}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\PropertiesDesignerMM\PropertiesDesignerMM.wixproj">
-      <Name>PropertiesDesignerMM</Name>
-      <Project>{21db01d9-2728-4e5c-b6fc-8d6d32825d15}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\ServicesDesignerMM\ServicesDesignerMM.wixproj">
-      <Name>ServicesDesignerMM</Name>
-      <Project>{27503637-49e8-4fbc-a56f-9e8bad4baa8e}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\ShortCutsDesignerMM\ShortCutsDesignerMM.wixproj">
-      <Name>ShortCutsDesignerMM</Name>
-      <Project>{47997fdc-9918-4732-8f0b-7b80a62a4764}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\XmlEditorDesignerMM\XmlEditorDesignerMM.wixproj">
-      <Name>XmlEditorDesignerMM</Name>
-      <Project>{183014d8-0f6f-4add-8652-59658a85ec37}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\ExtendedWpfToolkitMM\ExtendedWpfToolkitMM.wixproj">
-      <Name>ExtendedWpfToolkitMM</Name>
-      <Project>{2125b945-9a75-4092-9113-4a3e80285d2d}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
     <ProjectReference Include="..\IsWiX2019AddInMM\IsWiX2019AddInMM.wixproj">
       <Name>IsWiX2019AddInMM</Name>
       <Project>{4fc4fa20-b7b6-44f5-a82c-917aa8a26bf0}</Project>
@@ -199,8 +97,12 @@
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(WixTargetsPath)" />
-  <PropertyGroup>
+	<Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+	<Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+	<Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+		<Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+	</Target>
+	<PropertyGroup>
     <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
   <!--
