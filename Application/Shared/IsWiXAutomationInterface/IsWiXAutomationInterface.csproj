@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <TargetFramework>net7.0-windows</TargetFramework>
@@ -16,7 +16,7 @@
     <PackageReference Include="wix-libs" Version="3.11.1" />
   </ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)&#xA;IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)&#xA;xcopy /iery &quot;$(SolutionDir)\ExternalAssemblies\*.*&quot; &quot;$(TargetDir)&quot;&#xA;xcopy /iery &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)..\Installer\Deploy&quot;" />
+		<Exec Command="IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)&#xA;IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)" />
 	</Target>
 
 </Project>
