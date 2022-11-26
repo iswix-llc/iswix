@@ -27,14 +27,11 @@
 		<CustomActionRef Id="VS2022Setup" />
 
 		<Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
-		<CustomAction Id="VSFindInstances2" BinaryKey="iswixActions" DllEntry="VSFindInstances2" Execute="firstSequence"/>
 		<CustomAction Id="FixPaths" BinaryKey="iswixActions" DllEntry="FixPaths" Execute="firstSequence"/>
 		<InstallUISequence>
-			<Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
 			<Custom Action="FixPaths" After="AppSearch"></Custom>
 		</InstallUISequence>
 		<InstallExecuteSequence>
-			<Custom Action="VSFindInstances2" After="VSFindInstances"></Custom>
 			<Custom Action="FixPaths" After="AppSearch"></Custom>
 		</InstallExecuteSequence>
 
