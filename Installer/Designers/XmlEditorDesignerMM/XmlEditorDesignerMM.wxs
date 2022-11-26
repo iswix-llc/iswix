@@ -13,8 +13,8 @@ All Rights Reserved
         <Component Id="owc873A6D1E46285DC1178C56A2CA3D0A4E" Guid="745c1a13-171f-eba8-1ca8-bb70ff66b1f3">
           <File Id="owf873A6D1E46285DC1178C56A2CA3D0A4E" Source="$(var.SourceDir)\ICSharpCode.AvalonEdit.dll" KeyPath="yes" />
         </Component>
-        <Component Id="owc675848A23C77F45A718FDF2F184CED9E" Guid="9ba8f5e8-d869-5c13-4b67-080911ac4cc9">
-          <File Id="owf675848A23C77F45A718FDF2F184CED9E" Source="$(var.SourceDir)\XmlEditorDesigner.dll" KeyPath="yes"></File>
+        <Component Id="owcA75C358225DA6B164B9B94E25644162A" Guid="0c752f6d-15f2-e50f-b406-95c3ad570d57">
+          <File Id="owfA75C358225DA6B164B9B94E25644162A" Source="$(var.SourceDir)\XmlDesignerCore.dll" KeyPath="yes" />
         </Component>
       </Directory>
     </Directory>

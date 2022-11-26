@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define SourceDir="."?>
+  <Module Id="YourModuleHere" Language="1033" Version="1.0.0.0">
+    <Package Id="00000000-0000-0000-0000-000000000000" Manufacturer="YourCompanyHere" InstallerVersion="200" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="MergeRedirectFolder">
+      </Directory>
+    </Directory>
+  </Module>
+</Wix>

@@ -1,354 +1,215 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8707935E-E766-49E5-8560-A307090E2C39}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IsWiX</RootNamespace>
-    <AssemblyName>IsWiX</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <StartupObject>IsWiX.App</StartupObject>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
     <ApplicationIcon>IsWiX.ico</ApplicationIcon>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
+    <UseWindowsForms>True</UseWindowsForms>
+	<Private>false</Private>
+	<EnableDynamicLoading>true</EnableDynamicLoading>
+	  <DeployOnBuild>true</DeployOnBuild>
+	  <PublishProfile>FolderProfile</PublishProfile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="GlobalParams, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Externals\GlobalParams.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
+    <Compile Remove="IsWiXDesigner.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="IsWiXDesigner.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Remove="IsWiX.bmp" />
+    <None Remove="License.txt" />
+    <None Remove="Schemas\bal-v3.xsd" />
+    <None Remove="Schemas\bal-v4.xsd" />
+    <None Remove="Schemas\complus-v3.xsd" />
+    <None Remove="Schemas\complus-v4.xsd" />
+    <None Remove="Schemas\Dependency-v3.xsd" />
+    <None Remove="Schemas\Dependency-v4.xsd" />
+    <None Remove="Schemas\difxapp-v3.xsd" />
+    <None Remove="Schemas\difxapp-v4.xsd" />
+    <None Remove="Schemas\fgappx-v3.xsd" />
+    <None Remove="Schemas\fgmsix-v3.xsd" />
+    <None Remove="Schemas\firewall-v3.xsd" />
+    <None Remove="Schemas\firewall-v4.xsd" />
+    <None Remove="Schemas\gaming-v3.xsd" />
+    <None Remove="Schemas\http-v4.xsd" />
+    <None Remove="Schemas\iis-v3.xsd" />
+    <None Remove="Schemas\iis-v4.xsd" />
+    <None Remove="Schemas\lux-v3.xsd" />
+    <None Remove="Schemas\msmq-v3.xsd" />
+    <None Remove="Schemas\msmq-v4.xsd" />
+    <None Remove="Schemas\netfx-v3.xsd" />
+    <None Remove="Schemas\netfx-v4.xsd" />
+    <None Remove="Schemas\ps-v3.xsd" />
+    <None Remove="Schemas\ps-v4.xsd" />
+    <None Remove="Schemas\sql-v3.xsd" />
+    <None Remove="Schemas\sql-v4.xsd" />
+    <None Remove="Schemas\tag-v3.xsd" />
+    <None Remove="Schemas\thmutil-v3.xsd" />
+    <None Remove="Schemas\thmutil-v4.xsd" />
+    <None Remove="Schemas\util-v3.xsd" />
+    <None Remove="Schemas\util-v4.xsd" />
+    <None Remove="Schemas\vs-v3.xsd" />
+    <None Remove="Schemas\vs-v4.xsd" />
+    <None Remove="Schemas\wix-v3.xsd" />
+    <None Remove="Schemas\wix-v4.xsd" />
+    <None Remove="Schemas\wixloc-v3.xsd" />
+    <None Remove="Schemas\wixloc-v4.xsd" />
+    <None Remove="Templates\WiX\Fragment.wxs" />
+    <None Remove="Templates\WiX\MergeModule.wxs" />
+    <None Remove="Templates\WiX\Product.wxs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Resource Include="IsWiX.bmp" />
-    <EmbeddedResource Include="IsWiX.ico" />
-    <EmbeddedResource Include="License.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <Content Include="Templates\WiX\MergeModule.wxs">
+    <Content Include="IsWiX.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="app.manifest" />
-    <None Include="EULA.rtf">
+    <EmbeddedResource Include="IsWiX.ico" />
+    <Content Include="Schemas\bal-v3.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
+    <Content Include="Schemas\bal-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\complus-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\complus-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\Dependency-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\Dependency-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\difxapp-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\difxapp-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\fgappx-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\fgmsix-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\firewall-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\firewall-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\gaming-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\http-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\iis-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\iis-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\lux-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\msmq-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\msmq-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\netfx-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\netfx-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\ps-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\ps-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\sql-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\sql-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\tag-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\thmutil-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\thmutil-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\util-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\util-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\vs-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\vs-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\wix-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\wix-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\wixloc-v3.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\wixloc-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\WiX\Fragment.wxs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\WiX\MergeModule.wxs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\WiX\Product.wxs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\bal-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\bal-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\complus-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\complus-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\Dependency-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\Dependency-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\difxapp-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\difxapp-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\fgappx-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\fgmsix-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\firewall-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\firewall-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\gaming-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\http-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\iis-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\iis-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\lux-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\msmq-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\msmq-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\netfx-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\netfx-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\ps-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\ps-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\sql-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\sql-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\tag-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\thmutil-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\thmutil-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\util-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\util-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\vs-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\vs-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\wix-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\wix-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\wixloc-v3.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\wixloc-v4.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
+
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
+    <EmbeddedResource Include="IsWiXDesigner.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
+    <PackageReference Include="XmlDesignerCore" Version="5.1.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Designers\AppXDesigner\AppXDesigner.csproj">
-      <Project>{7c470e97-d17b-41a2-b1e2-9ec665300e36}</Project>
-      <Name>AppXDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\CustomTablesDesigner\CustomTablesDesigner.csproj">
-      <Project>{49adfdb8-d7a2-40d7-8a22-da540f2e8237}</Project>
-      <Name>CustomTablesDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\FeaturesDesigner\FeaturesDesigner.csproj">
-      <Project>{9b75ced2-3ffa-4e40-9b7e-b8eb364d7008}</Project>
-      <Name>FeaturesDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj">
-      <Project>{ec5ecf36-4f4c-45e2-a446-b331ac8126d5}</Project>
-      <Name>FilesAndFoldersDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj">
-      <Project>{5875aecd-549f-4209-95ed-a95df4f0fb21}</Project>
-      <Name>GeneralInformationDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\MSIXDesigner\MSIXDesigner.csproj">
-      <Project>{205bc85e-79eb-45ed-a861-adc5cebdf140}</Project>
-      <Name>MSIXDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj">
-      <Project>{d14bed47-ff47-49f4-b15e-e28e4607b757}</Project>
-      <Name>NamespacesDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj">
-      <Project>{9ad79b6e-b90b-435b-a7df-1b01c4d563df}</Project>
-      <Name>PropertiesDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj">
-      <Project>{4b733f56-a202-4813-9494-53b048fe07b6}</Project>
-      <Name>ServicesDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj">
-      <Project>{62ee9b37-d99a-4ac0-898a-ec822268467c}</Project>
-      <Name>ShortCutsDesigner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shared\WiXAutomationInteface\IsWiXAutomationInterface.csproj">
-      <Project>{461ddab2-0b76-460d-9f3e-041cb88df974}</Project>
-      <Name>IsWiXAutomationInterface</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Designers\AppXDesigner\AppXDesigner.csproj" />
+    <ProjectReference Include="..\Designers\CustomTablesDesigner\CustomTablesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\FeaturesDesigner\FeaturesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj" />
+    <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj" />
+    <ProjectReference Include="..\Designers\MSIXDesigner\MSIXDesigner.csproj" />
+    <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj" />
+    <ProjectReference Include="..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="fireworks">
-      <Version>5.1.13</Version>
-    </PackageReference>
-    <PackageReference Include="xmldesigner">
-      <Version>5.1.4</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)&#xA;IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)&#xA;" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)
-IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)
-xcopy /iery "$(SolutionDir)\ExternalAssemblies\*.*" "$(TargetDir)"
-xcopy /iery "$(TargetDir)*.*" "$(SolutionDir)..\Installer\Deploy"</PostBuildEvent>
-  </PropertyGroup>
+
 </Project>

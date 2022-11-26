@@ -11,21 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="FilesAndFolders.ico" />
-    <None Remove="License.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="FilesAndFolders.ico" />
-    <EmbeddedResource Include="License.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
+    <PackageReference Include="wix-libs" Version="3.11.1" />
   </ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /td SHA256 /tr http://timestamp.sectigo.com/ $(TargetPath)&#xA;IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)&#xA;xcopy /iery &quot;$(SolutionDir)\ExternalAssemblies\*.*&quot; &quot;$(TargetDir)&quot;&#xA;xcopy /iery &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)..\Installer\Deploy&quot;" />
