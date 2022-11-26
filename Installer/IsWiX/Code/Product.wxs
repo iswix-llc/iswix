@@ -35,13 +35,5 @@
 			<Custom Action="FixPaths" After="AppSearch"></Custom>
 		</InstallExecuteSequence>
 
-		<InstallExecuteSequence>
-			<Custom Action="VS2019Setup" Before="InstallFinalize" Overridable="yes">VS2019DEVENV</Custom>
-		</InstallExecuteSequence>
-
-		<InstallExecuteSequence>
-			<Custom Action="VS2022Setup" Before="InstallFinalize" Overridable="yes">VS2022DEVENV</Custom>
-		</InstallExecuteSequence>
-
 	</Product>
 </Wix>
