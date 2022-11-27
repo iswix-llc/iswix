@@ -1,58 +1,70 @@
-# .NET Desktop
-# Build and run tests for .NET Desktop or Windows classic desktop solutions.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
-
 name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_4.15$(Rev:.r).0
 
 trigger:
 - master
 
-pool:
-  name: 'default'
-
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-
-steps:
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
-
-- task: PowerShell@2
-  inputs:
-    filePath: 'Scripts/ApplyVersionToAssemblies.ps1'
-  displayName: 'Version Assemblies'
-
-- task: VSBuild@1
-  inputs:
-    solution: 'Application\Application.sln'
-    platform: 'Any CPU'
-    configuration: 'Release'
-  displayName: 'Build Application'
-- task: VSBuild@1
-  inputs:
-    solution: 'Application\ApplicationAddIn.sln'
-    platform: 'Any CPU'
-    configuration: 'Release'
-    msbuildArchitecture: x86
-  displayName: 'Build Application AddIn'
-
-- task: VSBuild@1
-  inputs:
-    solution: 'Installer\Installer.sln'
-    platform: 'x86'
-    msbuildArgs: '/p:RunWixToolsOutOfProc=true'
-    configuration: 'Release'
-  displayName: 'Build Installer'
-
-- task: CopyPublishBuildArtifacts@1
-  inputs:
-    CopyRoot: 'Installer'
-    Contents: '**/*.msi'
-    ArtifactName: 'Installer'
-    ArtifactType: 'Container'
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/dev
+jobs:
+- job: Job_1
+  displayName: Agent job 1
+  pool:
+    name: default
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
+  - task: PowerShell@2
+    inputs:
+      filePath: 'Scripts/ApplyVersionToAssemblies.ps1'
+      displayName: 'Version Assemblies'
+  - task: NuGetToolInstaller@0
+    displayName: Use NuGet 6.3.1
+    inputs:
+      versionSpec: 6.3.1
+  - task: DotNetCoreCLI@2
+    displayName: dotnet publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: Application/IsWiX/IsWiX.csproj
+      arguments: '-p:PublishProfile=FolderProfile /p:AssemblyVersion=$(Build.BuildNumber) -c Release '
+      zipAfterPublish: false
+  - task: MSBuild@1
+    displayName: Build 2019 AddIn
+    inputs:
+      solution: Application/2019AddIn.sln
+      msbuildLocationMethod: location
+      msbuildLocation: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\msbuild.exe
+      configuration: Release
+  - task: CmdLine@2
+    displayName: Build 2022 AddIn
+    inputs:
+      script: '"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.com" 2022AddIn.sln /rebuild Release'
+      workingDirectory: Application
+  - task: MSBuild@1
+    displayName: Build Installer
+    inputs:
+      solution: Installer/Installer.sln
+      msbuildLocation: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\msbuild.exe
+      platform: x86
+      configuration: Release
+      msbuildArguments: /p:RunWixToolsOutOfProc=true
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+    condition: succeededOrFailed()
+    inputs:
+      SourceFolder: $(system.defaultworkingdirectory)
+      Contents: '**\*.msi'
+      TargetFolder: $(build.artifactstagingdirectory)
+      CleanTargetFolder: true
+      flattenFolders: true
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    condition: succeededOrFailed()
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)
+      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
