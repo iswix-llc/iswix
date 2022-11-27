@@ -1054,7 +1054,7 @@ namespace Designers.FilesAndFolders
                     }
                     else
                     {
-                        CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
+                        //CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
                     }
                 }
                 SortData();
