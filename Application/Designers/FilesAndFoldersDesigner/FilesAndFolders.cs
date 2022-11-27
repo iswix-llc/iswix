@@ -1137,11 +1137,6 @@ namespace Designers.FilesAndFolders
                         {
                             AddItemToDocument(tvDestination.SelectedNode, item);
                         }
-                        else
-                        {
-                            CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text),
-                                           "Drop Warning");
-                        }
                     }
                 }
                 DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode); // Refreshes destination
@@ -1629,10 +1624,10 @@ namespace Designers.FilesAndFolders
                                 RemoveItemFromDocument(tvDestination.SelectedNode, item);
                             }
                         }
-                        else
-                        {
-                            CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
-                        }
+                        //else
+                        //{
+                        //    CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
+                        //}
                     }
                     SortData();
                     LoadDocument();
@@ -2274,12 +2269,48 @@ namespace Designers.FilesAndFolders
                 
             }
         }
+        private bool CanDeleteFolder(string directoryName)
+        {
+            bool canDelete;
 
+            switch(directoryName)
+            {
+                case "[CommonAppDataFolder]":
+                    canDelete = false;
+                    break;
+                case "[CommonFilesFolder]":
+                    canDelete = false;
+                    break;
+                case "[GlobalAssemblyCache]":
+                    canDelete = false;
+                    break;
+                case "[ProgramFilesFolder]":
+                    canDelete = false;
+                    break;
+                case "[SystemFolder]":
+                    canDelete = false;
+                    break;
+                case "[System64Folder]":
+                    canDelete = false;
+                    break;
+                case MergeRedirectFolderName:
+                    canDelete = false;
+                    break;
+                case DestinationFolderName:
+                    canDelete = false;
+                    break;
+                default:
+                    canDelete = true;
+                    break;
+            }
+            return canDelete;
+        }
         private void tvDestination_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if ((tvDestination.SelectedNode.Text == MergeRedirectFolderName) || (tvDestination.SelectedNode.Text == DestinationFolderName))
+                
+                if (!CanDeleteFolder(tvDestination.SelectedNode.Text))
                 {
                     var message = string.Format("Can't delete {0} folder", tvDestination.SelectedNode.Text);
                     CallMessageBox(message, "Delete Folder Warning");
