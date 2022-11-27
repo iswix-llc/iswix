@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using FireworksFramework.Managers;
 
+
 namespace IsWiX
 {
     /// <summary>
@@ -32,6 +33,5 @@ namespace IsWiX
             Exception e = (Exception)args.ExceptionObject;
             MessageBox.Show($"An unhandled error occurred. {e.Message}", "IsWiX Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
         }
-
     }
 }
