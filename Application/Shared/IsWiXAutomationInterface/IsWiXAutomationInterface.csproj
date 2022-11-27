@@ -11,21 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="AppX.ico" />
-    <None Remove="License.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="AppX.ico" />
-    <EmbeddedResource Include="License.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
+    <PackageReference Include="wix-libs" Version="3.11.1" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

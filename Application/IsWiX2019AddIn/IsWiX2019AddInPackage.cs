@@ -80,6 +80,8 @@ namespace ISWIXLLC.IsWiX2019AddIn
         /// </summary>
         private void MenuItemCallback(object sender, EventArgs e)
         {
+            // Does nothing. Just make sure DLL is used nd copies.
+            GlobalParams.WizardMPT wizardMPT = new GlobalParams.WizardMPT();
 
             // Show a Message Box to prove we were here
             IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
