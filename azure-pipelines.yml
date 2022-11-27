@@ -31,7 +31,7 @@ jobs:
       command: publish
       publishWebProjects: false
       projects: Application/IsWiX/IsWiX.csproj
-      arguments: '-p:PublishProfile=FolderProfile /p:AssemblyVersion=$(Build.BuildNumber) -c Release '
+      arguments: '-p:PublishProfile=FolderProfile /p:AssemblyVersion=$(Build.BuildNumber).0 -c Release '
       zipAfterPublish: false
   - task: MSBuild@1
     displayName: Build 2019 AddIn
