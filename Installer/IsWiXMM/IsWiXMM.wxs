@@ -8,6 +8,9 @@
         <Component Id="owcDBF23DF8BC1E6A00C5CAC4F5EAB3C052" Guid="c02f62d3-f9b1-f8a4-7bd0-abaab7cd5516">
           <File Id="owfDBF23DF8BC1E6A00C5CAC4F5EAB3C052" Source="$(var.SourceDir)\Accessibility.dll" KeyPath="yes" />
         </Component>
+        <Component Id="owc5CAF0C0E04B4BFC3BC18A9CA96F5AC86" Guid="18c6264e-388b-d707-d778-9f6a71bf30b2">
+          <File Id="owf5CAF0C0E04B4BFC3BC18A9CA96F5AC86" Source="$(var.SourceDir)\AppXDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owc1EB8A6523152350CEBC63B9D1BC2930F" Guid="a49af45a-fa09-479b-2625-4fdd580aa598">
           <File Id="owf1EB8A6523152350CEBC63B9D1BC2930F" Source="$(var.SourceDir)\clretwrc.dll" KeyPath="yes" />
         </Component>
@@ -23,6 +26,9 @@
         <Component Id="owc5E8FBF42F9BCF40914849582C19906B8" Guid="f7a08052-6afc-fe5e-291c-07137533ab79">
           <File Id="owf5E8FBF42F9BCF40914849582C19906B8" Source="$(var.SourceDir)\createdump.exe" KeyPath="yes" />
         </Component>
+        <Component Id="owcFD788C2B5D9AD56B89FDAEFA68376CBE" Guid="d9bc7d81-5974-a70d-aaf6-b63f71c45d2b">
+          <File Id="owfFD788C2B5D9AD56B89FDAEFA68376CBE" Source="$(var.SourceDir)\CustomTablesDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owc8BC1DB3EC0157B7862AD82CBB8C2BCED" Guid="94af4ef0-87b6-f387-29af-00478ffc826e">
           <File Id="owf8BC1DB3EC0157B7862AD82CBB8C2BCED" Source="$(var.SourceDir)\D3DCompiler_47_cor3.dll" KeyPath="yes" />
         </Component>
@@ -32,8 +38,17 @@
         <Component Id="owcFB8246B63DA73FE6BBB8C4D037ADFFC3" Guid="60148f41-8ba7-8086-d31a-c4c6d0883dd4">
           <File Id="owfFB8246B63DA73FE6BBB8C4D037ADFFC3" Source="$(var.SourceDir)\DirectWriteForwarder.dll" KeyPath="yes" />
         </Component>
+        <Component Id="owc506CE7201F47E1CD535EF0CEAA63AF66" Guid="33d3577c-47fc-ef42-49f4-331fb25efa29">
+          <File Id="owf506CE7201F47E1CD535EF0CEAA63AF66" Source="$(var.SourceDir)\FeaturesDesigner.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owcDD71750F3D6BC41F1355D4444CC3B794" Guid="2f9aa52a-ba55-a77f-73d1-09230b20b52d">
+          <File Id="owfDD71750F3D6BC41F1355D4444CC3B794" Source="$(var.SourceDir)\FilesAndFoldersDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owc79F365426F60CB4BD1117CA4AACE12CA" Guid="e2252c94-5bc0-afc6-fa42-2bb25a9a3812">
           <File Id="owf79F365426F60CB4BD1117CA4AACE12CA" Source="$(var.SourceDir)\FireworksFramework.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc48E8640E18D343868CA7B814FE2E317A" Guid="031bcce9-3528-a3e7-bea0-cb8583777413">
+          <File Id="owf48E8640E18D343868CA7B814FE2E317A" Source="$(var.SourceDir)\GeneralInformationDesigner.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc8138E00413CF804D31C92E6536ADBDD7" Guid="644a568d-6191-f90d-d183-aa343c0fbaff">
           <File Id="owf8138E00413CF804D31C92E6536ADBDD7" Source="$(var.SourceDir)\hostfxr.dll" KeyPath="yes" />
@@ -111,8 +126,14 @@
         <Component Id="owcE382B0CF482F0E7C3AF33E6EEEBD26B0" Guid="7433845c-c763-9b7e-e2c9-7b06986570bf">
           <File Id="owfE382B0CF482F0E7C3AF33E6EEEBD26B0" Source="$(var.SourceDir)\mscorrc.dll" KeyPath="yes" />
         </Component>
+        <Component Id="owcBAE3B6A7E42D54771056DE78F1FAD23F" Guid="67a73a23-c2f5-0aa4-60d0-120c8821fa98">
+          <File Id="owfBAE3B6A7E42D54771056DE78F1FAD23F" Source="$(var.SourceDir)\MSIXDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owcF32C324201B393498276941369CEDC5C" Guid="1ce232aa-6411-724f-caad-8912a328f217">
           <File Id="owfF32C324201B393498276941369CEDC5C" Source="$(var.SourceDir)\msquic.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc0DDB8C9C3ABC5B9FBBF91809955B48DC" Guid="a8eb84db-cd7a-092d-1d43-46c24be8f910">
+          <File Id="owf0DDB8C9C3ABC5B9FBBF91809955B48DC" Source="$(var.SourceDir)\NamespacesDesigner.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc79156F385239CEA4DEA3C87C1DA3E1D8" Guid="68380c80-6708-5eb6-415d-10e278417679">
           <File Id="owf79156F385239CEA4DEA3C87C1DA3E1D8" Source="$(var.SourceDir)\netstandard.dll" KeyPath="yes" />
@@ -122,6 +143,21 @@
         </Component>
         <Component Id="owc7BA217953ECABE5DE2B4F6DA41B436F7" Guid="5e361b58-eb92-3ccf-9660-b3bd9e0a025b">
           <File Id="owf7BA217953ECABE5DE2B4F6DA41B436F7" Source="$(var.SourceDir)\PresentationCore.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owcD005115A9FBDFDD4C07625EA79195A2A" Guid="08fe92a4-1c43-538a-158f-5bc5c07aeb46">
+          <File Id="owfD005115A9FBDFDD4C07625EA79195A2A" Source="$(var.SourceDir)\PresentationFramework-SystemCore.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc4CDA08ABFC27C4A86B0C14B65BCD3259" Guid="7cc1cc2a-128f-c5ff-b56c-c0d13c9a87b8">
+          <File Id="owf4CDA08ABFC27C4A86B0C14B65BCD3259" Source="$(var.SourceDir)\PresentationFramework-SystemData.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owcB5D1FBEFF995859F3C5C135CB325845E" Guid="92593304-2a2f-9ff6-8ac8-214dbaa933e9">
+          <File Id="owfB5D1FBEFF995859F3C5C135CB325845E" Source="$(var.SourceDir)\PresentationFramework-SystemDrawing.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc5DF0EA5A285E7ECC7AE070C4600EE070" Guid="957d3c2b-c5e4-371a-778a-6d7860206788">
+          <File Id="owf5DF0EA5A285E7ECC7AE070C4600EE070" Source="$(var.SourceDir)\PresentationFramework-SystemXml.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc63AD091935C6959A23EFEEB27A3014B0" Guid="2eb45111-d8c5-d68a-0fe4-61691d48bb92">
+          <File Id="owf63AD091935C6959A23EFEEB27A3014B0" Source="$(var.SourceDir)\PresentationFramework-SystemXmlLinq.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc25452D67E4727DAAA1EEA18EE454BE71" Guid="ac450f36-4ba5-1484-64c7-4c118f725941">
           <File Id="owf25452D67E4727DAAA1EEA18EE454BE71" Source="$(var.SourceDir)\PresentationFramework.Aero.dll" KeyPath="yes" />
@@ -144,29 +180,23 @@
         <Component Id="owcAAB683E3DF86A7ACC9E0EE6826F07F1B" Guid="b9af9128-a31f-1772-3be9-81710c1634f1">
           <File Id="owfAAB683E3DF86A7ACC9E0EE6826F07F1B" Source="$(var.SourceDir)\PresentationFramework.Royale.dll" KeyPath="yes" />
         </Component>
-        <Component Id="owcD005115A9FBDFDD4C07625EA79195A2A" Guid="08fe92a4-1c43-538a-158f-5bc5c07aeb46">
-          <File Id="owfD005115A9FBDFDD4C07625EA79195A2A" Source="$(var.SourceDir)\PresentationFramework-SystemCore.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc4CDA08ABFC27C4A86B0C14B65BCD3259" Guid="7cc1cc2a-128f-c5ff-b56c-c0d13c9a87b8">
-          <File Id="owf4CDA08ABFC27C4A86B0C14B65BCD3259" Source="$(var.SourceDir)\PresentationFramework-SystemData.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owcB5D1FBEFF995859F3C5C135CB325845E" Guid="92593304-2a2f-9ff6-8ac8-214dbaa933e9">
-          <File Id="owfB5D1FBEFF995859F3C5C135CB325845E" Source="$(var.SourceDir)\PresentationFramework-SystemDrawing.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc5DF0EA5A285E7ECC7AE070C4600EE070" Guid="957d3c2b-c5e4-371a-778a-6d7860206788">
-          <File Id="owf5DF0EA5A285E7ECC7AE070C4600EE070" Source="$(var.SourceDir)\PresentationFramework-SystemXml.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc63AD091935C6959A23EFEEB27A3014B0" Guid="2eb45111-d8c5-d68a-0fe4-61691d48bb92">
-          <File Id="owf63AD091935C6959A23EFEEB27A3014B0" Source="$(var.SourceDir)\PresentationFramework-SystemXmlLinq.dll" KeyPath="yes" />
-        </Component>
         <Component Id="owc1D1C7BDBC87CAD1E45E371537025FD30" Guid="d2143e36-ae15-c3e8-fd77-51af3adb81f2">
           <File Id="owf1D1C7BDBC87CAD1E45E371537025FD30" Source="$(var.SourceDir)\PresentationNative_cor3.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc6BD76DF1F3B5AB86645EB26064040336" Guid="f375d22a-d6dc-19bb-43dd-1750ece0f4fe">
           <File Id="owf6BD76DF1F3B5AB86645EB26064040336" Source="$(var.SourceDir)\PresentationUI.dll" KeyPath="yes" />
         </Component>
+        <Component Id="owcFD8BDBDCD23CAFAD1BE78CCDFE066536" Guid="7f0c3f46-8268-8ed7-9143-259214b2bf1c">
+          <File Id="owfFD8BDBDCD23CAFAD1BE78CCDFE066536" Source="$(var.SourceDir)\PropertiesDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owcAAEB7F29D4057856ED38D9F98F909A6B" Guid="ec6f73d3-e61e-208d-17a5-ae324c43c9f2">
           <File Id="owfAAEB7F29D4057856ED38D9F98F909A6B" Source="$(var.SourceDir)\ReachFramework.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc48F7449585373A9F7669AC10E319F507" Guid="9644d33c-8c4f-761a-5456-d37725f37944">
+          <File Id="owf48F7449585373A9F7669AC10E319F507" Source="$(var.SourceDir)\ServicesDesigner.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc5AA17827802C51F6AEE675A4501087BB" Guid="a80c13fd-21a0-6a3c-bd5a-8b99f5a59e36">
+          <File Id="owf5AA17827802C51F6AEE675A4501087BB" Source="$(var.SourceDir)\ShortCutsDesigner.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc25FBE4153F32A5634B0ADA8A6954CC89" Guid="6c98bea6-1304-2fb8-4ce3-709ad7fb9601">
           <File Id="owf25FBE4153F32A5634B0ADA8A6954CC89" Source="$(var.SourceDir)\System.AppContext.dll" KeyPath="yes" />
@@ -810,10 +840,10 @@
             <File Id="owfD928F1859DCB2BD81A8F40BE7D2ACC4A" Source="$(var.SourceDir)\Schemas\util-v4.xsd" />
             <File Id="owf96BC8A67FCBB8DE8A0831E2A7AAD36D3" Source="$(var.SourceDir)\Schemas\vs-v3.xsd" />
             <File Id="owfCF54E1EA36AA0094B3D7ABCA6BC1035D" Source="$(var.SourceDir)\Schemas\vs-v4.xsd" />
-            <File Id="owf9A9D1054524ACFD2E72BC80304E93890" Source="$(var.SourceDir)\Schemas\wixloc-v3.xsd" />
-            <File Id="owf489567B42FF334B92AF76EC199D51BAD" Source="$(var.SourceDir)\Schemas\wixloc-v4.xsd" />
             <File Id="owf78F4B4D39C2656C2481BCB8BBE9D671A" Source="$(var.SourceDir)\Schemas\wix-v3.xsd" />
             <File Id="owf5320F280DEEE65AFCC71E7E9FF29FCD8" Source="$(var.SourceDir)\Schemas\wix-v4.xsd" />
+            <File Id="owf9A9D1054524ACFD2E72BC80304E93890" Source="$(var.SourceDir)\Schemas\wixloc-v3.xsd" />
+            <File Id="owf489567B42FF334B92AF76EC199D51BAD" Source="$(var.SourceDir)\Schemas\wixloc-v4.xsd" />
           </Component>
         </Directory>
         <Directory Id="owd12A58CC26E75581DB42F31C9D7B4C6D5" Name="Templates">
