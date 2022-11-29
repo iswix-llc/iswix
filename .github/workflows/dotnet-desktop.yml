@@ -22,6 +22,6 @@ jobs:
       with:
         fetch-depth: 0
     - name: Version AssemblyInfo Files
-      shell: pwsh
+      shell: powershel
       run: Scripts/ApplyVersionToAssemblies.ps1
       
