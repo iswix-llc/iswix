@@ -24,7 +24,7 @@ namespace IsWiXAutomationInterface
             try
             {
 
-                foreach (var element in _documentManager.Document.GetProductModuleOrFragmentElement().Elements(ns + "Property"))
+                foreach (var element in _documentManager.Document.GetSecondOrderRoot().Elements(ns + "Property"))
                 {
                     IsWiXProperty iswixProperty = new IsWiXProperty(_documentManager.Document, element);
 
@@ -49,7 +49,7 @@ namespace IsWiXAutomationInterface
             }
             else
             {
-                _documentManager.Document.GetProductModuleOrFragmentElement().Add(propertyElement);
+                _documentManager.Document.GetSecondOrderRoot().Add(propertyElement);
             }
 
             IsWiXProperty iswixProperty = new IsWiXProperty(_documentManager.Document, propertyElement);
@@ -58,13 +58,23 @@ namespace IsWiXAutomationInterface
         }
         public void SortXML()
         {
-            var properties = _documentManager.Document.GetProductModuleOrFragmentElement().Elements(ns + "Property")
+            XElement rootElement = _documentManager.Document.GetSecondOrderRoot();
+
+            var properties = rootElement.Elements(ns + "Property")
                             .OrderBy(s => (string)s.Attribute("Id").Value).ToArray();
             _documentManager.Document.Descendants(ns + "Property").Remove();
             var element = _documentManager.Document.GetElementToAddAfterSelf("Property");
+
             foreach (var property in properties.Reverse())
             {
-                element.AddAfterSelf(property);
+                if (element == null)
+                {
+                    rootElement.AddFirst(property);
+                }
+                else
+                {
+                    element.AddAfterSelf(property);
+                }
             }
         }
     }

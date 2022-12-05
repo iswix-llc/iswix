@@ -28,7 +28,7 @@ namespace IsWiXAutomationInterface
             try
             {
 
-                foreach (var element in _document.GetProductModuleOrFragmentElement().Elements(ns + "Msix"))
+                foreach (var element in _document.GetSecondOrderRoot().Elements(ns + "Msix"))
                 {
                     IsWiXFGMSIX isWiXFGMSIX = new IsWiXFGMSIX(_document, element);
 
@@ -76,7 +76,7 @@ namespace IsWiXAutomationInterface
             }
             else
             {
-                _document.GetProductOrFragmentElement().Add(msixElement);
+                _document.GetSecondOrderRoot().Add(msixElement);
             }
 
             IsWiXFGMSIX isWiXFGMSIX = new IsWiXFGMSIX(_document, msixElement);
@@ -113,7 +113,7 @@ namespace IsWiXAutomationInterface
 
         public void SortXML()
         {
-            var properties = _document.GetProductOrFragmentElement().Elements(ns + "Msix")
+            var properties = _document.GetSecondOrderRoot().Elements(ns + "Msix")
                             .OrderBy(s => (string)s.Attribute("Id").Value).ToArray();
             _document.Descendants(ns + "Msix").Remove();
             var element = _document.GetElementToAddAfterSelf("Property");

@@ -116,108 +116,12 @@ namespace IsWiXAutomationInterface
             return docType;
         }
 
-        public static XElement GetProductOrModuleElement(this XDocument Document)
+        public static XElement GetSecondOrderRoot(this XDocument Document)
         {
-            XElement element;
-            XNamespace ns = GetWiXNameSpace(Document);
-            try
-            {
-                element = (from myitem in Document.Root.Elements()
-                           where myitem.Name == ns + "Module" || myitem.Name == ns + "Product"
-                           select myitem).First();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("IsWix Query Error: " + ex.Message);
-            }
-            return element;
+            return Document.Root.Elements().First();
+;
         }
-        public static XElement GetProductPackageOrModuleElement(this XDocument Document)
-        {
-            XElement element;
-            XNamespace ns = GetWiXNameSpace(Document);
-            try
-            {
-                element = (from myitem in Document.Root.Elements()
-                           where myitem.Name == ns + "Module" || myitem.Name == ns + "Product" || myitem.Name == ns + "Package"
-                           select myitem).First();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("IsWix Query Error: " + ex.Message);
-            }
-            return element;
-        }
-
-        public static XElement GetProductPackageModuleOrFragmentElement(this XDocument Document)
-        {
-            XElement element;
-            XNamespace ns = GetWiXNameSpace(Document);
-            try
-            {
-                element = (from myitem in Document.Root.Elements()
-                           where myitem.Name == ns + "Module" || myitem.Name == ns + "Product" || myitem.Name == ns + "Package" || myitem.Name == ns + "Fragment"
-                           select myitem).First();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("IsWix Query Error: " + ex.Message);
-            }
-            return element;
-        }
-
-
-        public static XElement GetModuleElement(this XDocument Document)
-        {
-            XElement element;
-            XNamespace ns = GetWiXNameSpace(Document);
-            try
-            {
-                element = (from myitem in Document.Root.Elements()
-                           where myitem.Name == ns + "Module"
-                           select myitem).First();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("IsWix Query Error: " + ex.Message);
-            }
-            return element;
-        }
-        public static XElement GetProductOrFragmentElement(this XDocument Document)
-        {
-            XElement element;
-            XNamespace ns = Document.GetWiXNameSpace();
-            try
-            {
-                element = (from myitem in Document.Root.Elements()
-                           where myitem.Name == ns + "Product" || myitem.Name == ns + "Fragment"
-                           select myitem).First();
-            }
-            catch (Exception ex)
-            {
-                 throw new Exception("IsWix Query Error: " + ex.Message);
-            }
-            return element;
-        }
-
-        public static XElement GetProductModuleOrFragmentElement(this XDocument Document)
-        {
-            XElement element;
-            XNamespace ns = Document.GetWiXNameSpace();
-            
-            try
-            {
-                element = (from myitem in Document.Root.Elements()
-                           where myitem.Name == ns + "Module" || myitem.Name == ns + "Product" || myitem.Name == ns + "Fragment"
-                           select myitem).First();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("IsWix Query Error: " + ex.Message);
-            }
-            return element;
-        }
-
+   
         public static XElement GetElementToAddAfterSelf(this XDocument Document, string ElementName)
         {
             XElement element = null;
@@ -237,7 +141,7 @@ namespace IsWiXAutomationInterface
                     elementsInOrder =
                         "SummaryInformation,Package,MediaTemplate,Majorupgrade,AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef," +
                         "EmbeddedChainer,EmbeddedChainerRef,EnsureTable,Feature,FeatureGroupRef,FeatureRef,Icon,InstanceTransforms,Media,PackageCertificates," +
-                        "PatchCertificates,SetDirectory,SetProperty,SFPCatalog,SymbolPath,UI,UIRef,Upgrade,WixVariable,InstallExecuteSequence," +
+                        "PatchCertificates,SetDirectory,Property,SetProperty,SFPCatalog,SymbolPath,UI,UIRef,Upgrade,WixVariable,InstallExecuteSequence," +
                         "InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
                     break;
 
@@ -245,7 +149,7 @@ namespace IsWiXAutomationInterface
                     elementsInOrder =
                         "MediaTemplate,Majorupgrade,AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef,EmbeddedChainer,EmbeddedChainerRef," +
                         "EnsureTable,Feature,FeatureGroup,FeatureRef,Icon,IgnoreModularization,Media,PackageCertificates,PatchCertificates,PatchFamily,SetDirectory," +
-                        "SetProperty,SFPCatalog,UI,UIRef,Upgrade,WixVariable,Sequence,InstallExecuteSequence,InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
+                        "Property,SetProperty,SFPCatalog,UI,UIRef,Upgrade,WixVariable,Sequence,InstallExecuteSequence,InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
                     break;
             }
 
@@ -258,7 +162,7 @@ namespace IsWiXAutomationInterface
             {
                 try
                 {
-                    var test = Document.GetProductPackageModuleOrFragmentElement();
+                    var test = Document.GetSecondOrderRoot();
                     element = test.Elements(ns + item).Last();
                     break;
                 }

@@ -26,7 +26,7 @@ namespace IsWiXAutomationInterface
 
             try
             {
-                foreach (var shortcutElement in _documentManager.Document.GetProductModuleOrFragmentElement().Descendants(ns + "Shortcut"))
+                foreach (var shortcutElement in _documentManager.Document.GetSecondOrderRoot().Descendants(ns + "Shortcut"))
                 {
                     IsWiXShortCut isWiXShortcut = new IsWiXShortCut(_documentManager.Document, shortcutElement);
                     Add(isWiXShortcut);

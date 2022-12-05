@@ -16,7 +16,7 @@ namespace IsWiXAutomationInterface
         public IsWiXPackage()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-            _packageElement = _documentManager.Document.GetProductOrModuleElement().Element(ns + "Package");
+            _packageElement = _documentManager.Document.GetSecondOrderRoot().Element(ns + "Package");
         }
         
         public String Id 

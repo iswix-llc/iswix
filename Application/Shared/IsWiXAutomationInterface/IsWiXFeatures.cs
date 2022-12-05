@@ -15,7 +15,7 @@ namespace IsWiXAutomationInterface
         {
             ns = _documentManager.Document.GetWiXNameSpace();
 
-            Load(_documentManager.Document.GetProductOrFragmentElement());
+            Load(_documentManager.Document.GetSecondOrderRoot());
         }
 
         public IsWiXFeatures(string parentId)
@@ -87,11 +87,12 @@ namespace IsWiXAutomationInterface
             }
             else
             {
-                _documentManager.Document.GetProductModuleOrFragmentElement().Add(featureElement);
+                _documentManager.Document.GetSecondOrderRoot().Add(featureElement);
             }
             
             IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             this.Add(iswixFeature);
+            SortXML();
             return iswixFeature;
         }
 
@@ -104,6 +105,7 @@ namespace IsWiXAutomationInterface
             insertAfterElement.AddAfterSelf(featureElement);
             IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             this.Add(iswixFeature);
+            SortXML();
             return iswixFeature;
         }
         public IsWiXFeature CreateSubFeature(string parentId, string id)
@@ -115,6 +117,28 @@ namespace IsWiXAutomationInterface
             parentElement.Add(featureElement);
             IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             return iswixFeature;
+        }
+
+        public void SortXML()
+        {
+            XElement rootElement = _documentManager.Document.GetSecondOrderRoot();
+
+            var features = rootElement.Elements(ns + "Feature")
+                            .OrderBy(s => (string)s.Attribute("Id").Value).ToArray();
+            _documentManager.Document.Descendants(ns + "Feature").Remove();
+            var element = _documentManager.Document.GetElementToAddAfterSelf("Feature");
+
+            foreach (var feature in features.Reverse())
+            {
+                if (element == null)
+                {
+                    rootElement.AddFirst(feature);
+                }
+                else
+                {
+                    element.AddAfterSelf(feature);
+                }
+            }
         }
     }
     public enum Absent { allow, disallow }

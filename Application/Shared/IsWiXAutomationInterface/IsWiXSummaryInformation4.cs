@@ -15,11 +15,11 @@ namespace IsWiXAutomationInterface
         public IsWiXSummaryInformation4()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-            _summaryInformationElement = _documentManager.Document.GetProductPackageOrModuleElement().Element(ns + "SummaryInformation");
+            _summaryInformationElement = _documentManager.Document.GetSecondOrderRoot().Element(ns + "SummaryInformation");
             if (_summaryInformationElement == null) 
             {
                 XElement summaryInformationElement = new XElement(ns + "SummaryInformation");
-                _documentManager.Document.GetProductPackageOrModuleElement().Elements().First().AddBeforeSelf(summaryInformationElement);
+                _documentManager.Document.GetSecondOrderRoot().Elements().First().AddBeforeSelf(summaryInformationElement);
             }
         }
 

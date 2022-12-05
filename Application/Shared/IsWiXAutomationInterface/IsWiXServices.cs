@@ -25,7 +25,7 @@ namespace IsWiXAutomationInterface
 
             try
             {
-                foreach (var serviceInstallElement in _documentManager.Document.GetProductModuleOrFragmentElement().Descendants(ns + "ServiceInstall"))
+                foreach (var serviceInstallElement in _documentManager.Document.GetSecondOrderRoot().Descendants(ns + "ServiceInstall"))
                 {
                     IsWiXServiceInstall isWiXServiceInstall = new IsWiXServiceInstall(_documentManager.Document, serviceInstallElement);
 

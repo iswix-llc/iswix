@@ -67,7 +67,7 @@ namespace CustomTablesDesigner
 
             try
             {
-                XElement moduleElement = _documentManager.Document.GetProductModuleOrFragmentElement();
+                XElement moduleElement = _documentManager.Document.GetSecondOrderRoot();
                 foreach (var tableElement in moduleElement.Elements(ns + "CustomTable"))
                 {
                     listBoxTables.Items.Add(tableElement.Attribute("Id").Value);
@@ -543,7 +543,7 @@ namespace CustomTablesDesigner
 
                 if (previousElement == null)
                 {
-                    _documentManager.Document.GetProductModuleOrFragmentElement().AddFirst(newElement);
+                    _documentManager.Document.GetSecondOrderRoot().AddFirst(newElement);
                 }
                 else
                 {

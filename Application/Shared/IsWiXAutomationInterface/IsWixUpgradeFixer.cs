@@ -17,7 +17,7 @@ namespace IsWiXAutomationInterface
             XNamespace ns = _documentManager.Document.GetWiXNameSpace();
             if(_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
             {
-                XElement module = _documentManager.Document.GetModuleElement();
+                XElement module = _documentManager.Document.GetSecondOrderRoot();
                 if (!module.Elements(ns + "Directory").Where(c=>c.Attribute("Id").Value == "TARGETDIR").Any())
                 {
                     XElement targetDir = new XElement(ns + "Directory", new XAttribute("Id", "TARGETDIR"), new XAttribute("Name", "SourceDir"));

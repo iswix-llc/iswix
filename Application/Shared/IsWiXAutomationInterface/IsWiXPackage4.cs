@@ -16,7 +16,7 @@ namespace IsWiXAutomationInterface
         public IsWiXPackage4()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-            _packageElement = _documentManager.Document.GetProductPackageOrModuleElement();
+            _packageElement = _documentManager.Document.GetSecondOrderRoot();
         }
 
         public string Codepage
