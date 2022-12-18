@@ -1,39 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e">
-		<Package InstallerVersion="301" Compressed="yes" InstallScope="perMachine" />
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:vs="http://wixtoolset.org/schemas/v4/wxs/vs">
+	<Package Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e" InstallerVersion="301">
+		
 		<MediaTemplate EmbedCab="yes" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
 
 		<PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
-		<SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch">
-			WIXNETFX4RELEASEINSTALLED >= "#528040 "
-		</SetProperty>
-		<Condition Message="[ProductName] requires .NET Framework 4.8 or later.">Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED</Condition>
+		<SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch" Condition="WIXNETFX4RELEASEINSTALLED &gt;= &quot;#528040 &quot;" />
+		<Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="[ProductName] requires .NET Framework 4.8 or later." />
 
-		<DirectoryRef Id="INSTALLLOCATION"/>
+		<DirectoryRef Id="INSTALLLOCATION" />
 
-		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
+		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
-		<UIRef Id="UI"/>
-		<UIRef Id="WixUI_ErrorProgressText"/>
+		<UIRef Id="UI" />
+		<UIRef Id="WixUI_ErrorProgressText" />
 
 		<!-- Used by AddInMM  Goes here due to merge constraints -->
-		<PropertyRef Id="VS2019_EXTENSIONS_DIR"/>
-		<PropertyRef Id="VS2022_EXTENSIONS_DIR"/>
+		<vs:FindVisualStudio />
+		<PropertyRef Id="VS2019_EXTENSIONS_DIR" />
+		<PropertyRef Id="VS2022_EXTENSIONS_DIR" />
 
 		<CustomActionRef Id="VS2019Setup" />
 		<CustomActionRef Id="VS2022Setup" />
 
-		<Binary Id="iswixActions" SourceFile="$(var.IsWiXActions.TargetDir)IsWiXActions.CA.dll"/>
-		<CustomAction Id="FixPaths" BinaryKey="iswixActions" DllEntry="FixPaths" Execute="firstSequence"/>
-		<InstallUISequence>
-			<Custom Action="FixPaths" After="AppSearch"></Custom>
-		</InstallUISequence>
-		<InstallExecuteSequence>
-			<Custom Action="FixPaths" After="AppSearch"></Custom>
-		</InstallExecuteSequence>
-
-	</Product>
+	
+	</Package>
 </Wix>

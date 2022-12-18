@@ -1,11 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <?define ComponentRules="OneToOne"?>
   <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
   <?define SourceDir="..\Deploy"?>
-  <Module Id="IsWiXNewNewAddInMM" Language="1033" Version="1.0.0.0">
-    <Package Id="{D487A781-DB05-40E7-A236-DF808C08EA53}" Manufacturer="IsWiXNewAddInMM" InstallerVersion="200" />
-    <Directory Id="TARGETDIR" Name="SourceDir">
+  <Module Id="IsWiXNewNewAddInMM" Language="1033" Version="1.0.0.0" Guid="{D487A781-DB05-40E7-A236-DF808C08EA53}" InstallerVersion="200"><SummaryInformation Manufacturer="IsWiXNewAddInMM" />
+    
+    <ComponentGroupRef Id="Custom" />
+    <Property Id="VS2022_EXTENSIONS_DIR" SuppressModularization="yes" />
+	  <Property Id="EXTENSIONDIR2022" SuppressModularization="yes" />
+	  <Property Id="EXTENSIONPROJECTTEMPLATESDIR2022" SuppressModularization="yes" />
+ 
       <Directory Id="MergeRedirectFolder">
         <Directory Id="owd00D844FBB782F9390ED1740825A5270C" Name="IsWiX2022AddIn">
           <Component Id="owc4AAB5D2EF980D11DC5191910D7C080DE" Guid="1b2775b5-9424-320c-3999-1d9ad637ed7b">
@@ -40,7 +43,7 @@
           </Component>
           <Directory Id="owd106575434686DDC2FAE6ED43DC75AE58" Name="ProjectTemplates">
             <Component Id="owc1C5316591F94625743CC9B4E69D6AAFE" Guid="3f790fd6-c623-cc13-a26c-87195db1958e">
-				<File Id="owf1C5316591F94625743CC9B4E69D6AAFE" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip" KeyPath="yes" >
+				<File Id="owf1C5316591F94625743CC9B4E69D6AAFE" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip" KeyPath="yes">
 					<CopyFile Id="HeatWaveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 				</File>
             </Component>
@@ -72,10 +75,5 @@
           </Directory>
         </Directory>
       </Directory>
-    </Directory>
-    <ComponentGroupRef Id="Custom" />
-    <Property Id="VS2022_EXTENSIONS_DIR" SuppressModularization="yes" />
-    <SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
-    <SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
-  </Module>
+    </Module>
 </Wix>

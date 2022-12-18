@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <?define SourceDir="..\Deploy"?>
-  <Module Id="IsWiXMM" Language="1033" Version="1.0.0.0">
-    <Package Id="5e52a169-36a3-4249-9bc3-746f33dcefc5" Manufacturer="IsWiXMM" InstallerVersion="200" />
+  <Module Id="IsWiXMM" Language="1033" Version="1.0.0.0" Guid="5e52a169-36a3-4249-9bc3-746f33dcefc5" InstallerVersion="200">
+    <SummaryInformation Manufacturer="IsWiXMM" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="MergeRedirectFolder">
         <Component Id="owcDBF23DF8BC1E6A00C5CAC4F5EAB3C052" Guid="c02f62d3-f9b1-f8a4-7bd0-abaab7cd5516">
@@ -90,8 +90,8 @@
         <Component Id="owcAD163F8F3E681AF203491EBF445307F9" Guid="68278ad9-e0b5-d647-d46f-a08f3ad098d8">
           <File Id="owfAD163F8F3E681AF203491EBF445307F9" Source="$(var.SourceDir)\Microsoft.Deployment.WindowsInstaller.Package.dll" KeyPath="yes" />
         </Component>
-        <Component Id="owc6EB8183FE89972EE32159CC87D09F1F9" Guid="11820b60-e96a-4798-439b-4f66b780430b">
-          <File Id="owf6EB8183FE89972EE32159CC87D09F1F9" Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.x86.dll" KeyPath="yes" />
+        <Component Id="owc8E8A4B43081A3E23A39A84E6034A1F78" Guid="bfdc1e75-05b8-7f04-2965-29a50f29fe42">
+          <File Id="owf8E8A4B43081A3E23A39A84E6034A1F78" Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc4A360832ECFF1ECB9A008F2BA790EC1F" Guid="48a7d858-89a0-d86f-9222-354f090dbbae">
           <File Id="owf4A360832ECFF1ECB9A008F2BA790EC1F" Source="$(var.SourceDir)\Microsoft.VisualBasic.Core.dll" KeyPath="yes" />

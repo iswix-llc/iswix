@@ -1,22 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Fragment>
-
-		<!-- Reference Custom Components Below -->
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment><!-- Reference Custom Components Below -->
 		<ComponentGroup Id="Custom">
-			<ComponentRef Id="iswixglobalparams"/>
+			<ComponentRef Id="iswixglobalparams" />
 		</ComponentGroup>
 
 		<!-- Author Custom Components Below -->
 		<DirectoryRef Id="MergeRedirectFolder">
 
 		</DirectoryRef>
-		<DirectoryRef Id="TARGETDIR">
+		
+	
 			<Directory Id="GlobalAssemblyCache" Name="GlobalAssemblyCache">
 				<Component Id="iswixglobalparams" Guid="{A1D8FD12-A814-4E43-BCF1-7360C7E781FB}" Permanent="yes">
-					<File Id="iswixglobalparams" Source="..\Deploy\IsWiX2022AddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net"/>
+					<File Id="iswixglobalparams" Source="..\Deploy\IsWiX2022AddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net" />
 				</Component>
 			</Directory>
-		</DirectoryRef>
-	</Fragment>
+		</Fragment>
 </Wix>
