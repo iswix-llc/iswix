@@ -108,13 +108,20 @@ namespace IsWiX2022AddIn
                 {
                     documentPath = "\"" + dte.ActiveDocument.FullName + "\"";
                 }
-                string isWiXPath = string.Empty; ;
-                using (RegistryKey local32Key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
+                string isWiXPath = string.Empty;
+                try
                 {
-                    using (RegistryKey isWiXKey = local32Key.OpenSubKey(@"SOFTWARE\ISWIXLLC\IsWiX", false))
+                    using (RegistryKey local64Key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
                     {
-                        isWiXPath = isWiXKey.GetValue("IsWiXFilePath", string.Empty).ToString();
+                        using (RegistryKey isWiXKey = local64Key.OpenSubKey(@"SOFTWARE\ISWIXLLC\IsWiX", false))
+                        {
+                            isWiXPath = isWiXKey.GetValue("IsWiXFilePath", string.Empty).ToString();
+                        }
                     }
+                }
+                catch (Exception ex) 
+                {
+                    throw new Exception("IsWiX installation path registry entry not found.");
                 }
 
                 if (!File.Exists(isWiXPath))
