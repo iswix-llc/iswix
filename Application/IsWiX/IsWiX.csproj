@@ -28,6 +28,7 @@
     <None Remove="Schemas\Dependency-v4.xsd" />
     <None Remove="Schemas\difxapp-v3.xsd" />
     <None Remove="Schemas\difxapp-v4.xsd" />
+    <None Remove="Schemas\directx-v4.xsd" />
     <None Remove="Schemas\fgappx-v3.xsd" />
     <None Remove="Schemas\fgmsix-v3.xsd" />
     <None Remove="Schemas\firewall-v3.xsd" />
@@ -48,6 +49,7 @@
     <None Remove="Schemas\tag-v3.xsd" />
     <None Remove="Schemas\thmutil-v3.xsd" />
     <None Remove="Schemas\thmutil-v4.xsd" />
+    <None Remove="Schemas\ui-v4.xsd" />
     <None Remove="Schemas\util-v3.xsd" />
     <None Remove="Schemas\util-v4.xsd" />
     <None Remove="Schemas\vs-v3.xsd" />
@@ -187,6 +189,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="IsWiXDesigner.cs" />
+    <Content Include="Schemas\directx-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\ui-v4.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

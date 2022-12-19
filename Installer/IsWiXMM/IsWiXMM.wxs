@@ -807,7 +807,7 @@
           <File Id="owfF246FCD6A0B7E4F6A4C083EDC1D810CD" Source="$(var.SourceDir)\IsWiX.runtimeconfig.json" />
         </Component>
         <Directory Id="owd878D183E2FFB0B60D5A8A3A3E2A04F73" Name="Schemas">
-          <Component Id="owc878D183E2FFB0B60D5A8A3A3E2A04F73" Guid="304ea067-4ec2-47e9-9360-d2287e33d11a" KeyPath="yes">
+          <Component Id="owc878D183E2FFB0B60D5A8A3A3E2A04F73" Guid="af6e5955-1587-4007-93d5-823718073bc0" KeyPath="yes">
             <File Id="owf758C6EECD752134066D453B810F89F66" Source="$(var.SourceDir)\Schemas\bal-v3.xsd" />
             <File Id="owf4936792BDD57351ADD01C2D0AD06FF7A" Source="$(var.SourceDir)\Schemas\bal-v4.xsd" />
             <File Id="owf5F69D55CD3B28280A89085CB3F4AFB60" Source="$(var.SourceDir)\Schemas\complus-v3.xsd" />
@@ -816,6 +816,7 @@
             <File Id="owf5A13F947B1203FB405D44532920C43FB" Source="$(var.SourceDir)\Schemas\Dependency-v4.xsd" />
             <File Id="owfAD0D437BB690AC47A7F8BF8814C8B5AC" Source="$(var.SourceDir)\Schemas\difxapp-v3.xsd" />
             <File Id="owf7B85626AB0C522ED75FE6285C4D7D426" Source="$(var.SourceDir)\Schemas\difxapp-v4.xsd" />
+            <File Id="owf0A1A969A251495B4AB68F446F79771D4" Source="$(var.SourceDir)\Schemas\directx-v4.xsd" />
             <File Id="owf901EA240F3190962E2ABD561F76B2278" Source="$(var.SourceDir)\Schemas\fgappx-v3.xsd" />
             <File Id="owfB0AABC373650390A08822B498C6C2F3F" Source="$(var.SourceDir)\Schemas\fgmsix-v3.xsd" />
             <File Id="owfEB9E98C67AB22D06EA66F0775B38A8BF" Source="$(var.SourceDir)\Schemas\firewall-v3.xsd" />
@@ -836,6 +837,7 @@
             <File Id="owf83D7B634372422F76B0C0251FA01E97C" Source="$(var.SourceDir)\Schemas\tag-v3.xsd" />
             <File Id="owf9F51CE2CFA0853D201A2F3DF97A8BB86" Source="$(var.SourceDir)\Schemas\thmutil-v3.xsd" />
             <File Id="owfD00EAE1A85DB1591AF0931117921EA6F" Source="$(var.SourceDir)\Schemas\thmutil-v4.xsd" />
+            <File Id="owf921545DAE3BDDEC8F3B9BA21900C07EF" Source="$(var.SourceDir)\Schemas\ui-v4.xsd" />
             <File Id="owf4308A6198DD85EF7CB6A91C5C4CB8AB7" Source="$(var.SourceDir)\Schemas\util-v3.xsd" />
             <File Id="owfD928F1859DCB2BD81A8F40BE7D2ACC4A" Source="$(var.SourceDir)\Schemas\util-v4.xsd" />
             <File Id="owf96BC8A67FCBB8DE8A0831E2A7AAD36D3" Source="$(var.SourceDir)\Schemas\vs-v3.xsd" />
