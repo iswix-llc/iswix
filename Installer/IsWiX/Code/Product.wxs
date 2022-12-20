@@ -24,8 +24,8 @@
 		<CustomActionRef Id="VS2019Setup" />
 		<CustomActionRef Id="VS2022Setup" />
 
-		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
-		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both">VS2022_EXTENSIONS_DIR</SetProperty>
+		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
+		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
 
 	</Package>
 </Wix>
