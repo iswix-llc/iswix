@@ -57,31 +57,35 @@ namespace IsWiXAutomationInterface
                     string currentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
 
                     string schemasDir = Path.Combine(currentDirectory, "Schemas");
-                    string patternMatch = string.Empty;
+
+                    int wixVersion;
                     if(_ns == "http://schemas.microsoft.com/wix/2006/wi")
                     {
-                        patternMatch = "*-v3.xsd";
+                        wixVersion = 3;
                     }
                     else 
                     {
-                        patternMatch = "*-v4.xsd";
+                        wixVersion = 4;
                     }
  
-                    foreach (var file in new DirectoryInfo(schemasDir).GetFiles(patternMatch))
+                    foreach (var file in new DirectoryInfo(schemasDir).GetFiles("*.xsd"))
                     {
-                        string prefix = Path.GetFileNameWithoutExtension(file.Name).ToLower().Split('-').First();
-                        if (!prefix.Equals("wix"))
+                        if ((wixVersion == 3 && !file.Name.StartsWith("fg4"))|| wixVersion == 4 && file.Name.StartsWith("fg4_" ))
                         {
-                            XDocument doc = XDocument.Load(file.FullName);
-                            string targetNameSpace = doc.Root.Attribute("targetNamespace").Value;
-
-                            // Expedient hack to handle this XSD not following the pattern set by the others
-                            if (prefix.Equals("fgwixappx"))
+                            string prefix = Path.GetFileNameWithoutExtension(file.Name).Replace("fg4_", "");
+                            if (!prefix.Equals("wix"))
                             {
-                                prefix = "fga";
-                            }
+                                XDocument doc = XDocument.Load(file.FullName);
+                                string targetNameSpace = doc.Root.Attribute("targetNamespace").Value;
 
-                            _extensions.Add(prefix, targetNameSpace);
+                                // Expedient hack to handle this XSD not following the pattern set by the others
+                                if (prefix.Equals("fgwixappx"))
+                                {
+                                    prefix = "fga";
+                                }
+
+                                _extensions.Add(prefix, targetNameSpace);
+                            }
                         }
                     }
                 }

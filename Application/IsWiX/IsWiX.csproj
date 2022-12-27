@@ -14,166 +14,182 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="IsWiXDesigner.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Remove="EULA.rtf" />
     <None Remove="IsWiX.bmp" />
+    <None Remove="IsWiX.ico" />
     <None Remove="License.txt" />
-    <None Remove="Schemas\bal-v3.xsd" />
-    <None Remove="Schemas\bal-v4.xsd" />
-    <None Remove="Schemas\complus-v3.xsd" />
-    <None Remove="Schemas\complus-v4.xsd" />
-    <None Remove="Schemas\Dependency-v3.xsd" />
-    <None Remove="Schemas\Dependency-v4.xsd" />
-    <None Remove="Schemas\difxapp-v3.xsd" />
-    <None Remove="Schemas\difxapp-v4.xsd" />
-    <None Remove="Schemas\directx-v4.xsd" />
-    <None Remove="Schemas\fgappx-v3.xsd" />
-    <None Remove="Schemas\fgmsix-v3.xsd" />
-    <None Remove="Schemas\firewall-v3.xsd" />
-    <None Remove="Schemas\firewall-v4.xsd" />
-    <None Remove="Schemas\gaming-v3.xsd" />
-    <None Remove="Schemas\http-v4.xsd" />
-    <None Remove="Schemas\iis-v3.xsd" />
-    <None Remove="Schemas\iis-v4.xsd" />
-    <None Remove="Schemas\lux-v3.xsd" />
-    <None Remove="Schemas\msmq-v3.xsd" />
-    <None Remove="Schemas\msmq-v4.xsd" />
-    <None Remove="Schemas\netfx-v3.xsd" />
-    <None Remove="Schemas\netfx-v4.xsd" />
-    <None Remove="Schemas\ps-v3.xsd" />
-    <None Remove="Schemas\ps-v4.xsd" />
-    <None Remove="Schemas\sql-v3.xsd" />
-    <None Remove="Schemas\sql-v4.xsd" />
-    <None Remove="Schemas\tag-v3.xsd" />
-    <None Remove="Schemas\thmutil-v3.xsd" />
-    <None Remove="Schemas\thmutil-v4.xsd" />
-    <None Remove="Schemas\ui-v4.xsd" />
-    <None Remove="Schemas\util-v3.xsd" />
-    <None Remove="Schemas\util-v4.xsd" />
-    <None Remove="Schemas\vs-v3.xsd" />
-    <None Remove="Schemas\vs-v4.xsd" />
-    <None Remove="Schemas\wix-v3.xsd" />
-    <None Remove="Schemas\wix-v4.xsd" />
-    <None Remove="Schemas\wixloc-v3.xsd" />
-    <None Remove="Schemas\wixloc-v4.xsd" />
+    <None Remove="Schemas\bal.xsd" />
+    <None Remove="Schemas\complus.xsd" />
+    <None Remove="Schemas\Dependency.xsd" />
+    <None Remove="Schemas\difxapp.xsd" />
+    <None Remove="Schemas\fg4_bal.xsd" />
+    <None Remove="Schemas\fg4_complus.xsd" />
+    <None Remove="Schemas\fg4_dependency.xsd" />
+    <None Remove="Schemas\fg4_difxapp.xsd" />
+    <None Remove="Schemas\fg4_directx.xsd" />
+    <None Remove="Schemas\fg4_firewall.xsd" />
+    <None Remove="Schemas\fg4_http.xsd" />
+    <None Remove="Schemas\fg4_iis.xsd" />
+    <None Remove="Schemas\fg4_msmq.xsd" />
+    <None Remove="Schemas\fg4_netfx.xsd" />
+    <None Remove="Schemas\fg4_ps.xsd" />
+    <None Remove="Schemas\fg4_sql.xsd" />
+    <None Remove="Schemas\fg4_thmutil.xsd" />
+    <None Remove="Schemas\fg4_ui.xsd" />
+    <None Remove="Schemas\fg4_util.xsd" />
+    <None Remove="Schemas\fg4_vs.xsd" />
+    <None Remove="Schemas\fg4_wix.xsd" />
+    <None Remove="Schemas\fg4_wixloc.xsd" />
+    <None Remove="Schemas\fgappx.xsd" />
+    <None Remove="Schemas\fgmsix.xsd" />
+    <None Remove="Schemas\firewall.xsd" />
+    <None Remove="Schemas\gaming.xsd" />
+    <None Remove="Schemas\http.xsd" />
+    <None Remove="Schemas\iis.xsd" />
+    <None Remove="Schemas\lux.xsd" />
+    <None Remove="Schemas\msmq.xsd" />
+    <None Remove="Schemas\netfx.xsd" />
+    <None Remove="Schemas\ps.xsd" />
+    <None Remove="Schemas\sql.xsd" />
+    <None Remove="Schemas\tag.xsd" />
+    <None Remove="Schemas\thmutil.xsd" />
+    <None Remove="Schemas\util.xsd" />
+    <None Remove="Schemas\vs.xsd" />
+    <None Remove="Schemas\wix.xsd" />
+    <None Remove="Schemas\wixloc.xsd" />
     <None Remove="Templates\WiX\Fragment.wxs" />
     <None Remove="Templates\WiX\MergeModule.wxs" />
     <None Remove="Templates\WiX\Product.wxs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="EULA.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="IsWiX.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="IsWiX.ico" />
-    <Content Include="Schemas\bal-v3.xsd">
+    <Content Include="IsWiX.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\bal-v4.xsd">
+    <Content Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\complus-v3.xsd">
+    <Content Include="Schemas\bal.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\complus-v4.xsd">
+    <Content Include="Schemas\complus.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\Dependency-v3.xsd">
+    <Content Include="Schemas\Dependency.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\Dependency-v4.xsd">
+    <Content Include="Schemas\difxapp.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\difxapp-v3.xsd">
+    <Content Include="Schemas\fg4_bal.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\difxapp-v4.xsd">
+    <Content Include="Schemas\fg4_complus.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\fgappx-v3.xsd">
+    <Content Include="Schemas\fg4_dependency.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\fgmsix-v3.xsd">
+    <Content Include="Schemas\fg4_difxapp.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\firewall-v3.xsd">
+    <Content Include="Schemas\fg4_directx.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\firewall-v4.xsd">
+    <Content Include="Schemas\fg4_firewall.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\gaming-v3.xsd">
+    <Content Include="Schemas\fg4_http.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\http-v4.xsd">
+    <Content Include="Schemas\fg4_iis.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\iis-v3.xsd">
+    <Content Include="Schemas\fg4_msmq.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\iis-v4.xsd">
+    <Content Include="Schemas\fg4_netfx.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\lux-v3.xsd">
+    <Content Include="Schemas\fg4_ps.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\msmq-v3.xsd">
+    <Content Include="Schemas\fg4_sql.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\msmq-v4.xsd">
+    <Content Include="Schemas\fg4_thmutil.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\netfx-v3.xsd">
+    <Content Include="Schemas\fg4_ui.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\netfx-v4.xsd">
+    <Content Include="Schemas\fg4_util.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\ps-v3.xsd">
+    <Content Include="Schemas\fg4_vs.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\ps-v4.xsd">
+    <Content Include="Schemas\fg4_wix.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\sql-v3.xsd">
+    <Content Include="Schemas\fg4_wixloc.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\sql-v4.xsd">
+    <Content Include="Schemas\fgappx.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\tag-v3.xsd">
+    <Content Include="Schemas\fgmsix.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\thmutil-v3.xsd">
+    <Content Include="Schemas\firewall.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\thmutil-v4.xsd">
+    <Content Include="Schemas\gaming.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\util-v3.xsd">
+    <Content Include="Schemas\http.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\util-v4.xsd">
+    <Content Include="Schemas\iis.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\vs-v3.xsd">
+    <Content Include="Schemas\lux.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\vs-v4.xsd">
+    <Content Include="Schemas\msmq.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\wix-v3.xsd">
+    <Content Include="Schemas\netfx.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\wix-v4.xsd">
+    <Content Include="Schemas\ps.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\wixloc-v3.xsd">
+    <Content Include="Schemas\sql.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Schemas\wixloc-v4.xsd">
+    <Content Include="Schemas\tag.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\thmutil.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\util.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\vs.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\wix.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\wixloc.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\WiX\Fragment.wxs">
@@ -183,16 +199,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\WiX\Product.wxs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="IsWiXDesigner.cs" />
-    <Content Include="Schemas\directx-v4.xsd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\ui-v4.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
