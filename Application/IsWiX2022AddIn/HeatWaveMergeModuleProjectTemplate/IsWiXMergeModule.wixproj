@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/4.0.0-preview.1">
+﻿<Project Sdk="WixToolset.Sdk/4.0.0-rc.1">
   <PropertyGroup>
     <OutputType>Module</OutputType>
   </PropertyGroup>

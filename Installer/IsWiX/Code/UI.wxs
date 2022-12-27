@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
   <Fragment>
     <UI Id="UI"> 
       <!-- See http://wix.sourceforge.net/manual-wix3/WixUI_index.htm for more information-->
-      <UIRef Id="WixUI_FeatureTree"/>
-      <ProgressText Action="VS2013Setup" Template="[1]">Updating Visual Studio 2013 registration</ProgressText>
-      <ProgressText Action="VS2015Setup" Template="[1]">Updating Visual Studio 2015 registration</ProgressText>
-      <ProgressText Action="VS2017Setup" Template="[1]">Updating Visual Studio 2017 registration</ProgressText>
-      <ProgressText Action="VS2019Setup" Template="[1]">Updating Visual Studio 2019 registration</ProgressText>
-	  <ProgressText Action="VS2022Setup" Template="[1]">Updating Visual Studio 2022 registration</ProgressText>
+      <ui:WixUI Id="WixUI_FeatureTree" />
+      <ProgressText Action="VS2013Setup" Template="[1]" Message="Updating Visual Studio 2013 registration" />
+      <ProgressText Action="VS2015Setup" Template="[1]" Message="Updating Visual Studio 2015 registration" />
+      <ProgressText Action="VS2017Setup" Template="[1]" Message="Updating Visual Studio 2017 registration" />
+      <ProgressText Action="VS2019Setup" Template="[1]" Message="Updating Visual Studio 2019 registration" />
+	  <ProgressText Action="VS2022Setup" Template="[1]" Message="Updating Visual Studio 2022 registration" />
 	</UI>
    </Fragment>
 </Wix>
