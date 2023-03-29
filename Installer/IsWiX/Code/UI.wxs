@@ -3,12 +3,11 @@
     <UI Id="UI"> 
       <!-- See http://wix.sourceforge.net/manual-wix3/WixUI_index.htm for more information-->
       <ui:WixUI Id="WixUI_FeatureTree" />
-      <!--<ProgressText Action="VS2013Setup" Template="[1]" Message="Updating Visual Studio 2013 registration" />
+      <ProgressText Action="VS2013Setup" Template="[1]" Message="Updating Visual Studio 2013 registration" />
       <ProgressText Action="VS2015Setup" Template="[1]" Message="Updating Visual Studio 2015 registration" />
       <ProgressText Action="VS2017Setup" Template="[1]" Message="Updating Visual Studio 2017 registration" />
       <ProgressText Action="VS2019Setup" Template="[1]" Message="Updating Visual Studio 2019 registration" />
-	  <ProgressText Action="VS2022Setup" Template="[1]" Message="Updating Visual Studio 2022 registration" />-->
+	  <ProgressText Action="VS2022Setup" Template="[1]" Message="Updating Visual Studio 2022 registration" />
 	</UI>
-	  <!--<UIRef Id="ProgressText"/>-->
    </Fragment>
 </Wix>
