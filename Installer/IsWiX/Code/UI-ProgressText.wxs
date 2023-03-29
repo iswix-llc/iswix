@@ -5,7 +5,7 @@
 		  <ProgressText Action="AppSearch" Template="Property: [1], Signature: [2]" Message="Searching for installed applications" />
 		  <ProgressText Action="BindImage" Template="File: [1]" Message="Binding executables" />
 		  <ProgressText Action="CCPSearch" Message="Unregistering modules" />
-		  <ProgressText Action="InstallValidate" Message="Validating install" />
+		  <!--<ProgressText Action="InstallValidate" Message="Validating install" />-->
 		  <ProgressText Action="InstallFiles" Template="File: [1],  Directory: [9],  Size: [6]" Message="Copying new files" />
 		  <ProgressText Action="InstallAdminPackage" Template="File: [1], Directory: [9], Size: [6]" Message="Copying files to the network" />
 		  <ProgressText Action="FileCost" Message="Computing space requirements" />
