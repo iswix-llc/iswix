@@ -75,6 +75,5 @@
 		  <ProgressText Action="ISLockPermissionsCost" Message="Gathering permissions information for objects..." />
 		  <ProgressText Action="ISLockPermissionsInstall" Message="Applying permissions information for objects..." />
 	  </UI>
-	  </UI>
   </Fragment>
 </Wix>
