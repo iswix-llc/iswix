@@ -8,7 +8,7 @@
       
       <!--Uncomment to inject a custom dialog into the install wizard loop -->
       <!--<UIRef Id="CustomDlg"/>-->
-      
+		  <UIRef Id="WixUI_ErrorProgressText" />
     </UI>
    </Fragment>
 </Wix>
