@@ -60,7 +60,7 @@
           <xs:documentation>Description to show if application is running and needs to be closed.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Optionally orders the applications to be closed.</xs:documentation>
         </xs:annotation>
@@ -109,7 +109,7 @@
           <xs:documentation>Property to be set if application is still running. Useful for launch conditions or to conditionalize custom UI to ask user to shut down apps.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="TerminateProcess" type="xs:integer">
+      <xs:attribute name="TerminateProcess" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>
             Attempts to terminates process and return the attribute value as the process's exit code if the application is still running after sending any requested close and/or end session messages.
@@ -117,7 +117,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Timeout" type="xs:integer">
+      <xs:attribute name="Timeout" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>
             Optional time in seconds to wait for the application to exit after the close and/or end session messages. If the application is still running after the timeout then
@@ -341,7 +341,7 @@
           </xs:annotation>
         </xs:any>
       </xs:choice>
-      <xs:attribute name="CategoryCount" type="xs:integer">
+      <xs:attribute name="CategoryCount" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>
             The number of categories in CategoryMessageFile. CategoryMessageFile
@@ -658,7 +658,7 @@
       </xs:anyAttribute>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="FormatFile">
     <xs:annotation>
       <xs:appinfo>
@@ -852,7 +852,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="IconIndex" type="xs:integer">
+      <xs:attribute name="IconIndex" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>
             Index of the icon being referenced.
@@ -1115,7 +1115,6 @@
       <xs:appinfo>
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="CreateFolder" />
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="File" />
-        <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Registry" />
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="RegistryKey" />
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="RegistryValue" />
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="ServiceInstall" />
@@ -1530,7 +1529,7 @@
       </xs:anyAttribute>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="RegistrySearch">
     <xs:annotation>
       <xs:documentation>Describes a registry search.</xs:documentation>
@@ -1737,12 +1736,12 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="ResetPeriodInDays" type="xs:integer">
+      <xs:attribute name="ResetPeriodInDays" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Number of days after which to reset the failure count to zero if there are no failures.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="RestartServiceDelayInSeconds" type="xs:integer">
+      <xs:attribute name="RestartServiceDelayInSeconds" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>If any of the three *ActionType attributes is "restart", this specifies the number of seconds to wait before doing so.</xs:documentation>
         </xs:annotation>
@@ -1922,6 +1921,16 @@
           <xs:documentation>Indicates whether failure to create the user or add the user to a group fails the installation. The default value is "yes".</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="Comment" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Optional comment to set on the user.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="RemoveComment" type="wxs:YesNoTypeUnion">
+        <xs:annotation>
+          <xs:documentation>Indicates whether remove the comment from the user. The default value is "no".</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:anyAttribute namespace="##other" processContents="lax">
         <xs:annotation>
           <xs:documentation>
@@ -2095,7 +2104,7 @@
           <xs:documentation>Specifies wheter or not the modification should preserve the modified date.  Preserving the modified date will allow the file to be patched if no other modifications have been made.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Specifies the order in which the modification is to be attempted on the XML file.  It is important to ensure that new elements are created before you attempt to add an attribute to them.</xs:documentation>
         </xs:annotation>
@@ -2200,7 +2209,7 @@
           <xs:documentation>Specifies wheter or not the modification should preserve the modified date.  Preserving the modified date will allow the file to be patched if no other modifications have been made.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Specifies the order in which the modification is to be attempted on the XML file.  It is important to ensure that new elements are created before you attempt to add an attribute to them.</xs:documentation>
         </xs:annotation>
@@ -2312,10 +2321,24 @@
     </xs:annotation>
   </xs:element>
 
+  <xs:element name="QueryNativeMachine">
+    <xs:annotation>
+      <xs:documentation>
+        Schedules the QueryNativeMachine custom action for the current platform. For more information, see [QueryNativeMachine properties](../../../tools/wixext/wininfo#querynativemachine).
+      </xs:documentation>
+      <xs:appinfo>
+        <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Package" />
+        <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Module" />
+        <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Fragment" />
+        <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="UI" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+
   <xs:element name="QueryWindowsDirectories">
     <xs:annotation>
       <xs:documentation>
-        Schedules the QueryOsDirs custom action for the current platform. For more information, see [QueryWindowsDirectories properties](../../../wixext/wininfo#querywindowsdirectories).
+        Schedules the QueryOsDirs custom action for the current platform. For more information, see [QueryWindowsDirectories properties](../../../tools/wixext/wininfo#querywindowsdirectories).
       </xs:documentation>
       <xs:appinfo>
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Package" />
@@ -2329,7 +2352,7 @@
   <xs:element name="QueryWindowsDriverInfo">
     <xs:annotation>
       <xs:documentation>
-        Schedules the QueryOsDriverInfo custom action for the current platform. For more information, see [QueryWindowsDriverInfo properties](../../../wixext/wininfo#querywindowsdriverinfo).
+        Schedules the QueryOsDriverInfo custom action for the current platform. For more information, see [QueryWindowsDriverInfo properties](../../../tools/wixext/wininfo#querywindowsdriverinfo).
       </xs:documentation>
       <xs:appinfo>
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Package" />
@@ -2343,7 +2366,7 @@
   <xs:element name="QueryWindowsSuiteInfo">
     <xs:annotation>
       <xs:documentation>
-        Schedules the QueryOsInfo custom action for the current platform. For more information, see [QueryWindowsSuiteInfo properties](../../../wixext/wininfo#querywindowssuiteinfo).
+        Schedules the QueryOsInfo custom action for the current platform. For more information, see [QueryWindowsSuiteInfo properties](../../../tools/wixext/wininfo#querywindowssuiteinfo).
       </xs:documentation>
       <xs:appinfo>
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Package" />
@@ -2357,7 +2380,7 @@
   <xs:element name="QueryWindowsWellKnownSIDs">
     <xs:annotation>
       <xs:documentation>
-        Schedules the QueryOsWellKnownSID custom action for the current platform. For more information, see [QueryWindowsWellKnownSIDs properties](../../../wixext/wininfo#querywindowswellknownsids).
+        Schedules the QueryOsWellKnownSID custom action for the current platform. For more information, see [QueryWindowsWellKnownSIDs properties](../../../tools/wixext/wininfo#querywindowswellknownsids).
       </xs:documentation>
       <xs:documentation>Schedules the QueryOsWellKnownSID custom action for the current platform.</xs:documentation>
       <xs:appinfo>

@@ -4,7 +4,6 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
           xmlns:xse="http://wixtoolset.org/schemas/XmlSchemaExtension"
-         xmlns:html="http://www.w3.org/1999/xhtml"
           xmlns:wxs="http://wixtoolset.org/schemas/v4/wxs"
     targetNamespace="http://wixtoolset.org/schemas/v4/wxs/dependency"
               xmlns="http://wixtoolset.org/schemas/v4/wxs/dependency">

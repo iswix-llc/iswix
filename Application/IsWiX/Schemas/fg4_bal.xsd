@@ -19,7 +19,7 @@
   <xs:element name="Condition">
     <xs:annotation>
       <xs:documentation>
-        Conditions for a bundle. The condition is specified in the inner text of the element.
+        Conditions for a bundle.
       </xs:documentation>
       <xs:appinfo>
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Bundle" />

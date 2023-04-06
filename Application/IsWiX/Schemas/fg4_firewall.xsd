@@ -19,9 +19,8 @@
   <xs:element name="FirewallException">
     <xs:annotation>
       <xs:documentation>
-        Registers an exception for a program or a specific port and protocol in the Windows Firewall
-        on Windows XP SP2, Windows Server 2003 SP1, and later. For more information about the Windows
-        Firewall, see [About Windows Firewall API](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/about-windows-firewall).
+        Registers an exception for a program or a specific port and protocol in the Windows Firewall.
+        For more information about the Windows Firewall, see [Windows Firewall with Advanced Security](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/windows-firewall-advanced-security-start-page).
       </xs:documentation>
       <xs:appinfo>
         <xse:parent namespace="http://wixtoolset.org/schemas/v4/wxs" ref="Component" />
@@ -86,12 +85,9 @@
       <xs:attribute name="Port" type="xs:string">
         <xs:annotation>
           <xs:documentation>
-            Port to allow through the firewall for this exception. 
-
-            If you use Port and also File or Program in the same 
-            FirewallException element, the exception will fail to install on 
-            Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to
-            ignore the resulting failure, but the exception will not be added.
+            Port to allow through the firewall for this exception. By default,
+            any program is allowed access through the port unless a File or
+            Program attribute is specified.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -100,12 +96,7 @@
         <xs:annotation>
           <xs:documentation>
             IP protocol used for this firewall exception. If Port is defined, 
-            "tcp" is assumed if the protocol is not specified. 
-
-            If you use Protocol and also File or Program in the same 
-            FirewallException element, the exception will fail to install on 
-            Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to
-            ignore the resulting failure, but the exception will not be added.
+            "tcp" is assumed if the protocol is not specified.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -119,13 +110,11 @@
       <xs:attribute name="File" type="xs:string">
         <xs:annotation>
           <xs:documentation>
-            Identifier of a file to be granted access to all incoming ports and 
-            protocols. If you use File, you cannot also use Program.
+            Identifier of a File to be granted access through the firewall. By default,
+            all incoming ports and protocols are allowed unless the Port and.or Protocol
+            attributes are specified.
 
-            If you use File and also Port or Protocol in the same 
-            FirewallException element, the exception will fail to install on 
-            Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to
-            ignore the resulting failure, but the exception will not be added.
+            If you use File, you cannot also use Program.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -133,15 +122,13 @@
       <xs:attribute name="Program" type="xs:string">
         <xs:annotation>
           <xs:documentation>
-            Path to a target program to be granted access to all incoming ports and 
-            protocols. Note that this is a formatted field, so you can use [#fileId] 
+            Path to a target program to be granted access through the firewall. By default,
+            all incoming ports and protocols are allowed unless the Port and.or Protocol
+            attributes are specified.
+
+            Note that this is a formatted field, so you can use [#fileId] 
             syntax to refer to a file being installed. If you use Program, you cannot 
             also use File.
-
-            If you use Program and also Port or Protocol in the same 
-            FirewallException element, the exception will fail to install on 
-            Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to
-            ignore the resulting failure, but the exception will not be added.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -199,14 +186,6 @@
   </xs:element>
 
   <xs:element name="RemoteAddress">
-    <xs:annotation>
-      <xs:documentation>
-        A remote address to which the port or program can listen. Address formats vary 
-        based on the version of Windows and Windows Firewall the program is being installed
-        on. For Windows XP SP2 and Windows Server 2003 SP1, see [RemoteAddresses Property](https://learn.microsoft.com/en-us/windows/win32/api/netfw/nf-netfw-inetfwauthorizedapplication-get_remoteaddresses).
-        For Windows Vista and Windows Server 2008, see [RemoteAddresses Property](https://learn.microsoft.com/en-us/windows/win32/api/netfw/nf-netfw-inetfwrule-get_remoteaddresses).
-      </xs:documentation>
-    </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other" processContents="lax">
@@ -221,7 +200,8 @@
       <xs:attribute name="Value" type="xs:string" use="required">
         <xs:annotation>
           <xs:documentation>
-            A remote address.
+            A remote address to which the port or program can listen. See [RemoteAddresses](https://learn.microsoft.com/en-us/windows/win32/api/netfw/nf-netfw-inetfwrule-get_remoteaddresses)
+            for examples.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>

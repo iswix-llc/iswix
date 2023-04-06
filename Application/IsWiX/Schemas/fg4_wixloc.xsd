@@ -17,7 +17,7 @@
     <xs:annotation>
       <xs:appinfo>
         <xse:remarks>
-          <html:p>You can specify any valid Windows code page by integer like 1252, or by web name like Windows-1252 or iso-8859-1. See [Code pages](reference/codepage.md) for more information.</html:p>
+          <html:p>You can specify any valid Windows code page by integer like 1252, or by web name like Windows-1252 or iso-8859-1. See [Code pages](../../tools/codepage.md) for more information.</html:p>
         </xse:remarks>
         <xse:howtoRef href="ui_and_localization/build_a_localized_version.html">How To: Build a localized version of your installer</xse:howtoRef>
         <xse:howtoRef href="ui_and_localization/make_installer_localizable.html">How To: Make your installer localizable</xse:howtoRef>
@@ -38,7 +38,7 @@
           <xs:documentation>Optional culture for this localization file. If the Culture attribute is not provided, the localization file is considered to be language neutral. This culture value is used to filter applicable localization files during the build. Language neutral localization files are always included.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Language" type="xs:integer">
+      <xs:attribute name="Language" type="Integer">
         <xs:annotation>
           <xs:documentation>The decimal language ID (LCID) for the culture. Used only when processed by native code using locutil.</xs:documentation>
         </xs:annotation>
@@ -97,22 +97,22 @@
           <xs:documentation>Combined with the Dialog attribute, identifies the control to localize.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="X" type="xs:integer">
+      <xs:attribute name="X" type="Integer">
         <xs:annotation>
           <xs:documentation>For a dialog, overrides the authored horizontal centering. For a control, overrides the authored horizontal coordinate of the upper-left corner of the rectangular boundary. This must be a non-negative number.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Y" type="xs:integer">
+      <xs:attribute name="Y" type="Integer">
         <xs:annotation>
           <xs:documentation>For a dialog, overrides the authored vertical centering. For a control, overrides the authored vertical coordinate of the upper-left corner of the rectangular boundary of the control. This must be a non-negative number.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Width" type="xs:integer">
+      <xs:attribute name="Width" type="Integer">
         <xs:annotation>
           <xs:documentation>For a dialog, overrides the authored width in dialog units. For a control, overrides the authored width of the rectangular boundary of the control. This must be a non-negative number.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Height" type="xs:integer">
+      <xs:attribute name="Height" type="Integer">
         <xs:annotation>
           <xs:documentation>For a dialog, overrides the authored height in dialog units. For a control, overrides the authored height of the rectangular boundary of the control. This must be a non-negative number.</xs:documentation>
         </xs:annotation>
@@ -140,6 +140,14 @@
     </xs:complexType>
   </xs:element>
 
+  <xs:simpleType name="Integer">
+    <xs:annotation>
+      <xs:documentation>Values of this type must be an integer or a preprocessor variable with the format `$(Variable)` or `$(var.Variable).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[\d]+|\$\((var\.)?[_A-Za-z][0-9A-Za-z_.]*\)" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="LocalizationYesNoType">
     <xs:annotation>
       <xs:documentation>Values of this type will either be "yes"/"true" or "no"/"false".</xs:documentation>

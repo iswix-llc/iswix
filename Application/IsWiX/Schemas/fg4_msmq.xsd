@@ -45,7 +45,7 @@
           <xs:documentation>The default value is "no".</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="BasePriority" type="xs:integer">
+      <xs:attribute name="BasePriority" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>The base priority of the queue.</xs:documentation>
         </xs:annotation>
@@ -55,7 +55,7 @@
           <xs:documentation>The default value is "no".</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="JournalQuota" type="xs:integer" />
+      <xs:attribute name="JournalQuota" type="wxs:Integer" />
       <xs:attribute name="Label" use="required" type="xs:string" />
       <xs:attribute name="MulticastAddress" type="xs:string" />
       <xs:attribute name="PathName" use="required" type="xs:string" />
@@ -68,7 +68,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="Quota" type="xs:integer" />
+      <xs:attribute name="Quota" type="wxs:Integer" />
       <xs:attribute name="Transactional" type="wxs:YesNoTypeUnion">
         <xs:annotation>
           <xs:documentation>The default value is "no".</xs:documentation>
