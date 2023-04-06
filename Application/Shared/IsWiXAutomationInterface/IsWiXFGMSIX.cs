@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using FireworksFramework.Managers;
 

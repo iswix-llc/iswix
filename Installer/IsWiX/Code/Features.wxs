@@ -1,19 +1,20 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Fragment><Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
+	<Fragment>
+		<Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
 			<MergeRef Id="IsWiXMM" />
 			<Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2019 - 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
 				<MergeRef Id="IsWiX2022AddInMM" />
 			</Feature>
 		</Feature>
-		
-	
-			<StandardDirectory Id="ProgramFiles6432Folder">
-				<Directory Id="CompanyFolder" Name="ISWIX LLC">
-					<Directory Id="INSTALLLOCATION" Name="IsWiX">
-						<Merge Id="IsWiXMM" SourceFile="$(var.IsWiXMM.TargetPath)" DiskId="1" Language="1033" />
-						<Merge Id="IsWiX2022AddInMM" SourceFile="$(var.IsWiX2022AddInMM.TargetPath)" DiskId="1" Language="1033" />
-					</Directory>
+
+
+		<StandardDirectory Id="ProgramFiles6432Folder">
+			<Directory Id="CompanyFolder" Name="ISWIX LLC">
+				<Directory Id="INSTALLLOCATION" Name="IsWiX">
+					<Merge Id="IsWiXMM" SourceFile="$(var.IsWiXMM.TargetPath)" DiskId="1" Language="1033" />
+					<Merge Id="IsWiX2022AddInMM" SourceFile="$(var.IsWiX2022AddInMM.TargetPath)" DiskId="1" Language="1033" />
 				</Directory>
-			</StandardDirectory>
-		</Fragment>
+			</Directory>
+		</StandardDirectory>
+	</Fragment>
 </Wix>

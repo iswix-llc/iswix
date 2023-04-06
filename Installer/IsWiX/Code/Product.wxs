@@ -14,7 +14,6 @@
 		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
 		<UIRef Id="UI" />
-		<UIRef Id="WixUI_ErrorProgressText" />
 
 		<!-- Used by AddInMM  Goes here due to merge constraints -->
 		<vs:FindVisualStudio />

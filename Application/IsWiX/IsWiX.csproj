@@ -11,6 +11,7 @@
 	<EnableDynamicLoading>true</EnableDynamicLoading>
 	  <DeployOnBuild>true</DeployOnBuild>
 	  <PublishProfile>FolderProfile</PublishProfile>
+	  <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

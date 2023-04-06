@@ -75,21 +75,6 @@
         <Component Id="owc27AE8A53D94DD8A3E4AEAF6F7C27FB60" Guid="80e5ef0e-84a5-2bce-9923-0fd54d243e45">
           <File Id="owf27AE8A53D94DD8A3E4AEAF6F7C27FB60" Source="$(var.SourceDir)\Microsoft.CSharp.dll" KeyPath="yes" />
         </Component>
-        <Component Id="owc821B8801AE589857FF976D81477507B2" Guid="02587585-265a-5a0a-a780-d3262f89ded4">
-          <File Id="owf821B8801AE589857FF976D81477507B2" Source="$(var.SourceDir)\Microsoft.Deployment.Compression.Cab.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc53C299C5943FDD448EC6F20A2A2FE2DD" Guid="23f69b4a-15d5-27fa-188d-19d609bd9480">
-          <File Id="owf53C299C5943FDD448EC6F20A2A2FE2DD" Source="$(var.SourceDir)\Microsoft.Deployment.Compression.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owc80D1FFE636B056279391FEDCC7545DAC" Guid="092f45dc-603e-5e01-f945-a6283fd23615">
-          <File Id="owf80D1FFE636B056279391FEDCC7545DAC" Source="$(var.SourceDir)\Microsoft.Deployment.Resources.dll" KeyPath="yes" />
-        </Component>
-        <Component Id="owcF687CD25DBEA41F3A5555729AC19B5F6" Guid="615b5678-171b-e34b-353a-6d7999a14edf">
-          <File Id="owfF687CD25DBEA41F3A5555729AC19B5F6" Source="$(var.SourceDir)\Microsoft.Deployment.WindowsInstaller.dll" KeyPath="yes"></File>
-        </Component>
-        <Component Id="owcAD163F8F3E681AF203491EBF445307F9" Guid="68278ad9-e0b5-d647-d46f-a08f3ad098d8">
-          <File Id="owfAD163F8F3E681AF203491EBF445307F9" Source="$(var.SourceDir)\Microsoft.Deployment.WindowsInstaller.Package.dll" KeyPath="yes" />
-        </Component>
         <Component Id="owc8E8A4B43081A3E23A39A84E6034A1F78" Guid="bfdc1e75-05b8-7f04-2965-29a50f29fe42">
           <File Id="owf8E8A4B43081A3E23A39A84E6034A1F78" Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" />
         </Component>
@@ -779,6 +764,9 @@
         </Component>
         <Component Id="owcF1AC7FBB25CCCA208A021BC3EC23A514" Guid="2eb18af6-4314-a3b7-7d66-7cb7cb5d69ce">
           <File Id="owfF1AC7FBB25CCCA208A021BC3EC23A514" Source="$(var.SourceDir)\WindowsFormsIntegration.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="owc716610405EEE74182722C9BD8ED12E4E" Guid="fdf45f54-68b8-432d-698d-9fbf5e5d9ee3">
+          <File Id="owf716610405EEE74182722C9BD8ED12E4E" Source="$(var.SourceDir)\WixToolset.Dtf.WindowsInstaller.dll" KeyPath="yes" />
         </Component>
         <Component Id="owc693D66F39A6EF282B6636183125F426E" Guid="478e5d88-3f1c-3775-431e-a15548e032c5">
           <File Id="owf693D66F39A6EF282B6636183125F426E" Source="$(var.SourceDir)\wpfgfx_cor3.dll" KeyPath="yes" />

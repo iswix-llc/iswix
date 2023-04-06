@@ -354,7 +354,7 @@
           <xs:documentation>Continue executing scripts even if this one fails.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Specifes the order to run the SQL Scripts.  It is recommended that rollback scripts be scheduled before their complementary execution script.  This order is also relative across the SqlString element.</xs:documentation>
         </xs:annotation>
@@ -443,7 +443,7 @@
           <xs:documentation>Continue executing strings even if this one fails.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Specifes the order to run the SQL Strings.  It is recommended that rollback strings be scheduled before their complementary execution string.  This order is also relative across the SqlScript element.</xs:documentation>
         </xs:annotation>

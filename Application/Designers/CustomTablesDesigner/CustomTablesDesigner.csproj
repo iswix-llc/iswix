@@ -8,6 +8,7 @@
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <Private>false</Private>
 	  <EnableDynamicLoading>true</EnableDynamicLoading>
+	  <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

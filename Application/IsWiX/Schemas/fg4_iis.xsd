@@ -185,12 +185,12 @@
           </xs:annotation>
         </xs:any>
       </xs:choice>
-      <xs:attribute name="ErrorCode" use="required" type="xs:integer">
+      <xs:attribute name="ErrorCode" use="required" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>HTTP 1.1 error code.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="SubCode" use="required" type="xs:integer">
+      <xs:attribute name="SubCode" use="required" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Error sub code.  Set to 0 to get the wild card "*".</xs:documentation>
         </xs:annotation>
@@ -348,7 +348,7 @@
           <xs:documentation>Description of the filter.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Flags" type="xs:integer">
+      <xs:attribute name="Flags" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Sets the MD_FILTER_FLAGS metabase key for the filter. This must be an integer. See MSDN 'FilterFlags' documentation for more details.</xs:documentation>
         </xs:annotation>
@@ -456,32 +456,32 @@
           <xs:documentation>User account to run the AppPool as. To use this, you must set the Identity attribute to 'other'.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="RecycleMinutes" type="xs:integer">
+      <xs:attribute name="RecycleMinutes" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>How often, in minutes, you want the AppPool to be recycled.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="RecycleRequests" type="xs:integer">
+      <xs:attribute name="RecycleRequests" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>How often, in requests, you want the AppPool to be recycled.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="VirtualMemory" type="xs:integer">
+      <xs:attribute name="VirtualMemory" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Specifies the amount of virtual memory (in KB) that a worker process can use before the worker process recycles. The maximum value supported for this attribute is 4,294,967 KB.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="PrivateMemory" type="xs:integer">
+      <xs:attribute name="PrivateMemory" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Specifies the amount of private memory (in KB) that a worker process can use before the worker process recycles. The maximum value supported for this attribute is 4,294,967 KB.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="IdleTimeout" type="xs:integer">
+      <xs:attribute name="IdleTimeout" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Shutdown worker process after being idle for (time in minutes).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="QueueLimit" type="xs:integer">
+      <xs:attribute name="QueueLimit" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Limit the kernel request queue (number of requests).</xs:documentation>
         </xs:annotation>
@@ -491,7 +491,7 @@
           <xs:documentation>Maximum CPU usage (percent).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="RefreshCpu" type="xs:integer">
+      <xs:attribute name="RefreshCpu" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Refresh CPU usage numbers (in minutes).</xs:documentation>
         </xs:annotation>
@@ -507,7 +507,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="MaxWorkerProcesses" type="xs:integer">
+      <xs:attribute name="MaxWorkerProcesses" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Maximum number of worker processes.</xs:documentation>
         </xs:annotation>
@@ -922,7 +922,7 @@
           <xs:documentation>Sets the Enable Session State option. When enabled, you can set the session timeout using the SessionTimeout attribute.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="SessionTimeout" type="xs:integer">
+      <xs:attribute name="SessionTimeout" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Sets the timeout value for sessions in minutes.</xs:documentation>
         </xs:annotation>
@@ -948,7 +948,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="ScriptTimeout" type="xs:integer">
+      <xs:attribute name="ScriptTimeout" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Sets the timeout value in seconds for executing ASP scripts.</xs:documentation>
         </xs:annotation>
@@ -1247,7 +1247,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>Sequence that the web site is to be created in.</xs:documentation>
         </xs:annotation>

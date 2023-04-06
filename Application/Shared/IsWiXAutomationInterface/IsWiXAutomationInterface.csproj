@@ -8,12 +8,13 @@
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <Private>false</Private>
 	  <EnableDynamicLoading>true</EnableDynamicLoading>
+	  <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
-    <PackageReference Include="wix-libs" Version="3.11.1" />
+    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.0" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

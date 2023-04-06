@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.0-rc.4" />
+  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.0" />
   <PropertyGroup>
     <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments-->
@@ -21,10 +21,10 @@
     <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.0-rc.4" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0-rc.4" />
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.0-rc.4" />
-    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="4.0.0-rc.4" />
+    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -53,7 +53,7 @@
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.0-rc.1" />
+  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.0" />
   <PropertyGroup>
     <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
   </PropertyGroup>

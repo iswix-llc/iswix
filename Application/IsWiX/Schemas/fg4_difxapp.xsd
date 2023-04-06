@@ -92,7 +92,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="Sequence" type="xs:integer">
+      <xs:attribute name="Sequence" type="wxs:Integer">
         <xs:annotation>
           <xs:documentation>
             Specifies an optional installation sequence number. DIFxApp CustomActions install the driver packages in
