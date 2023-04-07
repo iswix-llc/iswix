@@ -2,6 +2,7 @@
   <Bundle Name="$globalsafeprojectname$" Version="$(var.MSIProductVersion)" Manufacturer="$globalsafeprojectname$" UpgradeCode="$guid3$">
     <BootstrapperApplication>
       <bal:WixStandardBootstrapperApplication LicenseFile="Resources\EULA.rtf" LogoFile="Resources\Icon.png" Theme="rtfLicense" />
+      <!-- <bal:WixInternalUIBootstrapperApplication LogoFile="Resources\Icon.png" Theme="standard" /> -->
     </BootstrapperApplication>
     <Chain>
       <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Setup.TargetPath)" />
