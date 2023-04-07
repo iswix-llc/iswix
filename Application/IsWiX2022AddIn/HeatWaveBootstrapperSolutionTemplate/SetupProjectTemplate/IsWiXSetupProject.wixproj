@@ -36,7 +36,7 @@
     <Content Include="Resources\EULA.rtf" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\$globalsafeprojectname$MM\$globalsafeprojectname$MM.wixproj" />
+    <ProjectReference Include="..\$safeprojectname$MM\$safeprojectname$MM.wixproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.0" />
