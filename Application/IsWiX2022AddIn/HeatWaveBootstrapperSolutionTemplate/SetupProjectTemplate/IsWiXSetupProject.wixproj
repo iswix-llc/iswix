@@ -15,21 +15,32 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\$globalsafeprojectname$MM\$globalsafeprojectname$MM.wixproj" />
+    <Content Include="Resources\Banner.jpg" />
+    <Content Include="Resources\Dialog.jpg" />
+    <Content Include="Resources\Icon.ico" />
+    <Content Include="Resources\EULA.rtf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\$safeprojectname$MM\$safeprojectname$MM.wixproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0" />
     <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.0" />
   </ItemGroup>
 </Project>

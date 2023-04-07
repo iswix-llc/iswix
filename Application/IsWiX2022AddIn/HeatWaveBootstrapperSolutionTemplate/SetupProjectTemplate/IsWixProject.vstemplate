@@ -20,6 +20,12 @@
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Code\Product.wxs">Product.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\Features.wxs">Features.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\IISMeta.wxs">IISMeta.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI.wxs">UI.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Banner.jpg">Banner.jpg</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Dialog.jpg">Dialog.jpg</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.ico">Icon.ico</ProjectItem>
     </Project>
     <CustomParameters>
       <CustomParameter _locID="$loc_WXS_TODO1$" Name="$loc_WXS_TODO1$" Value="TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer." />

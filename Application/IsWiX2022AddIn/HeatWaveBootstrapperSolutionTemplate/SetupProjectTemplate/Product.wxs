@@ -15,6 +15,10 @@
     <!-- Examples at http://wixtoolset.org/documentation/manual/v3/customactions/wixnetfxextension.html -->
     <PropertyRef Id="NETFRAMEWORK40FULL"/>
     <Launch Condition="Installed OR NETFRAMEWORK40FULL" Message="[ProductName] requires .NET Framework 4.0." />
+    <!-- Include User Interface Experience -->
+    <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
+    <UIRef Id="UI"/>
     <!-- Include Features and Directories Fragment -->
     <DirectoryRef Id="INSTALLLOCATION"/>
   </Package>
