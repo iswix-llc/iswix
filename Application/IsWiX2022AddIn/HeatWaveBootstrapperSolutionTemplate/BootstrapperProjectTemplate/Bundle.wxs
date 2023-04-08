@@ -1,8 +1,8 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
   <Bundle Name="$globalsafeprojectname$" Version="$(var.MSIProductVersion)" Manufacturer="$globalsafeprojectname$" UpgradeCode="$guid3$">
     <BootstrapperApplication>
-      <bal:WixStandardBootstrapperApplication LicenseFile="Resources\EULA.rtf" LogoFile="Resources\Icon.png" Theme="rtfLicense" />
-      <!-- <bal:WixInternalUIBootstrapperApplication LogoFile="Resources\Icon.png" Theme="standard" /> -->
+      <bal:WixStandardBootstrapperApplication LicenseFile="Resources\EULA.rtf" LogoFile="Resources\Icon.png" Theme="none" ThemeFile="Resources\iuipreq.thm" LocalizationFile="Resources\iuipreq.wxl" />
+      <!-- <bal:WixInternalUIBootstrapperApplication LogoFile="Resources\Icon.png" Theme="none" ThemeFile="Resources\iuipreq.thm" LocalizationFile="Resources\iuipreq.wxl"/> -->
     </BootstrapperApplication>
     <Chain>
       <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Setup.TargetPath)" />
