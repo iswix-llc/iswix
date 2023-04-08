@@ -32,6 +32,8 @@
   <ItemGroup>
     <Content Include="Resources\EULA.rtf" />
     <Content Include="Resources\Icon.png" />
+    <Content Include="Resources\iuipreq.thm" />
+    <Content Include="Resources\iuipreq.wxl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\$globalsafeprojectname$Setup\$globalsafeprojectname$Setup.wixproj">
