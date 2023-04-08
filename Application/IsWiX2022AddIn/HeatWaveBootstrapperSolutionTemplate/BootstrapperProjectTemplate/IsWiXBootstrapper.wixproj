@@ -24,6 +24,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Bal.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.Netfx.wixext" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code" />
