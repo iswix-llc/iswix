@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
   <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.0" />
   <PropertyGroup>
     <ProductVersion>3.7</ProductVersion>
@@ -21,9 +21,7 @@
     <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.0" />
     <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0" />
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.0" />
     <PackageReference Include="WixToolset.VisualStudio.wixext" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>

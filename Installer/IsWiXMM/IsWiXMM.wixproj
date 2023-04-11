@@ -11,7 +11,4 @@
     <SuppressPdbOutput>True</SuppressPdbOutput>
     <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.0" />
-  </ItemGroup>
 </Project>
