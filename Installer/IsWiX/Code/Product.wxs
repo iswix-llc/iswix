@@ -5,10 +5,6 @@
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
 
-		<PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
-		<SetProperty Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Value="1" After="AppSearch" Condition="WIXNETFX4RELEASEINSTALLED &gt;= &quot;#528040 &quot;" />
-		<Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="[ProductName] requires .NET Framework 4.8 or later." />
-
 		<DirectoryRef Id="INSTALLLOCATION" />
 
 		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico" />
@@ -17,12 +13,8 @@
 
 		<!-- Used by AddInMM  Goes here due to merge constraints -->
 		<vs:FindVisualStudio />
-		<PropertyRef Id="VS2019_EXTENSIONS_DIR" />
 		<PropertyRef Id="VS2022_EXTENSIONS_DIR" />
-
-		<CustomActionRef Id="VS2019Setup" />
 		<CustomActionRef Id="VS2022Setup" />
-
 		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
 		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
 
