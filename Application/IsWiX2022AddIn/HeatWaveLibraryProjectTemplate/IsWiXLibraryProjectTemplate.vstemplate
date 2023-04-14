@@ -9,7 +9,7 @@
 		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
 		<CreateNewFolder>true</CreateNewFolder>
 		<CreateInPlace>true</CreateInPlace>
-		<DefaultName>MergeModule</DefaultName>
+		<DefaultName>Library</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
 		<ProjectTypeTag>HeatWave</ProjectTypeTag>
