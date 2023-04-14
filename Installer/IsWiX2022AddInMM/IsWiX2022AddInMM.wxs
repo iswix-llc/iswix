@@ -1,14 +1,15 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <?define ComponentRules="OneToOne"?>
   <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
   <?define SourceDir="..\Deploy"?>
-  <Module Id="IsWiXNewNewAddInMM" Language="1033" Version="1.0.0.0" Guid="{D487A781-DB05-40E7-A236-DF808C08EA53}" InstallerVersion="200"><SummaryInformation Manufacturer="IsWiXNewAddInMM" />
-    
+  <Module Id="IsWiXNewNewAddInMM" Language="1033" Version="1.0.0.0" Guid="{D487A781-DB05-40E7-A236-DF808C08EA53}" InstallerVersion="200">
+    <SummaryInformation Manufacturer="IsWiXNewAddInMM" />
     <ComponentGroupRef Id="Custom" />
     <Property Id="VS2022_EXTENSIONS_DIR" SuppressModularization="yes" />
-	  <Property Id="EXTENSIONDIR2022" SuppressModularization="yes" />
-	  <Property Id="EXTENSIONPROJECTTEMPLATESDIR2022" SuppressModularization="yes" />
- 
+    <Property Id="EXTENSIONDIR2022" SuppressModularization="yes" />
+    <Property Id="EXTENSIONPROJECTTEMPLATESDIR2022" SuppressModularization="yes" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="MergeRedirectFolder">
         <Directory Id="owd00D844FBB782F9390ED1740825A5270C" Name="IsWiX2022AddIn">
           <Component Id="owc4AAB5D2EF980D11DC5191910D7C080DE" Guid="1b2775b5-9424-320c-3999-1d9ad637ed7b">
@@ -43,37 +44,43 @@
           </Component>
           <Directory Id="owd106575434686DDC2FAE6ED43DC75AE58" Name="ProjectTemplates">
             <Component Id="owc1C5316591F94625743CC9B4E69D6AAFE" Guid="3f790fd6-c623-cc13-a26c-87195db1958e">
-				<File Id="owf1C5316591F94625743CC9B4E69D6AAFE" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip" KeyPath="yes">
-					<CopyFile Id="HeatWaveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              <File Id="owf1C5316591F94625743CC9B4E69D6AAFE" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="HeatWaveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              </File>
+            </Component>
+            <Component Id="owc00D8C299EC29601700139A2ADAAF7FE4" Guid="d47ee709-f1eb-319a-8469-95cb314044d7">
+				<File Id="owf00D8C299EC29601700139A2ADAAF7FE4" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveLibraryProjectTemplate.zip" KeyPath="yes">
+					<CopyFile Id="HeatWaveLibraryProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 				</File>
             </Component>
             <Component Id="owc524320D322CAF05C13F07A50DF703924" Guid="963b2b4f-6454-e3f3-07ab-cc27663e444a">
-				<File Id="owf524320D322CAF05C13F07A50DF703924" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
-					<CopyFile Id="HeatWaveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
-				</File>
+              <File Id="owf524320D322CAF05C13F07A50DF703924" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
+                <CopyFile Id="HeatWaveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              </File>
             </Component>
             <Component Id="owcB3A96FFE3BBE8FF66B15D95751E3A6B6" Guid="b6ffce84-ef4b-e9e7-cd32-6a5ac5401b51">
-				<File Id="owfB3A96FFE3BBE8FF66B15D95751E3A6B6" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes">
-					<CopyFile Id="HeatWaveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
-				</File>
+              <File Id="owfB3A96FFE3BBE8FF66B15D95751E3A6B6" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="HeatWaveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              </File>
             </Component>
             <Component Id="owc111ED0969E804F37000E0E1FC42347F8" Guid="0daf3d12-dad8-7078-ee68-47f7255898ac">
-				<File Id="owf111ED0969E804F37000E0E1FC42347F8" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes">
-					<CopyFile Id="VotiveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
-				</File>
+              <File Id="owf111ED0969E804F37000E0E1FC42347F8" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="VotiveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              </File>
             </Component>
             <Component Id="owc0537E22D841695EE8E0CABF9DBD07413" Guid="6bfaefa2-603b-22c2-b4b4-19a77190c4b9">
-				<File Id="owf0537E22D841695EE8E0CABF9DBD07413" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes">
-					<CopyFile Id="VotiveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
-				</File>
+              <File Id="owf0537E22D841695EE8E0CABF9DBD07413" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes">
+                <CopyFile Id="VotiveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              </File>
             </Component>
             <Component Id="owcC19D60E2337569D894406249653A96EC" Guid="8515ea6f-ebbd-e3f4-67de-4ac3a26442aa">
-				<File Id="owfC19D60E2337569D894406249653A96EC" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes">
-					<CopyFile Id="VotiveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
-				</File>
+              <File Id="owfC19D60E2337569D894406249653A96EC" Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes">
+                <CopyFile Id="VotiveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+              </File>
             </Component>
           </Directory>
         </Directory>
       </Directory>
-    </Module>
+    </Directory>
+  </Module>
 </Wix>

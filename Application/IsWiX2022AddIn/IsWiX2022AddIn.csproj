@@ -119,6 +119,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="ProjectTemplates\HeatWaveLibraryProjectTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -172,6 +176,9 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 
 CD "$(ProjectDir)HeatWaveMergeModuleProjectTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip' -Force
+
+CD "$(ProjectDir)HeatWaveLibraryProjectTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveLibraryProjectTemplate.zip' -Force
 
 CD "$(ProjectDir)HeatWaveMSISolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force
