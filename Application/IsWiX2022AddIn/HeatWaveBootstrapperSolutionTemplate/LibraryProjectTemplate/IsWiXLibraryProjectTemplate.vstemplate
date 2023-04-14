@@ -1,7 +1,7 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
 	<TemplateData>
 		<Name>IsWiX Library Project (WiX v4)</Name>
-		<TemplateID>IsWiX.WixLibProject</TemplateID>
+		<TemplateID>IsWiX.BootWixLibProject</TemplateID>
 		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based wixlib file</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
