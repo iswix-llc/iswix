@@ -9,7 +9,7 @@
     </StandardDirectory>
     <Feature Id="$safeprojectname$" Title="$safeprojectname$" Description="Installs all the files needed for $safeprojectname$" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
       <MergeRef Id="$safeprojectname$MM"/>
-      <ComponentGroupRef Id="$safeprojectName$Lib"/>
+      <ComponentGroupRef Id="$safeprojectname$Lib"/>
       <!-- Uncomment the below line to pull in IIS Metadata.  Otherwise delete if not needed -->
       <!--<ComponentGroupRef Id="webSite" />-->
     </Feature>
