@@ -3,6 +3,7 @@
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CompanyFolder" Name="My Company">
         <Directory Id="INSTALLLOCATION" Name="$safeprojectname$">
+          <Directory Id="$safeprojectname$Lib" Name="."/>
           <Merge Id="$safeprojectname$MM" SourceFile="$(var.$safeprojectname$MM.TargetPath)" DiskId="1" Language="1033"/>
         </Directory>
       </Directory>
