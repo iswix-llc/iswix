@@ -217,6 +217,7 @@
     <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj" />
     <ProjectReference Include="..\Designers\MSIXDesigner\MSIXDesigner.csproj" />
     <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\NewFilesAndFoldersDesigner\NewFilesAndFoldersDesigner.csproj" />
     <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj" />
     <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj" />
     <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj" />
