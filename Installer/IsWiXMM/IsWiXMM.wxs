@@ -123,6 +123,9 @@
         <Component Id="owc79156F385239CEA4DEA3C87C1DA3E1D8" Guid="68380c80-6708-5eb6-415d-10e278417679">
           <File Id="owf79156F385239CEA4DEA3C87C1DA3E1D8" Source="$(var.SourceDir)\netstandard.dll" KeyPath="yes" />
         </Component>
+        <Component Id="owc3F368CE0F6813CC121A11E9340993FDD" Guid="2774e91b-5a0c-f544-a003-441a878e6f2e">
+          <File Id="owf3F368CE0F6813CC121A11E9340993FDD" Source="$(var.SourceDir)\NewFilesAndFoldersDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owc65C378EF6FBA286713783F18452D2BE5" Guid="898ed534-8d01-2ac2-89dd-51fb38ae92b7">
           <File Id="owf65C378EF6FBA286713783F18452D2BE5" Source="$(var.SourceDir)\PenImc_cor3.dll" KeyPath="yes" />
         </Component>
