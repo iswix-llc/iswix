@@ -1,15 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="00000000-0000-0000-0000-000000000000" Name="YourProductNameHere" Language="1033" Version="1.0.0.0" Manufacturer="YourCompanyNameHere" UpgradeCode="00000000-0000-0000-0000-000000000000">
-		<Package InstallerVersion="200" Compressed="yes" />
-		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLLOCATION" Name="WixProject1">
-				</Directory>
-			</Directory>
-		</Directory>
-		<Feature Id="ProductFeature" Title="WixProject1" Level="1">
-		</Feature>
-	</Product>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <?define ComponentRules="OneToOne"?>
+  <?define SourceDir="..\Deploy"?>
+  <Package Name="My Product" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="Test" UpgradeCode="00000000-0000-0000-0000-000000000000">
+    <MediaTemplate EmbedCab="yes" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
+    <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico" />
+    <ui:WixUI Id="WixUI_FeatureTree" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property><StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="CompanyFolder" Name="My Company">
+        <Directory Id="INSTALLLOCATION" Name="My Product">
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+    <Feature Id="MYPRODUCT" Title="My Product" Description="Installs all the files needed for My Product" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentGroupRef Id="ProductComponents"/>
+    </Feature>
+  </Package>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents">
+    </ComponentGroup>
+  </Fragment>
 </Wix>
