@@ -66,6 +66,26 @@ namespace IsWiXAutomationInterface
                 _documentManager.Document.Descendants(_ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\".\""));
             }
 
+            bool componentRulesExist = false;
+
+            foreach (var node in _documentManager.Document.DescendantNodes())
+            {
+                var xpi = node as XProcessingInstruction;
+                if (xpi != null && xpi.Target == "define")
+                {
+                    var fields = new List<string>(xpi.Data.Split(new char[] { '=' }));
+
+                    if (fields[0].Trim().Equals("ComponentRules"))
+                    {
+                        componentRulesExist = true;
+                        break;
+                    }
+                }
+            }
+            if (!componentRulesExist)
+            {
+                _documentManager.Document.Descendants(_ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "ComponentRules=\"OneToOne\""));
+            }
         }
 
         public string GetRootPath()
@@ -89,9 +109,9 @@ namespace IsWiXAutomationInterface
             return sourceDirValue;
         }
 
-        public bool GetComponentRules()
+        public string GetComponentRules()
         {
-            bool componentRules = false;
+            string componentRules = string.Empty;
             foreach (var node in _documentManager.Document.DescendantNodes())
             {
                 var xpi = node as XProcessingInstruction;
@@ -101,14 +121,36 @@ namespace IsWiXAutomationInterface
 
                     if (fields[0].Trim().Equals("ComponentRules"))
                     {
-                        if (fields[1].Replace("\"", "").Trim().ToLower().Equals("onetoone"))
-                        {
-                            componentRules = true;
-                        }
+                        componentRules = fields[1].Replace("\"", "").Trim();
                     }
                 }
             }
             return componentRules;
+        }
+
+        public void SetComponentRules(string componentRules)
+        {
+            bool componentRulesExists = false;
+            foreach (var node in _documentManager.Document.DescendantNodes())
+            {
+                var xpi = node as XProcessingInstruction;
+                if (xpi != null && xpi.Target == "define")
+                {
+                    var fields = new List<string>(xpi.Data.Split(new char[] { '=' }));
+
+                    if (fields[0].Trim().Equals("ComponentRules"))
+                    {
+                        componentRulesExists = true;
+                        xpi.Data = string.Format("ComponentRules={0}", componentRules);
+                    }
+                }
+            }
+
+            if (!componentRulesExists)
+            {
+                _documentManager.Document.Descendants(_ns + "Wix").First().AddFirst(
+                    new XProcessingInstruction("define", string.Format("ComponentRules={0}", componentRules)));
+            }
         }
         public static bool IsValidDocument()
         {

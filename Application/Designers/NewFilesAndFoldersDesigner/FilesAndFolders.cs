@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
@@ -17,6 +18,7 @@ namespace Designers.NewFilesAndFolders
     {
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
         IsWiXComponentGroup _isWiXComponentGroup;
+        string rootPath;
 
         #region (------ Global Variables and Constants -----)
         // DirectoryObject directoryObject = new DirectoryObject();
@@ -135,8 +137,38 @@ namespace Designers.NewFilesAndFolders
                 return;
             }
             _isWiXComponentGroup = new IsWiXComponentGroup();
-            SourceStart = _isWiXComponentGroup.GetRootPath();
+            rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
+
+            if(_isWiXComponentGroup.GetComponentRules()=="OneToMany")
+            {
+                rbOneToMany.Checked = true;
+            }
+            else
+            {
+                rbOneToOne.Checked = true;
+            }
+
+            try
+            {
+                if (!rootPath.Contains(":"))
+                {
+                    var documentInfo = new FileInfo(_documentManager.DocumentPath);
+                    rootPath = Path.Combine(documentInfo.DirectoryName, rootPath);
+                }
+
+                if (!Directory.Exists(rootPath))
+                {
+                    Directory.CreateDirectory(rootPath);
+                }
+                SourceStart = new DirectoryInfo(rootPath).FullName;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(string.Format("An error occurred trying to use '{0}' as the SourceDir.  Defaulting to document directory.", rootPath));
+            }
+
+
             PopulateSource();
         }
 
@@ -541,14 +573,23 @@ namespace Designers.NewFilesAndFolders
 
         private void rbOneToMany_Click(object sender, EventArgs e)
         {
+            SetComponentRulesXPI();
         }
 
         private void rbOneToOne_Click(object sender, EventArgs e)
         {
+            SetComponentRulesXPI();
         }
 
 
-        
-
+        private void SetComponentRulesXPI()
+        {
+            string componentRules = "\"OneToMany\"";
+            if (rbOneToOne.Checked)
+            {
+                componentRules = "\"OneToOne\"";
+            }
+           _isWiXComponentGroup.SetComponentRules(componentRules);
+        }
     }
 }
