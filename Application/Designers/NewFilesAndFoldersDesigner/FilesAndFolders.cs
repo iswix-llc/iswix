@@ -4,13 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
@@ -22,27 +16,15 @@ namespace Designers.NewFilesAndFolders
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
     {
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        IsWiXComponentGroup _isWiXComponentGroup;
 
         #region (------ Global Variables and Constants -----)
         // DirectoryObject directoryObject = new DirectoryObject();
         private const string Seperator = ";";
         private const string Wildcard = "*";
         private const string BaseExcludePattern = ""; // "*unittest*;*.pdb" <- We used to default this
-        private const string DestinationPathPrefix = "Destination Computer\\[MergeRedirectFolder]\\";
-        private const string DestinationFolderName = "Destination Computer";
-        private const string MergeRedirectFolderName = "[MergeRedirectFolder]";
-        private const string MrfHashStringPrefix = "MergeRedirectFolder\\";
-        private const string ListViewItemCollectionFormatIdentifier = "System.Windows.Forms.ListView+SelectedListViewItemCollection";
         private const string SourceDirVar = "$(var.SourceDir)";
         private string SourceStart;
-        private const bool DoNotProcessPath = false;
-        private const bool ProcessPath = true;
-        private bool SkipSort;
-        XNamespace ns;
-
-        //private TreeNode OldSelectNode;
-        private string OldSelectedNodeText;
-        private string OldSelectedNodeTagText;
 
         private TreeNode HoverNode;
         
@@ -146,24 +128,16 @@ namespace Designers.NewFilesAndFolders
 
         public void LoadData()
         {
-            ns = _documentManager.Document.GetWiXNameSpace();
 
             if (String.IsNullOrEmpty(_documentManager.DocumentPath))
             {
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
-
-            if (!FilePassesOurTest())
-            {
-                _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\".\""));
-            }
-
-            IsWixUpgradeFixer.Fix();
+            _isWiXComponentGroup = new IsWiXComponentGroup();
+            SourceStart = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
-
             PopulateSource();
-            LoadDocument();
         }
 
         #region (------ Utility Methods ------)
@@ -172,87 +146,6 @@ namespace Designers.NewFilesAndFolders
             MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         #endregion
-
-        private void LoadDocument()
-        {
-            Cursor = Cursors.WaitCursor;
-            Cursor = Cursors.Default;
-        }
-
-        private bool FilePassesOurTest()
-        {
-            var rootPath = string.Empty;
-            var sourceDirXpiExists = false;
-            var componentRulesExists = false;
-            var sourceDirExistsOnFileSystem = false;
-
-            rbOneToMany.Checked = true;
-            foreach (var node in _documentManager.Document.DescendantNodes())
-            {
-                var xpi = node as XProcessingInstruction;
-                if (xpi != null && xpi.Target == "define")
-                {
-                    var fields = new List<string>(xpi.Data.Split(new char[] { '=' }));
-
-                    if (fields[0].Trim().Equals("ComponentRules"))
-                    {
-                        componentRulesExists = true;
-                        if (fields[1].Replace("\"", "").Trim().ToLower().Equals("onetoone"))
-                        {
-                            rbOneToOne.Checked = true;
-                        }
-                    }
-                }
-                if (componentRulesExists)
-                {
-                    goto FirstTest;
-                }
-            }
-
-            FirstTest:
-            foreach (var node in _documentManager.Document.DescendantNodes())
-            {
-                var xpi = node as XProcessingInstruction;
-                if (xpi != null && xpi.Target == "define")
-                {
-                    var fields = new List<string>(xpi.Data.Split(new char[] { '=' }));
-
-                    if (fields[0].Trim().Equals("SourceDir"))
-                    {
-                        sourceDirXpiExists = true;
-                        rootPath = fields[1].Replace("\"", "").Trim();
-                    }
-                }
-                if (sourceDirXpiExists)
-                {
-                    goto SecondTest;
-                }
-            }
-            // set label here for breaking out of first for loop
-            SecondTest:
-            // figure out if sourceDirValue exists or can be created
-            try
-            {
-                if (!rootPath.Contains(":"))
-                {
-                    var documentInfo = new FileInfo(_documentManager.DocumentPath);
-                    rootPath = Path.Combine(documentInfo.DirectoryName, rootPath);
-                }
-
-                if (!Directory.Exists(rootPath))
-                {
-                    Directory.CreateDirectory(rootPath);
-                }
-                sourceDirExistsOnFileSystem = true;
-                SourceStart = new DirectoryInfo(rootPath).FullName;
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(string.Format("An error occurred trying to use '{0}' as the SourceDir.  Defaulting to document directory.", rootPath));
-            }
-            return sourceDirXpiExists &&  sourceDirExistsOnFileSystem;
-        }
-
 
         #endregion
 
@@ -283,135 +176,6 @@ namespace Designers.NewFilesAndFolders
             }
         }
         #endregion
-
-        private bool IsASpecialDirectoryToIgnore(XElement element)
-        {
-            var elementId = GetElementId(element);
-            return IsASpecialDirectoryToIgnore(elementId);
-        }
-
-        private bool IsASpecialDirectoryToIgnore(string elementId)
-        {
-            if (IdIsWithinSystemFolderPropertyEnum(elementId))
-            {
-                var systemFolderProperty = (SystemFolderProperty)Enum.Parse(typeof(SystemFolderProperty), elementId, true);
-                switch (systemFolderProperty)
-                {
-                    case SystemFolderProperty.AdminToolsFolder:
-                    case SystemFolderProperty.AppDataFolder:
-                    case SystemFolderProperty.CommonFiles64Folder:
-                    case SystemFolderProperty.DesktopFolder:
-                    case SystemFolderProperty.FavoritesFolder:
-                    case SystemFolderProperty.FontsFolder:
-                    case SystemFolderProperty.LocalAppDataFolder:
-                    case SystemFolderProperty.MyPicturesFolder:
-                    case SystemFolderProperty.PersonalFolder:
-                    case SystemFolderProperty.ProgramFiles64Folder:
-                    case SystemFolderProperty.ProgramMenuFolder:
-                    case SystemFolderProperty.SendToFolder:
-                    case SystemFolderProperty.StartupFolder:
-                    case SystemFolderProperty.StartMenuFolder:
-                    case SystemFolderProperty.System16Folder:
-                    case SystemFolderProperty.TempFolder:
-                    case SystemFolderProperty.TemplateFolder:
-                    case SystemFolderProperty.WindowsFolder:
-                    case SystemFolderProperty.WindowsVolume:
-                        return true;
-                    case SystemFolderProperty.ProgramFilesFolder:
-                    case SystemFolderProperty.CommonAppDataFolder:
-                    case SystemFolderProperty.CommonFilesFolder:
-                    case SystemFolderProperty.MergeRedirectFolder:
-                    case SystemFolderProperty.GlobalAssemblyCache:
-                    case SystemFolderProperty.SystemFolder:
-                    case SystemFolderProperty.System64Folder:
-                        return false;
-                    default:
-                        return false;
-                }
-            }
-            return false;
-        }
-        private static bool IdIsWithinSystemFolderPropertyEnum(string elementId)
-        {
-            foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
-            {
-                if (string.Compare(s, elementId, true) == 0)
-                    return true;
-            }
-            return false;
-        }
-
-        private bool DirectoryIsNotEmpty(XElement directoryElement)
-        {
-            if (directoryElement.HasElements)
-            {
-                // check for type of elements
-                return DirectoryElementContainsProperSubElements(directoryElement);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool DirectoryElementContainsProperSubElements(XElement directoryElement)
-        {
-            return ( SubElementIsDirectory(directoryElement) || SubElementIsGoodComponent(directoryElement));
-        }
-
-        private bool SubElementIsGoodComponent(XElement directoryElement)
-        {
-            XElement subElement = directoryElement.Element(ns + "Component");
-            if (subElement != null)
-            {
-                // check if file or create folder
-                XElement childElementFile = subElement.Element(ns + "File");
-                XElement childElementCreateFolder = subElement.Element(ns + "CreateFolder");
-
-                return (childElementFile != null) || (childElementCreateFolder != null);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool SubElementIsDirectory(XElement directoryElement)
-        {
-            XElement subElement = directoryElement.Element(ns + "Directory");
-            return subElement != null;
-        }
-
-        private string GetElementName(XElement element)
-        {
-            var elementId = GetElementId(element);
-            var dirName = (IdIsWithinSystemFolderPropertyEnum(elementId)) ? "[" + elementId + "]" : element.Attribute("Name").Value;
-            //Rename SourceDir to Destination Computer, if needed
-            dirName = (dirName != "SourceDir") ? dirName : "Destination Computer";
-            return dirName;
-        }
-
-        private string GetElementId(XElement element)
-        {
-            var id = (element.Attribute("Id") != null) ? element.Attribute("Id").Value : "No ID";
-            return id;
-        }
-
-        private TreeNode AddDestinationComputerToDestination(XElement element)
-        {
-            var nodeName = CreateNodeName(element);
-            var subTreeNode = tvDestination.Nodes.Add(nodeName);
-            subTreeNode.ImageIndex =  (int)ImageLibrary.Computer;
-            subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
-            subTreeNode.Tag = GetElementId(element);
-            return subTreeNode;
-        }
-
-        private string CreateNodeName(XElement element)
-        {
-            //return String.Format("[{0}] [{1}]", GetElementId(element), GetElementName(element));
-            return String.Format("{0}", GetElementName(element));
-        }
 
         private void PopulateSourceTree(string startingLocation, TreeNode currentNode, PopulateMode populateMode)
         {
@@ -645,35 +409,6 @@ namespace Designers.NewFilesAndFolders
             lvSourceFiles.Sort();
         }
 
-        private void GetDirectories(XElement element, TreeNode treeNode)
-        {
-            //ToDo: Rememeber to check if the Element xNamespace is not null also
-
-            // IEnumerable<XElement> directories = element.Descendants(xNamespace + "Directory");
-
-            try
-            {
-                var dir = element.Descendants(ns + "Directory").First();
-                var Id = (dir.Attribute("Id") != null) ? dir.Attribute("Id").Value : "foo";
-                var dirName = (dir.Attribute("Name") != null) ? dir.Attribute("Name").Value : "bar";
-                var subTreeNode = (treeNode == null) ? tvDestination.Nodes.Add(Id + " " + dirName) : treeNode.Nodes.Add(Id + " " + dirName);
-
-                GetDirectories(dir, subTreeNode);
-            }
-            catch
-            {
-                return;
-            }             
-        }
-
-
-        private void lvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
-        {
-            DragSourceName = "lvSourceFiles";
-            lvSourceFiles.DoDragDrop(lvSourceFiles.SelectedItems, DragDropEffects.Copy);
-        }
-
-
         private void refreshSourceFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PopulateSource();
@@ -743,15 +478,7 @@ namespace Designers.NewFilesAndFolders
 
         public bool IsValidContext()
         {
-            if( _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment && 
-                _documentManager.Document.GetWiXVersion() == WiXVersion.v4 )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return IsWiXComponentGroup.IsValidDocument();
         }
 
         public System.Drawing.Image PluginImage
@@ -814,46 +541,14 @@ namespace Designers.NewFilesAndFolders
 
         private void rbOneToMany_Click(object sender, EventArgs e)
         {
-            SetComponentRulesXPI();
         }
 
         private void rbOneToOne_Click(object sender, EventArgs e)
         {
-            SetComponentRulesXPI();
         }
 
 
-        private void SetComponentRulesXPI()
-        {
-            bool componentRulesExists = false;
-            string componentRules = "\"OneToMany\"";
-
-            if (rbOneToOne.Checked)
-            {
-                componentRules = "\"OneToOne\"";
-            }
-
-            foreach (var node in _documentManager.Document.DescendantNodes())
-            {
-                var xpi = node as XProcessingInstruction;
-                if (xpi != null && xpi.Target == "define")
-                {
-                    var fields = new List<string>(xpi.Data.Split(new char[] { '=' }));
-
-                    if (fields[0].Trim().Equals("ComponentRules"))
-                    {
-                        componentRulesExists = true;
-                        xpi.Data = string.Format("ComponentRules={0}", componentRules);
-                    }
-                }
-            }
-            
-            if (!componentRulesExists)
-            {
-                _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(
-                    new XProcessingInstruction("define", string.Format("ComponentRules={0}", componentRules)));
-            }
-        }
+        
 
     }
 }

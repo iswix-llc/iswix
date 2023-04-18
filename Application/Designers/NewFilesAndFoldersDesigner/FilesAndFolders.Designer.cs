@@ -201,8 +201,6 @@
             this.lvSourceFiles.TabIndex = 0;
             this.lvSourceFiles.UseCompatibleStateImageBehavior = false;
             this.lvSourceFiles.View = System.Windows.Forms.View.Details;
-            this.lvSourceFiles.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvSourceFiles_ColumnClick);
-            this.lvSourceFiles.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.lvSourceFiles_ItemDrag);
             this.lvSourceFiles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvSourceFiles_KeyDown);
             this.lvSourceFiles.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lvSourceFiles_MouseUp);
             // 

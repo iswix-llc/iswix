@@ -83,7 +83,7 @@ namespace MSIXDesigner
 
         }
 
-        private  void LoadDocument()
+        private void LoadDocument()
         {
             panelTop.Height = 0;
             _isWiXFGMSIXs = new IsWiXFGMSIXs(_documentManager.Document);
@@ -200,7 +200,7 @@ namespace MSIXDesigner
             IsWiXFGMSIX isWiXFGMSIX = treeViewMSIXs.SelectedNode.Tag as IsWiXFGMSIX;
             isWiXFGMSIX.Delete();
             treeViewMSIXs.SelectedNode.Remove();
-            if(treeViewMSIXs.Nodes.Count>0)
+            if (treeViewMSIXs.Nodes.Count > 0)
             {
                 treeViewMSIXs.SelectedNode = treeViewMSIXs.Nodes[0];
             }
@@ -211,7 +211,7 @@ namespace MSIXDesigner
                 propertyGrid1.SelectedObject = msix1;
             }
 
-            if(treeViewMSIXs.Nodes.Count == 0)
+            if (treeViewMSIXs.Nodes.Count == 0)
             {
                 contextMenuStripMSIX.Items["toolStripMenuItemRename"].Enabled = false;
                 contextMenuStripMSIX.Items["toolStripMenuItemDelete"].Enabled = false;
