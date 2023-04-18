@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace IsWiXAutomationInterface
@@ -169,6 +170,18 @@ namespace IsWiXAutomationInterface
                 return false;
             }
 
+        }
+
+        public List<string> GetDirectories()
+        {
+            List<string> dirs = new List<string>();
+            XElement componentGroupElement = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+            foreach (var componentElement in componentGroupElement.Elements(_ns + "Component"))
+            {
+                dirs.Add(Path.Combine(componentElement.GetOptionalAttribute("Directory"), componentElement.GetOptionalAttribute("Subdirectory")));
+            }
+
+            return dirs;
         }
 
         //public void SortXML()

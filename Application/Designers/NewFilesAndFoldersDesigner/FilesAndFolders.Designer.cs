@@ -279,6 +279,7 @@
             this.tvDestination.SelectedImageIndex = 0;
             this.tvDestination.Size = new System.Drawing.Size(264, 273);
             this.tvDestination.TabIndex = 0;
+            this.tvDestination.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tvDestination_MouseUp);
             // 
             // lvDestination
             // 

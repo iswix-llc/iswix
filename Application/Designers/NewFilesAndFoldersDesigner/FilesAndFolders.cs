@@ -33,7 +33,9 @@ namespace Designers.NewFilesAndFolders
         private string DragSourceName;
         protected string fileFilterPattern;
         protected string fileExcludePattern;
-        
+        private string OldSelectedNodeText;
+        private string OldSelectedNodeTagText;
+
         private enum PopulateMode
         {
             OneLevel,
@@ -170,7 +172,230 @@ namespace Designers.NewFilesAndFolders
 
 
             PopulateSource();
+            LoadDocument();
         }
+
+        private void LoadDocument()
+        {
+            Cursor = Cursors.WaitCursor;
+            if (tvDestination.SelectedNode != null)
+            {
+                OldSelectedNodeText = tvDestination.SelectedNode.Text;
+                OldSelectedNodeTagText = tvDestination.SelectedNode.Tag.ToString();
+            }
+            tvDestination.Nodes.Clear();
+            AddDestinationComputerToDestination();
+
+            List<string> dirs = _isWiXComponentGroup.GetDirectories();
+
+            Cursor = Cursors.Default;
+        }
+
+        private void AddDestinationComputerToDestination()
+        {
+            var subTreeNode = tvDestination.Nodes.Add("Destination Computer");
+            subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
+            subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
+        }
+
+        private void tvDestination_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Show menu only if the right mouse button is clicked.
+            if (e.Button == MouseButtons.Right)
+            {
+                // Point where the mouse is clicked.
+                Point p = new Point(e.X, e.Y);
+
+                // Get the node that the user has clicked.
+                TreeNode node = tvDestination.GetNodeAt(p);
+                if (node != null)
+                {
+                    // Select the node the user has clicked.
+                    // The node appears selected once the menu is displayed on the screen.
+                    tvDestination.SelectedNode = node;
+
+                    // Find the appropriate ContextMenu depending on the selected node.
+                    switch (Convert.ToString(node.Text))
+                    {
+                        case "[CommonAppDataFolder]":
+                        case "[CommonFilesFolder]":
+                        case "[GlobalAssemblyCache]":
+                        case "[ProgramFilesFolder]":
+                        case "[SystemFolder]":
+                        case "[System64Folder]":
+                        case "[MergeRedirectFolder]":
+                            cmsMergeRedirectFolder.Show(tvDestination, p);
+                            break;
+                        case "Destination Computer":
+                            ClearOldDestinationRootMenuItems();
+                            AddItemsToDestinationRootMenu();
+                            cmsDestinationRoot.Show(tvDestination, p);
+                            break;
+                        default:
+                            cmsDestinationTreeDefault.Show(tvDestination, p);
+                            break;
+                    }
+                }
+            }
+        }
+        private void AddItemsToDestinationRootMenu()
+        {
+            // foreach item on the special folders list, add a menu item for the ones we dont ignore
+            // if it already exists in the document make the item disabled.
+            foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
+            {
+                if (IsASpecialDirectoryToIgnore(s))
+                {
+                    // pass over the item
+                }
+                else
+                {
+                    if (s == "GlobalAssemblyCache") continue;
+                    var toolStripMenuItem = new ToolStripMenuItem(s);
+                    toolStripMenuItem.Name = s;
+                    if (ExistsInTree(s))
+                    {
+                        toolStripMenuItem.Enabled = false;
+                    }
+                    else
+                    {
+                        // add event handler
+                        toolStripMenuItem.Click += (toolStripMenuItem_Click);
+                    }
+                    cmsDestinationRoot.Items.Add(toolStripMenuItem);
+                }
+            }
+        }
+
+        void toolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+            switch (toolStripMenuItem.Name)
+            {
+                case "CommonAppDataFolder":
+                    AddSpecialFolder("CommonAppDataFolder", "CommonAppData");
+                    break;
+                case "ProgramFilesFolder":
+                    AddSpecialFolder("ProgramFilesFolder", "ProgramFilesFolder");
+                    break;
+                case "SystemFolder":
+                    AddSpecialFolder("SystemFolder", "SystemFolder");
+                    break;
+                case "System64Folder":
+                    AddSpecialFolder("System64Folder", "System64Folder");
+                    break;
+                case "CommonFilesFolder":
+                    AddSpecialFolder("CommonFilesFolder");
+                    break;
+                case "MergeRedirectFolder":
+                    AddSpecialFolder("MergeRedirectFolder");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void AddSpecialFolder(string folderId)
+        {
+            //find DestinationRoot
+            //XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
+
+            //add folder with folderId as the Id attribute value
+            //XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId));
+            //destinationComputer.Add(specialDirectory);
+
+            //reload the document so the new folder can be seen
+            //SortData();
+            LoadDocument();
+        }
+        private void AddSpecialFolder(string folderId, string folderName)
+        {
+            //find DestinationRoot
+           // XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
+
+            //add folder with folderId as the Id attribute value
+        //    XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId), new XAttribute("Name", folderName));
+         //   destinationComputer.Add(specialDirectory);
+
+            //reload the document so the new folder can be seen
+            //SortData();
+            LoadDocument();
+        }
+
+        private bool ExistsInTree(string tag)
+        {
+            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
+            {
+                if (node.Tag.ToString() == tag)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ClearOldDestinationRootMenuItems()
+        {
+            var itemCount = cmsDestinationRoot.Items.Count;
+            if (itemCount <= 3) return;
+            for (var i = (itemCount - 1); i >= 3; i--)
+            {
+                cmsDestinationRoot.Items.RemoveAt(i);
+            }
+        }
+
+        private bool IsASpecialDirectoryToIgnore(string elementId)
+        {
+            if (IdIsWithinSystemFolderPropertyEnum(elementId))
+            {
+                var systemFolderProperty = (SystemFolderProperty)Enum.Parse(typeof(SystemFolderProperty), elementId, true);
+                switch (systemFolderProperty)
+                {
+                    case SystemFolderProperty.AdminToolsFolder:
+                    case SystemFolderProperty.AppDataFolder:
+                    case SystemFolderProperty.CommonFiles64Folder:
+                    case SystemFolderProperty.DesktopFolder:
+                    case SystemFolderProperty.FavoritesFolder:
+                    case SystemFolderProperty.FontsFolder:
+                    case SystemFolderProperty.LocalAppDataFolder:
+                    case SystemFolderProperty.MyPicturesFolder:
+                    case SystemFolderProperty.PersonalFolder:
+                    case SystemFolderProperty.ProgramFiles64Folder:
+                    case SystemFolderProperty.ProgramMenuFolder:
+                    case SystemFolderProperty.SendToFolder:
+                    case SystemFolderProperty.StartupFolder:
+                    case SystemFolderProperty.StartMenuFolder:
+                    case SystemFolderProperty.System16Folder:
+                    case SystemFolderProperty.TempFolder:
+                    case SystemFolderProperty.TemplateFolder:
+                    case SystemFolderProperty.WindowsFolder:
+                    case SystemFolderProperty.WindowsVolume:
+                        return true;
+                    case SystemFolderProperty.ProgramFilesFolder:
+                    case SystemFolderProperty.CommonAppDataFolder:
+                    case SystemFolderProperty.CommonFilesFolder:
+                    case SystemFolderProperty.MergeRedirectFolder:
+                    case SystemFolderProperty.GlobalAssemblyCache:
+                    case SystemFolderProperty.SystemFolder:
+                    case SystemFolderProperty.System64Folder:
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
+
+        private static bool IdIsWithinSystemFolderPropertyEnum(string elementId)
+        {
+            foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
+            {
+                if (string.Compare(s, elementId, true) == 0)
+                    return true;
+            }
+            return false;
+        }
+
 
         #region (------ Utility Methods ------)
         private static void CallMessageBox(string message, string caption)
