@@ -904,7 +904,7 @@ namespace Designers.NewFilesAndFolders
 
             try
             {
-                if (file.Attribute("KeyPath").Value.ToLower().Equals("yes"))
+                if (file.GetOptionalYesNoAttribute("KeyPath", false))
                 {
                     item.SubItems.Add("Key File");
                 }

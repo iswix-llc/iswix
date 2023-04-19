@@ -17,7 +17,7 @@ namespace IsWiXAutomationInterface
         private const string SourceDirVar = "$(var.SourceDir)";
         public IsWiXComponentGroup()
         {
-            _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
+            _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath).ToLower();
             Load();
         }
 
@@ -29,21 +29,11 @@ namespace IsWiXAutomationInterface
         private void EstablishFragment()
         {
             _ns = _documentManager.Document.GetWiXNameSpace();
-            bool foundFragment = _documentManager.Document.Descendants(_ns + "Fragment").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
-            if (!foundFragment)
-            {
-                XElement element = new XElement(_ns + "Fragment");
-                element.SetAttributeValue("Id", _fileName);
-                _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
-            }
-
-            XElement fragmentElement = _documentManager.Document.Descendants(_ns + "Fragment").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
-            bool foundComponentGroup = fragmentElement.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
+            bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
             if (!foundComponentGroup)
             {
-                XElement element = new XElement(_ns + "ComponentGroup");
-                element.SetAttributeValue("Id", _fileName);
-                fragmentElement.Add(element);
+                XElement element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
+                _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
             }
 
             bool sourceDirXpiExists = false;
