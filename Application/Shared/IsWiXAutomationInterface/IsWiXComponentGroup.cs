@@ -175,12 +175,13 @@ namespace IsWiXAutomationInterface
         public List<string> GetDirectories()
         {
             List<string> dirs = new List<string>();
+
             XElement componentGroupElement = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
             foreach (var componentElement in componentGroupElement.Elements(_ns + "Component"))
             {
                 dirs.Add(Path.Combine(componentElement.GetOptionalAttribute("Directory"), componentElement.GetOptionalAttribute("Subdirectory")));
             }
-
+            dirs.Sort();
             return dirs;
         }
 
@@ -205,5 +206,26 @@ namespace IsWiXAutomationInterface
         //        }
         //    }
         //}
+
+        public List<XElement> GetFiles(string path)
+        {
+            List<XElement> fileElements = new List<XElement>();
+            string[] parts = path.Split(new char[] { '\\' });
+            string directory = parts[0];
+            string subDirectory = string.Empty;
+            if(parts.Length > 1)
+            {
+                subDirectory = path.Substring(directory.Length + 1);
+            }
+
+            XElement componentGroupElement = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+            var componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directory && e.GetOptionalAttribute("Subdirectory") == subDirectory).ToList();
+
+            foreach (var componentElement in componentElements)
+            {
+                fileElements.AddRange(componentElement.Descendants(_ns + "File").ToList());
+            }
+            return fileElements;
+        }
     }
 }

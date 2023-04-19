@@ -65,15 +65,15 @@
     <Content Include="EULA.rtf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="IsWiX.bmp">
+    <EmbeddedResource Include="IsWiX.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="IsWiX.ico">
+    </EmbeddedResource>
+    <EmbeddedResource Include="IsWiX.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="License.txt">
+    </EmbeddedResource>
+    <EmbeddedResource Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Schemas\bal.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

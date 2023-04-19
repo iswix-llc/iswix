@@ -4,11 +4,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Shapes;
 using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
+using static System.Net.WebRequestMethods;
 using static FireworksFramework.Types.Enums;
 
 namespace Designers.NewFilesAndFolders
@@ -29,7 +32,7 @@ namespace Designers.NewFilesAndFolders
         private string SourceStart;
 
         private TreeNode HoverNode;
-        
+
         private string DragSourceName;
         protected string fileFilterPattern;
         protected string fileExcludePattern;
@@ -51,7 +54,7 @@ namespace Designers.NewFilesAndFolders
             Unknown
         }
         private enum ImageLibrary
-        { 
+        {
             FolderOpen,
             FolderClosed,
             Computer,
@@ -78,7 +81,7 @@ namespace Designers.NewFilesAndFolders
             FontsFolder,
             GlobalAssemblyCache,
             LocalAppDataFolder,
-            MergeRedirectFolder,
+            INSTALLLOCATION,
             MyPicturesFolder,
             PersonalFolder,
             ProgramFiles64Folder,
@@ -142,7 +145,7 @@ namespace Designers.NewFilesAndFolders
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
-            if(_isWiXComponentGroup.GetComponentRules()=="OneToMany")
+            if (_isWiXComponentGroup.GetComponentRules() == "OneToMany")
             {
                 rbOneToMany.Checked = true;
             }
@@ -156,7 +159,7 @@ namespace Designers.NewFilesAndFolders
                 if (!rootPath.Contains(":"))
                 {
                     var documentInfo = new FileInfo(_documentManager.DocumentPath);
-                    rootPath = Path.Combine(documentInfo.DirectoryName, rootPath);
+                    rootPath = System.IO.Path.Combine(documentInfo.DirectoryName, rootPath);
                 }
 
                 if (!Directory.Exists(rootPath))
@@ -167,7 +170,7 @@ namespace Designers.NewFilesAndFolders
             }
             catch (Exception)
             {
-                MessageBox.Show(string.Format("An error occurred trying to use '{0}' as the SourceDir.  Defaulting to document directory.", rootPath));
+                System.Windows.Forms.MessageBox.Show(string.Format("An error occurred trying to use '{0}' as the SourceDir.  Defaulting to document directory.", rootPath));
             }
 
 
@@ -178,171 +181,184 @@ namespace Designers.NewFilesAndFolders
         private void LoadDocument()
         {
             Cursor = Cursors.WaitCursor;
-            if (tvDestination.SelectedNode != null)
-            {
-                OldSelectedNodeText = tvDestination.SelectedNode.Text;
-                OldSelectedNodeTagText = tvDestination.SelectedNode.Tag.ToString();
-            }
-            tvDestination.Nodes.Clear();
-            AddDestinationComputerToDestination();
+            //if (tvDestination.SelectedNode != null)
+            //{
+            //    OldSelectedNodeText = tvDestination.SelectedNode.Text;
+            //    OldSelectedNodeTagText = tvDestination.SelectedNode.Tag.ToString();
+            //}
+            //tvDestination.Nodes.Clear();
+            //AddDestinationComputerToDestination();
 
             List<string> dirs = _isWiXComponentGroup.GetDirectories();
+            AddDirectoryNodesToDestination(dirs);
+            tvDestination.ExpandAll();
+
+
 
             Cursor = Cursors.Default;
-        }
-
-        private void AddDestinationComputerToDestination()
-        {
-            var subTreeNode = tvDestination.Nodes.Add("Destination Computer");
-            subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
-            subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
         }
 
         private void tvDestination_MouseUp(object sender, MouseEventArgs e)
         {
             // Show menu only if the right mouse button is clicked.
-            if (e.Button == MouseButtons.Right)
-            {
-                // Point where the mouse is clicked.
-                Point p = new Point(e.X, e.Y);
+            //if (e.Button == MouseButtons.Right)
+            //{
+            //    // Point where the mouse is clicked.
+            //    Point p = new Point(e.X, e.Y);
 
-                // Get the node that the user has clicked.
-                TreeNode node = tvDestination.GetNodeAt(p);
-                if (node != null)
-                {
-                    // Select the node the user has clicked.
-                    // The node appears selected once the menu is displayed on the screen.
-                    tvDestination.SelectedNode = node;
+            //    // Get the node that the user has clicked.
+            //    TreeNode node = tvDestination.GetNodeAt(p);
+            //    if (node != null)
+            //    {
+            //        // Select the node the user has clicked.
+            //        // The node appears selected once the menu is displayed on the screen.
+            //        tvDestination.SelectedNode = node;
 
-                    // Find the appropriate ContextMenu depending on the selected node.
-                    switch (Convert.ToString(node.Text))
-                    {
-                        case "[CommonAppDataFolder]":
-                        case "[CommonFilesFolder]":
-                        case "[GlobalAssemblyCache]":
-                        case "[ProgramFilesFolder]":
-                        case "[SystemFolder]":
-                        case "[System64Folder]":
-                        case "[MergeRedirectFolder]":
-                            cmsMergeRedirectFolder.Show(tvDestination, p);
-                            break;
-                        case "Destination Computer":
-                            ClearOldDestinationRootMenuItems();
-                            AddItemsToDestinationRootMenu();
-                            cmsDestinationRoot.Show(tvDestination, p);
-                            break;
-                        default:
-                            cmsDestinationTreeDefault.Show(tvDestination, p);
-                            break;
-                    }
-                }
-            }
+            //        // Find the appropriate ContextMenu depending on the selected node.
+            //        switch (Convert.ToString(node.Text))
+            //        {
+            //            case "[CommonAppDataFolder]":
+            //            case "[CommonFilesFolder]":
+            //            case "[GlobalAssemblyCache]":
+            //            case "[ProgramFilesFolder]":
+            //            case "[SystemFolder]":
+            //            case "[System64Folder]":
+            //            case "[INSTALLLOCATION]":
+            //                cmsINSTALLLOCATION.Show(tvDestination, p);
+            //                break;
+            //            case "Destination Computer":
+            //                ClearOldDestinationRootMenuItems();
+            //                AddItemsToDestinationRootMenu();
+            //                cmsDestinationRoot.Show(tvDestination, p);
+            //                break;
+            //            default:
+            //                cmsDestinationTreeDefault.Show(tvDestination, p);
+            //                break;
+            //        }
+            //    }
+            //}
         }
         private void AddItemsToDestinationRootMenu()
         {
             // foreach item on the special folders list, add a menu item for the ones we dont ignore
             // if it already exists in the document make the item disabled.
-            foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
-            {
-                if (IsASpecialDirectoryToIgnore(s))
-                {
-                    // pass over the item
-                }
-                else
-                {
-                    if (s == "GlobalAssemblyCache") continue;
-                    var toolStripMenuItem = new ToolStripMenuItem(s);
-                    toolStripMenuItem.Name = s;
-                    if (ExistsInTree(s))
-                    {
-                        toolStripMenuItem.Enabled = false;
-                    }
-                    else
-                    {
-                        // add event handler
-                        toolStripMenuItem.Click += (toolStripMenuItem_Click);
-                    }
-                    cmsDestinationRoot.Items.Add(toolStripMenuItem);
-                }
-            }
+            //foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
+            //{
+            //    if (IsASpecialDirectoryToIgnore(s))
+            //    {
+            //        // pass over the item
+            //    }
+            //    else
+            //    {
+            //        if (s == "GlobalAssemblyCache") continue;
+            //        var toolStripMenuItem = new ToolStripMenuItem(s);
+            //        toolStripMenuItem.Name = s;
+            //        if (ExistsInTree(s))
+            //        {
+            //            toolStripMenuItem.Enabled = false;
+            //        }
+            //        else
+            //        {
+            //            // add event handler
+            //            toolStripMenuItem.Click += (toolStripMenuItem_Click);
+            //        }
+            //        cmsDestinationRoot.Items.Add(toolStripMenuItem);
+            //    }
+            //}
         }
 
         void toolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
-            switch (toolStripMenuItem.Name)
+            //ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+            //switch (toolStripMenuItem.Name)
+            //{
+            //    case "CommonAppDataFolder":
+            //        AddSpecialFolder("CommonAppDataFolder", "CommonAppData");
+            //        break;
+            //    case "ProgramFilesFolder":
+            //        AddSpecialFolder("ProgramFilesFolder", "ProgramFilesFolder");
+            //        break;
+            //    case "SystemFolder":
+            //        AddSpecialFolder("SystemFolder", "SystemFolder");
+            //        break;
+            //    case "System64Folder":
+            //        AddSpecialFolder("System64Folder", "System64Folder");
+            //        break;
+            //    case "CommonFilesFolder":
+            //        AddSpecialFolder("CommonFilesFolder");
+            //        break;
+            //    case "INSTALLLOCATION":
+            //        AddSpecialFolder("INSTALLLOCATION");
+            //        break;
+            //    default:
+            //        break;
+            //}
+        }
+
+        //private void AddSpecialFolder(string folderId)
+        //{
+        //    //find DestinationRoot
+        //    //XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
+
+        //    //add folder with folderId as the Id attribute value
+        //    //XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId));
+        //    //destinationComputer.Add(specialDirectory);
+
+        //    //reload the document so the new folder can be seen
+        //    //SortData();
+        //}
+        //private void AddSpecialFolder(string folderId, string folderName)
+        //{
+        //    //find DestinationRoot
+        //   // XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
+
+        //    //add folder with folderId as the Id attribute value
+        ////    XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId), new XAttribute("Name", folderName));
+        // //   destinationComputer.Add(specialDirectory);
+
+        //    //reload the document so the new folder can be seen
+        //    //SortData();
+        //    LoadDocument();
+        //}
+
+        private void AddDirectoryNodesToDestination(List<string> dirs)
+        {
+            tvDestination.Nodes.Clear();
+            var subTreeNode = tvDestination.Nodes.Add("Destination Computer");
+            subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
+            subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
+
+            string pathSeparator = @"\";
+            foreach (var dir in dirs)
             {
-                case "CommonAppDataFolder":
-                    AddSpecialFolder("CommonAppDataFolder", "CommonAppData");
-                    break;
-                case "ProgramFilesFolder":
-                    AddSpecialFolder("ProgramFilesFolder", "ProgramFilesFolder");
-                    break;
-                case "SystemFolder":
-                    AddSpecialFolder("SystemFolder", "SystemFolder");
-                    break;
-                case "System64Folder":
-                    AddSpecialFolder("System64Folder", "System64Folder");
-                    break;
-                case "CommonFilesFolder":
-                    AddSpecialFolder("CommonFilesFolder");
-                    break;
-                case "MergeRedirectFolder":
-                    AddSpecialFolder("MergeRedirectFolder");
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void AddSpecialFolder(string folderId)
-        {
-            //find DestinationRoot
-            //XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
-
-            //add folder with folderId as the Id attribute value
-            //XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId));
-            //destinationComputer.Add(specialDirectory);
-
-            //reload the document so the new folder can be seen
-            //SortData();
-            LoadDocument();
-        }
-        private void AddSpecialFolder(string folderId, string folderName)
-        {
-            //find DestinationRoot
-           // XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
-
-            //add folder with folderId as the Id attribute value
-        //    XElement specialDirectory = new XElement(ns + "Directory", new XAttribute("Id", folderId), new XAttribute("Name", folderName));
-         //   destinationComputer.Add(specialDirectory);
-
-            //reload the document so the new folder can be seen
-            //SortData();
-            LoadDocument();
-        }
-
-        private bool ExistsInTree(string tag)
-        {
-            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
-            {
-                if (node.Tag.ToString() == tag)
+                string subPathAgg = null;
+                TreeNode lastNode = null;
+                foreach (string subPath in dir.Split(pathSeparator))
                 {
-                    return true;
+                    subPathAgg += subPath + pathSeparator;
+                    TreeNode[] nodes = subTreeNode.Nodes.Find(subPathAgg, true);
+                    if (nodes.Length == 0)
+                        if (lastNode == null)
+                        {
+                            lastNode = subTreeNode.Nodes.Add(subPathAgg, subPath);
+                            if (IdIsWithinSystemFolderPropertyEnum(subPath))
+                            {
+                                lastNode.ImageIndex = (int)ImageLibrary.BlueFolderClosed;
+                                lastNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
+                            }
+                        }
+                        else
+                        {
+                            lastNode = lastNode.Nodes.Add(subPathAgg, subPath);
+                        }
+                    else
+                    {
+                        lastNode = nodes[0];
+                    }
                 }
             }
-            return false;
         }
 
-        private void ClearOldDestinationRootMenuItems()
-        {
-            var itemCount = cmsDestinationRoot.Items.Count;
-            if (itemCount <= 3) return;
-            for (var i = (itemCount - 1); i >= 3; i--)
-            {
-                cmsDestinationRoot.Items.RemoveAt(i);
-            }
-        }
 
         private bool IsASpecialDirectoryToIgnore(string elementId)
         {
@@ -374,7 +390,7 @@ namespace Designers.NewFilesAndFolders
                     case SystemFolderProperty.ProgramFilesFolder:
                     case SystemFolderProperty.CommonAppDataFolder:
                     case SystemFolderProperty.CommonFilesFolder:
-                    case SystemFolderProperty.MergeRedirectFolder:
+                    case SystemFolderProperty.INSTALLLOCATION:
                     case SystemFolderProperty.GlobalAssemblyCache:
                     case SystemFolderProperty.SystemFolder:
                     case SystemFolderProperty.System64Folder:
@@ -400,7 +416,7 @@ namespace Designers.NewFilesAndFolders
         #region (------ Utility Methods ------)
         private static void CallMessageBox(string message, string caption)
         {
-            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            System.Windows.Forms.MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         #endregion
 
@@ -423,7 +439,7 @@ namespace Designers.NewFilesAndFolders
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    fileExcludePattern = BaseExcludePattern;                    
+                    fileExcludePattern = BaseExcludePattern;
                 }
                 else
                 {
@@ -498,9 +514,9 @@ namespace Designers.NewFilesAndFolders
             lvSourceFiles.EndUpdate();
         }
 
-        private FileInfo[] GetFilteredFiles( DirectoryInfo directoryInfo, string FileExcludePatter, string FileFilterPattern )
+        private FileInfo[] GetFilteredFiles(DirectoryInfo directoryInfo, string FileExcludePatter, string FileFilterPattern)
         {
-            FileInfo[] files = RemoveExcludedFiles( GetFiles(directoryInfo), FileExcludePatter);
+            FileInfo[] files = RemoveExcludedFiles(GetFiles(directoryInfo), FileExcludePatter);
 
             var includedFiles = new List<FileInfo>();
 
@@ -552,12 +568,12 @@ namespace Designers.NewFilesAndFolders
             foreach (var info in fileInfos)
             {
 
-                
+
                 if (!imageListFileIcons.Images.ContainsKey(info.Extension.ToLower()))
                 {
                     imageListFileIcons.Images.Add(info.Extension.ToLower(), ShellIcon.GetSmallBitmap(info.FullName));
                 }
-                
+
                 var listViewItem = new ListViewItem(info.Name);
                 listViewItem.SubItems.Add(info.Extension);
                 listViewItem.SubItems.Add(String.Format(new FileSizeFormatter(), "{0}", info.Length));
@@ -674,12 +690,12 @@ namespace Designers.NewFilesAndFolders
         private void tvSourceFiles_MouseUp(object sender, MouseEventArgs e)
         {
             // Show menu only if the right mouse button is clicked.
-            if (e.Button == MouseButtons.Right)
-            {
-                // Point where the mouse is clicked.
-                Point p = new Point(e.X, e.Y);
-                cmsSourceTree.Show(tvSourceFiles, p);
-            }
+            //if (e.Button == MouseButtons.Right)
+            //{
+            //    // Point where the mouse is clicked.
+            //    Point p = new Point(e.X, e.Y);
+            //    cmsSourceTree.Show(tvSourceFiles, p);
+            //}
         }
 
         private void tvSourceFiles_KeyDown(object sender, KeyEventArgs e)
@@ -696,28 +712,28 @@ namespace Designers.NewFilesAndFolders
         private void lvSourceFiles_MouseUp(object sender, MouseEventArgs e)
         {
             // Show menu only if the right mouse button is clicked.
-            if (e.Button == MouseButtons.Right)
-            {
-                // Point where the mouse is clicked.
-                Point p = new Point(e.X, e.Y);
-                cmsSourceFiles.Show(lvSourceFiles, p);
-            }
+            //if (e.Button == MouseButtons.Right)
+            //{
+            //    // Point where the mouse is clicked.
+            //    Point p = new Point(e.X, e.Y);
+            //    cmsSourceFiles.Show(lvSourceFiles, p);
+            //}
         }
 
         private void lvSourceFiles_KeyDown(object sender, KeyEventArgs e)
         {
-            if( e.KeyCode == Keys.F5 )
+            if (e.KeyCode == Keys.F5)
             {
                 DisplaySourceListItemsForSelectedNode(tvSourceFiles.SelectedNode);
             }
-            else if( e.KeyCode == Keys.A && e.Control )
+            else if (e.KeyCode == Keys.A && e.Control)
             {
                 foreach (ListViewItem item in lvSourceFiles.Items)
                 {
                     item.Selected = true;
                 }
             }
-            else if( e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.Escape)
             {
                 foreach (ListViewItem item in lvSourceFiles.Items)
                 {
@@ -728,7 +744,7 @@ namespace Designers.NewFilesAndFolders
 
         private void tvSourceFiles_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            PopulateSourceTree( e.Node.FullPath, e.Node, PopulateMode.OneLevel);
+            PopulateSourceTree(e.Node.FullPath, e.Node, PopulateMode.OneLevel);
         }
 
         #region IFireworksDesigner Members
@@ -771,7 +787,7 @@ namespace Designers.NewFilesAndFolders
 
         private void textBoxExcludeFilter_KeyDown(object sender, KeyEventArgs e)
         {
-            if( e.KeyCode == Keys.Enter )
+            if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
@@ -814,7 +830,103 @@ namespace Designers.NewFilesAndFolders
             {
                 componentRules = "\"OneToOne\"";
             }
-           _isWiXComponentGroup.SetComponentRules(componentRules);
+            _isWiXComponentGroup.SetComponentRules(componentRules);
         }
+
+        private void tvDestination_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Level.Equals(0))
+            {
+                lvDestination.Items.Clear();
+                lvDestination.Enabled = false;
+            }
+            else
+            {
+                lvDestination.Enabled = true;
+                DisplayDestinationItemsFromSelectedNode(e.Node);
+            }
+        }
+        private void DisplayDestinationItemsFromSelectedNode(TreeNode treeNode)
+        {
+            lvDestination.Items.Clear();
+            //tvDestination.SelectedNode.Text  To Display the Selected Node in the ListView
+            if (treeNode == null) return;
+
+            // find the directory element based on the information from the selected treenode
+            List<ListViewItem> listItems = GetItemListFromSelectedDestinationDirectory(treeNode);
+            if (listItems == null) return;
+            lvDestination.BeginUpdate();
+            lvDestination.Items.AddRange(listItems.ToArray());
+            lvDestination.EndUpdate();
+        }
+
+        private List<ListViewItem> GetItemListFromSelectedDestinationDirectory(TreeNode treeNode)
+        {
+            imageListFileIconsDst.Images.Clear();
+            imageListFileIconsDst.Images.Add("stockdeletedimage", ilImageLibrary.Images["delete_16x16.gif"]);
+
+            var itemList = new List<ListViewItem>();
+            try
+            {
+                string path = treeNode.FullPath.Replace("Destination Computer\\", "");
+                var filesElements = _isWiXComponentGroup.GetFiles(path);
+                foreach (var fileElement in filesElements)
+                {
+                    itemList.Add(CreateDestinationItemFromFile(fileElement));
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return itemList;
+        }
+
+        private ListViewItem CreateDestinationItemFromFile(XElement file)
+        {
+            var source = file.Attribute("Source").Value;
+            string temp = source.Replace(SourceDirVar + @"\", "");
+            var realSourcePath = System.IO.Path.Combine(SourceStart, temp);
+            var sourceFileInfo = new FileInfo(realSourcePath);
+
+            var filename = sourceFileInfo.Name;// source.Substring(source.LastIndexOf("\\")+1);
+            var extension = sourceFileInfo.Extension; // source.Substring(source.LastIndexOf("\\"));
+            var item = new ListViewItem(filename);
+            item.SubItems.Add(extension.ToLower());
+            item.SubItems.Add(source);
+
+            if (!imageListFileIconsDst.Images.ContainsKey(extension.ToLower()))
+            {
+                if (sourceFileInfo.Exists)
+                {
+                    imageListFileIconsDst.Images.Add(extension.ToLower(), ShellIcon.GetSmallBitmap(realSourcePath));
+                }
+            }
+
+            try
+            {
+                if (file.Attribute("KeyPath").Value.ToLower().Equals("yes"))
+                {
+                    item.SubItems.Add("Key File");
+                }
+            }
+            catch (Exception)
+            {
+                item.SubItems.Add("");
+            }
+            if (!imageListFileIconsDst.Images.ContainsKey(extension.ToLower()))
+            {
+                if (!string.IsNullOrEmpty(extension))
+                {
+                    item.ImageKey = "stockdeletedimage";
+                    item.ForeColor = Color.Red;
+                }
+            }
+            else
+            {
+                item.ImageKey = extension.ToLower();
+            }
+            return item;
+        }
+
     }
 }
