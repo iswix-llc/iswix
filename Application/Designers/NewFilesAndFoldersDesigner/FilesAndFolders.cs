@@ -124,12 +124,19 @@ namespace Designers.NewFilesAndFolders
             PopulateSource();
             LoadDocument();
 
+            bool found = false;
             foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
             {
                 if(node.Text == "INSTALLLOCATION")
                 {
                     tvDestination.SelectedNode = node;
+                    found = true;
+                    break;
                 }
+            }
+            if(!found)
+            {
+                tvDestination.SelectedNode = tvDestination.Nodes[0];
             }
 
         }
