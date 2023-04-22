@@ -2,7 +2,7 @@
   "profiles": {
     "IsWiX": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\GitHub\\Test\\Installer\\TestSetup\\Testfiles.wxs"
+      "commandLineArgs": "C:\\GitHub\\Files.wxs"
     }
   }
 }

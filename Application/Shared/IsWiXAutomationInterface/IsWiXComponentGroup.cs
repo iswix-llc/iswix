@@ -1,11 +1,9 @@
-﻿using FireworksFramework.Managers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml.Linq;
+using FireworksFramework.Managers;
 
 namespace IsWiXAutomationInterface
 {
@@ -13,28 +11,35 @@ namespace IsWiXAutomationInterface
     {
         XNamespace _ns;
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        XElement _componentGroupElement;
         string _fileName;
         private const string SourceDirVar = "$(var.SourceDir)";
         public IsWiXComponentGroup()
         {
-            _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath).ToLower();
-            Load();
-        }
-
-        public void Load()
-        {
-            EstablishFragment();
-        }
-
-        private void EstablishFragment()
-        {
             _ns = _documentManager.Document.GetWiXNameSpace();
+            _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath).ToLower();
+            EstablishDefines();
+            _componentGroupElement = GetOrEstablishComponentGroup();
+        }
+
+        private XElement GetOrEstablishComponentGroup()
+        {
+            XElement element = null;
             bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
-            if (!foundComponentGroup)
+            if (foundComponentGroup)
             {
-                XElement element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
+                element = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+            }
+            else
+            {
+                 element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
                 _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
             }
+            return element; 
+        }
+
+        private void EstablishDefines()
+        {
 
             bool sourceDirXpiExists = false;
 
@@ -175,31 +180,10 @@ namespace IsWiXAutomationInterface
             return dirs;
         }
 
-        //public void SortXML()
-        //{
-        //    XElement rootElement = _documentManager.Document.GetSecondOrderRoot();
 
-        //    var fragments = rootElement.Elements(ns + "Fragment")
-        //                    .OrderBy(s => (string)s.Attribute("Id").Value).ToArray();
-        //    _documentManager.Document.Descendants(ns + "Fragment").Remove();
-        //    var element = _documentManager.Document.GetElementToAddAfterSelf("Fragment");
-
-        //    foreach (var fragment in fragments.Reverse())
-        //    {
-        //        if (element == null)
-        //        {
-        //            rootElement.AddFirst(fragment);
-        //        }
-        //        else
-        //        {
-        //            element.AddAfterSelf(fragment);
-        //        }
-        //    }
-        //}
-
-        public List<XElement> GetFiles(string path)
+        public List<Tuple<string, bool>> GetFiles(string path)
         {
-            List<XElement> fileElements = new List<XElement>();
+            List<Tuple<string, bool>> files = new List<Tuple<string, bool>>();
             string[] parts = path.Split(new char[] { '\\' });
             string directory = parts[0];
             string subDirectory = string.Empty;
@@ -213,9 +197,12 @@ namespace IsWiXAutomationInterface
 
             foreach (var componentElement in componentElements)
             {
-                fileElements.AddRange(componentElement.Descendants(_ns + "File").ToList());
+                foreach (var file in componentElement.Descendants(_ns + "File").ToList())
+                {
+                    files.Add(new Tuple<string, bool>(file.Attribute("Source").Value, file.GetOptionalYesNoAttribute("KeyPath", false)));
+                }
             }
-            return fileElements;
+            return files;
         }
     }
 }

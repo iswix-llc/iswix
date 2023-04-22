@@ -165,7 +165,6 @@
             tvSourceFiles.BeforeExpand += tvSourceFiles_BeforeExpand;
             tvSourceFiles.AfterSelect += tvSourceFiles_AfterSelect;
             tvSourceFiles.KeyDown += tvSourceFiles_KeyDown;
-            tvSourceFiles.MouseUp += tvSourceFiles_MouseUp;
             // 
             // ilImageLibrary
             // 
@@ -198,7 +197,6 @@
             lvSourceFiles.UseCompatibleStateImageBehavior = false;
             lvSourceFiles.View = System.Windows.Forms.View.Details;
             lvSourceFiles.KeyDown += lvSourceFiles_KeyDown;
-            lvSourceFiles.MouseUp += lvSourceFiles_MouseUp;
             // 
             // chFileName
             // 
@@ -276,7 +274,6 @@
             tvDestination.Size = new System.Drawing.Size(264, 268);
             tvDestination.TabIndex = 0;
             tvDestination.AfterSelect += tvDestination_AfterSelect;
-            tvDestination.MouseUp += tvDestination_MouseUp;
             // 
             // lvDestination
             // 
