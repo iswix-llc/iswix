@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
@@ -122,6 +123,15 @@ namespace Designers.NewFilesAndFolders
 
             PopulateSource();
             LoadDocument();
+
+            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
+            {
+                if(node.Text == "INSTALLLOCATION")
+                {
+                    tvDestination.SelectedNode = node;
+                }
+            }
+
         }
 
         private void LoadDocument()
