@@ -2,7 +2,7 @@
   <Fragment>
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CompanyFolder" Name="My Company">
-        <Directory Id="INSTALLLOCATION" Name="$safeprojectname$">
+        <Directory Id="INSTALLLOCATION" Name="$safeprojectname$"/>
       </Directory>
     </StandardDirectory>
     <Feature Id="$safeprojectname$" Title="$safeprojectname$" Description="Installs all the files needed for $safeprojectname$" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">

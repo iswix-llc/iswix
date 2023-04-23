@@ -29,7 +29,7 @@ namespace IsWiXAutomationInterface
             XElement element = GetComponentGroup();
             element.Add(
                 new XElement(_ns + "Component",
-                    new XAttribute("Id", $"{_fileName}{directoryName}"),
+                    new XAttribute("Id", $"_{_fileName}_{directoryName}"),
                     new XAttribute("Directory", directoryName),
                     new XAttribute("Guid", Guid.NewGuid().ToString()),
                     new XAttribute("KeyPath", "true"),

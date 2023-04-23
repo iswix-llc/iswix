@@ -17,11 +17,11 @@
   </TemplateData>
   <TemplateContent>
     <Project File="IsWiXSetupProject.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Code\Product.wxs">Product.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\Features.wxs">Features.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Code\IISMeta.wxs">IISMeta.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI.wxs">UI.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Code\UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Product.wxs">Product.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Features.wxs">Features.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="IISMeta.wxs">IISMeta.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="UI.wxs">UI.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Banner.jpg">Banner.jpg</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Dialog.jpg">Dialog.jpg</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>

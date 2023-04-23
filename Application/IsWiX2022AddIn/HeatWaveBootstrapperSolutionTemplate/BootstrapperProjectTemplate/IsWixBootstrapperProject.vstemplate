@@ -16,7 +16,7 @@
   </TemplateData>
   <TemplateContent>
     <Project File="IsWiXBootstrapper.wixproj" TargetFileName="$safeprojectname$Bootstrapper.wixproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Code\Bundle.wxs">Bundle.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Bundle.wxs">Bundle.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.png">Icon.png</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\iuipreq.thm">iuipreq.thm</ProjectItem>
