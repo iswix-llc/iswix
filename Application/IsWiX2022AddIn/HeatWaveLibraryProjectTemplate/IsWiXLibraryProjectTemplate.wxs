@@ -4,7 +4,7 @@
 	<?define SourceDir="..\Deploy"?>
 	<Fragment Id="$safeprojectname$">
 		<ComponentGroup Id="$safeprojectname$">
-		  <Component Id="_$safeprojectName$_INSTALLLOCATION" Directory="INSTALLLOCATION" Guid="$guid2$" KeyPath="yes">
+		  <Component Id="_$safeprojectname$_INSTALLLOCATION" Directory="INSTALLLOCATION" Guid="$guid2$" KeyPath="yes">
 		    <CreateFolder />
 		  </Component>
 		</ComponentGroup>
