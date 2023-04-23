@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
@@ -124,20 +127,6 @@ namespace Designers.NewFilesAndFolders
             PopulateSource();
             LoadDocument();
 
-            bool found = false;
-            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
-            {
-                if(node.Text == "INSTALLLOCATION")
-                {
-                    tvDestination.SelectedNode = node;
-                    found = true;
-                    break;
-                }
-            }
-            if(!found)
-            {
-                tvDestination.SelectedNode = tvDestination.Nodes[0];
-            }
 
         }
 
@@ -147,6 +136,21 @@ namespace Designers.NewFilesAndFolders
             List<string> dirs = _isWiXComponentGroup.GetDirectories();
             AddDirectoryNodesToDestination(dirs);
             tvDestination.ExpandAll();
+            bool found = false;
+            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
+            {
+                if (node.Text == "INSTALLLOCATION")
+                {
+                    tvDestination.SelectedNode = node;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                tvDestination.SelectedNode = tvDestination.Nodes[0];
+            }
+
             Cursor = Cursors.Default;
         }
 
@@ -589,7 +593,7 @@ namespace Designers.NewFilesAndFolders
             if (treeNode == null) return;
 
             string directoryPath = treeNode.FullPath.Replace(@"Destination Computer\", "");
-            List<Tuple<string, bool>> files= _isWiXComponentGroup.GetFiles(directoryPath);
+            List<Tuple<string, bool>> files = _isWiXComponentGroup.GetFiles(directoryPath);
             foreach (var file in files)
             {
                 listItems.Add(CreateDestinationItemFromFile(file.Item1, file.Item2));
@@ -637,7 +641,7 @@ namespace Designers.NewFilesAndFolders
                 if (!string.IsNullOrEmpty(extension))
                 {
                     item.ImageKey = "stockdeletedimage";
-                    item.ForeColor = Color.Red;
+                    item.ForeColor = Color.Red; 
                 }
             }
             else
@@ -647,5 +651,160 @@ namespace Designers.NewFilesAndFolders
             return item;
         }
 
+        private void tvDestination_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Show menu only if the right mouse button is clicked.
+            if (e.Button == MouseButtons.Right)
+            {
+                // Point where the mouse is clicked.
+                Point p = new Point(e.X, e.Y);
+
+                // Get the node that the user has clicked.
+                TreeNode node = tvDestination.GetNodeAt(p);
+                if (node != null)
+                {
+                    // Select the node the user has clicked.
+                    // The node appears selected once the menu is displayed on the screen.
+                    tvDestination.SelectedNode = node;
+
+                    foreach (ToolStripItem toolStripItem in cmsDestinationRoot.Items)
+                    {
+                        toolStripItem.Visible = true;
+                    }
+
+                    // Find the appropriate ContextMenu depending on the selected node.
+                    switch (Convert.ToString(node.Text))
+                    {
+                        case "[CommonAppDataFolder]":
+                        case "[CommonFilesFolder]":
+                        case "[GlobalAssemblyCache]":
+                        case "[ProgramFilesFolder]":
+                        case "[SystemFolder]":
+                        case "[System64Folder]":
+                        case "[INSTALLLOCATION]":
+                            cmsINSTALLLOCATION.Show(tvDestination, p);
+                            break;
+                        case "Destination Computer":
+                            ClearOldDestinationRootMenuItems();
+                            AddItemsToDestinationRootMenu();
+                            cmsDestinationRoot.Show(tvDestination, p);
+                            break;
+                        default:
+                            cmsDestinationTreeDefault.Show(tvDestination, p);
+                            break;
+                    }
+                }
+            }
+        }
+        private void ClearOldDestinationRootMenuItems()
+        {
+            var itemCount = cmsDestinationRoot.Items.Count;
+            if (itemCount <= 3) return;
+            for (var i = (itemCount - 1); i >= 3; i--)
+            {
+                cmsDestinationRoot.Items.RemoveAt(i);
+            }
+        }
+
+        private void AddItemsToDestinationRootMenu()
+        {
+            List<string> dirs = _isWiXComponentGroup.GetDirectories();
+            foreach (ToolStripItem toolStripItem in cmsDestinationRoot.Items)
+            {
+                toolStripItem.Visible = false;
+            }
+
+            // foreach item on the special folders list, add a menu item for the ones we dont ignore
+            // if it already exists in the document make the item disabled.
+            foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
+            {
+                if (IsASpecialDirectoryToIgnore(s)||dirs.Contains(s))
+                {
+                    // pass over the item
+                }
+                else
+                {
+                    if (s == "GlobalAssemblyCache") continue;
+                    var toolStripMenuItem = new ToolStripMenuItem(s);
+                    toolStripMenuItem.Name = s;
+                    toolStripMenuItem.Click += toolStripMenuItem_Click;
+                    cmsDestinationRoot.Items.Add(toolStripMenuItem);
+                }
+            }
+        }
+
+        void toolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+            AddSpecialFolder(toolStripMenuItem.Name);
+        }
+
+        bool IsASpecialDirectoryToIgnore(string elementId)
+        {
+            if (IdIsWithinSystemFolderPropertyEnum(elementId))
+            {
+                var systemFolderProperty = (SystemFolderProperty)Enum.Parse(typeof(SystemFolderProperty), elementId, true);
+                switch (systemFolderProperty)
+                {
+                    case SystemFolderProperty.AdminToolsFolder:
+                    case SystemFolderProperty.AppDataFolder:
+                    case SystemFolderProperty.CommonFiles64Folder:
+                    case SystemFolderProperty.DesktopFolder:
+                    case SystemFolderProperty.FavoritesFolder:
+                    case SystemFolderProperty.FontsFolder:
+                    case SystemFolderProperty.LocalAppDataFolder:
+                    case SystemFolderProperty.MyPicturesFolder:
+                    case SystemFolderProperty.PersonalFolder:
+                    case SystemFolderProperty.ProgramFiles64Folder:
+                    case SystemFolderProperty.ProgramMenuFolder:
+                    case SystemFolderProperty.SendToFolder:
+                    case SystemFolderProperty.StartupFolder:
+                    case SystemFolderProperty.StartMenuFolder:
+                    case SystemFolderProperty.System16Folder:
+                    case SystemFolderProperty.System64Folder:
+                    case SystemFolderProperty.SystemFolder:
+                    case SystemFolderProperty.TempFolder:
+                    case SystemFolderProperty.TemplateFolder:
+                    case SystemFolderProperty.CommonFilesFolder:
+                    case SystemFolderProperty.ProgramFilesFolder:
+                        return true;
+                    case SystemFolderProperty.ProgramFiles6432Folder:
+                    case SystemFolderProperty.CommonFiles6432Folder:
+                    case SystemFolderProperty.INSTALLLOCATION:
+                    case SystemFolderProperty.GlobalAssemblyCache:
+                    case SystemFolderProperty.System6432Folder:
+                    case SystemFolderProperty.CommonAppDataFolder:
+                    case SystemFolderProperty.WindowsFolder:
+                    case SystemFolderProperty.WindowsVolume:
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
+
+        bool ExistsInTree(string tag)
+        {
+            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
+            {
+                if (node.Tag.ToString() == tag)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        string GetElementId(XElement element)
+        {
+            var id = (element.Attribute("Id") != null) ? element.Attribute("Id").Value : "No ID";
+            return id;
+        }
+
+        private void AddSpecialFolder(string folderId)
+        {
+            _isWiXComponentGroup.CreateRootDirectory(folderId);
+            LoadDocument();
+        }
     }
 }

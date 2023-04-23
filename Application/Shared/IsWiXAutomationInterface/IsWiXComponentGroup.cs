@@ -18,11 +18,37 @@ namespace IsWiXAutomationInterface
         {
             _ns = _documentManager.Document.GetWiXNameSpace();
             _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath).ToLower();
+           _componentGroupElement = GetComponentGroup();
             EstablishDefines();
-            _componentGroupElement = GetOrEstablishComponentGroup();
+            SortXML();
         }
 
-        private XElement GetOrEstablishComponentGroup()
+        public void CreateRootDirectory(string directoryName)
+        {
+            EstablishFragment();
+            XElement element = GetComponentGroup();
+            element.Add(
+                new XElement(_ns + "Component",
+                    new XAttribute("Id", $"{_fileName}{directoryName}"),
+                    new XAttribute("Directory", directoryName),
+                    new XAttribute("Guid", Guid.NewGuid().ToString()),
+                    new XAttribute("KeyPath", "true"),
+                    new XElement(_ns+"CreateFolder"))
+                    );
+            SortXML();
+        }
+        private XElement GetComponentGroup()
+        {
+            XElement element = null;
+            bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
+            if (foundComponentGroup)
+            {
+                element = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+            }
+            return element; 
+        }
+
+        private void EstablishFragment()
         {
             XElement element = null;
             bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
@@ -32,15 +58,13 @@ namespace IsWiXAutomationInterface
             }
             else
             {
-                 element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
+                element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
                 _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
             }
-            return element; 
         }
 
         private void EstablishDefines()
         {
-
             bool sourceDirXpiExists = false;
 
             foreach (var node in _documentManager.Document.DescendantNodes())
@@ -83,6 +107,7 @@ namespace IsWiXAutomationInterface
                 _documentManager.Document.Descendants(_ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "ComponentRules=\"OneToOne\""));
             }
         }
+
 
         public string GetRootPath()
         {
@@ -171,12 +196,15 @@ namespace IsWiXAutomationInterface
         {
             List<string> dirs = new List<string>();
 
-            XElement componentGroupElement = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
-            foreach (var componentElement in componentGroupElement.Elements(_ns + "Component"))
+            XElement componentGroup = GetComponentGroup();
+            if (componentGroup!=null)
             {
-                dirs.Add(Path.Combine(componentElement.GetOptionalAttribute("Directory"), componentElement.GetOptionalAttribute("Subdirectory")));
+                foreach (var componentElement in componentGroup.Elements(_ns + "Component"))
+                {
+                    dirs.Add(Path.Combine(componentElement.GetOptionalAttribute("Directory"), componentElement.GetOptionalAttribute("Subdirectory")));
+                }
+                dirs.Sort();
             }
-            dirs.Sort();
             return dirs;
         }
 
@@ -204,5 +232,16 @@ namespace IsWiXAutomationInterface
             }
             return files;
         }
+        public void SortXML()
+        {
+            if (_componentGroupElement != null)
+            {
+                var components = _componentGroupElement.Elements(_ns + "Component")
+                                .OrderBy(s => Path.Combine((string)s.Attribute("Directory").Value, s.GetOptionalAttribute("Subdirectory"))).ToList();
+                _documentManager.Document.Descendants(_ns + "Component").Remove();
+                _componentGroupElement.Add(components);
+            }
+        }
     }
+
 }
