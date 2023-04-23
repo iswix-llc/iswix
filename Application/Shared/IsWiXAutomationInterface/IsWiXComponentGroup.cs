@@ -17,7 +17,7 @@ namespace IsWiXAutomationInterface
         public IsWiXComponentGroup()
         {
             _ns = _documentManager.Document.GetWiXNameSpace();
-            _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath).ToLower();
+            _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
            _componentGroupElement = GetComponentGroup();
             EstablishDefines();
             SortXML();
@@ -40,23 +40,22 @@ namespace IsWiXAutomationInterface
         private XElement GetComponentGroup()
         {
             XElement element = null;
-            bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
+            bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id").ToLower() == _fileName.ToLower()).Any();
             if (foundComponentGroup)
             {
                 element = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+                if(element.Attribute("Id").Value != _fileName)
+                {
+                    element.Attribute("Id").Value = _fileName;
+                }
             }
             return element; 
         }
 
         private void EstablishFragment()
         {
-            XElement element = null;
-            bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).Any();
-            if (foundComponentGroup)
-            {
-                element = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
-            }
-            else
+            XElement element = GetComponentGroup();
+            if (element == null)
             {
                 element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
                 _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);

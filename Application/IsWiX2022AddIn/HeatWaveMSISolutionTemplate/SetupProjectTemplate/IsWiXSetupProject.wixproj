@@ -36,7 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\$safeprojectname$Lib\$safeprojectname$Lib.wixproj" />
-    <ProjectReference Include="..\$safeprojectname$MM\$safeprojectname$MM.wixproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.0" />

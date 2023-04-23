@@ -2,7 +2,7 @@
 	<?define ComponentRules="OneToOne"?>
 	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
 	<?define SourceDir="..\Deploy"?>
-	<Fragment>
-		<ComponentGroup Id="$safeprojectname$" Directory="$safeprojectname$"/>
+	<Fragment Id="$safeprojectname$">
+		<ComponentGroup Id="$safeprojectname$"/>
 	</Fragment>
 </Wix>

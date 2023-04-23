@@ -3,13 +3,10 @@
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CompanyFolder" Name="My Company">
         <Directory Id="INSTALLLOCATION" Name="$globalsafeprojectname$">
-          <Directory Id="$globalsafeprojectname$Lib" Name="."/>
-          <Merge Id="$globalsafeprojectname$MM" SourceFile="$(var.$globalsafeprojectname$MM.TargetPath)" DiskId="1" Language="1033"/>
         </Directory>
       </Directory>
     </StandardDirectory>
     <Feature Id="$globalsafeprojectname$" Title="$globalsafeprojectname$" Description="Installs all the files needed for $globalsafeprojectname$" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-      <MergeRef Id="$globalsafeprojectname$MM"/>
       <ComponentGroupRef Id="$globalsafeprojectname$Lib"/>
       <!-- Uncomment the below line to pull in IIS Metadata.  Otherwise delete if not needed -->
       <!--<ComponentGroupRef Id="webSite" />-->

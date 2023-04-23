@@ -14,11 +14,11 @@
       </Directory>
     </StandardDirectory>
     <Feature Id="MYPRODUCT" Title="My Product" Description="Installs all the files needed for My Product" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-      <ComponentGroupRef Id="ProductComponents"/>
+      <ComponentGroupRef Id="Product"/>
     </Feature>
   </Package>
-  <Fragment>
-    <ComponentGroup Id="ProductComponents">
+  <Fragment Id="Product">
+    <ComponentGroup Id="Product">
     </ComponentGroup>
   </Fragment>
 </Wix>
