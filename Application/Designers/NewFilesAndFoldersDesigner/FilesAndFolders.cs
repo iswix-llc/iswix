@@ -1009,10 +1009,13 @@ namespace Designers.NewFilesAndFolders
             {
                 var result = MessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (DialogResult.OK != result) return;
+                List<FileMeta> files = new List<FileMeta>();
+                string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
                 foreach (ListViewItem item in lvDestination.SelectedItems)
                 {
-                    //RemoveItemFromDirectory(tvDestination.SelectedNode, item);
+                    files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
                 }
+                _isWiXComponentGroup.DeleteFiles(files);
                 LoadDocument();
             }
         }
