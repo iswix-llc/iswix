@@ -297,6 +297,8 @@
             lvDestination.ItemDrag += lvDestination_ItemDrag;
             lvDestination.DragDrop += lvDestination_DragDrop;
             lvDestination.DragEnter += lvDestination_DragEnter;
+            lvDestination.KeyDown += lvDestination_KeyDown;
+            lvDestination.MouseUp += lvDestination_MouseUp;
             // 
             // chDestinationFileName
             // 
@@ -447,6 +449,7 @@
             removeFileFromProjectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             removeFileFromProjectToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             removeFileFromProjectToolStripMenuItem.Text = "Remove From Project";
+            removeFileFromProjectToolStripMenuItem.Click += removeFileFromProjectToolStripMenuItem_Click;
             // 
             // cmsDestinationRoot
             // 

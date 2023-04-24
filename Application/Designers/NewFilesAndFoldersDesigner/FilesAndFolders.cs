@@ -789,7 +789,8 @@ namespace Designers.NewFilesAndFolders
 
         private void AddSpecialFolder(string folderId)
         {
-            _isWiXComponentGroup.CreateRootDirectory(folderId);
+            _isWiXComponentGroup.GetOrCreateDirectoryComponent(folderId);
+            _isWiXComponentGroup.SortXML();
             LoadDocument();
         }
 
@@ -987,6 +988,68 @@ namespace Designers.NewFilesAndFolders
                     HoverNode = node;
                 }
             }
+        }
+
+        private void lvDestination_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Show menu only if the right mouse button is clicked.
+            if (e.Button == MouseButtons.Right)
+            {
+                // Point where the mouse is clicked.
+                Point p = new Point(e.X, e.Y);
+                cmsDestinationFiles.Show(lvDestination, p);
+            }
+
+        }
+
+        private void removeFileFromProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // call remove function
+            if (lvDestination.SelectedItems.Count > 0)
+            {
+                var result = MessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (DialogResult.OK != result) return;
+                foreach (ListViewItem item in lvDestination.SelectedItems)
+                {
+                    //RemoveItemFromDirectory(tvDestination.SelectedNode, item);
+                }
+                LoadDocument();
+            }
+        }
+
+        private void lvDestination_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (lvDestination.SelectedItems.Count > 0)
+                {
+                    var result = MessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (DialogResult.OK != result) return;
+                    List<FileMeta> files = new List<FileMeta>();
+                    string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
+                    foreach (ListViewItem item in lvDestination.SelectedItems)
+                    {
+                        files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
+                    }
+                    _isWiXComponentGroup.DeleteFiles(files);
+                    LoadDocument();
+                }
+            }
+            else if (e.KeyCode == Keys.A && e.Control)
+            {
+                foreach (ListViewItem item in lvDestination.Items)
+                {
+                    item.Selected = true;
+                }
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                foreach (ListViewItem item in lvDestination.Items)
+                {
+                    item.Selected = false;
+                }
+            }
+
         }
     }
 }

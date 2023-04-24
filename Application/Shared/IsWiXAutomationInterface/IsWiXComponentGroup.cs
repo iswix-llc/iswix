@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Xml.Linq;
 using FireworksFramework.Managers;
@@ -15,6 +16,12 @@ namespace IsWiXAutomationInterface
     {
         public string Source { get; set; }
         public string Destination { get; set; }
+    }
+
+    public class DirectoryMeta
+    {
+        public string Directory { get; set; }
+        public string Subdirectory { get; set; }
     }
 
     public class IsWiXComponentGroup
@@ -33,20 +40,67 @@ namespace IsWiXAutomationInterface
             SortXML();
         }
 
-        public void CreateRootDirectory(string directoryName)
+        private DirectoryMeta SplitDirectory(string directory)
         {
+            DirectoryMeta directoryMeta= new DirectoryMeta();
+
+            string[] parts = directory.Split(new char[] { '\\' });
+            directoryMeta.Directory = parts[0];
+            string subDirectory = string.Empty;
+            if (parts.Length > 1)
+            {
+                directoryMeta.Subdirectory = directory.Substring(directory.Length + 1);
+            }
+            return directoryMeta;
+        }
+        public XElement GetOrCreateDirectoryComponent(string directoryPath)
+        {
+            XElement directoryComponentElement;
+            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
             EstablishFragment();
             XElement element = GetComponentGroup();
-            element.Add(
-                new XElement(_ns + "Component",
-                    new XAttribute("Id", $"_{_fileName}_{directoryName}"),
-                    new XAttribute("Directory", directoryName),
-                    new XAttribute("Guid", Guid.NewGuid().ToString()),
-                    new XAttribute("KeyPath", "true"),
-                    new XElement(_ns+"CreateFolder"))
-                    );
-            SortXML();
+
+            if (directoryMeta.Subdirectory == null)
+            {
+                directoryComponentElement = element.Descendants(_ns + "Component").Where(
+                c => c.Attribute("Directory").Value == directoryMeta.Directory).FirstOrDefault();
+            }
+            else
+            {
+                directoryComponentElement = element.Descendants(_ns + "Component").Where(
+                c => c.Attribute("Directory").Value == directoryMeta.Directory &&
+                (c.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory)).FirstOrDefault();
+            }
+
+            if (directoryComponentElement == null)
+            {
+                if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
+                {
+                    directoryComponentElement =
+                        new XElement(_ns + "Component",
+                            new XAttribute("Id", $"_{_fileName}_{directoryPath}"),
+                            new XAttribute("Directory", directoryMeta.Directory),
+                            new XAttribute("Guid", Guid.NewGuid().ToString()),
+                            new XAttribute("KeyPath", "true"),
+                            new XElement(_ns + "CreateFolder"));
+                }
+                else
+                {
+                    directoryComponentElement =
+                        new XElement(_ns + "Component",
+                            new XAttribute("Id", $"_{_fileName}_{directoryPath}"),
+                            new XAttribute("Directory", directoryMeta.Directory),
+                            new XAttribute("Subdirectory", directoryMeta.Subdirectory),
+                            new XAttribute("Guid", Guid.NewGuid().ToString()),
+                            new XAttribute("KeyPath", "true"),
+                            new XElement(_ns + "CreateFolder"));
+                }
+                element.Add(directoryComponentElement);
+            }
+            return directoryComponentElement;
         }
+
+
         private XElement GetComponentGroup()
         {
             XElement element = null;
@@ -226,18 +280,20 @@ namespace IsWiXAutomationInterface
 
         public List<Tuple<string, bool>> GetFiles(string path)
         {
+            DirectoryMeta directoryMeta = SplitDirectory(path);
+
             List<Tuple<string, bool>> files = new List<Tuple<string, bool>>();
-            string[] parts = path.Split(new char[] { '\\' });
-            string directory = parts[0];
-            string subDirectory = string.Empty;
-            if(parts.Length > 1)
-            {
-                subDirectory = path.Substring(directory.Length + 1);
-            }
 
             XElement componentGroupElement = GetComponentGroup();
-            //string sourceDirVar = componentGroupElement.Attribute("Source").Value;
-            var componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directory && e.GetOptionalAttribute("Subdirectory") == subDirectory).ToList();
+            List<XElement> componentElements;
+            if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
+            {
+                componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directoryMeta.Directory).ToList();
+            }
+            else
+            {
+                componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directoryMeta.Directory && e.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory).ToList();
+            }
 
             foreach (var componentElement in componentElements)
             {
@@ -249,6 +305,54 @@ namespace IsWiXAutomationInterface
             return files;
         }
 
+        public void DeleteFiles(List<FileMeta> files)
+        {
+            foreach (var file in files)
+            {
+                DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+                if(FileExists(file))
+                {
+                    if(string.IsNullOrEmpty(directoryMeta.Subdirectory))
+                    {
+                        var fileElements = from f in GetComponentGroup().Descendants(_ns + "File")
+                                           where f.Attribute("Source").Value == file.Source &&
+                                                f.Parent.Attribute("Directory").Value == file.Destination
+                                           select f;
+                        var listElements = fileElements.ToList();
+                        foreach (var fileElement in listElements)
+                        {
+                            fileElement.Remove();
+                        }
+                    }
+                    else
+                    {
+                        var fileElements = from f in GetComponentGroup().Descendants(_ns + "File")
+                                           where f.Attribute("Source").Value == file.Source &&
+                                                f.Parent.Attribute("Directory").Value == file.Destination &&
+                                                f.Parent.GetOptionalAttribute("Subdiectory") == directoryMeta.Subdirectory
+                                           select f;
+                        foreach (var fileElement in fileElements)
+                        {
+                            fileElement.Remove();
+                        }
+
+                    }
+                }
+            }
+            var elements = _componentGroupElement.Descendants(_ns + "Component").Where(c => !c.Elements().Any()).ToList();
+            foreach (var element in elements)
+            {
+                if (string.IsNullOrEmpty(element.GetOptionalAttribute("Id")))
+                {
+                    element.Remove();
+                }
+                else
+                {
+                    element.Add(new XElement(_ns + "CreateFolder"));
+                }
+            }
+        }
+
         public void AddFiles(List<FileMeta> files)
         {
             string rootDir = GetRootPath();
@@ -256,10 +360,20 @@ namespace IsWiXAutomationInterface
             foreach (var file in files)
             {
                 file.Source = file.Source.Replace(rootDir, "$(var.SourceDir)");
-                if(!FileExists(file))
+                if (!FileExists(file))
                 {
-                    GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", file.Destination), 
-                        new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
+                    if (IsProgramExecutable(file.Source))
+                    {
+                        GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", file.Destination),
+                            new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
+                    }
+                    else
+                    {
+                        XElement directoryComponentElement = GetOrCreateDirectoryComponent(file.Destination);
+                        directoryComponentElement.Elements(_ns + "CreateFolder").Remove();
+                        directoryComponentElement.Add(new XElement(_ns + "File", new XAttribute("Source", file.Source)));
+
+                    }
                 }
             }
         }
@@ -273,6 +387,20 @@ namespace IsWiXAutomationInterface
 
             return files.Any();
         }
+
+        private bool IsProgramExecutable(string fileName)
+        {
+
+            return
+                fileName.ToLower().EndsWith(".dll") ||
+                fileName.ToLower().EndsWith(".exe") ||
+                fileName.ToLower().EndsWith(".ocx") ||
+                fileName.ToLower().EndsWith(".chm") ||
+                fileName.ToLower().EndsWith(".hlp") ||
+               GetComponentRules() == ComponentRules.OneToOne;
+
+        }
+
 
         public void SortXML()
         {
