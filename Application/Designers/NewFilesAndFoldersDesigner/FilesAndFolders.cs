@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
@@ -30,6 +29,10 @@ namespace Designers.NewFilesAndFolders
         private string SourceStart;
         protected string fileFilterPattern;
         protected string fileExcludePattern;
+        private string DragSourceName;
+        private TreeNode HoverNode;
+        private const string ListViewItemCollectionFormatIdentifier = "System.Windows.Forms.ListView+SelectedListViewItemCollection";
+
 
         public string FileFilterPattern
         {
@@ -95,7 +98,7 @@ namespace Designers.NewFilesAndFolders
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
-            if (_isWiXComponentGroup.GetComponentRules() == "OneToMany")
+            if (_isWiXComponentGroup.GetComponentRules() == ComponentRules.OneToMany)
             {
                 rbOneToMany.Checked = true;
             }
@@ -564,10 +567,10 @@ namespace Designers.NewFilesAndFolders
 
         private void SetComponentRulesXPI()
         {
-            string componentRules = "\"OneToMany\"";
+            ComponentRules componentRules = ComponentRules.OneToMany;
             if (rbOneToOne.Checked)
             {
-                componentRules = "\"OneToOne\"";
+                componentRules = ComponentRules.OneToOne;
             }
             _isWiXComponentGroup.SetComponentRules(componentRules);
         }
@@ -641,7 +644,7 @@ namespace Designers.NewFilesAndFolders
                 if (!string.IsNullOrEmpty(extension))
                 {
                     item.ImageKey = "stockdeletedimage";
-                    item.ForeColor = Color.Red; 
+                    item.ForeColor = Color.Red;
                 }
             }
             else
@@ -718,7 +721,7 @@ namespace Designers.NewFilesAndFolders
             // if it already exists in the document make the item disabled.
             foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
             {
-                if (IsASpecialDirectoryToIgnore(s)||dirs.Contains(s))
+                if (IsASpecialDirectoryToIgnore(s) || dirs.Contains(s))
                 {
                     // pass over the item
                 }
@@ -784,27 +787,206 @@ namespace Designers.NewFilesAndFolders
             return false;
         }
 
-        bool ExistsInTree(string tag)
-        {
-            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
-            {
-                if (node.Tag.ToString() == tag)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        string GetElementId(XElement element)
-        {
-            var id = (element.Attribute("Id") != null) ? element.Attribute("Id").Value : "No ID";
-            return id;
-        }
-
         private void AddSpecialFolder(string folderId)
         {
             _isWiXComponentGroup.CreateRootDirectory(folderId);
             LoadDocument();
+        }
+
+        private void lvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DragSourceName = "lvSourceFiles";
+            lvSourceFiles.DoDragDrop(lvSourceFiles.SelectedItems, DragDropEffects.Copy);
+
+        }
+        private void lvDestination_DragEnter(object sender, DragEventArgs e)
+        {
+            if ((e.Data.GetDataPresent(typeof(ListView.SelectedListViewItemCollection))) || (e.Data.GetDataPresent(typeof(TreeNode))))
+            {
+                if (tvDestination.SelectedNode != null)
+                {
+                    //The data from the drag source is moved to the target.	
+                    e.Effect = DragDropEffects.Copy;
+                }
+                else
+                {
+                    // Notify the user in some fashion that they cannot drop files without selecting a node
+                    //CallMessageBox("Please select a destination location.", "Drag and Drop Error");
+                }
+            }
+
+        }
+
+
+        private void lvDestination_DragDrop(object sender, DragEventArgs e)
+        {
+            //_documentManager.DisableChangeWatcher();
+            if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+            {
+                var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
+                List<FileMeta> files = new List<FileMeta>();
+                string sourcePath = tvSourceFiles.SelectedNode.FullPath;
+                string destinationPath = tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", "");
+                foreach (ListViewItem item in itemCollection)
+                {
+                    FileMeta fileMeta = new FileMeta();
+                    fileMeta.Source = Path.Combine(sourcePath, item.Text);
+                    fileMeta.Destination = destinationPath;
+                    files.Add(fileMeta);
+                }
+                _isWiXComponentGroup.AddFiles(files);
+                LoadDocument();
+                DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
+            }
+
+            //if (e.Data.GetDataPresent(typeof(TreeNode)))
+            //{
+            //    var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            //    if (!DestinationContainsFolder(tvDestination.SelectedNode, sourceFolder))
+            //    {
+            //        AddAllDirectoriesToDestination(tvDestination.SelectedNode, sourceFolder);
+            //        SortData();
+            //        LoadDocument();
+            //    }
+            //    else
+            //    {
+            //        CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
+            //    }
+            //}
+            _documentManager.EnableChangeWatcher();
+
+
+        }
+
+        private void tvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DragSourceName = "tvSourceFiles";
+            tvSourceFiles.DoDragDrop(e.Item, DragDropEffects.Copy);
+            //LoadDocument();
+        }
+
+        private void lvDestination_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DragSourceName = "lvDestination";
+            lvDestination.DoDragDrop(lvDestination.SelectedItems, DragDropEffects.Move);
+
+        }
+
+        private void tvDestination_DragDrop(object sender, DragEventArgs e)
+        {
+            //_documentManager.DisableChangeWatcher();
+            //if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+            //{
+            //    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+            //    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+            //    if (dropNode != null)
+            //    {
+            //        var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
+            //        foreach (ListViewItem item in itemCollection)
+            //        {
+            //            if (CanBeMoved(item, dropNode))
+            //            {
+            //                AddItemToDocument(dropNode, item);
+            //                if (e.Effect == DragDropEffects.Move)
+            //                {
+            //                    RemoveItemFromDocument(tvDestination.SelectedNode, item);
+            //                }
+            //            }
+            //            //else
+            //            //{
+            //            //    CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
+            //            //}
+            //        }
+            //        SortData();
+            //        LoadDocument();
+            //        DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
+            //    }
+            //    else
+            //    {
+            //        CallMessageBox("Drop the items onto a folder", "Drop Warning");
+            //    }
+            //}
+
+            //if (e.Data.GetDataPresent(typeof(TreeNode)))
+            //{
+            //    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+            //    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+            //    if (dropNode != null)
+            //    {
+            //        var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            //        if (sourceFolder == tvSourceFiles.Nodes[0])
+            //        {
+            //            CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
+            //        }
+            //        else
+            //        {
+            //            if (!DestinationContainsFolder(dropNode, sourceFolder))
+            //            {
+            //                // Refresh the directory structure incase of delayed load or changes since loading
+            //                sourceFolder.Nodes.Clear();
+            //                PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
+            //                AddAllDirectoriesToDestination(dropNode, sourceFolder);
+            //                SortData();
+            //                LoadDocument();
+            //            }
+            //            else
+            //            {
+            //                CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        CallMessageBox("Drop the items onto a folder", "Drop Warning");
+            //    }
+            //}
+            //HoverNode.BackColor = Color.White;
+            //HoverNode.ForeColor = Color.Black;
+            //_documentManager.EnableChangeWatcher();
+        }
+
+        private void tvDestination_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListView.SelectedListViewItemCollection)))
+            {
+                switch (DragSourceName)
+                {
+                    case "lvDestination":
+                        e.Effect = DragDropEffects.Move;
+                        break;
+                    case "lvSourceFiles":
+                        e.Effect = DragDropEffects.Copy;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+        private void tvDestination_DragOver(object sender, DragEventArgs e)
+        {
+            var mouseLocation = tvDestination.PointToClient(new Point(e.X, e.Y));
+            var node = tvDestination.GetNodeAt(mouseLocation);
+            if (node != null)
+            {
+                if (HoverNode == null)
+                {
+                    node.BackColor = Color.SteelBlue;
+                    node.ForeColor = Color.White;
+                    HoverNode = node;
+                }
+                else if (HoverNode != node)
+                {
+                    HoverNode.BackColor = Color.White;
+                    HoverNode.ForeColor = Color.Black;
+                    node.BackColor = Color.SteelBlue;
+                    node.ForeColor = Color.White;
+                    HoverNode = node;
+                }
+            }
         }
     }
 }

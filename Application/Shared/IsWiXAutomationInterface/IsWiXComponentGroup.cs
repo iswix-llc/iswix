@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using FireworksFramework.Managers;
 
 namespace IsWiXAutomationInterface
 {
+    public enum ComponentRules { OneToOne, OneToMany };
+
+    public class FileMeta
+    {
+        public string Source { get; set; }
+        public string Destination { get; set; }
+    }
+
     public class IsWiXComponentGroup
     {
         XNamespace _ns;
@@ -57,11 +67,13 @@ namespace IsWiXAutomationInterface
             XElement element = GetComponentGroup();
             if (element == null)
             {
-                element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
+                element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), 
+                            new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName), new XAttribute("Source", "$(var.SourceDir)")));
                 _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
             }
         }
 
+         
         private void EstablishDefines()
         {
             bool sourceDirXpiExists = false;
@@ -126,12 +138,12 @@ namespace IsWiXAutomationInterface
                     }
                 }
             }
-            return sourceDirValue;
+            return new DirectoryInfo(sourceDirValue).FullName;
         }
 
-        public string GetComponentRules()
+        public ComponentRules GetComponentRules()
         {
-            string componentRules = string.Empty;
+            ComponentRules componentRules = ComponentRules.OneToOne;
             foreach (var node in _documentManager.Document.DescendantNodes())
             {
                 var xpi = node as XProcessingInstruction;
@@ -141,16 +153,20 @@ namespace IsWiXAutomationInterface
 
                     if (fields[0].Trim().Equals("ComponentRules"))
                     {
-                        componentRules = fields[1].Replace("\"", "").Trim();
+                        if(fields[1].Replace("\"", "").Trim() == "OneToMany")
+                        {
+                            componentRules = ComponentRules.OneToMany;
+                        }
                     }
                 }
             }
             return componentRules;
         }
 
-        public void SetComponentRules(string componentRules)
+        public void SetComponentRules(ComponentRules componentRules)
         {
             bool componentRulesExists = false;
+
             foreach (var node in _documentManager.Document.DescendantNodes())
             {
                 var xpi = node as XProcessingInstruction;
@@ -161,7 +177,7 @@ namespace IsWiXAutomationInterface
                     if (fields[0].Trim().Equals("ComponentRules"))
                     {
                         componentRulesExists = true;
-                        xpi.Data = string.Format("ComponentRules={0}", componentRules);
+                        xpi.Data = $"ComponentRules=\"{componentRules}\"";
                     }
                 }
             }
@@ -169,7 +185,7 @@ namespace IsWiXAutomationInterface
             if (!componentRulesExists)
             {
                 _documentManager.Document.Descendants(_ns + "Wix").First().AddFirst(
-                    new XProcessingInstruction("define", string.Format("ComponentRules={0}", componentRules)));
+                    new XProcessingInstruction("define", $"ComponentRules=\"{componentRules}\""));
             }
         }
         public static bool IsValidDocument()
@@ -219,18 +235,45 @@ namespace IsWiXAutomationInterface
                 subDirectory = path.Substring(directory.Length + 1);
             }
 
-            XElement componentGroupElement = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+            XElement componentGroupElement = GetComponentGroup();
+            string sourceDirVar = componentGroupElement.Attribute("Source").Value;
             var componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directory && e.GetOptionalAttribute("Subdirectory") == subDirectory).ToList();
 
             foreach (var componentElement in componentElements)
             {
                 foreach (var file in componentElement.Descendants(_ns + "File").ToList())
                 {
-                    files.Add(new Tuple<string, bool>(file.Attribute("Source").Value, file.GetOptionalYesNoAttribute("KeyPath", false)));
+                    files.Add(new Tuple<string, bool>(Path.Combine(sourceDirVar,file.Attribute("Source").Value), file.GetOptionalYesNoAttribute("KeyPath", false)));
                 }
             }
             return files;
         }
+
+        public void AddFiles(List<FileMeta> files)
+        {
+            string rootDir = GetRootPath();
+            
+            foreach (var file in files)
+            {
+                file.Source = file.Source.Replace(rootDir + "\\", "");
+                if(!FileExists(file))
+                {
+                    GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", file.Destination), 
+                        new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
+                }
+            }
+        }
+
+        private bool FileExists(FileMeta file)
+        {
+            var files = from f in GetComponentGroup().Descendants(_ns + "File")
+                        where f.Attribute("Source").Value == file.Source &&
+                             f.Parent.Attribute("Directory").Value == file.Destination
+                        select f;
+
+            return files.Any();
+        }
+
         public void SortXML()
         {
             if (_componentGroupElement != null)
@@ -242,5 +285,4 @@ namespace IsWiXAutomationInterface
             }
         }
     }
-
 }

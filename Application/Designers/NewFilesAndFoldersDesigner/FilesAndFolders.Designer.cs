@@ -163,6 +163,7 @@
             tvSourceFiles.Size = new System.Drawing.Size(263, 342);
             tvSourceFiles.TabIndex = 0;
             tvSourceFiles.BeforeExpand += tvSourceFiles_BeforeExpand;
+            tvSourceFiles.ItemDrag += tvSourceFiles_ItemDrag;
             tvSourceFiles.AfterSelect += tvSourceFiles_AfterSelect;
             tvSourceFiles.KeyDown += tvSourceFiles_KeyDown;
             // 
@@ -196,6 +197,7 @@
             lvSourceFiles.TabIndex = 0;
             lvSourceFiles.UseCompatibleStateImageBehavior = false;
             lvSourceFiles.View = System.Windows.Forms.View.Details;
+            lvSourceFiles.ItemDrag += lvSourceFiles_ItemDrag;
             lvSourceFiles.KeyDown += lvSourceFiles_KeyDown;
             // 
             // chFileName
@@ -274,6 +276,9 @@
             tvDestination.Size = new System.Drawing.Size(264, 276);
             tvDestination.TabIndex = 0;
             tvDestination.AfterSelect += tvDestination_AfterSelect;
+            tvDestination.DragDrop += tvDestination_DragDrop;
+            tvDestination.DragEnter += tvDestination_DragEnter;
+            tvDestination.DragOver += tvDestination_DragOver;
             tvDestination.MouseUp += tvDestination_MouseUp;
             // 
             // lvDestination
@@ -289,6 +294,9 @@
             lvDestination.TabIndex = 0;
             lvDestination.UseCompatibleStateImageBehavior = false;
             lvDestination.View = System.Windows.Forms.View.Details;
+            lvDestination.ItemDrag += lvDestination_ItemDrag;
+            lvDestination.DragDrop += lvDestination_DragDrop;
+            lvDestination.DragEnter += lvDestination_DragEnter;
             // 
             // chDestinationFileName
             // 
