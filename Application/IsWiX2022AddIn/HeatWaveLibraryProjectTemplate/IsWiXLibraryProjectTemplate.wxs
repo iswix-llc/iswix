@@ -3,7 +3,7 @@
 	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
 	<?define SourceDir="..\Deploy"?>
 	<Fragment Id="$safeprojectname$">
-		<ComponentGroup Id="$safeprojectname$" Source="$(var.SourceDir)">
+		<ComponentGroup Id="$safeprojectname$">
 		  <Component Id="_$safeprojectname$_INSTALLLOCATION" Directory="INSTALLLOCATION" Guid="$guid2$" KeyPath="yes">
 		    <CreateFolder />
 		  </Component>

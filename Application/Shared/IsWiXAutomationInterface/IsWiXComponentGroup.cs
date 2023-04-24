@@ -68,7 +68,7 @@ namespace IsWiXAutomationInterface
             if (element == null)
             {
                 element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), 
-                            new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName), new XAttribute("Source", "$(var.SourceDir)")));
+                            new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
                 _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
             }
         }
@@ -236,14 +236,14 @@ namespace IsWiXAutomationInterface
             }
 
             XElement componentGroupElement = GetComponentGroup();
-            string sourceDirVar = componentGroupElement.Attribute("Source").Value;
+            //string sourceDirVar = componentGroupElement.Attribute("Source").Value;
             var componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directory && e.GetOptionalAttribute("Subdirectory") == subDirectory).ToList();
 
             foreach (var componentElement in componentElements)
             {
                 foreach (var file in componentElement.Descendants(_ns + "File").ToList())
                 {
-                    files.Add(new Tuple<string, bool>(Path.Combine(sourceDirVar,file.Attribute("Source").Value), file.GetOptionalYesNoAttribute("KeyPath", false)));
+                    files.Add(new Tuple<string, bool>(file.Attribute("Source").Value, file.GetOptionalYesNoAttribute("KeyPath", false)));
                 }
             }
             return files;
@@ -255,7 +255,7 @@ namespace IsWiXAutomationInterface
             
             foreach (var file in files)
             {
-                file.Source = file.Source.Replace(rootDir + "\\", "");
+                file.Source = file.Source.Replace(rootDir, "$(var.SourceDir)");
                 if(!FileExists(file))
                 {
                     GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", file.Destination), 
