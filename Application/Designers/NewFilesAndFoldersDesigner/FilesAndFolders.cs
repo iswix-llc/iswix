@@ -1107,5 +1107,19 @@ namespace Designers.NewFilesAndFolders
         {
             tvDestination.SelectedNode.Collapse();
         }
+
+        private void createNewFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string newFolderName = _isWiXComponentGroup.GetNextSubDirectoryName(tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", ""));
+            string directoryPath = Path.Combine(tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", ""), newFolderName);
+            _isWiXComponentGroup.GetOrCreateDirectoryComponent(Path.Combine(directoryPath));
+            var nodeToEdit = tvDestination.SelectedNode.Nodes.Add(newFolderName, newFolderName);
+            nodeToEdit.Tag = newFolderName;
+            tvDestination.SelectedNode = nodeToEdit;
+            tvDestination.LabelEdit = true;
+           // tvDestination.SelectedNode.BeginEdit();
+
+
+        }
     }
 }

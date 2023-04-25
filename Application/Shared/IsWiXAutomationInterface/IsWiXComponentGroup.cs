@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using FireworksFramework.Managers;
@@ -53,6 +54,25 @@ namespace IsWiXAutomationInterface
             }
             return directoryMeta;
         }
+
+        public string GetNextSubDirectoryName(string directoryPath)
+        {
+            var newFolderName = "New Folder";
+            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+
+            List<string> dirs = new List<string>();
+            XElement element = GetComponentGroup();
+
+            var test = from d in element.Descendants(_ns + "Component")
+                       where d.Attribute("Directory").Value == directoryMeta.Directory &&
+                       d.GetOptionalAttribute("Subdirectory").StartsWith(Path.Combine(directoryMeta.Subdirectory, newFolderName))
+                       select d;
+            if (test.Count() > 0)
+            {
+                newFolderName += String.Format(" ({0})", test.Count());
+            }
+            return newFolderName;
+        }
         public XElement GetOrCreateDirectoryComponent(string directoryPath)
         {
             XElement directoryComponentElement;
@@ -60,7 +80,7 @@ namespace IsWiXAutomationInterface
             EstablishFragment();
             XElement element = GetComponentGroup();
 
-            if (directoryMeta.Subdirectory == null)
+            if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
                 directoryComponentElement = element.Descendants(_ns + "Component").Where(
                 c => c.Attribute("Directory").Value == directoryMeta.Directory).FirstOrDefault();
@@ -74,11 +94,12 @@ namespace IsWiXAutomationInterface
 
             if (directoryComponentElement == null)
             {
+                string id = "owd" + GetSHA256Hash(directoryPath);
                 if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
                 {
                     directoryComponentElement =
                         new XElement(_ns + "Component",
-                            new XAttribute("Id", $"_{_fileName}_{directoryPath}"),
+                            new XAttribute("Id", id),
                             new XAttribute("Directory", directoryMeta.Directory),
                             new XAttribute("Guid", Guid.NewGuid().ToString()),
                             new XAttribute("KeyPath", "true"),
@@ -88,7 +109,7 @@ namespace IsWiXAutomationInterface
                 {
                     directoryComponentElement =
                         new XElement(_ns + "Component",
-                            new XAttribute("Id", $"_{_fileName}_{directoryPath}"),
+                            new XAttribute("Id", id),
                             new XAttribute("Directory", directoryMeta.Directory),
                             new XAttribute("Subdirectory", directoryMeta.Subdirectory),
                             new XAttribute("Guid", Guid.NewGuid().ToString()),
@@ -289,7 +310,7 @@ namespace IsWiXAutomationInterface
             List<XElement> componentElements;
             if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
-                componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directoryMeta.Directory).ToList();
+                componentElements = componentGroupElement.Elements(_ns + "Component").Where(e => e.GetOptionalAttribute("Directory") == directoryMeta.Directory && String.IsNullOrEmpty(e.GetOptionalAttribute("Subdirectory"))).ToList();
             }
             else
             {
@@ -430,6 +451,28 @@ namespace IsWiXAutomationInterface
 
         }
 
+
+        static string GetSHA256Hash(string input)
+        {
+            // Create a new instance of the MD5CryptoServiceProvider object.
+            SHA256 sha256Hasher = SHA256.Create();
+
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = sha256Hasher.ComputeHash(Encoding.Default.GetBytes(input.ToUpper()));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            // Return the hexadecimal string.
+            return sBuilder.ToString().ToUpper();
+        }
 
         public void SortXML()
         {

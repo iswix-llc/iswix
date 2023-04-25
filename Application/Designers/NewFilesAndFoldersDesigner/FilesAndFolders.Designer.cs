@@ -331,7 +331,7 @@
             cmsDestinationTreeDefault.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
-            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 160);
+            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 182);
             // 
             // createNewFolderToolStripMenuItem
             // 
@@ -340,6 +340,7 @@
             createNewFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             createNewFolderToolStripMenuItem.Text = "Create New Folder";
+            createNewFolderToolStripMenuItem.Click += createNewFolderToolStripMenuItem_Click;
             // 
             // renameFolderToolStripMenuItem
             // 
