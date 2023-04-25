@@ -45,11 +45,11 @@ namespace IsWiXAutomationInterface
             DirectoryMeta directoryMeta= new DirectoryMeta();
 
             string[] parts = directory.Split(new char[] { '\\' });
-            directoryMeta.Directory = parts[0];
-            string subDirectory = string.Empty;
-            if (parts.Length > 1)
+            directoryMeta.Directory = parts[0].Replace("[", "").Replace("]", "");
+            directoryMeta.Subdirectory = string.Empty;
+            for (int i = 1; i < parts.Length; i++)
             {
-                directoryMeta.Subdirectory = directory.Substring(directory.Length + 1);
+                directoryMeta.Subdirectory = Path.Combine(directoryMeta.Subdirectory, parts[i]);
             }
             return directoryMeta;
         }
@@ -281,6 +281,7 @@ namespace IsWiXAutomationInterface
         public List<Tuple<string, bool>> GetFiles(string path)
         {
             DirectoryMeta directoryMeta = SplitDirectory(path);
+            directoryMeta.Directory = directoryMeta.Directory.Replace("[", "").Replace("]", "");
 
             List<Tuple<string, bool>> files = new List<Tuple<string, bool>>();
 
@@ -359,14 +360,25 @@ namespace IsWiXAutomationInterface
             
             foreach (var file in files)
             {
+                DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+                file.Destination = Path.Combine(directoryMeta.Directory, directoryMeta.Subdirectory);
                 file.Source = file.Source.Replace(rootDir, "$(var.SourceDir)");
                 if (!FileExists(file))
                 {
                     if (IsProgramExecutable(file.Source))
                     {
-                        GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", file.Destination),
+                        if(string.IsNullOrEmpty(directoryMeta.Subdirectory))
+                        { 
+                            GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", directoryMeta.Directory),
                             new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
-                    }
+                        }
+                        else
+                        
+                            GetComponentGroup().Add(new XElement(_ns + "Component", 
+                                new XAttribute("Directory", directoryMeta.Directory),
+                                new XAttribute("Subdirectory", directoryMeta.Subdirectory),
+                            new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
+                        }
                     else
                     {
                         XElement directoryComponentElement = GetOrCreateDirectoryComponent(file.Destination);
@@ -380,12 +392,29 @@ namespace IsWiXAutomationInterface
 
         private bool FileExists(FileMeta file)
         {
-            var files = from f in GetComponentGroup().Descendants(_ns + "File")
-                        where f.Attribute("Source").Value == file.Source &&
-                             f.Parent.Attribute("Directory").Value == file.Destination
-                        select f;
 
-            return files.Any();
+            DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+
+            if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
+            {
+                var files = from f in GetComponentGroup().Descendants(_ns + "File")
+                            where f.Attribute("Source").Value == file.Source &&
+                                 f.Parent.Attribute("Directory").Value == file.Destination
+                            select f;
+
+                return files.Any();
+            }
+            else
+            {
+                var files = from f in GetComponentGroup().Descendants(_ns + "File")
+                            where f.Attribute("Source").Value == file.Source &&
+                                 f.Parent.Attribute("Directory").Value == directoryMeta.Directory &&
+                                 f.Parent.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory
+                            select f;
+
+                return files.Any();
+
+            }
         }
 
         private bool IsProgramExecutable(string fileName)

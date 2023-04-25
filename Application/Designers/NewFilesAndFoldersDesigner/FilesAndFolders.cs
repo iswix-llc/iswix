@@ -142,7 +142,7 @@ namespace Designers.NewFilesAndFolders
             bool found = false;
             foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
             {
-                if (node.Text == "INSTALLLOCATION")
+                if (node.Text == "[INSTALLLOCATION]")
                 {
                     tvDestination.SelectedNode = node;
                     found = true;
@@ -177,7 +177,7 @@ namespace Designers.NewFilesAndFolders
                     if (nodes.Length == 0)
                         if (lastNode == null)
                         {
-                            lastNode = subTreeNode.Nodes.Add(subPathAgg, subPath);
+                            lastNode = subTreeNode.Nodes.Add(subPathAgg, "[" + subPath + "]");
                             if (IdIsWithinSystemFolderPropertyEnum(subPath))
                             {
                                 lastNode.ImageIndex = (int)ImageLibrary.BlueFolderClosed;
@@ -672,29 +672,49 @@ namespace Designers.NewFilesAndFolders
 
                     foreach (ToolStripItem toolStripItem in cmsDestinationRoot.Items)
                     {
-                        toolStripItem.Visible = true;
+                        toolStripItem.Visible = false;
                     }
 
                     // Find the appropriate ContextMenu depending on the selected node.
-                    switch (Convert.ToString(node.Text))
+                    if (node.Parent == null)
                     {
-                        case "[CommonAppDataFolder]":
-                        case "[CommonFilesFolder]":
-                        case "[GlobalAssemblyCache]":
-                        case "[ProgramFilesFolder]":
-                        case "[SystemFolder]":
-                        case "[System64Folder]":
-                        case "[INSTALLLOCATION]":
-                            cmsINSTALLLOCATION.Show(tvDestination, p);
-                            break;
-                        case "Destination Computer":
-                            ClearOldDestinationRootMenuItems();
-                            AddItemsToDestinationRootMenu();
-                            cmsDestinationRoot.Show(tvDestination, p);
-                            break;
-                        default:
-                            cmsDestinationTreeDefault.Show(tvDestination, p);
-                            break;
+                        ClearOldDestinationRootMenuItems();
+                        AddItemsToDestinationRootMenu();
+                        cmsDestinationRoot.Show(tvDestination, p);
+                        if (node.Nodes.Count == 0)
+                        {
+                            cmsDestinationRoot.Items[0].Visible = false;
+                            cmsDestinationRoot.Items[1].Visible = false;
+                        }
+                        else
+                        {
+                            cmsDestinationRoot.Items[0].Visible = true;
+                            cmsDestinationRoot.Items[1].Visible = true;
+                        }
+                    }
+                    else if (node.Parent.Text == "Destination Computer")
+                    {
+                        cmsDestinationTreeDefault.Show(tvDestination, p);
+                        cmsDestinationTreeDefault.Items[0].Visible = true;
+                        cmsDestinationTreeDefault.Items[1].Visible = false;
+                        cmsDestinationTreeDefault.Items[2].Visible = false;
+                        if (node.Nodes.Count == 0)
+                        {
+                            cmsDestinationTreeDefault.Items[4].Visible = false;
+                            cmsDestinationTreeDefault.Items[5].Visible = false;
+                        }
+                        else
+                        {
+                            cmsDestinationTreeDefault.Items[4].Visible = true;
+                            cmsDestinationTreeDefault.Items[5].Visible = true;
+                        }
+                    }
+                    else
+                    {
+                        cmsDestinationTreeDefault.Show(tvDestination, p);
+                        cmsDestinationTreeDefault.Items[0].Visible = true;
+                        cmsDestinationTreeDefault.Items[1].Visible = true;
+                        cmsDestinationTreeDefault.Items[2].Visible = true;
                     }
                 }
             }
@@ -714,7 +734,7 @@ namespace Designers.NewFilesAndFolders
             List<string> dirs = _isWiXComponentGroup.GetDirectories();
             foreach (ToolStripItem toolStripItem in cmsDestinationRoot.Items)
             {
-                toolStripItem.Visible = false;
+                toolStripItem.Visible = true;
             }
 
             // foreach item on the special folders list, add a menu item for the ones we dont ignore
@@ -828,6 +848,10 @@ namespace Designers.NewFilesAndFolders
                 List<FileMeta> files = new List<FileMeta>();
                 string sourcePath = tvSourceFiles.SelectedNode.FullPath;
                 string destinationPath = tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", "");
+                if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
+                {
+                    destinationPath = destinationPath.Replace("[", "").Replace("]", "");
+                }
                 foreach (ListViewItem item in itemCollection)
                 {
                     FileMeta fileMeta = new FileMeta();
@@ -1011,6 +1035,10 @@ namespace Designers.NewFilesAndFolders
                 if (DialogResult.OK != result) return;
                 List<FileMeta> files = new List<FileMeta>();
                 string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
+                if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
+                {
+                    destination = destination.Replace("[", "").Replace("]", "");
+                }
                 foreach (ListViewItem item in lvDestination.SelectedItems)
                 {
                     files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
@@ -1030,6 +1058,10 @@ namespace Designers.NewFilesAndFolders
                     if (DialogResult.OK != result) return;
                     List<FileMeta> files = new List<FileMeta>();
                     string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
+                    if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
+                    {
+                        destination = destination.Replace("[", "").Replace("]", "");
+                    }
                     foreach (ListViewItem item in lvDestination.SelectedItems)
                     {
                         files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
@@ -1053,6 +1085,27 @@ namespace Designers.NewFilesAndFolders
                 }
             }
 
+        }
+
+        private void expandAllToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            tvDestination.SelectedNode.ExpandAll();
+        }
+
+        private void collapseAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            tvDestination.SelectedNode.Collapse();
+        }
+
+        private void expandAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            tvDestination.SelectedNode.ExpandAll();
+
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvDestination.SelectedNode.Collapse();
         }
     }
 }

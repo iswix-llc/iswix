@@ -368,6 +368,7 @@
             expandAllToolStripMenuItem1.Name = "expandAllToolStripMenuItem1";
             expandAllToolStripMenuItem1.Size = new System.Drawing.Size(220, 30);
             expandAllToolStripMenuItem1.Text = "Expand All";
+            expandAllToolStripMenuItem1.Click += expandAllToolStripMenuItem1_Click;
             // 
             // collapseAllToolStripMenuItem
             // 
@@ -375,6 +376,7 @@
             collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
             collapseAllToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             collapseAllToolStripMenuItem.Text = "Collapse All";
+            collapseAllToolStripMenuItem.Click += collapseAllToolStripMenuItem_Click;
             // 
             // cmsINSTALLLOCATION
             // 
@@ -464,6 +466,7 @@
             expandAllToolStripMenuItem2.Name = "expandAllToolStripMenuItem2";
             expandAllToolStripMenuItem2.Size = new System.Drawing.Size(144, 30);
             expandAllToolStripMenuItem2.Text = "Expand All";
+            expandAllToolStripMenuItem2.Click += expandAllToolStripMenuItem2_Click;
             // 
             // collapseAllToolStripMenuItem1
             // 
@@ -471,6 +474,7 @@
             collapseAllToolStripMenuItem1.Name = "collapseAllToolStripMenuItem1";
             collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(144, 30);
             collapseAllToolStripMenuItem1.Text = "Collapse All";
+            collapseAllToolStripMenuItem1.Click += collapseAllToolStripMenuItem1_Click;
             // 
             // toolStripSeparator3
             // 
