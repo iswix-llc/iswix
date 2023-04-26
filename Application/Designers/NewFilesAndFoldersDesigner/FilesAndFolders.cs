@@ -1026,7 +1026,6 @@ namespace Designers.NewFilesAndFolders
 
         private void removeFileFromProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // call remove function
             if (lvDestination.SelectedItems.Count > 0)
             {
                 var result = MessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -1042,7 +1041,10 @@ namespace Designers.NewFilesAndFolders
                     files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
                 }
                 _isWiXComponentGroup.DeleteFiles(files);
-                LoadDocument();
+                foreach (ListViewItem item in lvDestination.SelectedItems)
+                {
+                    item.Remove();
+                }
             }
         }
 
