@@ -275,10 +275,12 @@
             tvDestination.SelectedImageIndex = 0;
             tvDestination.Size = new System.Drawing.Size(264, 276);
             tvDestination.TabIndex = 0;
+            tvDestination.AfterLabelEdit += tvDestination_AfterLabelEdit;
             tvDestination.AfterSelect += tvDestination_AfterSelect;
             tvDestination.DragDrop += tvDestination_DragDrop;
             tvDestination.DragEnter += tvDestination_DragEnter;
             tvDestination.DragOver += tvDestination_DragOver;
+            tvDestination.KeyDown += tvDestination_KeyDown;
             tvDestination.MouseUp += tvDestination_MouseUp;
             // 
             // lvDestination
@@ -332,7 +334,7 @@
             cmsDestinationTreeDefault.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
-            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 160);
+            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 182);
             // 
             // createNewFolderToolStripMenuItem
             // 
@@ -350,6 +352,7 @@
             renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
             renameFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             renameFolderToolStripMenuItem.Text = "Rename Folder";
+            renameFolderToolStripMenuItem.Click += renameFolderToolStripMenuItem_Click;
             // 
             // deleteToolStripMenuItem
             // 

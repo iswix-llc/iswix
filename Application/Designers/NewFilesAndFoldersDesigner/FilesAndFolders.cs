@@ -897,7 +897,6 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_DragDrop(object sender, DragEventArgs e)
         {
-            //_documentManager.DisableChangeWatcher();
             //if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             //{
             //    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
@@ -1067,7 +1066,7 @@ namespace Designers.NewFilesAndFolders
                         files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
                     }
                     _isWiXComponentGroup.DeleteFiles(files);
-                    foreach(ListViewItem item in lvDestination.SelectedItems)
+                    foreach (ListViewItem item in lvDestination.SelectedItems)
                     {
                         item.Remove();
                     }
@@ -1120,9 +1119,7 @@ namespace Designers.NewFilesAndFolders
             nodeToEdit.Tag = newFolderName;
             tvDestination.SelectedNode = nodeToEdit;
             tvDestination.LabelEdit = true;
-            // tvDestination.SelectedNode.BeginEdit();
-
-
+            tvDestination.SelectedNode.BeginEdit();
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1133,6 +1130,96 @@ namespace Designers.NewFilesAndFolders
 
         private void lvDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void tvDestination_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+
+                if (tvDestination.SelectedNode.Parent == null)
+                {
+                    var message = string.Format("Can't delete {0} folder", tvDestination.SelectedNode.Text);
+                    CallMessageBox(message, "Delete Folder Warning");
+                }
+                else
+                {
+                    var message = string.Format("Do you really want to delete the {0} folder?", tvDestination.SelectedNode.Text);
+                    var result = MessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (DialogResult.OK != result)
+                    {
+                        return;
+                    }
+                    _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath);
+                    tvDestination.SelectedNode.Remove();
+                }
+            }
+
+            if (e.KeyCode == Keys.Insert)
+            {
+                // make sure there is a selected directory
+                if (tvDestination.SelectedNode != null)
+                {
+                    //check if selected node is not Destination Computer
+                    if (tvDestination.SelectedNode.Parent != null)
+                    {
+                        // add new directory
+                        string newFolderName = _isWiXComponentGroup.GetNextSubDirectoryName(tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", ""));
+                        string directoryPath = Path.Combine(tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", ""), newFolderName);
+                        _isWiXComponentGroup.GetOrCreateDirectoryComponent(Path.Combine(directoryPath));
+                        var nodeToEdit = tvDestination.SelectedNode.Nodes.Add(newFolderName, newFolderName);
+                        nodeToEdit.Tag = newFolderName;
+                        tvDestination.SelectedNode = nodeToEdit;
+                        tvDestination.LabelEdit = true;
+                        // tvDestination.SelectedNode.BeginEdit();
+                    }
+                    else
+                    {
+                        CallMessageBox("You cannot add a folder at this location", "Insert Warning");
+                    }
+                }
+                else
+                {
+                    CallMessageBox("Please select a destination directory before choosing to insert a new directory.", "Insert Warning");
+                }
+            }
+
+            if (e.KeyCode == Keys.F2)
+            {
+                // make sure there is a selected directory
+                if (tvDestination.SelectedNode != null)
+                {
+                    //check if selected node is not Destination Computer
+                    if (tvDestination.SelectedNode.Parent != null && tvDestination.SelectedNode.Parent.Parent != null)
+                    {
+                        tvDestination.LabelEdit = true;
+                        tvDestination.SelectedNode.BeginEdit();
+                    }
+                    else
+                    {
+                        CallMessageBox("You cannot rename this folder!", "Rename Warning");
+                    }
+                }
+                else
+                {
+                    CallMessageBox("Please select a directory before attempting to rename it.", "Rename Warning");
+                }
+            }
+        }
+
+        private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if(!_isWiXComponentGroup.RenameDirectory(tvDestination.SelectedNode.FullPath, e.Label))
+            {
+                e.CancelEdit = true;
+            }
+        }
+
+        private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvDestination.LabelEdit = true;
+            tvDestination.SelectedNode.BeginEdit();
 
         }
     }

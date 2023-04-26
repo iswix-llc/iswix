@@ -484,5 +484,44 @@ namespace IsWiXAutomationInterface
             }
         }
 
+        public bool RenameDirectory(string directoryPath, string newName)
+        {
+            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            string directory = directoryMeta.Directory;
+            string oldSubDirectory = directoryMeta.Subdirectory;
+
+            string[] parts = directoryMeta.Subdirectory.Split('\\');
+            parts[parts.Length-1] = newName;
+
+            string newSubDirectory = string.Join('\\', parts);
+
+            if(!DirectoryExists(Path.Combine(directory, newSubDirectory)))
+            {
+                List<XElement> components = GetComponentGroup().Descendants(_ns + "Component").Where(
+                    c => c.Attribute("Directory").Value == directoryMeta.Directory &&
+                    (c.GetOptionalAttribute("Subdirectory").Equals(directoryMeta.Subdirectory) || c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory + @"\"))).ToList();
+
+                foreach (var component in components)
+                {
+                    string newValue = newSubDirectory + component.Attribute("Subdirectory").Value.Substring(oldSubDirectory.Length);
+                    component.Attribute("Subdirectory").Value = newValue; 
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool DirectoryExists(string directoryPath)
+        {
+            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+
+            return GetComponentGroup().Descendants(_ns + "Component").Where(
+                c => c.Attribute("Directory").Value == directoryMeta.Directory &&
+                (c.GetOptionalAttribute("Subdirectory").Equals(directoryMeta.Subdirectory) || c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory + @"\"))).Any();
+        }
     }
 }
