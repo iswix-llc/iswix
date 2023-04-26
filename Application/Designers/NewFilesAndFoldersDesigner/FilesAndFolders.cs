@@ -697,7 +697,7 @@ namespace Designers.NewFilesAndFolders
                         cmsDestinationTreeDefault.Show(tvDestination, p);
                         cmsDestinationTreeDefault.Items[0].Visible = true;
                         cmsDestinationTreeDefault.Items[1].Visible = false;
-                        cmsDestinationTreeDefault.Items[2].Visible = false;
+                        cmsDestinationTreeDefault.Items[2].Visible = true;
                         if (node.Nodes.Count == 0)
                         {
                             cmsDestinationTreeDefault.Items[4].Visible = false;
@@ -810,7 +810,6 @@ namespace Designers.NewFilesAndFolders
         private void AddSpecialFolder(string folderId)
         {
             _isWiXComponentGroup.GetOrCreateDirectoryComponent(folderId);
-            _isWiXComponentGroup.SortXML();
             LoadDocument();
         }
 
@@ -860,7 +859,6 @@ namespace Designers.NewFilesAndFolders
                     files.Add(fileMeta);
                 }
                 _isWiXComponentGroup.AddFiles(files);
-                LoadDocument();
                 DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
             }
 
@@ -1067,7 +1065,10 @@ namespace Designers.NewFilesAndFolders
                         files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
                     }
                     _isWiXComponentGroup.DeleteFiles(files);
-                    LoadDocument();
+                    foreach(ListViewItem item in lvDestination.SelectedItems)
+                    {
+                        item.Remove();
+                    }
                 }
             }
             else if (e.KeyCode == Keys.A && e.Control)
@@ -1117,8 +1118,19 @@ namespace Designers.NewFilesAndFolders
             nodeToEdit.Tag = newFolderName;
             tvDestination.SelectedNode = nodeToEdit;
             tvDestination.LabelEdit = true;
-           // tvDestination.SelectedNode.BeginEdit();
+            // tvDestination.SelectedNode.BeginEdit();
 
+
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath);
+            tvDestination.SelectedNode.Remove();
+        }
+
+        private void lvDestination_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

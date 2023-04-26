@@ -295,6 +295,7 @@
             lvDestination.UseCompatibleStateImageBehavior = false;
             lvDestination.View = System.Windows.Forms.View.Details;
             lvDestination.ItemDrag += lvDestination_ItemDrag;
+            lvDestination.SelectedIndexChanged += lvDestination_SelectedIndexChanged;
             lvDestination.DragDrop += lvDestination_DragDrop;
             lvDestination.DragEnter += lvDestination_DragEnter;
             lvDestination.KeyDown += lvDestination_KeyDown;
@@ -331,7 +332,7 @@
             cmsDestinationTreeDefault.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
-            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 182);
+            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 160);
             // 
             // createNewFolderToolStripMenuItem
             // 
@@ -357,6 +358,7 @@
             deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             deleteToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             deleteToolStripMenuItem.Text = "Remove From Project";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 

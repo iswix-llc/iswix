@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using FireworksFramework.Managers;
 
@@ -38,12 +39,13 @@ namespace IsWiXAutomationInterface
             _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
            _componentGroupElement = GetComponentGroup();
             EstablishDefines();
-            SortXML();
         }
 
         private DirectoryMeta SplitDirectory(string directory)
         {
-            DirectoryMeta directoryMeta= new DirectoryMeta();
+            directory = directory.Replace(@"Destination Computer\", "");
+
+            DirectoryMeta directoryMeta = new DirectoryMeta();
 
             string[] parts = directory.Split(new char[] { '\\' });
             directoryMeta.Directory = parts[0].Replace("[", "").Replace("]", "");
@@ -338,7 +340,7 @@ namespace IsWiXAutomationInterface
                     {
                         var fileElements = from f in GetComponentGroup().Descendants(_ns + "File")
                                            where f.Attribute("Source").Value == file.Source &&
-                                                f.Parent.Attribute("Directory").Value == file.Destination
+                                                f.Parent.Attribute("Directory").Value == directoryMeta.Directory
                                            select f;
                         var listElements = fileElements.ToList();
                         foreach (var fileElement in listElements)
@@ -350,10 +352,11 @@ namespace IsWiXAutomationInterface
                     {
                         var fileElements = from f in GetComponentGroup().Descendants(_ns + "File")
                                            where f.Attribute("Source").Value == file.Source &&
-                                                f.Parent.Attribute("Directory").Value == file.Destination &&
-                                                f.Parent.GetOptionalAttribute("Subdiectory") == directoryMeta.Subdirectory
+                                                f.Parent.Attribute("Directory").Value == directoryMeta.Directory &&
+                                                f.Parent.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory
                                            select f;
-                        foreach (var fileElement in fileElements)
+                        List<XElement> test = fileElements.ToList();
+                        foreach (var fileElement in test)
                         {
                             fileElement.Remove();
                         }
@@ -413,29 +416,14 @@ namespace IsWiXAutomationInterface
 
         private bool FileExists(FileMeta file)
         {
-
             DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+            var files = from f in GetComponentGroup().Descendants(_ns + "File")
+                        where f.Attribute("Source").Value == file.Source &&
+                                f.Parent.Attribute("Directory").Value == directoryMeta.Directory &&
+                                f.Parent.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory
+                        select f;
 
-            if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
-            {
-                var files = from f in GetComponentGroup().Descendants(_ns + "File")
-                            where f.Attribute("Source").Value == file.Source &&
-                                 f.Parent.Attribute("Directory").Value == file.Destination
-                            select f;
-
-                return files.Any();
-            }
-            else
-            {
-                var files = from f in GetComponentGroup().Descendants(_ns + "File")
-                            where f.Attribute("Source").Value == file.Source &&
-                                 f.Parent.Attribute("Directory").Value == directoryMeta.Directory &&
-                                 f.Parent.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory
-                            select f;
-
-                return files.Any();
-
-            }
+            return files.Any();
         }
 
         private bool IsProgramExecutable(string fileName)
@@ -474,15 +462,27 @@ namespace IsWiXAutomationInterface
             return sBuilder.ToString().ToUpper();
         }
 
-        public void SortXML()
+        public void DeleteDirectory(string directoryPath)
         {
-            if (_componentGroupElement != null)
+            XElement componentGroupElement = GetComponentGroup();
+            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            List<XElement> elements = new List<XElement>();
+
+            if(string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
-                var components = _componentGroupElement.Elements(_ns + "Component")
-                                .OrderBy(s => Path.Combine((string)s.Attribute("Directory").Value, s.GetOptionalAttribute("Subdirectory"))).ToList();
-                _documentManager.Document.Descendants(_ns + "Component").Remove();
-                _componentGroupElement.Add(components);
+                elements.AddRange(componentGroupElement.Descendants(_ns + "Component").Where(c => c.Attribute("Directory").Value == directoryMeta.Directory).ToList());
+            }
+            else
+            {
+                elements.AddRange(componentGroupElement.Descendants(_ns + "Component").Where(
+                    c => c.Attribute("Directory").Value == directoryMeta.Directory &&
+                    (c.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory || c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory + @"\"))));
+            }
+            foreach (var element in elements)
+            {
+                element.Remove();
             }
         }
+
     }
 }
