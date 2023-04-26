@@ -96,7 +96,7 @@ namespace IsWiXAutomationInterface
 
             if (directoryComponentElement == null)
             {
-                string id = "owd" + GetSHA256Hash(directoryPath);
+                string id = "owd" + GetSHA256Hash(Path.Combine(directoryMeta.Directory, directoryMeta.Subdirectory));
                 if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
                 {
                     directoryComponentElement =
@@ -504,7 +504,9 @@ namespace IsWiXAutomationInterface
                 foreach (var component in components)
                 {
                     string newValue = newSubDirectory + component.Attribute("Subdirectory").Value.Substring(oldSubDirectory.Length);
-                    component.Attribute("Subdirectory").Value = newValue; 
+                    string id = "owc" + GetSHA256Hash(Path.Combine(directoryMeta.Directory, newValue));
+                    component.Attribute("Subdirectory").Value = newValue;
+                    component.Attribute("Id").Value = id;
                 }
 
                 return true;
