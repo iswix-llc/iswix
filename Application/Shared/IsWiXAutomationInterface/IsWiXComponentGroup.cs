@@ -124,6 +124,18 @@ namespace IsWiXAutomationInterface
         }
 
 
+        private XElement GetFragment()
+        {
+            XElement element = null;
+            bool foundFragment = _documentManager.Document.Descendants(_ns + "Fragment").Where(e => e.GetOptionalAttribute("Id").ToLower() == _fileName.ToLower()).Any();
+            if (foundFragment)
+            {
+                element = _documentManager.Document.Descendants(_ns + "Fragment").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+            }
+            return element;
+        }
+
+
         private XElement GetComponentGroup()
         {
             XElement element = null;
@@ -141,12 +153,16 @@ namespace IsWiXAutomationInterface
 
         private void EstablishFragment()
         {
+            XElement fragment = GetFragment();
+            if(fragment==null)
+            {
+                fragment = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName));
+                _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(fragment);
+            }
             XElement element = GetComponentGroup();
             if (element == null)
             {
-                element = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName), 
-                            new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
-                _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(element);
+                fragment.Add(new XElement(_ns + "ComponentGroup", new XAttribute("Id", _fileName)));
             }
         }
 
