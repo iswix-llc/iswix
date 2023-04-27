@@ -117,9 +117,8 @@ namespace IsWiXAutomationInterface
                             new XAttribute("Guid", Guid.NewGuid().ToString()),
                             new XAttribute("KeyPath", "true"),
                             new XElement(_ns + "CreateFolder"));
-
-                    element.Add(directoryComponentElement);
                 }
+                element.Add(directoryComponentElement);
             }
             return directoryComponentElement;
         }
