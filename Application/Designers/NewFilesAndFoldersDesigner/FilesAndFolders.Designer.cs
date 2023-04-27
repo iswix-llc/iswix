@@ -335,6 +335,7 @@
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
             cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 182);
+            cmsDestinationTreeDefault.Opening += cmsDestinationTreeDefault_Opening;
             // 
             // createNewFolderToolStripMenuItem
             // 

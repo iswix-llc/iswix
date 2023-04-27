@@ -37,7 +37,7 @@ namespace IsWiXAutomationInterface
         {
             _ns = _documentManager.Document.GetWiXNameSpace();
             _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
-           _componentGroupElement = GetComponentGroup();
+            _componentGroupElement = GetComponentGroup();
             EstablishDefines();
         }
 
@@ -117,12 +117,12 @@ namespace IsWiXAutomationInterface
                             new XAttribute("Guid", Guid.NewGuid().ToString()),
                             new XAttribute("KeyPath", "true"),
                             new XElement(_ns + "CreateFolder"));
+
+                    element.Add(directoryComponentElement);
                 }
-                element.Add(directoryComponentElement);
             }
             return directoryComponentElement;
         }
-
 
         private XElement GetFragment()
         {
@@ -143,18 +143,18 @@ namespace IsWiXAutomationInterface
             if (foundComponentGroup)
             {
                 element = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
-                if(element.Attribute("Id").Value != _fileName)
+                if (element.Attribute("Id").Value != _fileName)
                 {
                     element.Attribute("Id").Value = _fileName;
                 }
             }
-            return element; 
+            return element;
         }
 
         private void EstablishFragment()
         {
             XElement fragment = GetFragment();
-            if(fragment==null)
+            if (fragment == null)
             {
                 fragment = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName));
                 _documentManager.Document.GetSecondOrderRoot().AddAfterSelf(fragment);
@@ -166,7 +166,7 @@ namespace IsWiXAutomationInterface
             }
         }
 
-         
+
         private void EstablishDefines()
         {
             bool sourceDirXpiExists = false;
@@ -246,7 +246,7 @@ namespace IsWiXAutomationInterface
 
                     if (fields[0].Trim().Equals("ComponentRules"))
                     {
-                        if(fields[1].Replace("\"", "").Trim() == "OneToMany")
+                        if (fields[1].Replace("\"", "").Trim() == "OneToMany")
                         {
                             componentRules = ComponentRules.OneToMany;
                         }
@@ -305,7 +305,7 @@ namespace IsWiXAutomationInterface
             List<string> dirs = new List<string>();
 
             XElement componentGroup = GetComponentGroup();
-            if (componentGroup!=null)
+            if (componentGroup != null)
             {
                 foreach (var componentElement in componentGroup.Elements(_ns + "Component"))
                 {
@@ -350,9 +350,9 @@ namespace IsWiXAutomationInterface
             foreach (var file in files)
             {
                 DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
-                if(FileExists(file))
+                if (FileExists(file))
                 {
-                    if(string.IsNullOrEmpty(directoryMeta.Subdirectory))
+                    if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
                     {
                         var fileElements = from f in GetComponentGroup().Descendants(_ns + "File")
                                            where f.Attribute("Source").Value == file.Source &&
@@ -379,6 +379,7 @@ namespace IsWiXAutomationInterface
 
                     }
                 }
+                UnpruneDirectory(directoryMeta);
             }
             var elements = _componentGroupElement.Descendants(_ns + "Component").Where(c => !c.Elements().Any()).ToList();
             foreach (var element in elements)
@@ -397,7 +398,7 @@ namespace IsWiXAutomationInterface
         public void AddFiles(List<FileMeta> files)
         {
             string rootDir = GetRootPath();
-            
+
             foreach (var file in files)
             {
                 DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
@@ -407,18 +408,18 @@ namespace IsWiXAutomationInterface
                 {
                     if (IsProgramExecutable(file.Source))
                     {
-                        if(string.IsNullOrEmpty(directoryMeta.Subdirectory))
-                        { 
+                        if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
+                        {
                             GetComponentGroup().Add(new XElement(_ns + "Component", new XAttribute("Directory", directoryMeta.Directory),
                             new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
                         }
                         else
-                        
-                            GetComponentGroup().Add(new XElement(_ns + "Component", 
+
+                            GetComponentGroup().Add(new XElement(_ns + "Component",
                                 new XAttribute("Directory", directoryMeta.Directory),
                                 new XAttribute("Subdirectory", directoryMeta.Subdirectory),
                             new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
-                        }
+                    }
                     else
                     {
                         XElement directoryComponentElement = GetOrCreateDirectoryComponent(file.Destination);
@@ -427,6 +428,7 @@ namespace IsWiXAutomationInterface
 
                     }
                 }
+                PruneDirectory(file.Destination);
             }
         }
 
@@ -484,7 +486,7 @@ namespace IsWiXAutomationInterface
             DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
             List<XElement> elements = new List<XElement>();
 
-            if(string.IsNullOrEmpty(directoryMeta.Subdirectory))
+            if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
                 elements.AddRange(componentGroupElement.Descendants(_ns + "Component").Where(c => c.Attribute("Directory").Value == directoryMeta.Directory).ToList());
             }
@@ -507,11 +509,11 @@ namespace IsWiXAutomationInterface
             string oldSubDirectory = directoryMeta.Subdirectory;
 
             string[] parts = directoryMeta.Subdirectory.Split('\\');
-            parts[parts.Length-1] = newName;
+            parts[parts.Length - 1] = newName;
 
             string newSubDirectory = string.Join('\\', parts);
 
-            if(!DirectoryExists(Path.Combine(directory, newSubDirectory)))
+            if (!DirectoryExists(Path.Combine(directory, newSubDirectory)))
             {
                 List<XElement> components = GetComponentGroup().Descendants(_ns + "Component").Where(
                     c => c.Attribute("Directory").Value == directoryMeta.Directory &&
@@ -540,6 +542,33 @@ namespace IsWiXAutomationInterface
             return GetComponentGroup().Descendants(_ns + "Component").Where(
                 c => c.Attribute("Directory").Value == directoryMeta.Directory &&
                 (c.GetOptionalAttribute("Subdirectory").Equals(directoryMeta.Subdirectory) || c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory + @"\"))).Any();
+        }
+
+        public void PruneDirectory(string directoryPath)
+        {
+            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            bool needed = true;
+            int componentCount = GetComponentGroup().Descendants(_ns + "Component").Where(
+                c => c.Attribute("Directory").Value == directoryMeta.Directory && c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory)
+            ).Count();
+
+            if (componentCount > 1)
+            {
+                var component = GetComponentGroup().Descendants(_ns + "Component").Where(
+                                 c => c.Attribute("Directory").Value == directoryMeta.Directory &&
+                                 c.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory &&
+                                 c.Descendants(_ns + "CreateFolder").Count() > 0 &&
+                                 c.Elements().Count() == 1
+                                 ).FirstOrDefault();
+                if (component != null)
+                {
+                    component.Remove();
+                }
+            }
+        }
+        private void UnpruneDirectory(DirectoryMeta directoryMeta)
+        {
+
         }
     }
 }

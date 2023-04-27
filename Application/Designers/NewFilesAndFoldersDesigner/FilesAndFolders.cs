@@ -1114,7 +1114,8 @@ namespace Designers.NewFilesAndFolders
         {
             string newFolderName = _isWiXComponentGroup.GetNextSubDirectoryName(tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", ""));
             string directoryPath = Path.Combine(tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", ""), newFolderName);
-            _isWiXComponentGroup.GetOrCreateDirectoryComponent(Path.Combine(directoryPath));
+            var test = _isWiXComponentGroup.GetOrCreateDirectoryComponent(directoryPath);
+            _isWiXComponentGroup.PruneDirectory(tvDestination.SelectedNode.FullPath);
             var nodeToEdit = tvDestination.SelectedNode.Nodes.Add(newFolderName, newFolderName);
             nodeToEdit.Tag = newFolderName;
             tvDestination.SelectedNode = nodeToEdit;
@@ -1210,7 +1211,11 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if(!_isWiXComponentGroup.RenameDirectory(tvDestination.SelectedNode.FullPath, e.Label))
+            if(e.Label == null)
+            {
+                e.CancelEdit = true;
+            }
+            else if(!_isWiXComponentGroup.RenameDirectory(tvDestination.SelectedNode.FullPath, e.Label))
             {
                 e.CancelEdit = true;
             }
@@ -1220,6 +1225,11 @@ namespace Designers.NewFilesAndFolders
         {
             tvDestination.LabelEdit = true;
             tvDestination.SelectedNode.BeginEdit();
+
+        }
+
+        private void cmsDestinationTreeDefault_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
 
         }
     }
