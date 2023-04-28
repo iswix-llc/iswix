@@ -1125,7 +1125,7 @@ namespace Designers.NewFilesAndFolders
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath);
+            _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
             tvDestination.SelectedNode.Remove();
         }
 
@@ -1152,7 +1152,7 @@ namespace Designers.NewFilesAndFolders
                     {
                         return;
                     }
-                    _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath);
+                    _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
                     tvDestination.SelectedNode.Remove();
                 }
             }

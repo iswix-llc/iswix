@@ -59,14 +59,8 @@ namespace MSIXDesigner
         }
         public bool IsValidContext()
         {
-            bool valid = false;
-            IsWiXDocumentType documentType = _documentManager.Document.GetDocumentType();
-
-            if (documentType == IsWiXDocumentType.Product || documentType == IsWiXDocumentType.Fragment)
-            {
-                valid = true;
-            }
-            return valid;
+            DocumentManager documentManager = DocumentManager.DocumentManagerInstance;
+            return (documentManager.Document.GetWiXVersion() == WiXVersion.v3 && documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product);
         }
 
         public void LoadData()
