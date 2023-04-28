@@ -348,7 +348,11 @@ namespace IsWiXAutomationInterface
                 DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
                 file.Destination = Path.Combine(directoryMeta.Directory, directoryMeta.Subdirectory);
                 file.Source = file.Source.Replace(rootDir, "$(var.SourceDir)");
-                if (!FileExists(file))
+                if(file.Source == ".")
+                {
+                    GetOrCreateDirectoryComponent(file.Destination);
+                }
+                else if (!FileExists(file))
                 {
                     if (IsProgramExecutable(file.Source))
                     {

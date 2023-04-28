@@ -842,7 +842,7 @@ namespace Designers.NewFilesAndFolders
 
         private void lvDestination_DragDrop(object sender, DragEventArgs e)
         {
-            //_documentManager.DisableChangeWatcher();
+            _documentManager.DisableChangeWatcher();
             if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
                 var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
@@ -864,23 +864,69 @@ namespace Designers.NewFilesAndFolders
                 DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
             }
 
-            //if (e.Data.GetDataPresent(typeof(TreeNode)))
-            //{
-            //    var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            //    if (!DestinationContainsFolder(tvDestination.SelectedNode, sourceFolder))
-            //    {
-            //        AddAllDirectoriesToDestination(tvDestination.SelectedNode, sourceFolder);
-            //        SortData();
-            //        LoadDocument();
-            //    }
-            //    else
-            //    {
-            //        CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
-            //    }
-            //}
+            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+                {
+
+                    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+                    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+                    if (dropNode != null && dropNode.Text != "Destination Computer")
+                    {
+                        var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                        if (sourceFolder == tvSourceFiles.Nodes[0])
+                        {
+                            CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
+                        }
+                        else
+                        {
+                            // Refresh the directory structure incase of delayed load or changes since loading
+                            sourceFolder.Nodes.Clear();
+                            PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
+                            List<FileMeta> files = new List<FileMeta>();
+                            string directoryPath = dropNode.FullPath;
+                            GetFilesRecursive(sourceFolder, ref files, directoryPath, string.Empty);
+                            _isWiXComponentGroup.AddFiles(files);
+                            _isWiXComponentGroup.PruneDirectory(directoryPath);
+                            LoadDocument();
+                        }
+                    }
+                    else
+                    {
+                        CallMessageBox("Drop the items onto a folder", "Drop Warning");
+                    }
+                }
+            }
+            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                TreeNode dropNode = tvSourceFiles.SelectedNode;
+                if (dropNode != null)
+                {
+                    var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                    if (sourceFolder == tvSourceFiles.Nodes[0])
+                    {
+                        CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
+                    }
+                    else
+                    {
+                        // Refresh the directory structure incase of delayed load or changes since loading
+                        sourceFolder.Nodes.Clear();
+                        PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
+                        List<FileMeta> files = new List<FileMeta>();
+                        string directoryPath = tvDestination.SelectedNode.FullPath;
+                        GetFilesRecursive(sourceFolder, ref files, directoryPath, string.Empty);
+                        _isWiXComponentGroup.AddFiles(files);
+                        _isWiXComponentGroup.PruneDirectory(directoryPath);
+                        LoadDocument();
+                    }
+                }
+                else
+                {
+                    CallMessageBox("Drop the items onto a folder", "Drop Warning");
+                }
+
+            }
             _documentManager.EnableChangeWatcher();
-
-
         }
 
         private void tvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
@@ -913,7 +959,7 @@ namespace Designers.NewFilesAndFolders
                     {
                         FileMeta fileMeta = new FileMeta();
                         fileMeta.Source = item.SubItems[4].Text;
-                        fileMeta.Destination =dropNode.FullPath;
+                        fileMeta.Destination = dropNode.FullPath;
                         fileMetas.Add(fileMeta);
                     }
                     _isWiXComponentGroup.AddFiles(fileMetas);
@@ -942,9 +988,11 @@ namespace Designers.NewFilesAndFolders
                         // Refresh the directory structure incase of delayed load or changes since loading
                         sourceFolder.Nodes.Clear();
                         PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
-
                         List<FileMeta> files = new List<FileMeta>();
-                        GetFilesRecursive(sourceFolder, ref files);
+                        string directoryPath = dropNode.FullPath;
+                        GetFilesRecursive(sourceFolder, ref files, directoryPath, string.Empty);
+                        _isWiXComponentGroup.AddFiles(files);
+                        _isWiXComponentGroup.PruneDirectory(directoryPath);
                         LoadDocument();
                     }
                 }
@@ -958,8 +1006,35 @@ namespace Designers.NewFilesAndFolders
             _documentManager.EnableChangeWatcher();
         }
 
-        private void GetFilesRecursive(TreeNode sourceFolder, ref List<FileMeta> files)
+        private void GetFilesRecursive(TreeNode sourceFolder, ref List<FileMeta> files, string destinationDirectoryPath, string parent)
         {
+            parent = Path.Combine(parent, sourceFolder.Text);
+            string rootPath = _isWiXComponentGroup.GetRootPath();
+            var directoryInfo = new DirectoryInfo(sourceFolder.FullPath);
+            var fileInfos = GetFilteredFiles(directoryInfo, FileExcludePattern, FileFilterPattern);
+            if (files.Count == 0)
+            {
+                if (sourceFolder.Nodes.Count == 0)
+                {
+                    string subDirectory = (directoryInfo.FullName.Replace(rootPath + "\\", ""));
+                    FileMeta fileMeta = new FileMeta();
+                    fileMeta.Source = ".";
+                    fileMeta.Destination = Path.Combine(destinationDirectoryPath, parent);
+                    files.Add(fileMeta);
+                }
+            }
+            foreach (var fileInfo in fileInfos)
+            {
+                string subDirectory = (fileInfo.DirectoryName.Replace(rootPath + "\\", ""));
+                FileMeta fileMeta = new FileMeta();
+                fileMeta.Source = fileInfo.FullName;
+                fileMeta.Destination = Path.Combine(destinationDirectoryPath, parent);
+                files.Add(fileMeta);
+            }
+            foreach (TreeNode subNode in sourceFolder.Nodes)
+            {
+                GetFilesRecursive(subNode, ref files, destinationDirectoryPath, parent);
+            }
         }
 
         private void tvDestination_DragEnter(object sender, DragEventArgs e)
@@ -1206,11 +1281,11 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if(e.Label == null)
+            if (e.Label == null)
             {
                 e.CancelEdit = true;
             }
-            else if(!_isWiXComponentGroup.RenameDirectory(tvDestination.SelectedNode.FullPath, e.Label))
+            else if (!_isWiXComponentGroup.RenameDirectory(tvDestination.SelectedNode.FullPath, e.Label))
             {
                 e.CancelEdit = true;
             }
@@ -1224,6 +1299,11 @@ namespace Designers.NewFilesAndFolders
         }
 
         private void cmsDestinationTreeDefault_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void lvDestination_SelectedIndexChanged_1(object sender, EventArgs e)
         {
 
         }
