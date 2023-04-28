@@ -65,11 +65,13 @@ namespace Designers.NewFilesAndFolders
             InitializeComponent();
 
             // create the column sorter and assign it to the correct control
+#if !DEBUG
             lvColumnSorter = new ListViewColumnSorter();
             lvSourceFiles.ListViewItemSorter = lvColumnSorter;
 
             lvDestinationColumnSorter = new ListViewColumnSorter();
             lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
+#endif
         }
 
         private void PopulateSource()
@@ -897,74 +899,67 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_DragDrop(object sender, DragEventArgs e)
         {
-            //if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
-            //{
-            //    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
-            //    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
-            //    if (dropNode != null)
-            //    {
-            //        var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
-            //        foreach (ListViewItem item in itemCollection)
-            //        {
-            //            if (CanBeMoved(item, dropNode))
-            //            {
-            //                AddItemToDocument(dropNode, item);
-            //                if (e.Effect == DragDropEffects.Move)
-            //                {
-            //                    RemoveItemFromDocument(tvDestination.SelectedNode, item);
-            //                }
-            //            }
-            //            //else
-            //            //{
-            //            //    CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
-            //            //}
-            //        }
-            //        SortData();
-            //        LoadDocument();
-            //        DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
-            //    }
-            //    else
-            //    {
-            //        CallMessageBox("Drop the items onto a folder", "Drop Warning");
-            //    }
-            //}
+            _documentManager.DisableChangeWatcher();
 
-            //if (e.Data.GetDataPresent(typeof(TreeNode)))
-            //{
-            //    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
-            //    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
-            //    if (dropNode != null)
-            //    {
-            //        var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            //        if (sourceFolder == tvSourceFiles.Nodes[0])
-            //        {
-            //            CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
-            //        }
-            //        else
-            //        {
-            //            if (!DestinationContainsFolder(dropNode, sourceFolder))
-            //            {
-            //                // Refresh the directory structure incase of delayed load or changes since loading
-            //                sourceFolder.Nodes.Clear();
-            //                PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
-            //                AddAllDirectoriesToDestination(dropNode, sourceFolder);
-            //                SortData();
-            //                LoadDocument();
-            //            }
-            //            else
-            //            {
-            //                CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        CallMessageBox("Drop the items onto a folder", "Drop Warning");
-            //    }
-            //}
-            //HoverNode.BackColor = Color.White;
-            //HoverNode.ForeColor = Color.Black;
-            //_documentManager.EnableChangeWatcher();
+            if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+            {
+                var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+                TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+                if (dropNode != null && dropNode.Text != "Destination Computer")
+                {
+                    List<FileMeta> fileMetas = new List<FileMeta>();
+                    var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
+                    foreach (ListViewItem item in itemCollection)
+                    {
+                        FileMeta fileMeta = new FileMeta();
+                        fileMeta.Source = item.SubItems[4].Text;
+                        fileMeta.Destination =dropNode.FullPath;
+                        fileMetas.Add(fileMeta);
+                    }
+                    _isWiXComponentGroup.AddFiles(fileMetas);
+                    LoadDocument();
+                    DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
+                }
+                else
+                {
+                    CallMessageBox("Drop the items onto a folder", "Drop Warning");
+                }
+            }
+
+            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+                TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+                if (dropNode != null && dropNode.Text != "Destination Computer")
+                {
+                    var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                    if (sourceFolder == tvSourceFiles.Nodes[0])
+                    {
+                        CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
+                    }
+                    else
+                    {
+                        // Refresh the directory structure incase of delayed load or changes since loading
+                        sourceFolder.Nodes.Clear();
+                        PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
+
+                        List<FileMeta> files = new List<FileMeta>();
+                        GetFilesRecursive(sourceFolder, ref files);
+                        LoadDocument();
+                    }
+                }
+                else
+                {
+                    CallMessageBox("Drop the items onto a folder", "Drop Warning");
+                }
+            }
+            HoverNode.BackColor = Color.White;
+            HoverNode.ForeColor = Color.Black;
+            _documentManager.EnableChangeWatcher();
+        }
+
+        private void GetFilesRecursive(TreeNode sourceFolder, ref List<FileMeta> files)
+        {
         }
 
         private void tvDestination_DragEnter(object sender, DragEventArgs e)

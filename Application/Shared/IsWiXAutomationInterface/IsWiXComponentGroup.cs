@@ -296,7 +296,12 @@ namespace IsWiXAutomationInterface
                         var listElements = fileElements.ToList();
                         foreach (var fileElement in listElements)
                         {
+                            XElement componentElement = fileElement.Parent;
                             fileElement.Remove();
+                            if (!componentElement.HasElements)
+                            {
+                                componentElement.Remove();
+                            }
                         }
                     }
                     else
@@ -309,25 +314,30 @@ namespace IsWiXAutomationInterface
                         List<XElement> test = fileElements.ToList();
                         foreach (var fileElement in test)
                         {
+                            XElement componentElement = fileElement.Parent;
                             fileElement.Remove();
+                            if(!componentElement.HasElements)
+                            {
+                                componentElement.Remove();
+                            }
                         }
 
                     }
                 }
                 UnpruneDirectory(file.Destination);
             }
-            var elements = _componentGroup.Descendants(_ns + "Component").Where(c => !c.Elements().Any()).ToList();
-            foreach (var element in elements)
-            {
-                if (string.IsNullOrEmpty(element.GetOptionalAttribute("Id")))
-                {
-                    element.Remove();
-                }
-                else
-                {
-                    element.Add(new XElement(_ns + "CreateFolder"));
-                }
-            }
+            //var elements = _componentGroup.Descendants(_ns + "Component").Where(c => !c.Elements().Any()).ToList();
+            //foreach (var element in elements)
+            //{
+            //    if (string.IsNullOrEmpty(element.GetOptionalAttribute("Id")))
+            //    {
+            //        element.Remove();
+            //    }
+            //    else
+            //    {
+            //        element.Add(new XElement(_ns + "CreateFolder"));
+            //    }
+            //}
         }
         public void AddFiles(List<FileMeta> files)
         {
