@@ -297,7 +297,6 @@
             lvDestination.UseCompatibleStateImageBehavior = false;
             lvDestination.View = System.Windows.Forms.View.Details;
             lvDestination.ItemDrag += lvDestination_ItemDrag;
-            lvDestination.SelectedIndexChanged += lvDestination_SelectedIndexChanged_1;
             lvDestination.DragDrop += lvDestination_DragDrop;
             lvDestination.DragEnter += lvDestination_DragEnter;
             lvDestination.KeyDown += lvDestination_KeyDown;
@@ -335,7 +334,6 @@
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
             cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 160);
-            cmsDestinationTreeDefault.Opening += cmsDestinationTreeDefault_Opening;
             // 
             // createNewFolderToolStripMenuItem
             // 

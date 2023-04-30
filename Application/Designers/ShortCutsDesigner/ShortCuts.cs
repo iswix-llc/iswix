@@ -84,7 +84,8 @@ namespace ShortCutsDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module ||
+                (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment))
             {
                 return true;
             }
@@ -148,9 +149,21 @@ namespace ShortCutsDesigner
             //Ensure the XML file has any Directories.
             try
             {
-                var firstDirectory = _documentManager.Document.Descendants(WixNamespace + "Directory").First();
-                AddDirectoryNodesToDestination(firstDirectory, null);
+                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+                {
 
+                    var firstDirectory = _documentManager.Document.Descendants(WixNamespace + "Directory").First();
+                    AddDirectoryNodesToDestination(firstDirectory, null);
+                }
+                else
+                {
+                    TreeNode treeNode = AddDestinationComputerToDestination(null);
+                    AddFirstLevelFolder(treeNode, "DesktopFolder");
+                    AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
+                    AddFirstLevelFolder(treeNode, "SendToFolder");
+                    AddFirstLevelFolder(treeNode, "StartMenuFolder");
+                    AddFirstLevelFolder(treeNode, "StartupFolder");
+                }
             }
             catch (Exception exception)
             {
@@ -159,6 +172,24 @@ namespace ShortCutsDesigner
             tvDestination.ExpandAll();
 
             Cursor = Cursors.Default;
+        }
+
+        private void AddFirstLevelFolder(TreeNode treeNode, string folderName)
+        {
+            TreeNode newNode = treeNode.Nodes.Add($"[{folderName}]");
+            newNode.ImageIndex = (int)ImageLibrary.BlueFolderClosed;
+            newNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
+            foreach (var shortcut in _shortcuts)
+            {
+                if (shortcut.Directory == folderName)
+                {
+                    var newShortcutNode = newNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                    newShortcutNode.ImageIndex = (int)ImageLibrary.Shortcut;
+                    newShortcutNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
+                    newShortcutNode.Tag = shortcut;
+                }
+            }
+
         }
         private void AddDirectoryNodesToDestination(XElement element, TreeNode treeNode)
         {
@@ -226,14 +257,23 @@ namespace ShortCutsDesigner
             var subTreeNode = tvDestination.Nodes.Add(nodeName);
             subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
             subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
-            subTreeNode.Tag = GetElementId(element);
+            if (element != null)
+            {
+                subTreeNode.Tag = GetElementId(element);
+            }
             return subTreeNode;
         }
 
         private string CreateNodeName(XElement element)
         {
-            //return String.Format("[{0}] [{1}]", GetElementId(element), GetElementName(element));
-            return String.Format("{0}", GetElementName(element));
+            if (element == null)
+            {
+                return "Destination Computer";
+            }
+            else
+            {
+                return String.Format("{0}", GetElementName(element));
+            }
         }
 
         private bool SubElementIsDirectory(XElement directoryElement)
@@ -339,32 +379,44 @@ namespace ShortCutsDesigner
                     // Select the node the user has clicked.
                     // The node appears selected once the menu is displayed on the screen.
                     tvDestination.SelectedNode = node;
+                    foreach (ToolStripItem toolStripItem in cmsDestinationRoot.Items)
+                    {
+                        toolStripItem.Visible = false;
+                    }
 
                     // Find the appropriate ContextMenu depending on the selected node.
-                    switch (Convert.ToString(node.Text))
+                    if (node.Parent == null)
                     {
-                        case "[DesktopFolder]":
-                        case "[ProgramMenuFolder]":
-                        case "[SendToFolder]":
-                        case "[StartMenuFolder]":
-                        case "[StartupFolder]":
-                            cmsMergeRedirectFolder.Show(tvDestination, p);
-                            break;
-                        case "Destination Computer":
-                            ClearOldDestinationRootMenuItems();
-                            AddItemsToDestinationRootMenu();
-                            cmsDestinationRoot.Show(tvDestination, p);
-                            break;
-                        default:
-                            if (node.ImageIndex.Equals(12))
-                            {
-                                cmsShortcut.Show(tvDestination, p);
-                            }
-                            else
-                            {
-                                cmsDestinationTreeDefault.Show(tvDestination, p);
-                            }
-                            break;
+                        ClearOldDestinationRootMenuItems();
+                        AddItemsToDestinationRootMenu();
+                        cmsDestinationRoot.Show(tvDestination, p);
+                        if (node.Nodes.Count == 0)
+                        {
+                            cmsDestinationRoot.Items[0].Visible = false;
+                            cmsDestinationRoot.Items[1].Visible = false;
+                        }
+                        else
+                        {
+                            cmsDestinationRoot.Items[0].Visible = true;
+                            cmsDestinationRoot.Items[1].Visible = true;
+                        }
+
+                    }
+                    else if (node.Parent.Text == "Destination Computer")
+                    {
+                        cmsMergeRedirectFolder.Show(tvDestination, p);
+
+                    }
+                    else
+                    {
+                        if (node.ImageIndex.Equals(12))
+                        {
+                            cmsShortcut.Show(tvDestination, p);
+                        }
+                        else
+                        {
+                            cmsDestinationTreeDefault.Show(tvDestination, p);
+                        }
                     }
                 }
             }
@@ -422,7 +474,7 @@ namespace ShortCutsDesigner
         {
             foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
             {
-                if (node.Tag.ToString() == tag)
+                if (node.Tag == null || node.Tag.ToString() == tag)
                 {
                     return true;
                 }
@@ -566,7 +618,10 @@ namespace ShortCutsDesigner
 
         private void createNewFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNodeToDestinationTree();
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            {
+                AddNodeToDestinationTree();
+            }
         }
 
         private void AddNodeToDestinationTree()
@@ -793,7 +848,10 @@ namespace ShortCutsDesigner
 
         private void createNewFolderToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            AddNodeToDestinationTree();
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            {
+                AddNodeToDestinationTree();
+            }
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -823,26 +881,31 @@ namespace ShortCutsDesigner
 
         public void SortData()
         {
-            var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
-            var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
-            var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
-                                     orderby item.Attribute("Id").Value ascending
-                                     select item);
-            foreach (var directory in tempDirectoryList)
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
             {
-                if (IsASpecialDirectoryToIgnore(directory))
+
+                var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
+                var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
+                var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
+                                         orderby item.Attribute("Id").Value ascending
+                                         select item);
+                foreach (var directory in tempDirectoryList)
                 {
-                    // ignore
+                    if (IsASpecialDirectoryToIgnore(directory))
+                    {
+                        // ignore
+                    }
+                    else
+                    {
+                        SortDirectoriesAndChildren(directory);
+                    }
                 }
-                else
-                {
-                    SortDirectoriesAndChildren(directory);
-                }
+                // put order by list into original document
+                var startingElement = FindDirectoryElement("SourceDir", "TARGETDIR");
+                startingElement.Elements().Remove();
+                startingElement.Add(tempDirectoryList);
             }
-            // put order by list into original document
-            var startingElement = FindDirectoryElement("SourceDir", "TARGETDIR");
-            startingElement.Elements().Remove();
-            startingElement.Add(tempDirectoryList);
+
         }
 
         private void SortDirectoriesAndChildren(XElement originalStartingDirectory)
@@ -913,11 +976,21 @@ namespace ShortCutsDesigner
             DialogResult dr = picker.ShowDialog();
             if (dr != DialogResult.Cancel)
             {
-                string fileKey = picker.FileKey;
-
-                if (!string.IsNullOrEmpty(fileKey))
+                if (!string.IsNullOrEmpty(picker.FileKey) || picker.FileElement != null )
                 {
-                    string scDirectory = tvDestination.SelectedNode.Tag as string;
+                    string scDirectory = string.Empty;
+                    string scSubdirectory = string.Empty;
+
+                    if (tvDestination.SelectedNode.Tag != null)
+                    {
+                        scDirectory = tvDestination.SelectedNode.Tag as string;
+                    }
+                    else
+                    {
+                        string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
+                        scDirectory = fullPath.Split("\\").First();
+                        scSubdirectory = fullPath.Substring(scDirectory.Length, fullPath.Length - scDirectory.Length);
+                    }
 
                     string prefix = picker.FileName;
                     int index = 0;
@@ -961,7 +1034,7 @@ namespace ShortCutsDesigner
 
                             }
 
-                            IsWiXShortCut shortCut = _shortcuts.Create(name, fileKey, scDirectory);
+                            IsWiXShortCut shortCut = _shortcuts.Create(name, scDirectory, scSubdirectory, picker.FileElement);
                             AddShortcutNode(shortCut);
                             added = true;
                         }
@@ -1037,7 +1110,6 @@ namespace ShortCutsDesigner
         {
             return string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath);
         }
-
 
     }
 }

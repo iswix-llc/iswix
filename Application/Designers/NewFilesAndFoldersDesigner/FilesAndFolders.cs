@@ -1298,14 +1298,5 @@ namespace Designers.NewFilesAndFolders
 
         }
 
-        private void cmsDestinationTreeDefault_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
-        private void lvDestination_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }

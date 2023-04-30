@@ -26,7 +26,7 @@ namespace IsWiXAutomationInterface
 
             try
             {
-                foreach (var shortcutElement in _documentManager.Document.GetSecondOrderRoot().Descendants(ns + "Shortcut"))
+                foreach (var shortcutElement in _documentManager.Document.Descendants(ns + "Shortcut"))
                 {
                     IsWiXShortCut isWiXShortcut = new IsWiXShortCut(_documentManager.Document, shortcutElement);
                     Add(isWiXShortcut);
@@ -48,27 +48,26 @@ namespace IsWiXAutomationInterface
             foreach (var file in files)
             {
                 ShortCutCandidate scc = new ShortCutCandidate();
-                scc.FileKey = file.Attribute("Id").Value;
+                scc.FileKey = file.GetOptionalAttribute("Id");
                 scc.DestinationFilePath = file.GetDestinationFilePath();
                 scc.FileName = Path.GetFileNameWithoutExtension(file.Attribute("Source").Value.Split('\\').Last());
+                scc.FileElement = file;
                 candidates.Add(scc);
             }
             return candidates;
         }
 
-        public IsWiXShortCut Create(string name, string fileId, string directory)
+        public IsWiXShortCut Create(string name, string directory, string subDirectory, XElement fileElement)
         {
             XElement shortcutElement = new XElement(ns + "Shortcut");
             string scID = "sc" + Guid.NewGuid().ToString().ToUpper().Replace("-", string.Empty);
             shortcutElement.SetAttributeValue("Id", "sc" + IsWiXHelpers.GetMd5Hash(directory + name));
             shortcutElement.SetAttributeValue("Name", name);
             shortcutElement.SetAttributeValue("Directory", directory);
-
-            var elements = from a in _documentManager.Document.Descendants(ns + "File")
-                           where a.Attribute("Id").Value == fileId
-                           select a;
-
-            XElement fileElement = elements.First();
+            if (!string.IsNullOrEmpty(subDirectory))
+            {
+                shortcutElement.SetAttributeValue("Subdirectory", subDirectory);
+            }
 
             fileElement.Add(shortcutElement);
 
@@ -86,6 +85,8 @@ namespace IsWiXAutomationInterface
         public string FileKey { get; set; }
         public string FileName { get; set; }
         public string DestinationFilePath { get; set; }
+        public XElement FileElement { get; set; }
+
     }
     public class IsWiXShortCut
     {
@@ -164,6 +165,19 @@ namespace IsWiXAutomationInterface
             {
                 RetrieveShortcutElement();
                 _shortCutElement.SetAttributeValue("Directory", value);
+            }
+        }
+
+        public string Subdirectory
+        {
+            get
+            {
+                return _shortCutElement.GetOptionalAttribute("Subdirectory");
+            }
+            set
+            {
+                RetrieveShortcutElement();
+                _shortCutElement.SetAttributeValue("Subdirectory", value);
             }
         }
 
