@@ -31,6 +31,15 @@ namespace IsWiXAutomationInterface
             }
             return value;
         }
+        public static string GetOptionalSubElementAttribute(this XElement element, XNamespace nameSpace, string elementName, string attributeName)
+        {
+            string value = string.Empty;
+            if(element.Elements(nameSpace + elementName).Any())
+            {
+                value = element.Elements(nameSpace + elementName).FirstOrDefault().Attribute(attributeName).Value;
+            }
+            return value;
+        }
 
         public static bool GetOptionalYesNoAttribute(this XElement Element, string AttributeName, bool DefaultValue)
         {

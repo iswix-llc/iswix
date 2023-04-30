@@ -70,7 +70,7 @@ namespace IsWiXAutomationInterface
             }
             return newFolderName;
         }
-        public XElement GetOrCreateDirectoryComponent(string directoryPath)
+        public XElement GetOrCreateDirectoryComponent(string directoryPath, bool peFile = true)
         {
             if(_fragment == null)
             {
@@ -88,8 +88,16 @@ namespace IsWiXAutomationInterface
 
             if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
-                directoryComponentElement = _componentGroup.Descendants(_ns + "Component").Where(
-                c => c.Attribute("Directory").Value == directoryMeta.Directory).FirstOrDefault();
+                if (peFile)
+                {
+                    directoryComponentElement = _componentGroup.Descendants(_ns + "Component").Where(
+                    c => c.Attribute("Directory").Value == directoryMeta.Directory).FirstOrDefault();
+                }
+                else
+                {
+                    directoryComponentElement = _componentGroup.Descendants(_ns + "Component").Where(
+                    c => c.Attribute("Directory").Value == directoryMeta.Directory && c.GetOptionalAttribute("KeyPath") == "true").FirstOrDefault();
+                }
             }
             else
             {
@@ -124,6 +132,7 @@ namespace IsWiXAutomationInterface
                 }
                 _componentGroup.Add(directoryComponentElement);
             }
+            SortComponents();
             return directoryComponentElement;
         }
 
@@ -354,7 +363,8 @@ namespace IsWiXAutomationInterface
                 }
                 else if (!FileExists(file))
                 {
-                    if (IsProgramExecutable(file.Source))
+                    bool peFile = IsProgramExecutable(file.Source);
+                    if (peFile)
                     {
                         if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
                         {
@@ -368,13 +378,14 @@ namespace IsWiXAutomationInterface
                                 new XAttribute("Subdirectory", directoryMeta.Subdirectory),
                             new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
                         }
+                       SortComponents();
                     }
                     else
                     {
-                        XElement directoryComponentElement = GetOrCreateDirectoryComponent(file.Destination);
+                        XElement directoryComponentElement = GetOrCreateDirectoryComponent(file.Destination,false);
                         directoryComponentElement.Elements(_ns + "CreateFolder").Remove();
                         directoryComponentElement.Add(new XElement(_ns + "File", new XAttribute("Source", file.Source)));
-
+                        SortFiles(directoryComponentElement);
                     }
                 }
                 PruneDirectory(file.Destination);
@@ -469,7 +480,7 @@ namespace IsWiXAutomationInterface
                     component.Attribute("Subdirectory").Value = newValue;
                     component.Attribute("Id").Value = id;
                 }
-
+                SortComponents();
                 return true;
             }
             else
@@ -517,6 +528,30 @@ namespace IsWiXAutomationInterface
             if (componentCount < 1 && directoryPath != "Destination Computer")
             {
                 GetOrCreateDirectoryComponent(directoryPath);
+            }
+        }
+        public void SortComponents()
+        {
+            var components = _componentGroup.Elements(_ns + "Component")
+                .OrderBy(d => d.Attribute("Directory").Value)
+                .OrderBy(sd => sd.GetOptionalAttribute("Subdirectory"))
+                .OrderBy(kf =>kf.GetOptionalAttribute("Keyfile"))
+                .OrderBy(f=>f.GetOptionalSubElementAttribute(_ns, "File", "Source"))
+                .ToArray();
+            _documentManager.Document.Descendants(_ns + "Component").Remove();
+
+            foreach (var component in components)
+            {
+                _componentGroup.Add(component);
+            }
+        }
+        public void SortFiles(XElement component)
+        {
+            var files = component.Elements(_ns + "File").OrderBy(d => d.Attribute("Source").Value).ToArray();
+            component.Elements(_ns + "File").Remove();
+            foreach (var file in files)
+            {
+                component.Add(file);
             }
         }
     }
