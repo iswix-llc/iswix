@@ -1082,7 +1082,7 @@ namespace ShortCutsDesigner
                     string scDirectory = string.Empty;
                     string scSubdirectory = string.Empty;
 
-                    if (tvDestination.SelectedNode.Tag != null)
+                    if(_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
                     {
                         scDirectory = tvDestination.SelectedNode.Tag as string;
                     }
@@ -1090,7 +1090,7 @@ namespace ShortCutsDesigner
                     {
                         string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
                         scDirectory = fullPath.Split("\\").First();
-                        scSubdirectory = fullPath.Substring(scDirectory.Length, fullPath.Length - scDirectory.Length);
+                        scSubdirectory = fullPath.Substring(scDirectory.Length+1, fullPath.Length - scDirectory.Length-1);
                     }
 
                     string prefix = picker.FileName;
