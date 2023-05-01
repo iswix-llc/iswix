@@ -180,13 +180,18 @@ namespace ShortCutsDesigner
             directoryNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
             foreach (var shortcut in _shortcuts)
             {
+                TreeNode parentNode = null;
                 if (shortcut.Directory == folderName)
                 {
-                    if (!string.IsNullOrEmpty(shortcut.Subdirectory))
+                    if (string.IsNullOrEmpty(shortcut.Subdirectory))
                     {
-                        directoryNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
+                        TreeNode newNode = parentNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
                     }
-                    var newShortcutNode = directoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                    else
+                    {
+                        parentNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
+                    }
+                    var newShortcutNode = parentNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
                     newShortcutNode.ImageIndex = (int)ImageLibrary.Shortcut;
                     newShortcutNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
                     newShortcutNode.Tag = shortcut;
