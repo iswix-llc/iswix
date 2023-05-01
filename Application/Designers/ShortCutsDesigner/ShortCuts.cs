@@ -27,7 +27,7 @@ namespace ShortCutsDesigner
         private const string MrfHashStringPrefix = "MergeRedirectFolder\\";
         IsWiXShortCuts _shortcuts;
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
-
+        string _oldPath = string.Empty;
         private enum ImageLibrary
         {
             FolderOpen,
@@ -214,7 +214,7 @@ namespace ShortCutsDesigner
                         break;
                     }
                 }
-                if(!found)
+                if (!found)
                 {
                     searchNode = searchNode.Nodes.Add($"{part}");
                     searchNode.ImageIndex = (int)ImageLibrary.FolderClosed;
@@ -690,7 +690,7 @@ namespace ShortCutsDesigner
                 if (node.Text.StartsWith("New Folder"))
                 {
                     folderNames.Add(node.Text);
-                } 
+                }
             }
             var newFolderName = "New Folder";
             if (folderNames.Count() > 0)
@@ -728,7 +728,7 @@ namespace ShortCutsDesigner
             {
                 canRename = CanRenameFragmentStyle(previousName, e.Label);
             }
-            if(!canRename)
+            if (!canRename)
             {
                 CallMessageBox(String.Format("A folder with the name [{0}] already exists.", e.Node.Text), "Folder Rename Warning");
                 tvDestination.LabelEdit = true;
@@ -779,13 +779,28 @@ namespace ShortCutsDesigner
             int count = 0;
             foreach (TreeNode node in tvDestination.SelectedNode.Parent.Nodes)
             {
-                if(node.Text == newName )
+                if (node.Text == newName)
                 {
-                    count++; 
+                    count++;
                 }
             }
             if (count < 2)
             {
+                string old = _oldPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
+                string oldDirectory = old.Split("\\").First();
+                string oldSubDirectory = old.Substring(oldDirectory.Length + 1, old.Length - oldDirectory.Length -1);
+                string after = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
+                string afterDirectory = after.Split("\\").First();
+                string afterSubDirectory = after.Substring(afterDirectory.Length + 1, after.Length - afterDirectory.Length - 1);
+
+                foreach (IsWiXShortCut shortcut in _shortcuts)
+                {
+                    if (shortcut.Directory == oldDirectory && shortcut.Subdirectory.StartsWith(oldSubDirectory))
+                    {
+                        string subString = shortcut.Subdirectory.Substring(oldSubDirectory.Length , shortcut.Subdirectory.Length - oldSubDirectory.Length);
+                        shortcut.Subdirectory = afterSubDirectory + subString;
+                    }
+                }
                 return true;
             }
             else
@@ -1082,12 +1097,12 @@ namespace ShortCutsDesigner
             DialogResult dr = picker.ShowDialog();
             if (dr != DialogResult.Cancel)
             {
-                if (!string.IsNullOrEmpty(picker.FileKey) || picker.FileElement != null )
+                if (!string.IsNullOrEmpty(picker.FileKey) || picker.FileElement != null)
                 {
                     string scDirectory = string.Empty;
                     string scSubdirectory = string.Empty;
 
-                    if(_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+                    if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
                     {
                         scDirectory = tvDestination.SelectedNode.Tag as string;
                     }
@@ -1095,7 +1110,7 @@ namespace ShortCutsDesigner
                     {
                         string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
                         scDirectory = fullPath.Split("\\").First();
-                        scSubdirectory = fullPath.Substring(scDirectory.Length+1, fullPath.Length - scDirectory.Length-1);
+                        scSubdirectory = fullPath.Substring(scDirectory.Length + 1, fullPath.Length - scDirectory.Length - 1);
                     }
 
                     string prefix = picker.FileName;
@@ -1217,5 +1232,9 @@ namespace ShortCutsDesigner
             return string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath);
         }
 
+        private void tvDestination_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            _oldPath = tvDestination.SelectedNode.FullPath;
+        }
     }
 }
