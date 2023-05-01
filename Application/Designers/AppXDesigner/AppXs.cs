@@ -76,7 +76,7 @@ namespace AppXDesigner
             }
         }
 
-        private  void LoadDocument()
+        private void LoadDocument()
         {
             panelTop.Height = 0;
             _isWiXFGAppXs = new IsWiXFGAppXs(_documentManager.Document);
@@ -194,7 +194,7 @@ namespace AppXDesigner
             IsWiXFGAppX isWiXFGAppX = treeViewAppXs.SelectedNode.Tag as IsWiXFGAppX;
             isWiXFGAppX.Delete();
             treeViewAppXs.SelectedNode.Remove();
-            if(treeViewAppXs.Nodes.Count>0)
+            if (treeViewAppXs.Nodes.Count > 0)
             {
                 treeViewAppXs.SelectedNode = treeViewAppXs.Nodes[0];
             }
@@ -205,7 +205,7 @@ namespace AppXDesigner
                 propertyGrid1.SelectedObject = appX1;
             }
 
-            if(treeViewAppXs.Nodes.Count == 0)
+            if (treeViewAppXs.Nodes.Count == 0)
             {
                 contextMenuStripAppX.Items["toolStripMenuItemRename"].Enabled = false;
                 contextMenuStripAppX.Items["toolStripMenuItemDelete"].Enabled = false;
