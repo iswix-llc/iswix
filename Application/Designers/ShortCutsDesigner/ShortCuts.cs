@@ -151,7 +151,6 @@ namespace ShortCutsDesigner
             {
                 if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
                 {
-
                     var firstDirectory = _documentManager.Document.Descendants(WixNamespace + "Directory").First();
                     AddDirectoryNodesToDestination(firstDirectory, null);
                 }
@@ -176,21 +175,50 @@ namespace ShortCutsDesigner
 
         private void AddFirstLevelFolder(TreeNode treeNode, string folderName)
         {
-            TreeNode newNode = treeNode.Nodes.Add($"[{folderName}]");
-            newNode.ImageIndex = (int)ImageLibrary.BlueFolderClosed;
-            newNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
+            TreeNode directoryNode = treeNode.Nodes.Add($"[{folderName}]");
+            directoryNode.ImageIndex = (int)ImageLibrary.BlueFolderClosed;
+            directoryNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
             foreach (var shortcut in _shortcuts)
             {
                 if (shortcut.Directory == folderName)
                 {
-                    var newShortcutNode = newNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                    if (!string.IsNullOrEmpty(shortcut.Subdirectory))
+                    {
+                        directoryNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
+                    }
+                    var newShortcutNode = directoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
                     newShortcutNode.ImageIndex = (int)ImageLibrary.Shortcut;
                     newShortcutNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
                     newShortcutNode.Tag = shortcut;
                 }
             }
-
         }
+
+        private TreeNode GetOrCreateTreeNode(TreeNode directoryNode, string path)
+        {
+            TreeNode searchNode = directoryNode;
+            foreach (var part in path.Split("\\"))
+            {
+                bool found = false;
+                foreach (TreeNode subNode in searchNode.Nodes)
+                {
+                    if (subNode.Text == part)
+                    {
+                        searchNode = subNode;
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found)
+                {
+                    searchNode = searchNode.Nodes.Add($"{part}");
+                    searchNode.ImageIndex = (int)ImageLibrary.FolderClosed;
+                    searchNode.SelectedImageIndex = (int)ImageLibrary.FolderOpen;
+                }
+            }
+            return searchNode;
+        }
+
         private void AddDirectoryNodesToDestination(XElement element, TreeNode treeNode)
         {
             if (treeNode == null)
