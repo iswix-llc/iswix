@@ -650,6 +650,10 @@ namespace ShortCutsDesigner
             {
                 AddNodeToDestinationTree();
             }
+            else
+            {
+                AddNodeToDestinationTreeFragmentStyle();
+            }
         }
 
         private void AddNodeToDestinationTree()
@@ -672,6 +676,31 @@ namespace ShortCutsDesigner
             tvDestination.SelectedNode.BeginEdit();
         }
 
+        private void AddNodeToDestinationTreeFragmentStyle()
+        {
+            // Check for existance of directories that contain the text 'New Folder'
+            List<string> folderNames = new List<string>();
+            foreach (TreeNode node in tvDestination.SelectedNode.Nodes)
+            {
+                if (node.Text.StartsWith("New Folder"))
+                {
+                    folderNames.Add(node.Text);
+                } 
+            }
+            var newFolderName = "New Folder";
+            if (folderNames.Count() > 0)
+            {
+                newFolderName += String.Format(" ({0})", folderNames.Count());
+            }
+            //create a node
+            var nodeToEdit = tvDestination.SelectedNode.Nodes.Add(newFolderName, newFolderName);
+            nodeToEdit.Tag = newFolderName;
+            tvDestination.SelectedNode = nodeToEdit;
+            tvDestination.LabelEdit = true;
+            tvDestination.SelectedNode.BeginEdit();
+        }
+
+
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             tvDestination.LabelEdit = false;
@@ -685,19 +714,41 @@ namespace ShortCutsDesigner
                 e.Node.Text = e.Label;
             }
 
+            bool canRename = true;
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            {
+                canRename = CanRename(previousName, e.Label);
+            }
+            else
+            {
+                canRename = CanRenameFragmentStyle(previousName, e.Label);
+            }
+            if(!canRename)
+            {
+                CallMessageBox(String.Format("A folder with the name [{0}] already exists.", e.Node.Text), "Folder Rename Warning");
+                tvDestination.LabelEdit = true;
+                tvDestination.SelectedNode.BeginEdit();
+                e.CancelEdit = true;
+            }
+
+        }
+
+        private bool CanRename(string previousName, string newName)
+        {
+            bool canRename = true;
             // determine if the node with the previous name exists 
-            var directoryElement = FindDirectoryElement(previousName, e.Node.Tag.ToString());
+            var directoryElement = FindDirectoryElement(previousName, newName);
             if (directoryElement != null)
             {
                 // find out if a node with the new label exists within document
                 string nodePath = tvDestination.SelectedNode.FullPath;
                 string newDirectoryPath = CreateDirectoryStringForHash(nodePath);
                 var directoryId = "scd" + GetMd5Hash(newDirectoryPath);
-                var directoryElementWithSameNameAsLabel = FindDirectoryElement(e.Label, directoryId);
+                var directoryElementWithSameNameAsLabel = FindDirectoryElement(newName, directoryId);
                 if (directoryElementWithSameNameAsLabel == null)
                 {
                     // rename the node
-                    directoryElement.Attribute("Name").Value = e.Node.Text;
+                    directoryElement.Attribute("Name").Value = newName;
                     ReCalculateChildrenHashes(directoryElement, newDirectoryPath);
                     // set the selected node's tag to the new directory id
                     // so that we can find it again after we load the document
@@ -707,16 +758,34 @@ namespace ShortCutsDesigner
                 }
                 else
                 {
-                    CallMessageBox(String.Format("A folder with the name [{0}] already exists.", e.Node.Text), "Folder Rename Warning");
-                    tvDestination.LabelEdit = true;
-                    tvDestination.SelectedNode.BeginEdit();
+                    canRename = false;
                 }
             }
             else
             {
                 // need to take information from node and create directory in XML
-                AddDirectoryToDestination(e.Node.Parent, e.Node);
-                e.CancelEdit = true;
+                AddDirectoryToDestination(tvDestination.SelectedNode.Parent, tvDestination.SelectedNode);
+            }
+            return canRename;
+        }
+
+        private bool CanRenameFragmentStyle(string previousName, string newName)
+        {
+            int count = 0;
+            foreach (TreeNode node in tvDestination.SelectedNode.Parent.Nodes)
+            {
+                if(node.Text == newName )
+                {
+                    count++; 
+                }
+            }
+            if (count < 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private static string CreateDirectoryStringForHash(string path, string newDirectory)
@@ -879,6 +948,10 @@ namespace ShortCutsDesigner
             if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
             {
                 AddNodeToDestinationTree();
+            }
+            else
+            {
+                AddNodeToDestinationTreeFragmentStyle();
             }
         }
 
