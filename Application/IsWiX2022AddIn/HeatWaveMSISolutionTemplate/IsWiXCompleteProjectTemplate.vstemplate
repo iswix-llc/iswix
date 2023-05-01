@@ -2,7 +2,7 @@
 	<TemplateData>
 		<Name>IsWiX MSI Solution (WiX v4)</Name>
 		<TemplateID>IsWiX.InstallerProject</TemplateID>
-		<Description>A multiproject (.MSI/.MSM) solution accelerator for creating an IsWiX / Windows Installer XML v4 based MSI.</Description>
+		<Description>A multiproject (.MSI/.MSM / .LIB) solution accelerator for creating an IsWiX / Windows Installer XML v4 based MSI.</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>20</SortOrder>
@@ -20,7 +20,7 @@
 	</WizardExtension>
 	<WizardData>
 		<Settings>
-			<MappedProjectTemplate name="$projectname$MM" path="$projectname$MM" template="MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+			<MappedProjectTemplate name="$projectname$Lib" path="$projectname$Lib" template="LibraryProjectTemplate\IsWiXLibraryProjectTemplate.vstemplate" />
 			<MappedProjectTemplate name="$projectname$" path="$projectname$" template="SetupProjectTemplate\IsWixProject.vstemplate" />
 		</Settings>
 	</WizardData>

@@ -49,7 +49,8 @@ namespace ServicesDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module ||
+                (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment))
             {
                 return true;
             }
@@ -177,9 +178,8 @@ namespace ServicesDesigner
             DialogResult dr = picker.ShowDialog();
             if (dr != DialogResult.Cancel)
             {
-                string fileKey = picker.FileKey;
 
-                if (!string.IsNullOrEmpty(fileKey))
+                if (!string.IsNullOrEmpty(picker.FileKey) || picker.FileElement != null)
                 {
                     string prefix = picker.FileName;
                     int index = 0;
@@ -220,16 +220,16 @@ namespace ServicesDesigner
 
                             }
 
-                            IsWiXService service = _services.Create(name, fileKey);
+                            IsWiXService service = _services.Create(name, picker.FileKey, picker.FileElement);
                             AddServiceNode(service);
                             added = true;
                         }
                     }
                     while (added == false);
+
                 }
             }
         }
-
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IsWiXService service = treeViewServices.SelectedNode.Tag as IsWiXService;

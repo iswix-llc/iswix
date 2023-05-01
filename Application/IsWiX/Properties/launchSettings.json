@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "IsWiX": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\GitHub\\TestApp\\Installer\\TestAppLib\\TestAppLib.wxs"
+    }
+  }
+}

@@ -25,7 +25,7 @@ namespace IsWiXAutomationInterface
 
             try
             {
-                foreach (var serviceInstallElement in _documentManager.Document.GetSecondOrderRoot().Descendants(ns + "ServiceInstall"))
+                foreach (var serviceInstallElement in _documentManager.Document.Descendants(ns + "ServiceInstall"))
                 {
                     IsWiXServiceInstall isWiXServiceInstall = new IsWiXServiceInstall(_documentManager.Document, serviceInstallElement);
 
@@ -63,8 +63,9 @@ namespace IsWiXAutomationInterface
                     if(file.Attribute("Source").Value.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
                     {
                         ServiceCandidate sc = new ServiceCandidate();
-                        sc.Id = file.Attribute("Id").Value;
+                        sc.Id = file.GetOptionalAttribute("Id");
                         sc.DestinationFilePath = file.GetDestinationFilePath();
+                        sc.FileElement = file;
                         sc.FileName = Path.GetFileNameWithoutExtension(file.Attribute("Source").Value.Split('\\').Last());
                         candidates.Add(sc); 
                     }
@@ -76,7 +77,7 @@ namespace IsWiXAutomationInterface
 
 
 
-        public IsWiXService Create(string name, string fileId)
+        public IsWiXService Create(string name, string fileId, XElement fileElement = null)
         {
 
             XElement serviceInstallElement = new XElement(ns + "ServiceInstall");
@@ -88,12 +89,15 @@ namespace IsWiXAutomationInterface
             serviceInstallElement.SetAttributeValue("Start", "auto");
             serviceInstallElement.SetAttributeValue("Type", "ownProcess");
 
-            var elements = from a in _documentManager.Document.Descendants(ns + "File")
-                      where a.Attribute("Id").Value == fileId
-                      select a;
 
-            XElement fileElement = elements.First();
+            if (fileElement == null)
+            {
+                var elements = from a in _documentManager.Document.Descendants(ns + "File")
+                               where a.Attribute("Id").Value == fileId
+                               select a;
 
+                fileElement = elements.First();
+            }
             fileElement.AddAfterSelf(serviceInstallElement);
 
             XElement serviceControlElement = new XElement(ns + "ServiceControl");
@@ -128,6 +132,7 @@ namespace IsWiXAutomationInterface
         public string Id { get; set; }
         public string FileName { get; set; }
         public string DestinationFilePath { get; set; }
+        public XElement FileElement { get; set; }
     }
 
     public class IsWiXServiceInstall

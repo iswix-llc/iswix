@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net7.0-windows</TargetFramework>
+	  <ImplicitUsings>disable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <UseWPF>true</UseWPF>
+	  <UseWindowsForms>true</UseWindowsForms>
+	  <Private>false</Private>
+	  <EnableDynamicLoading>true</EnableDynamicLoading>
+	  <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="FilesAndFolders.ico" />
+    <None Remove="License.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="FilesAndFolders.ico" />
+    <EmbeddedResource Include="License.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)&#xD;&#xA;" />
+  </Target>
+
+</Project>

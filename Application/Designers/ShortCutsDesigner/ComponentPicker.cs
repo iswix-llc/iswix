@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using FireworksFramework.Interfaces;
-using FireworksFramework.Managers;
+﻿using System.Windows.Forms;
+using System.Xml.Linq;
 using IsWiXAutomationInterface;
 
 namespace ShortCutsDesigner
@@ -16,7 +8,16 @@ namespace ShortCutsDesigner
     {
         string _fileKey = string.Empty;
         string _fileName = string.Empty;
+        XElement _fileElement = null;
         IsWiXShortCuts _shortCuts;
+
+        public XElement FileElement
+        {
+            get
+            {
+                return _fileElement; 
+            }
+        }
 
         public string FileKey  
         { 
@@ -64,6 +65,7 @@ namespace ShortCutsDesigner
             ShortCutCandidate scc = treeView1.SelectedNode.Tag as ShortCutCandidate;
             _fileKey = scc.FileKey;
             _fileName = scc.FileName;
+            _fileElement = scc.FileElement;
             buttonSelect.Enabled = true;
         }
 

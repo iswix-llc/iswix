@@ -1064,17 +1064,74 @@ namespace Designers.FilesAndFolders
 
             if (e.Data.GetDataPresent(typeof(TreeNode)))
             {
-                var sourceFolder = (TreeNode) e.Data.GetData(typeof (TreeNode));
-                if (!DestinationContainsFolder(tvDestination.SelectedNode, sourceFolder))
+                _documentManager.DisableChangeWatcher();
+                if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
                 {
-                    AddAllDirectoriesToDestination(tvDestination.SelectedNode, sourceFolder);
-                    SortData();
-                    LoadDocument();
+                    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+                    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+                    if (dropNode != null)
+                    {
+                        var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
+                        foreach (ListViewItem item in itemCollection)
+                        {
+                            if (CanBeMoved(item, dropNode))
+                            {
+                                AddItemToDocument(dropNode, item);
+                                if (e.Effect == DragDropEffects.Move)
+                                {
+                                    RemoveItemFromDocument(tvDestination.SelectedNode, item);
+                                }
+                            }
+                            //else
+                            //{
+                            //    CallMessageBox(String.Format("File [{0}] Exists in Destination", item.Text), "Drop Warning");
+                            //}
+                        }
+                        SortData();
+                        LoadDocument();
+                        DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
+                    }
+                    else
+                    {
+                        CallMessageBox("Drop the items onto a folder", "Drop Warning");
+                    }
                 }
-                else
+
+                if (e.Data.GetDataPresent(typeof(TreeNode)))
                 {
-                    CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
+                    var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+                    TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
+                    if (dropNode != null)
+                    {
+                        var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                        if (sourceFolder == tvSourceFiles.Nodes[0])
+                        {
+                            CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
+                        }
+                        else
+                        {
+                            if (!DestinationContainsFolder(dropNode, sourceFolder))
+                            {
+                                // Refresh the directory structure incase of delayed load or changes since loading
+                                sourceFolder.Nodes.Clear();
+                                PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
+                                AddAllDirectoriesToDestination(dropNode, sourceFolder);
+                                SortData();
+                                LoadDocument();
+                            }
+                            else
+                            {
+                                CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        CallMessageBox("Drop the items onto a folder", "Drop Warning");
+                    }
                 }
+                HoverNode.BackColor = Color.White;
+                HoverNode.ForeColor = Color.Black;
             }
             _documentManager.EnableChangeWatcher();
 

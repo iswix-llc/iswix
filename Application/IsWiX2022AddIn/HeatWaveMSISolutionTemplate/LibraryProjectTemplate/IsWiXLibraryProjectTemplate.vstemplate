@@ -1,24 +1,23 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
 	<TemplateData>
-		<Name>IsWiX Merge Module Project (WiX v4)</Name>
-		<TemplateID>IsWiX.InstalerMSMProject</TemplateID>
-		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based MSM file</Description>
+		<Name>IsWiX Library Project (WiX v4)</Name>
+		<TemplateID>IsWiX.MSIWixLibProject</TemplateID>
+		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based wixlib file</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>42</SortOrder>
 		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
 		<CreateNewFolder>true</CreateNewFolder>
 		<CreateInPlace>true</CreateInPlace>
-		<DefaultName>MergeModule</DefaultName>
+		<DefaultName>Library</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
 		<ProjectTypeTag>HeatWave</ProjectTypeTag>
 		<LanguageTag>WiX</LanguageTag>
 	</TemplateData>
 	<TemplateContent PreferedSolutionConfiguration="Debug|x86">
-		<Project File="IsWiXMergeModule.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$.wxs">IsWiXMergeModule.wxs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$safeprojectname$custom.wxs">IsWiXMergeModuleCustom.wxs</ProjectItem>
+		<Project File="IsWiXLibraryProjectTemplate.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$.wxs">IsWiXLibraryProjectTemplate.wxs</ProjectItem>
 		</Project>
 	</TemplateContent>
 </VSTemplate>
