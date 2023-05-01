@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
-    <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.31" />
   </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />

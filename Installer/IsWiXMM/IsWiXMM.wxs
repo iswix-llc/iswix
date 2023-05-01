@@ -123,6 +123,9 @@
         <Component Id="owc79156F385239CEA4DEA3C87C1DA3E1D8" Guid="68380c80-6708-5eb6-415d-10e278417679">
           <File Id="owf79156F385239CEA4DEA3C87C1DA3E1D8" Source="$(var.SourceDir)\netstandard.dll" KeyPath="yes" />
         </Component>
+        <Component Id="owc3F368CE0F6813CC121A11E9340993FDD" Guid="2774e91b-5a0c-f544-a003-441a878e6f2e">
+          <File Id="owf3F368CE0F6813CC121A11E9340993FDD" Source="$(var.SourceDir)\NewFilesAndFoldersDesigner.dll" KeyPath="yes" />
+        </Component>
         <Component Id="owc65C378EF6FBA286713783F18452D2BE5" Guid="898ed534-8d01-2ac2-89dd-51fb38ae92b7">
           <File Id="owf65C378EF6FBA286713783F18452D2BE5" Source="$(var.SourceDir)\PenImc_cor3.dll" KeyPath="yes" />
         </Component>
@@ -840,8 +843,6 @@
         <Directory Id="owd12A58CC26E75581DB42F31C9D7B4C6D5" Name="Templates">
           <Directory Id="owdC2ADFF212487B37074CE0553E0161995" Name="WiX">
             <Component Id="owcC2ADFF212487B37074CE0553E0161995" Guid="13f6be16-0de4-48dd-8416-d7532961ee9a" KeyPath="yes">
-              <File Id="owfCAB721F9EE73932435FC38DAA67FB96D" Source="$(var.SourceDir)\Templates\WiX\Fragment.wxs" />
-              <File Id="owfA7E3F21C77DC55A6F2523C5EBC424A3A" Source="$(var.SourceDir)\Templates\WiX\MergeModule.wxs" />
               <File Id="owf617B8C9A52D600F15DD6973F9D4FB18D" Source="$(var.SourceDir)\Templates\WiX\Product.wxs" />
             </Component>
           </Directory>

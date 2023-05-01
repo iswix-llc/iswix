@@ -31,6 +31,15 @@ namespace IsWiXAutomationInterface
             }
             return value;
         }
+        public static string GetOptionalSubElementAttribute(this XElement element, XNamespace nameSpace, string elementName, string attributeName)
+        {
+            string value = string.Empty;
+            if(element.Elements(nameSpace + elementName).Any())
+            {
+                value = element.Elements(nameSpace + elementName).FirstOrDefault().Attribute(attributeName).Value;
+            }
+            return value;
+        }
 
         public static bool GetOptionalYesNoAttribute(this XElement Element, string AttributeName, bool DefaultValue)
         {
@@ -176,22 +185,31 @@ namespace IsWiXAutomationInterface
 
         public static string GetDestinationFilePath(this XElement file)
         {
-            char[] delimiter = {'\\'};
-            string filePath = file.Attribute("Source").Value.Split(delimiter).Last();
-            XNamespace ns = file.Name.Namespace;
-
-            foreach (var ancestor in file.Ancestors(ns+"Directory"))
+            if(!String.IsNullOrEmpty(file.GetOptionalAttribute("Id")))
             {
-                string directoryName = GetParentDirectoryName(ancestor);
-                if(!string.IsNullOrEmpty(directoryName))
-                {
-                    filePath = Path.Combine(directoryName + filePath);
-                }
-            }
+                char[] delimiter = { '\\' };
+                string filePath = file.Attribute("Source").Value.Split(delimiter).Last();
+                XNamespace ns = file.Name.Namespace;
 
-            int firstSlashLocation = filePath.IndexOf('\\');
-            string almostDone = "[" + filePath.Insert(firstSlashLocation, "]");
-            return almostDone.Replace("]\\", "]");
+                foreach (var ancestor in file.Ancestors(ns + "Directory"))
+                {
+                    string directoryName = GetParentDirectoryName(ancestor);
+                    if (!string.IsNullOrEmpty(directoryName))
+                    {
+                        filePath = Path.Combine(directoryName + filePath);
+                    }
+                }
+
+                int firstSlashLocation = filePath.IndexOf('\\');
+                string almostDone = "[" + filePath.Insert(firstSlashLocation, "]");
+                return almostDone.Replace("]\\", "]");
+            }
+            else
+            {
+                char[] delimiter = { '\\' };
+                string filePath = file.Attribute("Source").Value.Split(delimiter).Last();
+                return "[" + file.Parent.Attribute("Directory").Value + "]" + Path.Combine(file.Parent.GetOptionalAttribute("Subdirectory"), filePath);
+            }
 
         }
 

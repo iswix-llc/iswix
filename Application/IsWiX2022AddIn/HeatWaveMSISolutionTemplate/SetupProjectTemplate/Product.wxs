@@ -11,15 +11,23 @@
     <MediaTemplate EmbedCab="yes" />
     <!-- Major Upgrade Rule to disallow downgrades -->
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-    <!--Common Launch Condition-->
-    <!-- Examples at http://wixtoolset.org/documentation/manual/v3/customactions/wixnetfxextension.html -->
-    <PropertyRef Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" />
-    <Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="[ProductName] requires .NET Framework 4.8 or later." />
+    <!-- Launch Condition Examples at http://wixtoolset.org/documentation/manual/v3/customactions/wixnetfxextension.html -->
+    <!-- Uncomment below two lines to require .NET 4.8 or Later to install -->
+    <!-- <PropertyRef Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" /> -->
+    <!-- <Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="[ProductName] requires .NET Framework 4.8 or later." /> -->
     <!-- Include User Interface Experience -->
     <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
     <UIRef Id="UI"/>
-    <!-- Include Features and Directories Fragment -->
-    <DirectoryRef Id="INSTALLLOCATION"/>
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="CompanyFolder" Name="My Company">
+        <Directory Id="INSTALLLOCATION" Name="$safeprojectname$"/>
+      </Directory>
+    </StandardDirectory>
+    <Feature Id="$safeprojectname$" Title="$safeprojectname$" Description="Installs all the files needed for $safeprojectname$" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentGroupRef Id="$safeprojectname$Lib"/>
+      <!-- Uncomment the below line to pull in IIS Metadata.  Otherwise delete if not needed -->
+      <!--<ComponentGroupRef Id="webSite" />-->
+    </Feature>
   </Package>
 </Wix>

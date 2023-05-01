@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FireworksFrameworkCore" Version="5.1.25" />
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.31" />
   </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />

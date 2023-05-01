@@ -27,7 +27,6 @@
     <PackageReference Include="WixToolset.Netfx.wixext" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Code" />
     <Folder Include="Resources" />
   </ItemGroup>
   <ItemGroup>

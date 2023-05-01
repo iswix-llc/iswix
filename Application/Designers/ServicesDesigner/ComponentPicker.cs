@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
@@ -17,6 +18,16 @@ namespace ServicesDesigner
         string _fileKey = string.Empty;
         IsWiXServices _services;
         string _fileName = string.Empty;
+        XElement _fileElement = null;
+
+        public XElement FileElement
+        {
+            get
+            {
+                return _fileElement;
+            }
+        }
+
 
         public string FileKey  
         { 
@@ -67,7 +78,7 @@ namespace ServicesDesigner
             ServiceCandidate sc=treeView1.SelectedNode.Tag as ServiceCandidate;
             _fileKey = sc.Id;
             _fileName = sc.FileName;
-
+            _fileElement = sc.FileElement;
             buttonSelect.Enabled=true;
         }
 

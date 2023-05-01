@@ -20,7 +20,7 @@
 	</WizardExtension>
 	<WizardData>
 		<Settings>
-			<MappedProjectTemplate name="$projectname$MM" path="$projectname$MM" template="MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+			<MappedProjectTemplate name="$projectname$Lib" path="$projectname$Lib" template="LibraryProjectTemplate\IsWiXLibraryProjectTemplate.vstemplate" />
 			<MappedProjectTemplate name="$projectname$Setup" path="$projectname$Setup" template="SetupProjectTemplate\IsWixProject.vstemplate" />
 			<MappedProjectTemplate name="$projectname$Bootstrapper" path="$projectname$Bootstrapper" template="BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
 		</Settings>
