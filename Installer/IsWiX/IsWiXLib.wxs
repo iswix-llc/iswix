@@ -75,7 +75,7 @@
         <File Source="$(var.SourceDir)\IsWiX.exe" KeyPath="yes">
           <Shortcut Id="sc0E92A21E0413D87C7771C95CAE9C788F" Name="IsWiX" Directory="ProgramMenuFolder" Subdirectory="IsWiX" />
         </File>
-        <RegistryValue Id="IsWiXLocation" Action="write" Root="HKLM" Type="string" Key="SOFTWARE\ISWIXLLC\IsWiX" Name="IsWiXFilePath" Value="[#owf86703B2304B821A42054FD71F23A59DC]" />
+        <RegistryValue Id="IsWiXLocation" Action="write" Root="HKLM" Type="string" Key="SOFTWARE\ISWIXLLC\IsWiX" Name="IsWiXFilePath" Value="[INSTALLLOCATION]IsWiX.exe" />
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\IsWiX.ico" KeyPath="yes" />
