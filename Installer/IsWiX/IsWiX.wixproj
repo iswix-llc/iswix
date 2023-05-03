@@ -33,10 +33,6 @@
     <Content Include="Resources\EULA.rtf" />
     <Content Include="Resources\Icon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IsWiX2022AddInLib\IsWiX2022AddInLib.wixproj" />
-    <ProjectReference Include="..\IsWiXLib\IsWiXLib.wixproj" />
-  </ItemGroup>
   <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.0" />
   <PropertyGroup>
     <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
