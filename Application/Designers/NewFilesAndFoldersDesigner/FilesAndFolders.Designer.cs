@@ -138,7 +138,7 @@
             // scSourceFiles
             // 
             scSourceFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            scSourceFiles.Location = new System.Drawing.Point(3, 19);
+            scSourceFiles.Location = new System.Drawing.Point(3, 27);
             scSourceFiles.Name = "scSourceFiles";
             // 
             // scSourceFiles.Panel1
@@ -148,7 +148,7 @@
             // scSourceFiles.Panel2
             // 
             scSourceFiles.Panel2.Controls.Add(lvSourceFiles);
-            scSourceFiles.Size = new System.Drawing.Size(1194, 342);
+            scSourceFiles.Size = new System.Drawing.Size(1194, 334);
             scSourceFiles.SplitterDistance = 263;
             scSourceFiles.TabIndex = 0;
             // 
@@ -160,7 +160,7 @@
             tvSourceFiles.Location = new System.Drawing.Point(0, 0);
             tvSourceFiles.Name = "tvSourceFiles";
             tvSourceFiles.SelectedImageIndex = 0;
-            tvSourceFiles.Size = new System.Drawing.Size(263, 342);
+            tvSourceFiles.Size = new System.Drawing.Size(263, 334);
             tvSourceFiles.TabIndex = 0;
             tvSourceFiles.BeforeExpand += tvSourceFiles_BeforeExpand;
             tvSourceFiles.ItemDrag += tvSourceFiles_ItemDrag;
@@ -191,12 +191,13 @@
             lvSourceFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             lvSourceFiles.Location = new System.Drawing.Point(0, 0);
             lvSourceFiles.Name = "lvSourceFiles";
-            lvSourceFiles.Size = new System.Drawing.Size(927, 342);
+            lvSourceFiles.Size = new System.Drawing.Size(927, 334);
             lvSourceFiles.SmallImageList = imageListFileIcons;
             lvSourceFiles.Sorting = System.Windows.Forms.SortOrder.Ascending;
             lvSourceFiles.TabIndex = 0;
             lvSourceFiles.UseCompatibleStateImageBehavior = false;
             lvSourceFiles.View = System.Windows.Forms.View.Details;
+            lvSourceFiles.ColumnClick += lvSourceFiles_ColumnClick_1;
             lvSourceFiles.ItemDrag += lvSourceFiles_ItemDrag;
             lvSourceFiles.KeyDown += lvSourceFiles_KeyDown;
             // 
@@ -248,7 +249,7 @@
             // scDestination
             // 
             scDestination.Dock = System.Windows.Forms.DockStyle.Fill;
-            scDestination.Location = new System.Drawing.Point(3, 19);
+            scDestination.Location = new System.Drawing.Point(3, 27);
             scDestination.Name = "scDestination";
             // 
             // scDestination.Panel1
@@ -258,7 +259,7 @@
             // scDestination.Panel2
             // 
             scDestination.Panel2.Controls.Add(lvDestination);
-            scDestination.Size = new System.Drawing.Size(1194, 276);
+            scDestination.Size = new System.Drawing.Size(1194, 268);
             scDestination.SplitterDistance = 264;
             scDestination.TabIndex = 0;
             // 
@@ -273,7 +274,7 @@
             tvDestination.Location = new System.Drawing.Point(0, 0);
             tvDestination.Name = "tvDestination";
             tvDestination.SelectedImageIndex = 0;
-            tvDestination.Size = new System.Drawing.Size(264, 276);
+            tvDestination.Size = new System.Drawing.Size(264, 268);
             tvDestination.TabIndex = 0;
             tvDestination.AfterLabelEdit += tvDestination_AfterLabelEdit;
             tvDestination.AfterSelect += tvDestination_AfterSelect;
@@ -290,12 +291,13 @@
             lvDestination.Dock = System.Windows.Forms.DockStyle.Fill;
             lvDestination.Location = new System.Drawing.Point(0, 0);
             lvDestination.Name = "lvDestination";
-            lvDestination.Size = new System.Drawing.Size(926, 276);
+            lvDestination.Size = new System.Drawing.Size(926, 268);
             lvDestination.SmallImageList = imageListFileIconsDst;
             lvDestination.Sorting = System.Windows.Forms.SortOrder.Ascending;
             lvDestination.TabIndex = 0;
             lvDestination.UseCompatibleStateImageBehavior = false;
             lvDestination.View = System.Windows.Forms.View.Details;
+            lvDestination.ColumnClick += lvDestination_ColumnClick;
             lvDestination.ItemDrag += lvDestination_ItemDrag;
             lvDestination.DragDrop += lvDestination_DragDrop;
             lvDestination.DragEnter += lvDestination_DragEnter;
@@ -333,14 +335,14 @@
             cmsDestinationTreeDefault.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
-            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 160);
+            cmsDestinationTreeDefault.Size = new System.Drawing.Size(301, 170);
             // 
             // createNewFolderToolStripMenuItem
             // 
             createNewFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("createNewFolderToolStripMenuItem.Image");
             createNewFolderToolStripMenuItem.Name = "createNewFolderToolStripMenuItem";
             createNewFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
+            createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
             createNewFolderToolStripMenuItem.Text = "Create New Folder";
             createNewFolderToolStripMenuItem.Click += createNewFolderToolStripMenuItem_Click;
             // 
@@ -349,7 +351,7 @@
             renameFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("renameFolderToolStripMenuItem.Image");
             renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
             renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            renameFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
+            renameFolderToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
             renameFolderToolStripMenuItem.Text = "Rename Folder";
             renameFolderToolStripMenuItem.Click += renameFolderToolStripMenuItem_Click;
             // 
@@ -358,20 +360,20 @@
             deleteToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("deleteToolStripMenuItem.Image");
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            deleteToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
+            deleteToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
             deleteToolStripMenuItem.Text = "Remove From Project";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(217, 6);
+            toolStripSeparator1.Size = new System.Drawing.Size(297, 6);
             // 
             // expandAllToolStripMenuItem1
             // 
             expandAllToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem1.Image");
             expandAllToolStripMenuItem1.Name = "expandAllToolStripMenuItem1";
-            expandAllToolStripMenuItem1.Size = new System.Drawing.Size(220, 30);
+            expandAllToolStripMenuItem1.Size = new System.Drawing.Size(300, 32);
             expandAllToolStripMenuItem1.Text = "Expand All";
             expandAllToolStripMenuItem1.Click += expandAllToolStripMenuItem1_Click;
             // 
@@ -379,7 +381,7 @@
             // 
             collapseAllToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("collapseAllToolStripMenuItem.Image");
             collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
-            collapseAllToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
+            collapseAllToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
             collapseAllToolStripMenuItem.Text = "Collapse All";
             collapseAllToolStripMenuItem.Click += collapseAllToolStripMenuItem_Click;
             // 
@@ -388,26 +390,26 @@
             cmsINSTALLLOCATION.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsINSTALLLOCATION.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem1, toolStripSeparator2, expandAllToolStripMenuItem });
             cmsINSTALLLOCATION.Name = "cmsINSTALLLOCATION";
-            cmsINSTALLLOCATION.Size = new System.Drawing.Size(202, 70);
+            cmsINSTALLLOCATION.Size = new System.Drawing.Size(273, 74);
             // 
             // createNewFolderToolStripMenuItem1
             // 
             createNewFolderToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("createNewFolderToolStripMenuItem1.Image");
             createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(201, 30);
+            createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(272, 32);
             createNewFolderToolStripMenuItem1.Text = "Create New Folder";
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
+            toolStripSeparator2.Size = new System.Drawing.Size(269, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             expandAllToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem.Image");
             expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            expandAllToolStripMenuItem.Size = new System.Drawing.Size(201, 30);
+            expandAllToolStripMenuItem.Size = new System.Drawing.Size(272, 32);
             expandAllToolStripMenuItem.Text = "Expand All";
             // 
             // cmsSourceTree
@@ -415,14 +417,14 @@
             cmsSourceTree.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsSourceTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { refreshSourceFilesToolStripMenuItem });
             cmsSourceTree.Name = "cmsSourceTree";
-            cmsSourceTree.Size = new System.Drawing.Size(141, 34);
+            cmsSourceTree.Size = new System.Drawing.Size(182, 36);
             // 
             // refreshSourceFilesToolStripMenuItem
             // 
             refreshSourceFilesToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("refreshSourceFilesToolStripMenuItem.Image");
             refreshSourceFilesToolStripMenuItem.Name = "refreshSourceFilesToolStripMenuItem";
             refreshSourceFilesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            refreshSourceFilesToolStripMenuItem.Size = new System.Drawing.Size(140, 30);
+            refreshSourceFilesToolStripMenuItem.Size = new System.Drawing.Size(181, 32);
             refreshSourceFilesToolStripMenuItem.Text = "Refresh";
             refreshSourceFilesToolStripMenuItem.Click += refreshSourceFilesToolStripMenuItem_Click;
             // 
@@ -431,14 +433,14 @@
             cmsSourceFiles.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsSourceFiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { refreshToolStripMenuItem });
             cmsSourceFiles.Name = "cmsSourceFiles";
-            cmsSourceFiles.Size = new System.Drawing.Size(141, 34);
+            cmsSourceFiles.Size = new System.Drawing.Size(182, 36);
             // 
             // refreshToolStripMenuItem
             // 
             refreshToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("refreshToolStripMenuItem.Image");
             refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
             refreshToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            refreshToolStripMenuItem.Size = new System.Drawing.Size(140, 30);
+            refreshToolStripMenuItem.Size = new System.Drawing.Size(181, 32);
             refreshToolStripMenuItem.Text = "Refresh";
             refreshToolStripMenuItem.Click += refreshToolStripMenuItem_Click;
             // 
@@ -447,14 +449,14 @@
             cmsDestinationFiles.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationFiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { removeFileFromProjectToolStripMenuItem });
             cmsDestinationFiles.Name = "cmsDestinationFiles";
-            cmsDestinationFiles.Size = new System.Drawing.Size(221, 34);
+            cmsDestinationFiles.Size = new System.Drawing.Size(301, 36);
             // 
             // removeFileFromProjectToolStripMenuItem
             // 
             removeFileFromProjectToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("removeFileFromProjectToolStripMenuItem.Image");
             removeFileFromProjectToolStripMenuItem.Name = "removeFileFromProjectToolStripMenuItem";
             removeFileFromProjectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            removeFileFromProjectToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
+            removeFileFromProjectToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
             removeFileFromProjectToolStripMenuItem.Text = "Remove From Project";
             removeFileFromProjectToolStripMenuItem.Click += removeFileFromProjectToolStripMenuItem_Click;
             // 
@@ -463,13 +465,13 @@
             cmsDestinationRoot.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { expandAllToolStripMenuItem2, collapseAllToolStripMenuItem1, toolStripSeparator3 });
             cmsDestinationRoot.Name = "cmsDestinationRoot";
-            cmsDestinationRoot.Size = new System.Drawing.Size(145, 70);
+            cmsDestinationRoot.Size = new System.Drawing.Size(185, 74);
             // 
             // expandAllToolStripMenuItem2
             // 
             expandAllToolStripMenuItem2.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem2.Image");
             expandAllToolStripMenuItem2.Name = "expandAllToolStripMenuItem2";
-            expandAllToolStripMenuItem2.Size = new System.Drawing.Size(144, 30);
+            expandAllToolStripMenuItem2.Size = new System.Drawing.Size(184, 32);
             expandAllToolStripMenuItem2.Text = "Expand All";
             expandAllToolStripMenuItem2.Click += expandAllToolStripMenuItem2_Click;
             // 
@@ -477,14 +479,14 @@
             // 
             collapseAllToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("collapseAllToolStripMenuItem1.Image");
             collapseAllToolStripMenuItem1.Name = "collapseAllToolStripMenuItem1";
-            collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(144, 30);
+            collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(184, 32);
             collapseAllToolStripMenuItem1.Text = "Collapse All";
             collapseAllToolStripMenuItem1.Click += collapseAllToolStripMenuItem1_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
+            toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
             // 
             // splitContainer1
             // 
@@ -514,7 +516,7 @@
             // 
             textBoxExcludeFilter.Location = new System.Drawing.Point(313, -1);
             textBoxExcludeFilter.Name = "textBoxExcludeFilter";
-            textBoxExcludeFilter.Size = new System.Drawing.Size(158, 23);
+            textBoxExcludeFilter.Size = new System.Drawing.Size(158, 31);
             textBoxExcludeFilter.TabIndex = 7;
             textBoxExcludeFilter.KeyDown += textBoxExcludeFilter_KeyDown;
             // 
@@ -523,7 +525,7 @@
             labelExcludeFilter.AutoSize = true;
             labelExcludeFilter.Location = new System.Drawing.Point(238, 2);
             labelExcludeFilter.Name = "labelExcludeFilter";
-            labelExcludeFilter.Size = new System.Drawing.Size(51, 15);
+            labelExcludeFilter.Size = new System.Drawing.Size(75, 25);
             labelExcludeFilter.TabIndex = 6;
             labelExcludeFilter.Text = "Exclude:";
             // 
@@ -532,7 +534,7 @@
             labelIncludeFilter.AutoSize = true;
             labelIncludeFilter.Location = new System.Drawing.Point(3, 2);
             labelIncludeFilter.Name = "labelIncludeFilter";
-            labelIncludeFilter.Size = new System.Drawing.Size(49, 15);
+            labelIncludeFilter.Size = new System.Drawing.Size(73, 25);
             labelIncludeFilter.TabIndex = 4;
             labelIncludeFilter.Text = "Include:";
             // 
@@ -540,7 +542,7 @@
             // 
             textBoxIncludeFilter.Location = new System.Drawing.Point(74, -1);
             textBoxIncludeFilter.Name = "textBoxIncludeFilter";
-            textBoxIncludeFilter.Size = new System.Drawing.Size(158, 23);
+            textBoxIncludeFilter.Size = new System.Drawing.Size(158, 31);
             textBoxIncludeFilter.TabIndex = 3;
             textBoxIncludeFilter.KeyDown += textBoxIncludeFilter_KeyDown;
             // 
@@ -549,7 +551,7 @@
             lblComponentRules.AutoSize = true;
             lblComponentRules.Location = new System.Drawing.Point(477, 2);
             lblComponentRules.Name = "lblComponentRules";
-            lblComponentRules.Size = new System.Drawing.Size(105, 15);
+            lblComponentRules.Size = new System.Drawing.Size(158, 25);
             lblComponentRules.TabIndex = 2;
             lblComponentRules.Text = "Component Rules:";
             // 
@@ -558,7 +560,7 @@
             rbOneToOne.AutoSize = true;
             rbOneToOne.Location = new System.Drawing.Point(632, 0);
             rbOneToOne.Name = "rbOneToOne";
-            rbOneToOne.Size = new System.Drawing.Size(87, 19);
+            rbOneToOne.Size = new System.Drawing.Size(131, 29);
             rbOneToOne.TabIndex = 1;
             rbOneToOne.TabStop = true;
             rbOneToOne.Text = "One To One";
@@ -571,7 +573,7 @@
             rbOneToMany.Checked = true;
             rbOneToMany.Location = new System.Drawing.Point(762, 0);
             rbOneToMany.Name = "rbOneToMany";
-            rbOneToMany.Size = new System.Drawing.Size(95, 19);
+            rbOneToMany.Size = new System.Drawing.Size(142, 29);
             rbOneToMany.TabIndex = 0;
             rbOneToMany.TabStop = true;
             rbOneToMany.Text = "One To Many";

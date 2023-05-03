@@ -20,7 +20,7 @@ namespace Designers.NewFilesAndFolders
         {
             if (!this.Equals(formatProvider)) return null;
 
-            var fileSize = (long) arg;
+            var fileSize = (long)arg;
 
             if (fileSize < 1024) return fileSize.ToString("#,#0") + " bytes";
 
