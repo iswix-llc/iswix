@@ -185,16 +185,19 @@ namespace ShortCutsDesigner
                 {
                     if (string.IsNullOrEmpty(shortcut.Subdirectory))
                     {
-                        TreeNode newNode = parentNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                        TreeNode newNode = directoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                        newNode.ImageIndex = (int)ImageLibrary.Shortcut;
+                        newNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
+                        newNode.Tag = shortcut;
                     }
                     else
                     {
-                        parentNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
+                        directoryNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
+                        TreeNode newNode = directoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                        newNode.ImageIndex = (int)ImageLibrary.Shortcut;
+                        newNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
+                        newNode.Tag = shortcut;
                     }
-                    var newShortcutNode = parentNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
-                    newShortcutNode.ImageIndex = (int)ImageLibrary.Shortcut;
-                    newShortcutNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
-                    newShortcutNode.Tag = shortcut;
                 }
             }
         }
