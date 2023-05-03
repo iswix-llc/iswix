@@ -1109,8 +1109,10 @@ namespace ShortCutsDesigner
                     else
                     {
                         string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
-                        scDirectory = fullPath.Split("\\").First();
-                        scSubdirectory = fullPath.Substring(scDirectory.Length + 1, fullPath.Length - scDirectory.Length - 1);
+                        List<string> parts = fullPath.Split("\\").ToList();
+                        scDirectory = parts[0];
+                        parts.RemoveAt(0);
+                        scSubdirectory = string.Join(",", parts.ToArray());
                     }
 
                     string prefix = picker.FileName;
