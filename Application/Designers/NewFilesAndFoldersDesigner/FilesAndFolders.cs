@@ -65,13 +65,11 @@ namespace Designers.NewFilesAndFolders
             InitializeComponent();
 
             // create the column sorter and assign it to the correct control
-#if !DEBUG
             lvColumnSorter = new ListViewColumnSorter();
             lvSourceFiles.ListViewItemSorter = lvColumnSorter;
 
             lvDestinationColumnSorter = new ListViewColumnSorter();
             lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
-#endif
         }
 
         private void PopulateSource()
