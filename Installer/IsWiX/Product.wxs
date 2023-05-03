@@ -1,22 +1,27 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:vs="http://wixtoolset.org/schemas/v4/wxs/vs">
 	<Package Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e" InstallerVersion="301">
-		
 		<MediaTemplate EmbedCab="yes" />
-
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
-
-		<DirectoryRef Id="INSTALLLOCATION" />
-
 		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
 		<UIRef Id="UI" />
-
 		<!-- Used by AddInMM  Goes here due to merge constraints -->
 		<vs:FindVisualStudio />
 		<PropertyRef Id="VS2022_EXTENSIONS_DIR" />
 		<CustomActionRef Id="VS2022Setup" />
 		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
 		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
-
-	</Package>
+    <Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
+      <ComponentGroupRef Id="IsWiXLib"/>
+      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2019 - 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+        <ComponentGroupRef Id="IsWiX2022AddInLib"/>
+      </Feature>
+    </Feature>
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="CompanyFolder" Name="ISWIX LLC">
+        <Directory Id="INSTALLLOCATION" Name="IsWiX">
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+  </Package>
 </Wix>
