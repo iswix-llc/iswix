@@ -44,6 +44,7 @@ namespace IsWiXAutomationInterface
             List<ShortCutCandidate> candidates = new List<ShortCutCandidate>();
 
             var files = from f in _documentManager.Document.Descendants(ns + "File")
+                        where !f.Attribute("Source").Value.EndsWith(".dll")
                         select f;
             foreach (var file in files)
             {
@@ -113,7 +114,7 @@ namespace IsWiXAutomationInterface
             var foo = from a in _document.Descendants(ns + "Shortcut")
                       where a.Attribute("Id").Value == this.Id
                       select a;
-            _shortCutElement =  foo.First();
+            _shortCutElement = foo.FirstOrDefault();
         }
 
         public string Id

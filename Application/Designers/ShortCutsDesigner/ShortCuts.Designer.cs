@@ -98,6 +98,7 @@
             tvDestination.BeforeLabelEdit += tvDestination_BeforeLabelEdit;
             tvDestination.AfterLabelEdit += tvDestination_AfterLabelEdit;
             tvDestination.AfterSelect += tvDestination_AfterSelect;
+            tvDestination.KeyDown += tvDestination_KeyDown;
             tvDestination.MouseUp += tvDestination_MouseUp;
             // 
             // iImageLibrary

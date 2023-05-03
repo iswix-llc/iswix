@@ -192,8 +192,8 @@ namespace ShortCutsDesigner
                     }
                     else
                     {
-                        directoryNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
-                        TreeNode newNode = directoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                        TreeNode subDirectoryNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
+                        TreeNode newNode = subDirectoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
                         newNode.ImageIndex = (int)ImageLibrary.Shortcut;
                         newNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
                         newNode.Tag = shortcut;
@@ -571,7 +571,14 @@ namespace ShortCutsDesigner
 
         private XElement FindDirectoryElement(TreeNode treeNode)
         {
-            var selectedDirectory = FindDirectoryElement(_documentManager.Document, treeNode.Text, treeNode.Tag.ToString());
+            string tag = string.Empty;
+            if (treeNode.Tag != null)
+            {
+                tag = treeNode.Tag.ToString();
+            }
+
+
+            var selectedDirectory = FindDirectoryElement(_documentManager.Document, treeNode.Text, tag);
             return selectedDirectory;
         }
 
@@ -734,6 +741,7 @@ namespace ShortCutsDesigner
             if (!canRename)
             {
                 CallMessageBox(String.Format("A folder with the name [{0}] already exists.", e.Node.Text), "Folder Rename Warning");
+                e.Node.Text = previousName;
                 tvDestination.LabelEdit = true;
                 tvDestination.SelectedNode.BeginEdit();
                 e.CancelEdit = true;
@@ -791,7 +799,7 @@ namespace ShortCutsDesigner
             {
                 string old = _oldPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
                 string oldDirectory = old.Split("\\").First();
-                string oldSubDirectory = old.Substring(oldDirectory.Length + 1, old.Length - oldDirectory.Length -1);
+                string oldSubDirectory = old.Substring(oldDirectory.Length + 1, old.Length - oldDirectory.Length - 1);
                 string after = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
                 string afterDirectory = after.Split("\\").First();
                 string afterSubDirectory = after.Substring(afterDirectory.Length + 1, after.Length - afterDirectory.Length - 1);
@@ -800,7 +808,7 @@ namespace ShortCutsDesigner
                 {
                     if (shortcut.Directory == oldDirectory && shortcut.Subdirectory.StartsWith(oldSubDirectory))
                     {
-                        string subString = shortcut.Subdirectory.Substring(oldSubDirectory.Length , shortcut.Subdirectory.Length - oldSubDirectory.Length);
+                        string subString = shortcut.Subdirectory.Substring(oldSubDirectory.Length, shortcut.Subdirectory.Length - oldSubDirectory.Length);
                         shortcut.Subdirectory = afterSubDirectory + subString;
                     }
                 }
@@ -933,7 +941,14 @@ namespace ShortCutsDesigner
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RemoveDirectoryFromDocument(tvDestination.SelectedNode);
+            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+            {
+                RemoveDirectoryFromDocument(tvDestination.SelectedNode);
+            }
+            else
+            {
+                RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
+            }
         }
         private void RemoveDirectoryFromDocument(TreeNode treeNode)
         {
@@ -949,6 +964,27 @@ namespace ShortCutsDesigner
                 tvDestination.SelectedNode.Expand();
             }
         }
+        private void RemoveDirectoryFromDocumentFragmentStyle(TreeNode treeNode)
+        {
+            var tempNode = treeNode.Parent;
+            DirectoryMeta directoryMeta = new DirectoryMeta(treeNode.FullPath);
+
+            List<IsWiXShortCut> shortcuts = new List<IsWiXShortCut>();
+            foreach (IsWiXShortCut shortcut in _shortcuts)
+            {
+                if (shortcut.Directory == directoryMeta.Directory && shortcut.Subdirectory.StartsWith(directoryMeta.Subdirectory))
+                {
+                    shortcuts.Add(shortcut);
+                }
+            }
+
+            foreach (var shortcut in shortcuts)
+            {
+                shortcut.Delete();
+            }
+            //LoadDocument();
+        }
+
         private bool ParentDirectoryNowEmpty(TreeNode directoryNode)
         {
             var directoryElement = FindDirectoryElement(directoryNode);
@@ -1130,7 +1166,9 @@ namespace ShortCutsDesigner
                             foreach (var shortcut in _shortcuts)
                             {
                                 string name = string.Format("{0}{1}", prefix, index);
-                                if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) && shortcut.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                                if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) &&
+                                    shortcut.Subdirectory.Equals(scSubdirectory, StringComparison.InvariantCultureIgnoreCase) &&
+                                    shortcut.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                                 {
                                     exists = true;
                                     break;
@@ -1147,7 +1185,9 @@ namespace ShortCutsDesigner
                             {
                                 foreach (var shortcut in _shortcuts)
                                 {
-                                    if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) && shortcut.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                    if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) &&
+                                        shortcut.Subdirectory.Equals(scSubdirectory, StringComparison.InvariantCultureIgnoreCase) &&
+                                        shortcut.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
                                     {
                                         exists = true;
                                         break;
@@ -1240,6 +1280,51 @@ namespace ShortCutsDesigner
         private void tvDestination_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             _oldPath = tvDestination.SelectedNode.FullPath;
+        }
+
+
+
+        private void tvDestination_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+
+                if (tvDestination.SelectedNode.Level < 2)
+                {
+                    var message = string.Format("Can't delete {0} folder", tvDestination.SelectedNode.Text);
+                    CallMessageBox(message, "Delete Folder Warning");
+                }
+                else
+                {
+                    var message = string.Format("Do you really want to delete the {0} folder?", tvDestination.SelectedNode.Text);
+                    var result = MessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (DialogResult.OK != result)
+                    {
+                        if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
+                        {
+                            RemoveDirectoryFromDocument(tvDestination.SelectedNode);
+                        }
+                        else
+                        {
+                            RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
+                        }
+                    }
+                }
+            }
+
+            if (e.KeyCode == Keys.F2)
+            {
+                if (tvDestination.SelectedNode.Level < 2)
+                {
+                    var message = string.Format("Can't delete {0} folder", tvDestination.SelectedNode.Text);
+                    CallMessageBox(message, "Delete Folder Warning");
+                }
+                else
+                {
+                    tvDestination.LabelEdit = true;
+                    tvDestination.SelectedNode.BeginEdit();
+                }
+            }
         }
     }
 }
