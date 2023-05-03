@@ -806,7 +806,9 @@ namespace ShortCutsDesigner
 
                 foreach (IsWiXShortCut shortcut in _shortcuts)
                 {
-                    if (shortcut.Directory == oldDirectory && shortcut.Subdirectory.StartsWith(oldSubDirectory))
+                    if (shortcut.Directory == oldDirectory &&
+                        (shortcut.Subdirectory.Equals(oldSubDirectory) ||
+                        shortcut.Subdirectory.StartsWith(oldSubDirectory + "\\")))
                     {
                         string subString = shortcut.Subdirectory.Substring(oldSubDirectory.Length, shortcut.Subdirectory.Length - oldSubDirectory.Length);
                         shortcut.Subdirectory = afterSubDirectory + subString;
@@ -966,23 +968,33 @@ namespace ShortCutsDesigner
         }
         private void RemoveDirectoryFromDocumentFragmentStyle(TreeNode treeNode)
         {
-            var tempNode = treeNode.Parent;
-            DirectoryMeta directoryMeta = new DirectoryMeta(treeNode.FullPath);
+            bool isShortcut = (treeNode.ImageIndex == 12);
 
-            List<IsWiXShortCut> shortcuts = new List<IsWiXShortCut>();
-            foreach (IsWiXShortCut shortcut in _shortcuts)
+            if (isShortcut)
             {
-                if (shortcut.Directory == directoryMeta.Directory && shortcut.Subdirectory.StartsWith(directoryMeta.Subdirectory))
+                IsWiXShortCut selectedShortcut = (IsWiXShortCut)treeNode.Tag;
+                selectedShortcut.Delete();
+            }
+            else
+            {
+                List<IsWiXShortCut> shortcuts = new List<IsWiXShortCut>();
+                DirectoryMeta directoryMeta = new DirectoryMeta(treeNode.FullPath);
+                foreach (IsWiXShortCut shortcut in _shortcuts)
                 {
-                    shortcuts.Add(shortcut);
+                    if (shortcut.Directory == directoryMeta.Directory &&
+                        shortcut.Subdirectory.Equals(directoryMeta.Subdirectory) ||
+                        shortcut.Subdirectory.StartsWith(directoryMeta.Subdirectory + @"\"))
+                    {
+                        shortcuts.Add(shortcut);
+                    }
+                }
+                foreach (var shortcut in shortcuts)
+                {
+                    shortcut.Delete();
                 }
             }
+            treeNode.Remove();
 
-            foreach (var shortcut in shortcuts)
-            {
-                shortcut.Delete();
-            }
-            //LoadDocument();
         }
 
         private bool ParentDirectoryNowEmpty(TreeNode directoryNode)
@@ -1151,7 +1163,7 @@ namespace ShortCutsDesigner
                         List<string> parts = fullPath.Split("\\").ToList();
                         scDirectory = parts[0];
                         parts.RemoveAt(0);
-                        scSubdirectory = string.Join(",", parts.ToArray());
+                        scSubdirectory = string.Join("\\", parts.ToArray());
                     }
 
                     string prefix = picker.FileName;
@@ -1296,9 +1308,18 @@ namespace ShortCutsDesigner
                 }
                 else
                 {
-                    var message = string.Format("Do you really want to delete the {0} folder?", tvDestination.SelectedNode.Text);
-                    var result = MessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    if (DialogResult.OK != result)
+                    string objectType = string.Empty;
+                    if(tvDestination.SelectedNode.ImageIndex == 12)
+                    {
+                        objectType = "shortcut";
+                    }
+                    else
+                    {
+                        objectType = "folder";
+                    }
+                    var message = string.Format("Do you really want to delete the {0} {1}?", tvDestination.SelectedNode.Text, objectType);
+                    var result = MessageBox.Show(message, "Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (DialogResult.OK == result)
                     {
                         if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
                         {
