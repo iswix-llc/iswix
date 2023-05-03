@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.DirectoryServices;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
@@ -65,13 +62,11 @@ namespace Designers.NewFilesAndFolders
             InitializeComponent();
 
             // create the column sorter and assign it to the correct control
-#if !DEBUG
             lvColumnSorter = new ListViewColumnSorter();
             lvSourceFiles.ListViewItemSorter = lvColumnSorter;
 
             lvDestinationColumnSorter = new ListViewColumnSorter();
             lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
-#endif
         }
 
         private void PopulateSource()
@@ -1298,5 +1293,39 @@ namespace Designers.NewFilesAndFolders
 
         }
 
+        private void lvDestination_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if the column clicked has been clicked before
+            if (e.Column == lvDestinationColumnSorter.SortColumn)
+            {
+                // reverse sort direction
+                //lvColumnSorter.Order = (lvColumnSorter.Order == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+                lvDestinationColumnSorter.Order = (lvDestinationColumnSorter.Order == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                // set column to be sorted, default order to ascending
+                lvDestinationColumnSorter.Order = SortOrder.Ascending;
+                lvDestinationColumnSorter.SortColumn = e.Column;
+            }
+            lvDestination.Sort();
+        }
+
+        private void lvSourceFiles_ColumnClick_1(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if the column clicked has been clicked before
+            if (e.Column == lvColumnSorter.SortColumn)
+            {
+                // reverse sort direction
+                lvColumnSorter.Order = (lvColumnSorter.Order == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                // set column to be sorted, default order to ascending
+                lvColumnSorter.Order = SortOrder.Ascending;
+                lvColumnSorter.SortColumn = e.Column;
+            }
+            lvSourceFiles.Sort();
+        }
     }
 }

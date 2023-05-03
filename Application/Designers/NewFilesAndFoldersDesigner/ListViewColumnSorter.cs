@@ -37,8 +37,8 @@ namespace Designers.NewFilesAndFolders
         public int Compare(object x, object y)
         {
             int result;
-            var listViewItemX = (ListViewItem) x;
-            var listViewItemY = (ListViewItem) y;
+            var listViewItemX = (ListViewItem)x;
+            var listViewItemY = (ListViewItem)y;
             try
             {
                 // casting x and y as DateTime to see if we need to compare as DateTime
@@ -51,7 +51,7 @@ namespace Designers.NewFilesAndFolders
                 var stringX = listViewItemX.SubItems[ColumnToSort].Text;
                 var stringY = listViewItemY.SubItems[ColumnToSort].Text;
 
-                if ( (stringX.Contains(" bytes")) || (stringX.Contains(" KB")) )
+                if ((stringX.Contains(" bytes")) || (stringX.Contains(" KB")))
                 {
                     // can't assume that if first item (X) is bytes that the second is too
                     // must convert both back to bytes then parse and compare.
