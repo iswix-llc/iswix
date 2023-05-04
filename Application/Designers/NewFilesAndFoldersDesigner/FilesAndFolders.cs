@@ -60,6 +60,7 @@ namespace Designers.NewFilesAndFolders
         public FilesAndFolders()
         {
             InitializeComponent();
+#if !DEBUG
 
             // create the column sorter and assign it to the correct control
             lvColumnSorter = new ListViewColumnSorter();
@@ -67,6 +68,7 @@ namespace Designers.NewFilesAndFolders
 
             lvDestinationColumnSorter = new ListViewColumnSorter();
             lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
+#endif
         }
 
         private void PopulateSource()

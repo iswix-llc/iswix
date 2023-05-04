@@ -68,7 +68,7 @@
             // 
             splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             splitContainer1.Location = new System.Drawing.Point(0, 0);
-            splitContainer1.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            splitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -78,9 +78,9 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(propertyGridShortCut);
-            splitContainer1.Size = new System.Drawing.Size(954, 410);
-            splitContainer1.SplitterDistance = 524;
-            splitContainer1.SplitterWidth = 7;
+            splitContainer1.Size = new System.Drawing.Size(668, 246);
+            splitContainer1.SplitterDistance = 366;
+            splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 0;
             // 
             // tvDestination
@@ -90,14 +90,15 @@
             tvDestination.ImageIndex = 0;
             tvDestination.ImageList = iImageLibrary;
             tvDestination.Location = new System.Drawing.Point(0, 0);
-            tvDestination.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            tvDestination.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             tvDestination.Name = "tvDestination";
             tvDestination.SelectedImageIndex = 0;
-            tvDestination.Size = new System.Drawing.Size(524, 410);
+            tvDestination.Size = new System.Drawing.Size(366, 246);
             tvDestination.TabIndex = 0;
             tvDestination.BeforeLabelEdit += tvDestination_BeforeLabelEdit;
             tvDestination.AfterLabelEdit += tvDestination_AfterLabelEdit;
             tvDestination.AfterSelect += tvDestination_AfterSelect;
+            tvDestination.KeyDown += tvDestination_KeyDown;
             tvDestination.MouseUp += tvDestination_MouseUp;
             // 
             // iImageLibrary
@@ -123,9 +124,9 @@
             // 
             propertyGridShortCut.Dock = System.Windows.Forms.DockStyle.Fill;
             propertyGridShortCut.Location = new System.Drawing.Point(0, 0);
-            propertyGridShortCut.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            propertyGridShortCut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             propertyGridShortCut.Name = "propertyGridShortCut";
-            propertyGridShortCut.Size = new System.Drawing.Size(423, 410);
+            propertyGridShortCut.Size = new System.Drawing.Size(297, 246);
             propertyGridShortCut.TabIndex = 0;
             propertyGridShortCut.PropertyValueChanged += propertyGridShortCut_PropertyValueChanged;
             // 
@@ -134,13 +135,13 @@
             cmsDestinationRoot.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { expandAllToolStripMenuItem2, collapseAllToolStripMenuItem1, toolStripSeparator3 });
             cmsDestinationRoot.Name = "cmsDestinationRoot";
-            cmsDestinationRoot.Size = new System.Drawing.Size(185, 74);
+            cmsDestinationRoot.Size = new System.Drawing.Size(145, 70);
             // 
             // expandAllToolStripMenuItem2
             // 
             expandAllToolStripMenuItem2.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem2.Image");
             expandAllToolStripMenuItem2.Name = "expandAllToolStripMenuItem2";
-            expandAllToolStripMenuItem2.Size = new System.Drawing.Size(184, 32);
+            expandAllToolStripMenuItem2.Size = new System.Drawing.Size(144, 30);
             expandAllToolStripMenuItem2.Text = "Expand All";
             expandAllToolStripMenuItem2.Click += expandAllToolStripMenuItem2_Click;
             // 
@@ -148,28 +149,28 @@
             // 
             collapseAllToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("collapseAllToolStripMenuItem1.Image");
             collapseAllToolStripMenuItem1.Name = "collapseAllToolStripMenuItem1";
-            collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(184, 32);
+            collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(144, 30);
             collapseAllToolStripMenuItem1.Text = "Collapse All";
             collapseAllToolStripMenuItem1.Click += collapseAllToolStripMenuItem1_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
+            toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
             // 
             // cmsDestinationTreeDefault
             // 
             cmsDestinationTreeDefault.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsDestinationTreeDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem, renameFolderToolStripMenuItem, deleteToolStripMenuItem, toolStripMenuItemCreateSC, toolStripSeparator1, expandAllToolStripMenuItem1, collapseAllToolStripMenuItem });
             cmsDestinationTreeDefault.Name = "cmsDestinationTreeDefault";
-            cmsDestinationTreeDefault.Size = new System.Drawing.Size(301, 202);
+            cmsDestinationTreeDefault.Size = new System.Drawing.Size(221, 212);
             // 
             // createNewFolderToolStripMenuItem
             // 
             createNewFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("createNewFolderToolStripMenuItem.Image");
             createNewFolderToolStripMenuItem.Name = "createNewFolderToolStripMenuItem";
             createNewFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
+            createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             createNewFolderToolStripMenuItem.Text = "Create New Folder";
             createNewFolderToolStripMenuItem.Click += createNewFolderToolStripMenuItem_Click;
             // 
@@ -178,7 +179,7 @@
             renameFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("renameFolderToolStripMenuItem.Image");
             renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
             renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            renameFolderToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
+            renameFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             renameFolderToolStripMenuItem.Text = "Rename Folder";
             renameFolderToolStripMenuItem.Click += renameFolderToolStripMenuItem_Click;
             // 
@@ -187,7 +188,7 @@
             deleteToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("deleteToolStripMenuItem.Image");
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            deleteToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
+            deleteToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             deleteToolStripMenuItem.Text = "Remove From Project";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -195,20 +196,20 @@
             // 
             toolStripMenuItemCreateSC.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItemCreateSC.Image");
             toolStripMenuItemCreateSC.Name = "toolStripMenuItemCreateSC";
-            toolStripMenuItemCreateSC.Size = new System.Drawing.Size(300, 32);
+            toolStripMenuItemCreateSC.Size = new System.Drawing.Size(220, 30);
             toolStripMenuItemCreateSC.Text = "Create ShortCut";
             toolStripMenuItemCreateSC.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(297, 6);
+            toolStripSeparator1.Size = new System.Drawing.Size(217, 6);
             // 
             // expandAllToolStripMenuItem1
             // 
             expandAllToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem1.Image");
             expandAllToolStripMenuItem1.Name = "expandAllToolStripMenuItem1";
-            expandAllToolStripMenuItem1.Size = new System.Drawing.Size(300, 32);
+            expandAllToolStripMenuItem1.Size = new System.Drawing.Size(220, 30);
             expandAllToolStripMenuItem1.Text = "Expand All";
             expandAllToolStripMenuItem1.Click += expandAllToolStripMenuItem1_Click;
             // 
@@ -216,7 +217,7 @@
             // 
             collapseAllToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("collapseAllToolStripMenuItem.Image");
             collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
-            collapseAllToolStripMenuItem.Size = new System.Drawing.Size(300, 32);
+            collapseAllToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             collapseAllToolStripMenuItem.Text = "Collapse All";
             collapseAllToolStripMenuItem.Click += collapseAllToolStripMenuItem_Click;
             // 
@@ -225,14 +226,14 @@
             cmsMergeRedirectFolder.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsMergeRedirectFolder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { createNewFolderToolStripMenuItem1, toolStripMenuItemCreateShortCut, toolStripSeparator2, expandAllToolStripMenuItem });
             cmsMergeRedirectFolder.Name = "cmsMergeRedirectFolder";
-            cmsMergeRedirectFolder.Size = new System.Drawing.Size(273, 106);
+            cmsMergeRedirectFolder.Size = new System.Drawing.Size(202, 100);
             // 
             // createNewFolderToolStripMenuItem1
             // 
             createNewFolderToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("createNewFolderToolStripMenuItem1.Image");
             createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(272, 32);
+            createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(201, 30);
             createNewFolderToolStripMenuItem1.Text = "Create New Folder";
             createNewFolderToolStripMenuItem1.Click += createNewFolderToolStripMenuItem1_Click;
             // 
@@ -240,20 +241,20 @@
             // 
             toolStripMenuItemCreateShortCut.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItemCreateShortCut.Image");
             toolStripMenuItemCreateShortCut.Name = "toolStripMenuItemCreateShortCut";
-            toolStripMenuItemCreateShortCut.Size = new System.Drawing.Size(272, 32);
+            toolStripMenuItemCreateShortCut.Size = new System.Drawing.Size(201, 30);
             toolStripMenuItemCreateShortCut.Text = "Create ShortCut";
             toolStripMenuItemCreateShortCut.Click += toolStripMenuItemCreateShortCut_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new System.Drawing.Size(269, 6);
+            toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             expandAllToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem.Image");
             expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            expandAllToolStripMenuItem.Size = new System.Drawing.Size(272, 32);
+            expandAllToolStripMenuItem.Size = new System.Drawing.Size(201, 30);
             expandAllToolStripMenuItem.Text = "Expand All";
             expandAllToolStripMenuItem.Click += expandAllToolStripMenuItem_Click;
             // 
@@ -262,14 +263,14 @@
             cmsShortcut.ImageScalingSize = new System.Drawing.Size(24, 24);
             cmsShortcut.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItem3 });
             cmsShortcut.Name = "cmsDestinationTreeDefault";
-            cmsShortcut.Size = new System.Drawing.Size(301, 36);
+            cmsShortcut.Size = new System.Drawing.Size(221, 34);
             // 
             // toolStripMenuItem3
             // 
             toolStripMenuItem3.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItem3.Image");
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             toolStripMenuItem3.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            toolStripMenuItem3.Size = new System.Drawing.Size(300, 32);
+            toolStripMenuItem3.Size = new System.Drawing.Size(220, 30);
             toolStripMenuItem3.Text = "Remove From Project";
             toolStripMenuItem3.Click += toolStripMenuItem3_Click;
             // 
@@ -283,12 +284,12 @@
             // 
             // ShortCuts
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(splitContainer1);
-            Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             Name = "ShortCuts";
-            Size = new System.Drawing.Size(954, 410);
+            Size = new System.Drawing.Size(668, 246);
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();

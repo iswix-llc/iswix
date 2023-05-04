@@ -37,26 +37,26 @@ namespace IsWiXAutomationInterface
             EstablishDefines();
         }
 
-        private DirectoryMeta SplitDirectory(string directory)
-        {
-            directory = directory.Replace(@"Destination Computer\", "");
+        //private DirectoryMeta new DirectoryMeta(string directory)
+        //{
+        //    directory = directory.Replace(@"Destination Computer\", "");
 
-            DirectoryMeta directoryMeta = new DirectoryMeta();
+        //    DirectoryMeta directoryMeta = new DirectoryMeta();
 
-            string[] parts = directory.Split(new char[] { '\\' });
-            directoryMeta.Directory = parts[0].Replace("[", "").Replace("]", "");
-            directoryMeta.Subdirectory = string.Empty;
-            for (int i = 1; i < parts.Length; i++)
-            {
-                directoryMeta.Subdirectory = Path.Combine(directoryMeta.Subdirectory, parts[i]);
-            }
-            return directoryMeta;
-        }
+        //    string[] parts = directory.Split(new char[] { '\\' });
+        //    directoryMeta.Directory = parts[0].Replace("[", "").Replace("]", "");
+        //    directoryMeta.Subdirectory = string.Empty;
+        //    for (int i = 1; i < parts.Length; i++)
+        //    {
+        //        directoryMeta.Subdirectory = Path.Combine(directoryMeta.Subdirectory, parts[i]);
+        //    }
+        //    return directoryMeta;
+        //}
 
         public string GetNextSubDirectoryName(string directoryPath)
         {
             var newFolderName = "New Folder";
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
 
             List<string> dirs = new List<string>();
 
@@ -84,7 +84,7 @@ namespace IsWiXAutomationInterface
             }
 
             XElement directoryComponentElement;
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
 
             if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
@@ -265,7 +265,7 @@ namespace IsWiXAutomationInterface
         }
         public List<Tuple<string, bool>> GetFiles(string path)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(path);
+            DirectoryMeta directoryMeta = new DirectoryMeta(path);
             directoryMeta.Directory = directoryMeta.Directory.Replace("[", "").Replace("]", "");
 
             List<Tuple<string, bool>> files = new List<Tuple<string, bool>>();
@@ -293,7 +293,7 @@ namespace IsWiXAutomationInterface
         {
             foreach (var file in files)
             {
-                DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+                DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
                 if (FileExists(file))
                 {
                     if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
@@ -354,7 +354,7 @@ namespace IsWiXAutomationInterface
 
             foreach (var file in files)
             {
-                DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+                DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
                 file.Destination = Path.Combine(directoryMeta.Directory, directoryMeta.Subdirectory);
                 file.Source = file.Source.Replace(rootDir, "$(var.SourceDir)");
                 if(file.Source == ".")
@@ -393,7 +393,7 @@ namespace IsWiXAutomationInterface
         }
         private bool FileExists(FileMeta file)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(file.Destination);
+            DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
             var files = from f in _componentGroup.Descendants(_ns + "File")
                         where f.Attribute("Source").Value == file.Source &&
                                 f.Parent.Attribute("Directory").Value == directoryMeta.Directory &&
@@ -437,7 +437,7 @@ namespace IsWiXAutomationInterface
         }
         public void DeleteDirectory(string directoryPath, string parentPath)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             List<XElement> elements = new List<XElement>();
 
             if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
@@ -458,7 +458,7 @@ namespace IsWiXAutomationInterface
         }
         public bool RenameDirectory(string directoryPath, string newName)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             string directory = directoryMeta.Directory;
             string oldSubDirectory = directoryMeta.Subdirectory;
 
@@ -490,7 +490,7 @@ namespace IsWiXAutomationInterface
         }
         private bool DirectoryExists(string directoryPath)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
 
             return _componentGroup.Descendants(_ns + "Component").Where(
                 c => c.Attribute("Directory").Value == directoryMeta.Directory &&
@@ -498,7 +498,7 @@ namespace IsWiXAutomationInterface
         }
         public void PruneDirectory(string directoryPath)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             bool needed = true;
             int componentCount = _componentGroup.Descendants(_ns + "Component").Where(
                 c => c.Attribute("Directory").Value == directoryMeta.Directory && c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory)
@@ -520,7 +520,7 @@ namespace IsWiXAutomationInterface
         }
         private void UnpruneDirectory(string directoryPath)
         {
-            DirectoryMeta directoryMeta = SplitDirectory(directoryPath);
+            DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             bool needed = true;
             int componentCount = _componentGroup.Descendants(_ns + "Component").Where(
                 c => c.Attribute("Directory").Value == directoryMeta.Directory && c.GetOptionalAttribute("Subdirectory").StartsWith(directoryMeta.Subdirectory)
@@ -563,6 +563,17 @@ namespace IsWiXAutomationInterface
     }
     public class DirectoryMeta
     {
+        public DirectoryMeta(string filePath)
+        {
+            string directory = filePath.Replace(@"Destination Computer\", "");
+            string[] parts = directory.Split(new char[] { '\\' });
+            Directory = parts[0].Replace("[", "").Replace("]", "");
+            Subdirectory = string.Empty;
+            for (int i = 1; i < parts.Length; i++)
+            {
+                Subdirectory = Path.Combine(Subdirectory, parts[i]);
+            }
+        }
         public string Directory { get; set; }
         public string Subdirectory { get; set; }
     }
