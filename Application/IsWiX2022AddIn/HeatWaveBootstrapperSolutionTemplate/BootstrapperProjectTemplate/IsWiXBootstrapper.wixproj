@@ -34,6 +34,7 @@
     <Content Include="Resources\Icon.png" />
     <Content Include="Resources\iuipreq.thm" />
     <Content Include="Resources\iuipreq.wxl" />
+    <Content Include="Resources\splash.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\$globalsafeprojectname$Setup\$globalsafeprojectname$Setup.wixproj">
