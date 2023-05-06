@@ -70,6 +70,10 @@ namespace IsWiXAutomationInterface
                 shortcutElement.SetAttributeValue("Subdirectory", subDirectory);
             }
 
+            if(_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment)
+            {
+                shortcutElement.SetAttributeValue("Advertise", "Yes");
+            }
             fileElement.Add(shortcutElement);
 
             IsWiXShortCut iswixShortCut = new IsWiXShortCut(_documentManager.Document, shortcutElement);
