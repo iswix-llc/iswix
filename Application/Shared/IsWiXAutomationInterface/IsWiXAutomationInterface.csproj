@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
-    <PackageReference Include="FireworksFrameworkCore" Version="5.1.32" />
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.33" />
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.0" />
   </ItemGroup>
 
