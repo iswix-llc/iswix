@@ -72,7 +72,7 @@ namespace IsWiXAutomationInterface
 
             if(_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment)
             {
-                shortcutElement.SetAttributeValue("Advertise", "Yes");
+                shortcutElement.SetAttributeValue("Advertise", "yes");
             }
             fileElement.Add(shortcutElement);
 
