@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FireworksFrameworkCore" Version="5.1.31" />
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.32" />
   </ItemGroup>
 
   <ItemGroup>
