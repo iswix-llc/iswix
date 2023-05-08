@@ -1,6 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<?define ComponentRules="OneToOne"?>
-	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this wix library -->
 	<?define SourceDir="..\Deploy"?>
 	<Fragment Id="$safeprojectname$">
 	  <ComponentGroup Id="$safeprojectname$" />

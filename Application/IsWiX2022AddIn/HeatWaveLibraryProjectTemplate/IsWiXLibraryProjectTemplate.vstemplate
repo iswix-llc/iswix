@@ -2,7 +2,7 @@
 	<TemplateData>
 		<Name>IsWiX Library Project (WiX v4)</Name>
 		<TemplateID>IsWiX.WixLibProject</TemplateID>
-		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based wixlib file</Description>
+		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based wixlib.</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>42</SortOrder>
