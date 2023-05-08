@@ -2,7 +2,7 @@
 	<TemplateData>
 		<Name>IsWiX Bootstrapper Solution (WiX v4)</Name>
 		<TemplateID>IsWiX.BootstrapperProject</TemplateID>
-		<Description>A multiproject (.EXE/.MSI/.MSM) solution accelerator for creating an IsWiX / WiX v4 based EXE.</Description>
+		<Description>A multiproject (.EXE/.MSI/.WIXLIB) solution accelerator for creating an IsWiX / WiX v4 based EXE.</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>20</SortOrder>

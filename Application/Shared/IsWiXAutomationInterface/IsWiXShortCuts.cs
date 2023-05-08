@@ -44,7 +44,7 @@ namespace IsWiXAutomationInterface
             List<ShortCutCandidate> candidates = new List<ShortCutCandidate>();
 
             var files = from f in _documentManager.Document.Descendants(ns + "File")
-                        where !f.Attribute("Source").Value.EndsWith(".dll")
+                        where !f.Attribute("Source").Value.EndsWith(".dll") && !f.Attribute("Source").Value.EndsWith(".pdb")
                         select f;
             foreach (var file in files)
             {

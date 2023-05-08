@@ -160,7 +160,7 @@ namespace ShortCutsDesigner
                     AddFirstLevelFolder(treeNode, "DesktopFolder");
                     AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
                     AddFirstLevelFolder(treeNode, "SendToFolder");
-                    AddFirstLevelFolder(treeNode, "StartMenuFolder");
+                    //AddFirstLevelFolder(treeNode, "StartMenuFolder");  Old School
                     AddFirstLevelFolder(treeNode, "StartupFolder");
                 }
             }
