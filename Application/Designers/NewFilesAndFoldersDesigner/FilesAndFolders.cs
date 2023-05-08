@@ -923,6 +923,7 @@ namespace Designers.NewFilesAndFolders
                 }
 
             }
+            _isWiXComponentGroup.SortComponents();
             _documentManager.EnableChangeWatcher();
         }
 
@@ -998,6 +999,7 @@ namespace Designers.NewFilesAndFolders
                     CallMessageBox("Drop the items onto a folder", "Drop Warning");
                 }
             }
+            _isWiXComponentGroup.SortComponents();
             HoverNode.BackColor = Color.White;
             HoverNode.ForeColor = Color.Black;
             _documentManager.EnableChangeWatcher();
@@ -1222,6 +1224,9 @@ namespace Designers.NewFilesAndFolders
                     _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
                     tvDestination.SelectedNode.Remove();
                 }
+                _documentManager.DisableChangeWatcher();
+                _isWiXComponentGroup.SortComponents();
+                _documentManager.EnableChangeWatcher();
             }
 
             if (e.KeyCode == Keys.Insert)
@@ -1278,6 +1283,7 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
+            _documentManager.DisableChangeWatcher();
             if (e.Label == null)
             {
                 e.CancelEdit = true;
@@ -1286,6 +1292,8 @@ namespace Designers.NewFilesAndFolders
             {
                 e.CancelEdit = true;
             }
+            _isWiXComponentGroup.SortComponents();
+            _documentManager.EnableChangeWatcher();
         }
 
         private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)

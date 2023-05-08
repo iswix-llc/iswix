@@ -132,7 +132,6 @@ namespace IsWiXAutomationInterface
                 }
                 _componentGroup.Add(directoryComponentElement);
             }
-            SortComponents();
             return directoryComponentElement;
         }
 
@@ -300,7 +299,8 @@ namespace IsWiXAutomationInterface
                     {
                         var fileElements = from f in _componentGroup.Descendants(_ns + "File")
                                            where f.Attribute("Source").Value == file.Source &&
-                                                f.Parent.Attribute("Directory").Value == directoryMeta.Directory
+                                                f.Parent.Attribute("Directory").Value == directoryMeta.Directory &&
+                                                string.IsNullOrEmpty(f.Parent.GetOptionalAttribute("Subdirectory"))
                                            select f;
                         var listElements = fileElements.ToList();
                         foreach (var fileElement in listElements)
@@ -378,7 +378,6 @@ namespace IsWiXAutomationInterface
                                 new XAttribute("Subdirectory", directoryMeta.Subdirectory),
                             new XElement(_ns + "File", new XAttribute("Source", file.Source), new XAttribute("KeyPath", "yes"))));
                         }
-                       SortComponents();
                     }
                     else
                     {
@@ -480,7 +479,6 @@ namespace IsWiXAutomationInterface
                     component.Attribute("Subdirectory").Value = newValue;
                     component.Attribute("Id").Value = id;
                 }
-                SortComponents();
                 return true;
             }
             else
@@ -532,18 +530,18 @@ namespace IsWiXAutomationInterface
         }
         public void SortComponents()
         {
-            var components = _componentGroup.Elements(_ns + "Component")
-                .OrderBy(d => d.Attribute("Directory").Value)
-                .OrderBy(sd => sd.GetOptionalAttribute("Subdirectory"))
-                .OrderBy(kf =>kf.GetOptionalAttribute("Keyfile"))
+            var components = from c in _componentGroup.Elements(_ns + "Component")
+                .OrderBy(d=> Path.Combine(d.Attribute("Directory").Value, d.GetOptionalAttribute("Subdirectory")))
+                //.OrderBy(kf =>kf.GetOptionalAttribute("Keyfile"))
                 .OrderBy(f=>f.GetOptionalSubElementAttribute(_ns, "File", "Source"))
-                .ToArray();
-            _documentManager.Document.Descendants(_ns + "Component").Remove();
-
-            foreach (var component in components)
+                select c;
+            List<XElement> elements = components.ToList();
+            _componentGroup.Elements(_ns + "Component").Remove();
+            foreach (var element in elements)
             {
-                _componentGroup.Add(component);
+                _componentGroup.Add(element);
             }
+        
         }
         public void SortFiles(XElement component)
         {
