@@ -2,6 +2,7 @@
 	<?define ComponentRules="OneToOne"?>
 	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this wix library -->
 	<?define SourceDir="..\Deploy"?>
-	<Fragment Id="$safeprojectname$">
+	<Fragment>
+		  <ComponentGroup Id="$globalsafeprojectname$Files" />
 	</Fragment>
 </Wix>
