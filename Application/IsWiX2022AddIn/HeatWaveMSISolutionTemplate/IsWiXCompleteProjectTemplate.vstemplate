@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
 	<TemplateData>
-		<Name>IsWiX MSI Package(WiX v4)</Name>
+		<Name>IsWiX MSI Package (WiX v4)</Name>
 		<TemplateID>IsWiX.InstallerProject</TemplateID>
 		<Description>A project for creating a Windows installation package (.msi) file.</Description>
 		<Icon>IsWiX.ico</Icon>
