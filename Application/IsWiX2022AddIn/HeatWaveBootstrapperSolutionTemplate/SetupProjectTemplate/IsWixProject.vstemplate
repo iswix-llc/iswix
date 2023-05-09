@@ -18,7 +18,7 @@
   <TemplateContent>
     <Project File="IsWiXSetupProject.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Product.wxs">Product.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$Files.wxs">Files.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$globalsafeprojectname$Files.wxs">Files.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="IISMeta.wxs">IISMeta.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="UI.wxs">UI.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
