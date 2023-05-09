@@ -20,7 +20,6 @@
 	</WizardExtension>
 	<WizardData>
 		<Settings>
-			<MappedProjectTemplate name="$projectname$Lib" path="$projectname$Lib" template="LibraryProjectTemplate\IsWiXLibraryProjectTemplate.vstemplate" />
 			<MappedProjectTemplate name="$projectname$" path="$projectname$" template="SetupProjectTemplate\IsWixProject.vstemplate" />
 		</Settings>
 	</WizardData>
