@@ -2,7 +2,7 @@
 	<TemplateData>
 		<Name>IsWiX Bootstrapper (WiX v4)</Name>
 		<TemplateID>IsWiX.BootstrapperProject</TemplateID>
-		<Description>A multiple project solution accelerator for creating a WiX Burn Bootstrapper (.exe) file and Windows installation package (.msi) file.</Description>
+		<Description>A multiple project solution accelerator for creating a WiX bootstrapper (.exe) file and Windows installation package (.msi) file.</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>20</SortOrder>
@@ -20,7 +20,6 @@
 	</WizardExtension>
 	<WizardData>
 		<Settings>
-			<MappedProjectTemplate name="$projectname$Lib" path="$projectname$Lib" template="LibraryProjectTemplate\IsWiXLibraryProjectTemplate.vstemplate" />
 			<MappedProjectTemplate name="$projectname$Setup" path="$projectname$Setup" template="SetupProjectTemplate\IsWixProject.vstemplate" />
 			<MappedProjectTemplate name="$projectname$Bootstrapper" path="$projectname$Bootstrapper" template="BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
 		</Settings>
