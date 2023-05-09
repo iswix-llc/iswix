@@ -44,11 +44,6 @@
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveLibraryProjectTemplate.zip" KeyPath="yes">
-          <CopyFile Id="HeatWaveLibraryProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022"></CopyFile>
-        </File>
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
         <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
           <CopyFile Id="HeatWaveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
