@@ -303,7 +303,14 @@ namespace CustomTablesDesigner
                             foreach (var data in row.Elements(ns + "Data"))
                             {
                                 string columnName = data.Attribute("Column").Value;
-                                dr[columnName] = data.Value;
+                                if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
+                                {
+                                    dr[columnName] = data.GetOptionalAttribute("Value");
+                                }
+                                else
+                                {
+                                    dr[columnName] = data.Value;
+                                }
                             }
                             _customTable.Rows.Add(dr);
 
@@ -369,7 +376,14 @@ namespace CustomTablesDesigner
                 {
                     var xcolumn = new XElement(ns + "Data");
                     xcolumn.Add(new XAttribute("Column", column.ColumnName));
-                    xcolumn.Value = row[column.ColumnName].ToString();
+                    if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
+                    {
+                        xcolumn.SetAttributeValue("Value", row[column.ColumnName].ToString());
+                    }
+                    else
+                    {
+                        xcolumn.Value = row[column.ColumnName].ToString();
+                    }
                     xrow.Add(xcolumn);
 
                 }
@@ -530,12 +544,17 @@ namespace CustomTablesDesigner
             var dialog = new FormTableName(string.Empty, tables);
 
             if (dialog.ShowDialog() == DialogResult.OK)
-            {
+            { 
+                string identifier = "Identifier";
+                if(_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
+                {
+                    identifier = identifier.ToLower();
+                }
                 XElement previousElement = _documentManager.Document.GetElementToAddAfterSelf("CustomTable");
                 XElement newElement =    new XElement(ns + "CustomTable", new XAttribute("Id", dialog.TableName),
                     new XElement( ns + "Column",
                         new XAttribute( "Id", "Id" ),
-                        new XAttribute( "Category", "Identifier" ),
+                        new XAttribute( "Category", identifier ),
                         new XAttribute( "PrimaryKey", "yes" ),
                         new XAttribute( "Nullable", "no" ),
                         new XAttribute( "Type", "string" ),
@@ -548,6 +567,10 @@ namespace CustomTablesDesigner
                 else
                 {
                     previousElement.AddAfterSelf(newElement);
+                }
+                if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
+                {
+                    newElement.AddAfterSelf(new XElement(ns + "EnsureTable", new XAttribute("Id", dialog.TableName)));
                 }
                 LoadData();
             }
