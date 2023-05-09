@@ -477,7 +477,10 @@ namespace IsWiXAutomationInterface
                     string newValue = newSubDirectory + component.Attribute("Subdirectory").Value.Substring(oldSubDirectory.Length);
                     string id = "owc" + GetSHA256Hash(Path.Combine(directoryMeta.Directory, newValue));
                     component.Attribute("Subdirectory").Value = newValue;
-                    component.Attribute("Id").Value = id;
+                    if (!string.IsNullOrEmpty(component.GetOptionalAttribute("Id")))
+                    {
+                        component.Attribute("Id").Value = id;
+                    }
                 }
                 return true;
             }
