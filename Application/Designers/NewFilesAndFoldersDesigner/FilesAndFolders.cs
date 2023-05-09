@@ -839,7 +839,7 @@ namespace Designers.NewFilesAndFolders
 
         private void lvDestination_DragDrop(object sender, DragEventArgs e)
         {
-            _documentManager.DisableChangeWatcher();
+            //_documentManager.DisableChangeWatcher();
             if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
                 var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
@@ -924,7 +924,7 @@ namespace Designers.NewFilesAndFolders
 
             }
             _isWiXComponentGroup.SortComponents();
-            _documentManager.EnableChangeWatcher();
+            //_documentManager.EnableChangeWatcher();
         }
 
         private void tvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
@@ -943,7 +943,8 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_DragDrop(object sender, DragEventArgs e)
         {
-            _documentManager.DisableChangeWatcher();
+            Cursor = Cursors.WaitCursor;
+           // _documentManager.DisableChangeWatcher();
 
             if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
@@ -1002,7 +1003,8 @@ namespace Designers.NewFilesAndFolders
             _isWiXComponentGroup.SortComponents();
             HoverNode.BackColor = Color.White;
             HoverNode.ForeColor = Color.Black;
-            _documentManager.EnableChangeWatcher();
+         //   _documentManager.EnableChangeWatcher();
+            Cursor = Cursors.Arrow;
         }
 
         private void GetFilesRecursive(TreeNode sourceFolder, ref List<FileMeta> files, string destinationDirectoryPath, string parent)
@@ -1224,9 +1226,9 @@ namespace Designers.NewFilesAndFolders
                     _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
                     tvDestination.SelectedNode.Remove();
                 }
-                _documentManager.DisableChangeWatcher();
+               // _documentManager.DisableChangeWatcher();
                 _isWiXComponentGroup.SortComponents();
-                _documentManager.EnableChangeWatcher();
+               // _documentManager.EnableChangeWatcher();
             }
 
             if (e.KeyCode == Keys.Insert)
@@ -1283,7 +1285,7 @@ namespace Designers.NewFilesAndFolders
 
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            _documentManager.DisableChangeWatcher();
+           // _documentManager.DisableChangeWatcher();
             if (e.Label == null)
             {
                 e.CancelEdit = true;
@@ -1293,7 +1295,7 @@ namespace Designers.NewFilesAndFolders
                 e.CancelEdit = true;
             }
             _isWiXComponentGroup.SortComponents();
-            _documentManager.EnableChangeWatcher();
+            //_documentManager.EnableChangeWatcher();
         }
 
         private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)
