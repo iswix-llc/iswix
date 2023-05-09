@@ -177,9 +177,6 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 CD "$(ProjectDir)HeatWaveMergeModuleProjectTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip' -Force
 
-CD "$(ProjectDir)HeatWaveLibraryProjectTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveLibraryProjectTemplate.zip' -Force
-
 CD "$(ProjectDir)HeatWaveMSISolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force
 
