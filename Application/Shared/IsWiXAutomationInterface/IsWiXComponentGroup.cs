@@ -23,10 +23,10 @@ namespace IsWiXAutomationInterface
             _ns = _documentManager.Document.GetWiXNameSpace();
             _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
 
-            bool foundFragment = _documentManager.Document.Descendants(_ns + "Fragment").Where(e => e.GetOptionalAttribute("Id").ToLower() == _fileName.ToLower()).Any();
+            bool foundFragment = _documentManager.Document.Descendants(_ns + "Fragment").Any();
             if (foundFragment)
             {
-                _fragment = _documentManager.Document.Descendants(_ns + "Fragment").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+                _fragment = _documentManager.Document.Descendants(_ns + "Fragment").First();
             }
 
             bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id").ToLower() == _fileName.ToLower()).Any();
@@ -74,7 +74,7 @@ namespace IsWiXAutomationInterface
         {
             if(_fragment == null)
             {
-                _fragment = new XElement(_ns + "Fragment", new XAttribute("Id", _fileName));
+                _fragment = new XElement(_ns + "Fragment");
                 _documentManager.Document.Root.Add(_fragment); ;
             }
             if(_componentGroup == null)
