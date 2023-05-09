@@ -1,8 +1,8 @@
 <VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
 	<TemplateData>
-		<Name>IsWiX Bootstrapper Solution (WiX v4)</Name>
+		<Name>IsWiX Bootstrapper (WiX v4)</Name>
 		<TemplateID>IsWiX.BootstrapperProject</TemplateID>
-		<Description>A multiproject (.EXE/.MSI/.WIXLIB) solution accelerator for creating an IsWiX / WiX v4 based EXE.</Description>
+		<Description>A multiple project solution accelerator for creating a WiX Burn Bootstrapper (.exe) file and Windows installation package (.msi) file.</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>20</SortOrder>
