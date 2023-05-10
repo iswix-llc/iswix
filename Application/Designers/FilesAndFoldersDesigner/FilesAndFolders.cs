@@ -123,11 +123,11 @@ namespace Designers.FilesAndFolders
             InitializeComponent();
 
             // create the column sorter and assign it to the correct control
-            lvColumnSorter = new ListViewColumnSorter();
-            lvSourceFiles.ListViewItemSorter = lvColumnSorter;
+            //lvColumnSorter = new ListViewColumnSorter();
+            //lvSourceFiles.ListViewItemSorter = lvColumnSorter;
 
-            lvDestinationColumnSorter = new ListViewColumnSorter();
-            lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
+            //lvDestinationColumnSorter = new ListViewColumnSorter();
+            //lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
         }
 
         private void PopulateSource()
@@ -167,7 +167,7 @@ namespace Designers.FilesAndFolders
 
             if (!FilePassesOurTest())
             {
-                _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\".\""));
+                _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(new XProcessingInstruction("define", "SourceDir=\"..\\Deploy\""));
             }
 
             IsWixUpgradeFixer.Fix();
