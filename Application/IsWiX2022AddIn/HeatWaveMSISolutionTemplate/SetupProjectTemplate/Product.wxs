@@ -18,6 +18,7 @@
     <!-- Include User Interface Experience -->
     <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
+    <Property Id="DISABLEADVTSHORTCUTS" Value="1"></Property>
     <UIRef Id="UI"/>
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CompanyFolder" Name="My Company">
