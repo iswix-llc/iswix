@@ -56,6 +56,13 @@ namespace IsWiXAutomationInterface
                 case "no":
                     finalValue = false;
                     break;
+                case "true":
+                    finalValue = true;
+                    break;
+
+                case "false":
+                    finalValue = false;
+                    break;
             }
 
             return finalValue;
