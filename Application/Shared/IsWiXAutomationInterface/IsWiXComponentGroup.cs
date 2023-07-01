@@ -96,14 +96,14 @@ namespace IsWiXAutomationInterface
                 else
                 {
                     directoryComponentElement = _componentGroup.Descendants(_ns + "Component").Where(
-                    c => c.Attribute("Directory").Value == directoryMeta.Directory && c.GetOptionalAttribute("KeyPath") == "true").FirstOrDefault();
+                    c => c.Attribute("Directory").Value == directoryMeta.Directory && c.GetOptionalYesNoAttribute("KeyPath", false) == true).FirstOrDefault();
                 }
             }
             else
             {
                 directoryComponentElement = _componentGroup.Descendants(_ns + "Component").Where(
                 c => c.Attribute("Directory").Value == directoryMeta.Directory &&
-                (c.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory)).FirstOrDefault();
+                (c.GetOptionalAttribute("Subdirectory") == directoryMeta.Subdirectory && c.GetOptionalYesNoAttribute("KeyPath", false) == true)).FirstOrDefault();
             }
 
             if (directoryComponentElement == null)
@@ -116,7 +116,7 @@ namespace IsWiXAutomationInterface
                             new XAttribute("Id", id),
                             new XAttribute("Directory", directoryMeta.Directory),
                             new XAttribute("Guid", Guid.NewGuid().ToString()),
-                            new XAttribute("KeyPath", "true"),
+                            new XAttribute("KeyPath", "yes"),
                             new XElement(_ns + "CreateFolder"));
                 }
                 else
@@ -127,7 +127,7 @@ namespace IsWiXAutomationInterface
                             new XAttribute("Directory", directoryMeta.Directory),
                             new XAttribute("Subdirectory", directoryMeta.Subdirectory),
                             new XAttribute("Guid", Guid.NewGuid().ToString()),
-                            new XAttribute("KeyPath", "true"),
+                            new XAttribute("KeyPath", "yes"),
                             new XElement(_ns + "CreateFolder"));
                 }
                 _componentGroup.Add(directoryComponentElement);
