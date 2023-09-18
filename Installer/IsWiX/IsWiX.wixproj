@@ -1,5 +1,5 @@
 ﻿<Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.0" />
+  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.2" />
   <PropertyGroup>
     <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments-->
@@ -33,7 +33,7 @@
     <Content Include="Resources\EULA.rtf" />
     <Content Include="Resources\Icon.ico" />
   </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.0" />
+  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.2" />
   <PropertyGroup>
     <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/%3ftd=sha256 /td sha256  $(TargetPath)</PostBuildEvent>
   </PropertyGroup>
