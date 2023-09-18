@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/4.0.1">
+﻿<Project Sdk="WixToolset.Sdk/4.0.">
   <PropertyGroup>
     <ProductVersion>3.8</ProductVersion>
     <OutputName>TestApp</OutputName>
@@ -23,8 +23,8 @@
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Bal.wixext" Version="4.0.0" />
-    <PackageReference Include="WixToolset.Netfx.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.Bal.wixext" Version="4.0.2" />
+    <PackageReference Include="WixToolset.Netfx.wixext" Version="4.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
