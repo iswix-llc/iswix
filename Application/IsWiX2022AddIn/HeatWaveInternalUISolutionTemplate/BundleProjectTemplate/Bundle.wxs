@@ -3,9 +3,12 @@
     <BootstrapperApplication>
       <bal:WixInternalUIBootstrapperApplication LogoFile="Resources\Icon.png" Theme="standard" ThemeFile="Resources\iuipreq.thm" LocalizationFile="Resources\iuipreq.wxl"/>
     </BootstrapperApplication>
+     <Variable Name="InstallFolder" bal:Overridable="yes" Type="formatted" Value=""/>
     <Chain>
  			<PackageGroupRef Id="NetFx48WebAsPrereq"/>
-      <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Package.TargetPath)" />
+      <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Package.TargetPath)">
+        <MsiProperty Name="INSTALLLOCATION" Value="[InstallFolder]"/>
+      </MsiPackage>
     </Chain>
   </Bundle>
 </Wix>
