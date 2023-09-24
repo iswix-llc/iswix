@@ -12,6 +12,8 @@
     <AppxTimestampUrl Condition=" '$(AppxTimestampUrl)' == '' "></AppxTimestampUrl>
     <MsixCertificateThumbprint Condition=" '$(MsixCertificateThumbprint)' == '' "></MsixCertificateThumbprint>
     <MsixTimestampUrl Condition=" '$(MsixTimestampUrl)' == '' "></MsixTimestampUrl>
+    <OutputName>$globalsafeprojectname$-$(MSIProductVersion)</OutputName>
+    <OutputType>Bundle</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>

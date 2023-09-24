@@ -1,14 +1,14 @@
 ﻿<Project Sdk="WixToolset.Sdk/4.0.2">
   <PropertyGroup>
     <ProductVersion>3.8</ProductVersion>
-    <OutputName>TestApp</OutputName>
-    <OutputType>Bundle</OutputType>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(TF_BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, try to get it from TFBuild Environments (V.Next Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, default to lowerbound 0.0.1 for developer builds.-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
+    <OutputName>$globalsafeprojectname$-$(MSIProductVersion)</OutputName>
+    <OutputType>Bundle</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
