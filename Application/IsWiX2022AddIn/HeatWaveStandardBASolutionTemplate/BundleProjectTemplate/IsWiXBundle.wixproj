@@ -32,6 +32,7 @@
   <ItemGroup>
     <Content Include="Resources\EULA.rtf" />
     <Content Include="Resources\Icon.png" />
+    <Content Include="Resources\RtfTheme.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\$globalsafeprojectname$Package\$globalsafeprojectname$Package.wixproj">

@@ -19,6 +19,8 @@
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Bundle.wxs">Bundle.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.png">Icon.png</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\RtfTheme.xml">RtfTheme.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\RtfTheme.wxl">RtfTheme.wxl</ProjectItem>
     </Project>
     <CustomParameters>
       <CustomParameter _locID="$loc_WXS_TODO1$" Name="$loc_WXS_TODO1$" Value="TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer." />
