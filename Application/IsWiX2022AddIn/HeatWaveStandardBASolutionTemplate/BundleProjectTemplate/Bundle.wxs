@@ -3,7 +3,7 @@
     <BootstrapperApplication>
       <bal:WixStandardBootstrapperApplication LicenseFile="Resources\EULA.rtf" LogoFile="Resources\Icon.png" Theme="rtfLicense" ThemeFile="Resources\RtfTheme.xml"  LocalizationFile="Resources\RtfTheme.wxl" />
     </BootstrapperApplication>
-    <Variable Name="InstallFolder" bal:Overridable="yes" Type="formatted" Value="[ProgramFiles6432Folder\My Company\$globalsafeprojectname$"/>
+    <Variable Name="InstallFolder" bal:Overridable="yes" Type="formatted" Value="[ProgramFiles6432Folder]\My Company\$globalsafeprojectname$"/>
     <Chain>
  			<PackageGroupRef Id="NetFx48WebAsPrereq"/>
       <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Package.TargetPath)">
