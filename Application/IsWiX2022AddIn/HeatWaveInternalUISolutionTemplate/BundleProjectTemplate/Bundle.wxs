@@ -5,7 +5,7 @@
     </BootstrapperApplication>
     <Chain>
  			<PackageGroupRef Id="NetFx48WebAsPrereq"/>
-      <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Setup.TargetPath)" />
+      <MsiPackage Id="$globalsafeprojectname$" SourceFile="$(var.$globalsafeprojectname$Package.TargetPath)" />
     </Chain>
   </Bundle>
 </Wix>

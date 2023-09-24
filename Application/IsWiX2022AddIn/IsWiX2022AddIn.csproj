@@ -95,14 +95,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="ProjectTemplates\HeatWaveMSISolutionTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -116,6 +108,18 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="ProjectTemplates\VotiveMSISolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -176,9 +180,11 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 CD "$(ProjectDir)HeatWaveMSISolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force
 
-CD "$(ProjectDir)HeatWaveBootstrapperSolutionTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip' -Force
-</PreBuildEvent>
+CD "$(ProjectDir)HeatWaveInternalUISolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip' -Force
+
+CD "$(ProjectDir)HeatWaveStandardBASolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip' -Force</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>

@@ -16,7 +16,7 @@
     <LanguageTag>WiX</LanguageTag>
   </TemplateData>
   <TemplateContent>
-    <Project File="IsWiXSetupProject.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
+    <Project File="IsWiXPackageProject.wixproj" TargetFileName="$safeprojectname$Package.wixproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Product.wxs">Product.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$globalsafeprojectname$Files.wxs">Files.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="IISMeta.wxs">IISMeta.wxs</ProjectItem>

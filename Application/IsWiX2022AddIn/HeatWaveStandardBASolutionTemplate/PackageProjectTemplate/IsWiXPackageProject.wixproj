@@ -1,49 +1,36 @@
 ﻿<Project Sdk="WixToolset.Sdk/4.0.2">
-  <PropertyGroup>
-    <ProductVersion>3.8</ProductVersion>
-    <OutputName>TestApp</OutputName>
-    <OutputType>Bundle</OutputType>
+ <PropertyGroup>
+    <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(TF_BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, try to get it from TFBuild Environments (V.Next Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, default to lowerbound 0.0.1 for developer builds.-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
+    <!-- The following allows one cert to be referenced from the certificate store for self-signing in localbuilds and another cert to be passed in during official builds. -->
+    <AppxCertificateThumbprint Condition=" '$(AppxCertificateThumbprint)' == '' "></AppxCertificateThumbprint>
+    <AppxTimestampUrl Condition=" '$(AppxTimestampUrl)' == '' "></AppxTimestampUrl>
+    <MsixCertificateThumbprint Condition=" '$(MsixCertificateThumbprint)' == '' "></MsixCertificateThumbprint>
+    <MsixTimestampUrl Condition=" '$(MsixTimestampUrl)' == '' "></MsixTimestampUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables></WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables></WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables></WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+    <WixVariables></WixVariables>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Bal.wixext" Version="4.0.2" />
-    <PackageReference Include="WixToolset.Netfx.wixext" Version="4.0.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\EULA.rtf" />
-    <Content Include="Resources\Icon.png" />
-    <Content Include="Resources\iuipreq.thm" />
-    <Content Include="Resources\iuipreq.wxl" />
-    <Content Include="Resources\splash.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\$globalsafeprojectname$Setup\$globalsafeprojectname$Setup.wixproj">
-      <Name>$globalsafeprojectname$Setup</Name>
-      <Project>{298d4875-b9ce-4cdc-be4a-c3573226727e}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
+    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.2" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.2" />
   </ItemGroup>
 </Project>
