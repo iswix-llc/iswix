@@ -1,0 +1,39 @@
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>IsWiX Bootstrapper Project</Name>
+    <TemplateID>IsWiX.BootstrapperEXEProject</TemplateID>
+    <Description>A project for creating an IsWiX based EXE file</Description>
+    <Icon>Icon.ico</Icon>
+    <ProjectType>WiX</ProjectType>
+    <SortOrder>20</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <CreateInPlace>true</CreateInPlace>
+    <DefaultName>SetupProject</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <ProjectTypeTag>HeatWave</ProjectTypeTag>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="IsWiXBundle.wixproj" TargetFileName="$safeprojectname$Bundle.wixproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Bundle.wxs">Bundle.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.png">Icon.png</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\iuipreq.thm">iuipreq.thm</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\iuipreq.wxl">iuipreq.wxl</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\splash.bmp">splash.bmp</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter _locID="$loc_WXS_TODO1$" Name="$loc_WXS_TODO1$" Value="TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer." />
+      <CustomParameter _locID="$loc_WXS_TODO2$" Name="$loc_WXS_TODO2$" Value="TODO: Insert files, registry keys, and other resources here." />
+      <CustomParameter _locID="$loc_WXS_TODO3$" Name="$loc_WXS_TODO3$" Value="TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer." />
+      <CustomParameter _locID="$loc_WXS_NOTE1$" Name="$loc_WXS_NOTE1$" Value="Note: The following ComponentGroupRef is required to pull in generated authoring from project references." />
+      <CustomParameter _locID="$loc_WIXPROJ_TOMODIFY_LINE1$" Name="$loc_WIXPROJ_TOMODIFY_LINE1$" Value="To modify your build process, add your task inside one of the targets below and uncomment it." />
+      <CustomParameter _locID="$loc_WIXPROJ_TOMODIFY_LINE2$" Name="$loc_WIXPROJ_TOMODIFY_LINE2$" Value="Other similar extension points exist, see Wix.targets." />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec</Assembly>
+    <FullClassName>IsWiXGlobalParams.WizardMPT</FullClassName>
+  </WizardExtension>
+</VSTemplate>

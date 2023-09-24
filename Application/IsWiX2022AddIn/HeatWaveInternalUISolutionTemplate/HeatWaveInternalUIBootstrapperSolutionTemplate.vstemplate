@@ -1,8 +1,8 @@
 <VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
 	<TemplateData>
-		<Name>IsWiX Bootstrapper (WiX v4)</Name>
-		<TemplateID>IsWiX.BootstrapperProject</TemplateID>
-		<Description>A multiple project solution accelerator for creating a WiX bootstrapper (.exe) file and Windows installation package (.msi) file.</Description>
+		<Name>IsWiX Bundle - InternalUI (WiX v4)</Name>
+		<TemplateID>IsWiX.InternalUIBundleProject</TemplateID>
+		<Description>A multiple project solution accelerator for creating a WiX InternalUI Bundle (.exe) file and Windows installation package (.msi) file. InternalUI delegates the UI to the MSI.</Description>
 		<Icon>IsWiX.ico</Icon>
 		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>20</SortOrder>
@@ -20,8 +20,8 @@
 	</WizardExtension>
 	<WizardData>
 		<Settings>
-			<MappedProjectTemplate name="$projectname$Setup" path="$projectname$Setup" template="SetupProjectTemplate\IsWixProject.vstemplate" />
-			<MappedProjectTemplate name="$projectname$Bootstrapper" path="$projectname$Bootstrapper" template="BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
+			<MappedProjectTemplate name="$projectname$Package" path="$projectname$Package" template="PackageProjectTemplate\IsWixProject.vstemplate" />
+			<MappedProjectTemplate name="$projectname$Bundle" path="$projectname$Bundle" template="BundleProjectTemplate\IsWixBundleProject.vstemplate" />
 		</Settings>
 	</WizardData>
 

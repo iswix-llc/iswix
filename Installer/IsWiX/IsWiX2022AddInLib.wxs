@@ -39,9 +39,9 @@
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveBootstrapperSolutionTemplate.zip" KeyPath="yes">
-          <CopyFile Id="HeatWaveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
-        </File>
+		  <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" KeyPath="yes">
+			  <CopyFile Id="HeatWaveInternalUISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+		  </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
         <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
@@ -52,6 +52,11 @@
         <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes">
           <CopyFile Id="HeatWaveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
+		  <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" KeyPath="yes">
+			  <CopyFile Id="HeatWaveStandardBASolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
+		  </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
         <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes">
