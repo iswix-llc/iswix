@@ -1,10 +1,12 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis" xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
   <Fragment>
     <ComponentGroup Id="webSite">
       <ComponentRef Id="webSite" />
     </ComponentGroup>
     <PropertyRef Id="IISMAJORVERSION" />
+    <netfx:DotNetCoreSearch RuntimeType="aspnet" MajorVersion="7" Platform="x64" Variable="ASPNETCOREVERSION"/>
     <Launch Condition="Installed OR IISMAJORVERSION" Message="[ProductName] requires Microsoft IIS"/>
+    <Launch Condition="Installed OR ASPNETCOREVERSION" Message="[ProductName] requires ASP.NET Core 7.x (Hosting Bundle)"/>
     <DirectoryRef Id="INSTALLLOCATION">
       <Directory Id="webSite" Name="WebSite">
         <Component Id="webSite" Guid="$guid4$" KeyPath="yes">
