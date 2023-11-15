@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/4.0.2">
+﻿<Project Sdk="WixToolset.Sdk/4.0.3">
  <PropertyGroup>
     <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
@@ -32,7 +32,7 @@
     <WixVariables></WixVariables>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.2" />
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.2" />
+    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
   </ItemGroup>
 </Project>
