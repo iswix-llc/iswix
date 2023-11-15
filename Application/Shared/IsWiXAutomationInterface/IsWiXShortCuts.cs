@@ -62,7 +62,7 @@ namespace IsWiXAutomationInterface
         {
             XElement shortcutElement = new XElement(ns + "Shortcut");
             string scID = "sc" + Guid.NewGuid().ToString().ToUpper().Replace("-", string.Empty);
-            shortcutElement.SetAttributeValue("Id", "sc" + IsWiXHelpers.GetMd5Hash(directory + name));
+            shortcutElement.SetAttributeValue("Id", "sc" + IsWiXHelpers.GetMd5Hash(Path.Combine(directory, subDirectory,name)));
             shortcutElement.SetAttributeValue("Name", name);
             shortcutElement.SetAttributeValue("Directory", directory);
             if (!string.IsNullOrEmpty(subDirectory))
