@@ -4,7 +4,7 @@
       <ComponentRef Id="webSite" />
     </ComponentGroup>
     <PropertyRef Id="IISMAJORVERSION" />
-    <netfx:DotNetCoreSearch RuntimeType="aspnet" MajorVersion="7" Platform="x64" Variable="ASPNETCOREVERSION"/>
+    <netfx:DotNetCompatibilityCheck  RuntimeType="aspnet" Version="7.0.0" Platform="$(Platform)" RollForward="latestMajor"  Property="ASPNETCOREVERSION"/>
     <Launch Condition="Installed OR IISMAJORVERSION" Message="[ProductName] requires Microsoft IIS"/>
     <Launch Condition="Installed OR ASPNETCOREVERSION" Message="[ProductName] requires ASP.NET Core 7.x (Hosting Bundle)"/>
    <DirectoryRef Id="INSTALLLOCATION">
