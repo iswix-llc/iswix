@@ -35,7 +35,14 @@
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
     <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
   </PropertyGroup>
-  <ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM64' ">
+		<DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+		<WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM64' ">
+		<DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+		<WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
+	</PropertyGroup><ItemGroup>
     <Content Include="Resources\Banner.jpg" />
     <Content Include="Resources\Dialog.jpg" />
     <Content Include="Resources\Icon.ico" />
