@@ -1,4 +1,4 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis"  xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis" xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"  xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis" xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
   <Fragment>
     <ComponentGroup Id="webSite">
       <ComponentRef Id="webSite" />
