@@ -30,8 +30,5 @@
     <ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="IF &quot;%25SIGN_ISWIX%25&quot;==&quot;TRUE&quot; signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)&#xD;&#xA;" />
-  </Target>
 
 </Project>

@@ -186,9 +186,6 @@ powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTempla
 CD "$(ProjectDir)HeatWaveStandardBASolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip' -Force</PreBuildEvent>
   </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>IF "%25SIGN_ISWIX%25"=="TRUE" signtool sign /fd SHA256 /tr http://timestamp.sectigo.com/?td=sha256 /td sha256 /as $(TargetPath)</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
