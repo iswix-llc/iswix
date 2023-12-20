@@ -45,12 +45,12 @@ namespace IsWiXAutomationInterface
             _documentManager.RefreshNamespaces();
         }
 
-        public Dictionary<string, string> PossibleNamespaces
+        public SortedDictionary<string, string> PossibleNamespaces
         {
             get
             {
 
-                var _extensions = new Dictionary<string, string>();
+                var _extensions = new SortedDictionary<string, string>();
 
                 try
                 {
