@@ -84,6 +84,19 @@ namespace IsWiXAutomationInterface
                                     prefix = "fga";
                                 }
 
+                                // One expedient hack deserves another
+                                if (prefix.Equals("hbt"))
+                                {
+                                    prefix = "fg";
+                                }
+
+                                // and another until it's a pattern
+                                if (prefix.Equals("hbt_msix"))
+                                {
+                                    prefix = "msix";
+                                }
+
+
                                 _extensions.Add(prefix, targetNameSpace);
                             }
                         }
