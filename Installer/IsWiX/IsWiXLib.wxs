@@ -228,6 +228,12 @@
         <File Source="$(var.SourceDir)\Schemas\fg4_firewall.xsd" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+        <File Source="$(var.SourceDir)\Schemas\fg4_hbt_msix.xsd" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+        <File Source="$(var.SourceDir)\Schemas\fg4_hbt.xsd" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
         <File Source="$(var.SourceDir)\Schemas\fg4_http.xsd" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
