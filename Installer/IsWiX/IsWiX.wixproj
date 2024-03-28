@@ -1,5 +1,5 @@
 ﻿<Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.2" />
+  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="5.0.0-rc.2" />
   <PropertyGroup>
     <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments-->
@@ -21,8 +21,8 @@
     <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0" />
-    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0-rc.2" />
+    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="5.0.0-rc.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
