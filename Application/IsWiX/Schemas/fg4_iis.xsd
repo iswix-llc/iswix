@@ -1018,7 +1018,7 @@
             </html:ul>
 
             The IP attribute can contain a formatted string that is processed at install time to insert the values of properties using
-            [PropertyName] syntax. 
+            [PropertyName] syntax.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
