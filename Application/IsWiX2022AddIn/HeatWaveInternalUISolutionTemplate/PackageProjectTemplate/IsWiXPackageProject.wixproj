@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/4.0.3">
+﻿<Project Sdk="WixToolset.Sdk/5.0.0">
  <PropertyGroup>
     <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
@@ -49,8 +49,8 @@
     <Content Include="Resources\EULA.rtf" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.Iis.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="5.0.0" />
   </ItemGroup>
 </Project>

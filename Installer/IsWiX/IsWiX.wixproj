@@ -1,7 +1,5 @@
-﻿<Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.2" />
+﻿<Project Sdk="WixToolset.Sdk/5.0.0">
   <PropertyGroup>
-    <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- Default to 0.0.1 for developer builds -->
@@ -12,17 +10,15 @@
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
     <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
     <SuppressPdbOutput>True</SuppressPdbOutput>
-    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
     <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
     <SuppressPdbOutput>True</SuppressPdbOutput>
-    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0" />
-    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="4.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -33,5 +29,4 @@
     <Content Include="Resources\EULA.rtf" />
     <Content Include="Resources\Icon.ico" />
   </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.2" />
 </Project>

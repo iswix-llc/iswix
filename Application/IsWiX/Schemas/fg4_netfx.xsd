@@ -531,6 +531,7 @@
           <xs:documentation>
             Name of the property in which to place the result of the compatibility check. The possible values are:
               - 0 - Successful compatibility check.
+              - 13 - Requested platform is not compatible with OS. _Introduced in WiX v5.0._
               - 12289 - No runtime is installed.
               - 12290 - Required runtime is not installed.
               - 12291 - Failed to get hostfxr exports.

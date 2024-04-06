@@ -38,6 +38,11 @@
           <xs:documentation>Optional culture for this localization file. If the Culture attribute is not provided, the localization file is considered to be language neutral. This culture value is used to filter applicable localization files during the build. Language neutral localization files are always included.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="ExtensionDefaultCulture" type="LocalizationYesNoType">
+        <xs:annotation>
+          <xs:documentation>[WiX v5] Optional. Indicates that the localization file's culture is the default culture for a WiX Extension. Only valid when used in a WiX library included in a WiX Extension..</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="Language" type="Integer">
         <xs:annotation>
           <xs:documentation>The decimal language ID (LCID) for the culture. Used only when processed by native code using locutil.</xs:documentation>

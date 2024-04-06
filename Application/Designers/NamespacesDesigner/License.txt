@@ -1,2 +1,2 @@
-Copyright 2010 - 2023 - ISWIX, LLC
+Copyright 2010 - 2024 - ISWIX, LLC
 Microsoft Public License (MS-PL)

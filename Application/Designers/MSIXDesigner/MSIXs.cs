@@ -12,6 +12,9 @@ using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
 using static FireworksFramework.Types.Enums;
+using System.Security.Policy;
+using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace MSIXDesigner
 {
@@ -60,12 +63,12 @@ namespace MSIXDesigner
         public bool IsValidContext()
         {
             DocumentManager documentManager = DocumentManager.DocumentManagerInstance;
-            return (documentManager.Document.GetWiXVersion() == WiXVersion.v3 && documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product);
+            return (documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product);
         }
 
         public void LoadData()
         {
-            if (_fgWiXInstalled)
+            if (_fgWiXInstalled || DocumentManager.DocumentManagerInstance.Document.GetWiXVersion() == WiXVersion.v4)
             {
                 linkLabelRequirements.Visible = false;
                 LoadDocument();
@@ -109,10 +112,13 @@ namespace MSIXDesigner
 
         private void UpdatedSelectedNodeText()
         {
-            IsWiXFGMSIX msix = treeViewMSIXs.SelectedNode.Tag as IsWiXFGMSIX;
-            if (msix != null)
+            if (treeViewMSIXs.SelectedNode != null)
             {
-                treeViewMSIXs.SelectedNode.Text = msix.Id;
+                IsWiXFGMSIX msix = treeViewMSIXs.SelectedNode.Tag as IsWiXFGMSIX;
+                if (msix != null)
+                {
+                    treeViewMSIXs.SelectedNode.Text = msix.Id;
+                }
             }
         }
 
@@ -157,6 +163,7 @@ namespace MSIXDesigner
 
         private void treeViewMSIXs_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            msix1 = new MSIX();
             propertyGrid1.Enabled = true;
             propertyGrid1.SelectedObject = msix1;
             msix1.Read(e.Node.Tag as IsWiXFGMSIX);
@@ -170,6 +177,22 @@ namespace MSIXDesigner
 
         private void toolStripMenuItemNewFeature_Click(object sender, EventArgs e)
         {
+            string ns = null;
+            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v3)
+            {
+                ns = "http://www.firegiant.com/schemas/v3/wxs/fgappx.xsd";
+            }
+            else
+            {
+                ns = "http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools/msix";
+            }
+
+            if(!_documentManager.Document.NameSpaces().ContainsKey("msix"))
+            {
+                _documentManager.Document.Root.Add(new XAttribute(XNamespace.Xmlns + "msix", ns));
+                _documentManager.RefreshNamespaces();
+            }
+               
             IsWiXFGMSIXs msixs = new IsWiXFGMSIXs(_documentManager.Document);
             string msixName = IsWiXFGMSIXs.SuggestNextMSIXName(_documentManager.Document);
             IsWiXFGMSIX msix = msixs.Create(msixName, "CN=, O=, STREET=, L=, S=, PostalCode=, C=", TargetType.desktop);

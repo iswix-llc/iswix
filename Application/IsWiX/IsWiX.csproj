@@ -29,6 +29,8 @@
     <None Remove="Schemas\fg4_difxapp.xsd" />
     <None Remove="Schemas\fg4_directx.xsd" />
     <None Remove="Schemas\fg4_firewall.xsd" />
+    <None Remove="Schemas\fg4_hbt.xsd" />
+    <None Remove="Schemas\fg4_hbt_msix.xsd" />
     <None Remove="Schemas\fg4_http.xsd" />
     <None Remove="Schemas\fg4_iis.xsd" />
     <None Remove="Schemas\fg4_msmq.xsd" />
@@ -63,6 +65,12 @@
 
   <ItemGroup>
     <Content Include="EULA.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\fg4_hbt.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\fg4_hbt_msix.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="IsWiX.bmp">
@@ -209,6 +217,7 @@
     <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj" />
     <ProjectReference Include="..\Designers\MSIXDesigner\MSIXDesigner.csproj" />
     <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\NewFeaturesDesigner\NewFeaturesDesigner.csproj" />
     <ProjectReference Include="..\Designers\NewFilesAndFoldersDesigner\NewFilesAndFoldersDesigner.csproj" />
     <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj" />
     <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj" />

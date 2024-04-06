@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Win32;
 using FireworksFramework.Managers;
+using System.Reflection.Metadata;
 
 namespace IsWiXAutomationInterface
 {
@@ -16,7 +17,15 @@ namespace IsWiXAutomationInterface
         public IsWiXFGMSIXs(XDocument Document)
         {
             _document = Document;
-            ns = "http://www.firegiant.com/schemas/v3/wxs/fgmsix.xsd";
+            _document = Document;
+            if (_document.GetWiXVersion() == WiXVersion.v3)
+            {
+                ns = "http://www.firegiant.com/schemas/v3/wxs/fgappx.xsd";
+            }
+            else
+            {
+                ns = "http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools/msix";
+            }
             Load();
         }
 
@@ -85,7 +94,16 @@ namespace IsWiXAutomationInterface
 
         public static string SuggestNextMSIXName(XDocument document)
         {
-            XNamespace ns = "http://www.firegiant.com/schemas/v3/wxs/fgmsix.xsd";
+            XNamespace ns;
+            if (document.GetWiXVersion() == WiXVersion.v3)
+            {
+                ns = "http://www.firegiant.com/schemas/v3/wxs/fgappx.xsd";
+            }
+            else
+            {
+                ns = "http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools/msix";
+            }
+
             int i = 1;
             string suggestedMSIXName;
             bool found = false;
@@ -125,13 +143,22 @@ namespace IsWiXAutomationInterface
 
     public class IsWiXFGMSIX
     {
-        XNamespace ns = "http://www.firegiant.com/schemas/v3/wxs/fgmsix.xsd";
+        XNamespace ns;
         XElement _msixElement;
         XDocument _document;
 
         public IsWiXFGMSIX(XDocument document, XElement msixElement)
         {
             _document = document;
+            if (_document.GetWiXVersion() == WiXVersion.v3)
+            {
+                ns = "http://www.firegiant.com/schemas/v3/wxs/fgappx.xsd";
+            }
+            else
+            {
+                ns = "http://www.firegiant.com/schemas/v4/wxs/heatwave/buildtools/msix";
+            }
+
             _msixElement = msixElement;
         }
 

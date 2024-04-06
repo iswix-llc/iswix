@@ -45,12 +45,12 @@ namespace IsWiXAutomationInterface
             _documentManager.RefreshNamespaces();
         }
 
-        public Dictionary<string, string> PossibleNamespaces
+        public SortedDictionary<string, string> PossibleNamespaces
         {
             get
             {
 
-                var _extensions = new Dictionary<string, string>();
+                var _extensions = new SortedDictionary<string, string>();
 
                 try
                 {
@@ -83,6 +83,19 @@ namespace IsWiXAutomationInterface
                                 {
                                     prefix = "fga";
                                 }
+
+                                // One expedient hack deserves another
+                                if (prefix.Equals("hbt"))
+                                {
+                                    prefix = "fg";
+                                }
+
+                                // and another until it's a pattern
+                                if (prefix.Equals("hbt_msix"))
+                                {
+                                    prefix = "msix";
+                                }
+
 
                                 _extensions.Add(prefix, targetNameSpace);
                             }
