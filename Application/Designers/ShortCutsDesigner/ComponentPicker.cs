@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using IsWiXAutomationInterface;
 
@@ -10,19 +11,20 @@ namespace ShortCutsDesigner
         string _fileName = string.Empty;
         XElement _fileElement = null;
         IsWiXShortCuts _shortCuts;
-
+        List<ShortCutCandidate> _candidates;
+        public string FileFilterPattern { get; set; }
         public XElement FileElement
         {
             get
             {
-                return _fileElement; 
+                return _fileElement;
             }
         }
 
-        public string FileKey  
-        { 
+        public string FileKey
+        {
             get
-            { 
+            {
                 return _fileKey;
             }
         }
@@ -38,9 +40,10 @@ namespace ShortCutsDesigner
         public ComponentPicker(IsWiXShortCuts shortCuts)
         {
             _shortCuts = shortCuts;
+            _candidates = _shortCuts.GetShortCutCandidates();
             InitializeComponent();
             PopulateListBox();
-            if(treeView1.Nodes.Count==0)
+            if (treeView1.Nodes.Count == 0 && string.IsNullOrEmpty(FileFilterPattern))
             {
                 label1.Text = "No files were found to be suitable for creating a shortcut.";
                 treeView1.Visible = false;
@@ -50,11 +53,14 @@ namespace ShortCutsDesigner
 
         private void PopulateListBox()
         {
-
-            foreach (var candidate in _shortCuts.GetShortCutCandidates())
+            treeView1.Nodes.Clear();
+            foreach (var candidate in _candidates)
             {
-                TreeNode node = treeView1.Nodes.Add(candidate.DestinationFilePath);
-                node.Tag = candidate;
+                if(string.IsNullOrEmpty(FileFilterPattern) || candidate.DestinationFilePath.ToLower().Contains(FileFilterPattern.ToLower()))
+                {
+                    TreeNode node = treeView1.Nodes.Add(candidate.DestinationFilePath);
+                    node.Tag = candidate;
+                }
             }
 
         }
@@ -69,5 +75,14 @@ namespace ShortCutsDesigner
             buttonSelect.Enabled = true;
         }
 
+        private void label1_Click(object sender, System.EventArgs e)
+        {
+
+        }
+        private void textBoxIncludeFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+                FileFilterPattern = textBoxIncludeFilter.Text;
+                PopulateListBox();
+        }
     }
 }
