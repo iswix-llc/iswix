@@ -141,6 +141,9 @@
         <File Source="$(var.SourceDir)\netstandard.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
+        <File Source="$(var.SourceDir)\NewFeaturesDesigner.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\NewFilesAndFoldersDesigner.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
