@@ -808,7 +808,8 @@ namespace Designers.NewFilesAndFolders
 
         private void AddSpecialFolder(string folderId)
         {
-            _isWiXComponentGroup.GetOrCreateDirectoryComponent(folderId);
+            _isWiXComponentGroup.GetOrCreateDirectoryComponent(folderId, false);
+            _isWiXComponentGroup.SortComponents();
             LoadDocument();
         }
 
