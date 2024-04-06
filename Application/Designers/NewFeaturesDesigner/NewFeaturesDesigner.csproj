@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net7.0-windows</TargetFramework>
+	  <ImplicitUsings>disable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <UseWPF>true</UseWPF>
+	  <UseWindowsForms>true</UseWindowsForms>
+	  <Private>false</Private>
+	  <EnableDynamicLoading>true</EnableDynamicLoading>
+	  <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Features.ico" />
+    <None Remove="License.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Features.ico" />
+    <EmbeddedResource Include="License.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FireworksFrameworkCore" Version="5.1.34" />
+    <PackageReference Include="XmlDesignerCore" Version="5.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
+  </ItemGroup>
+
+</Project>
