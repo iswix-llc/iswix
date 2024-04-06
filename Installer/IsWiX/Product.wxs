@@ -13,7 +13,7 @@
 		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
     <Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
       <ComponentGroupRef Id="IsWiXLib"/>
-      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2019 - 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
         <ComponentGroupRef Id="IsWiX2022AddInLib"/>
       </Feature>
     </Feature>
