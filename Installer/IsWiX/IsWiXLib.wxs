@@ -1,943 +1,945 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-  <?define ComponentRules="OneToOne"?>
-  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
-  <?define SourceDir="..\Deploy"?>
-  <Fragment Id="IsWiXLib">
-    <ComponentGroup Id="IsWiXLib">
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Accessibility.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\AppXDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\clretwrc.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\clrgc.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\clrjit.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\coreclr.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\createdump.exe" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\CustomTablesDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\D3DCompiler_47_cor3.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\DiffPlex.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\DirectWriteForwarder.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\EULA.rtf" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\FeaturesDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\FilesAndFoldersDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\FireworksFramework.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\GeneralInformationDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\hostfxr.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\hostpolicy.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\ICSharpCode.AvalonEdit.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiX.bmp" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiX.deps.json" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiX.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiX.exe" KeyPath="yes">
-          <Shortcut Id="sc0E92A21E0413D87C7771C95CAE9C788F" Name="IsWiX" Directory="ProgramMenuFolder" Subdirectory="IsWiX" />
-        </File>
-        <RegistryValue Id="IsWiXLocation" Action="write" Root="HKLM" Type="string" Key="SOFTWARE\ISWIXLLC\IsWiX" Name="IsWiXFilePath" Value="[INSTALLLOCATION]IsWiX.exe" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiX.ico" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiX.runtimeconfig.json" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\IsWiXAutomationInterface.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\License.txt" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.CSharp.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.VisualBasic.Core.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.VisualBasic.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.VisualBasic.Forms.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.Win32.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.Win32.Registry.AccessControl.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.Win32.Registry.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.Win32.SystemEvents.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\mscordaccore.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\mscordbi.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\mscorlib.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\mscorrc.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\MSIXDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\msquic.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\NamespacesDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\netstandard.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\NewFeaturesDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\NewFilesAndFoldersDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PenImc_cor3.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationCore.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework-SystemCore.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework-SystemData.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework-SystemDrawing.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework-SystemXml.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework-SystemXmlLinq.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.Aero.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.Aero2.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.AeroLite.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.Classic.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.Luna.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationFramework.Royale.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationNative_cor3.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PresentationUI.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\PropertiesDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\ReachFramework.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\bal.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\complus.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\Dependency.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\difxapp.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_bal.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_complus.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_dependency.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_difxapp.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_directx.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_firewall.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_hbt_msix.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_hbt.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_http.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_iis.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_msmq.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_netfx.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_ps.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_sql.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_thmutil.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_ui.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_util.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_vs.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_wix.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fg4_wixloc.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fgappx.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\fgmsix.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\firewall.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\gaming.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\http.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\iis.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\lux.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\msmq.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\netfx.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\ps.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\sql.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\tag.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\thmutil.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\util.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\vs.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\wix.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
-        <File Source="$(var.SourceDir)\Schemas\wixloc.xsd" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\ServicesDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\ShortCutsDesigner.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.AppContext.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Buffers.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.CodeDom.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Collections.Concurrent.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Collections.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Collections.Immutable.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Collections.NonGeneric.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Collections.Specialized.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ComponentModel.Annotations.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ComponentModel.DataAnnotations.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ComponentModel.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ComponentModel.EventBasedAsync.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ComponentModel.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ComponentModel.TypeConverter.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Configuration.ConfigurationManager.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Configuration.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Console.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Core.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Data.Common.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Data.DataSetExtensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Data.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Design.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.Contracts.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.Debug.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.DiagnosticSource.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.EventLog.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.EventLog.Messages.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.FileVersionInfo.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.PerformanceCounter.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.Process.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.StackTrace.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.TextWriterTraceListener.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.Tools.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.TraceSource.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Diagnostics.Tracing.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.DirectoryServices.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Drawing.Common.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Drawing.Design.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Drawing.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Drawing.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Dynamic.Runtime.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Formats.Asn1.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Formats.Tar.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Globalization.Calendars.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Globalization.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Globalization.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Compression.Brotli.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Compression.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Compression.FileSystem.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Compression.Native.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Compression.ZipFile.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.FileSystem.AccessControl.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.FileSystem.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.FileSystem.DriveInfo.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.FileSystem.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.FileSystem.Watcher.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.IsolatedStorage.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.MemoryMappedFiles.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Packaging.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Pipes.AccessControl.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.Pipes.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.IO.UnmanagedMemoryStream.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Linq.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Linq.Expressions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Linq.Parallel.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Linq.Queryable.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Memory.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Http.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Http.Json.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.HttpListener.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Mail.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.NameResolution.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.NetworkInformation.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Ping.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Quic.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Requests.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Security.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.ServicePoint.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.Sockets.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.WebClient.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.WebHeaderCollection.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.WebProxy.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.WebSockets.Client.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Net.WebSockets.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Numerics.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Numerics.Vectors.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ObjectModel.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Printing.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Private.CoreLib.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Private.DataContractSerialization.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Private.Uri.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Private.Xml.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Private.Xml.Linq.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.DispatchProxy.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.Emit.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.Emit.ILGeneration.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.Emit.Lightweight.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.Metadata.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Reflection.TypeExtensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Resources.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Resources.Reader.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Resources.ResourceManager.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Resources.Writer.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.CompilerServices.Unsafe.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.CompilerServices.VisualC.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Handles.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.InteropServices.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.InteropServices.JavaScript.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.InteropServices.RuntimeInformation.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Intrinsics.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Loader.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Numerics.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Serialization.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Serialization.Formatters.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Serialization.Json.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Serialization.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Runtime.Serialization.Xml.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.AccessControl.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Claims.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Algorithms.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Cng.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Csp.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Encoding.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.OpenSsl.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Pkcs.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.ProtectedData.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.X509Certificates.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Cryptography.Xml.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Permissions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Principal.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.Principal.Windows.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Security.SecureString.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ServiceModel.Web.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ServiceProcess.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Text.Encoding.CodePages.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Text.Encoding.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Text.Encoding.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Text.Encodings.Web.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Text.Json.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Text.RegularExpressions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.AccessControl.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Channels.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Overlapped.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Tasks.Dataflow.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Tasks.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Tasks.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Tasks.Parallel.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Thread.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.ThreadPool.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Threading.Timer.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Transactions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Transactions.Local.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.ValueTuple.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Web.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Web.HttpUtility.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Controls.Ribbon.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Forms.Design.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Forms.Design.Editors.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Forms.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Forms.Primitives.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Input.Manipulations.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Windows.Presentation.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xaml.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.Linq.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.ReaderWriter.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.Serialization.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.XDocument.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.XmlDocument.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.XmlSerializer.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.XPath.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\System.Xml.XPath.XDocument.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="Templates\WiX">
-        <File Source="$(var.SourceDir)\Templates\WiX\Product.wxs" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\UIAutomationClient.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\UIAutomationClientSideProviders.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\UIAutomationProvider.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\UIAutomationTypes.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\vcruntime140_cor3.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\WindowsBase.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\WindowsFormsIntegration.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\WixToolset.Dtf.WindowsInstaller.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\wpfgfx_cor3.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.NET5.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Aero.NET5.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Metro.NET5.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.VS2010.NET5.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Xceed.Wpf.Toolkit.NET5.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\XmlDesignerCore.dll" KeyPath="yes" />
-      </Component>
-    </ComponentGroup>
-  </Fragment>
+	<?define ComponentRules="OneToOne"?>
+	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+	<?define SourceDir="..\Deploy"?>
+	<Fragment Id="IsWiXLib">
+		<ComponentGroup Id="IsWiXLib">
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Accessibility.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\AppXDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\clretwrc.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\clrgc.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\clrjit.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\coreclr.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\createdump.exe" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\CustomTablesDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\D3DCompiler_47_cor3.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\DiffPlex.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\DirectWriteForwarder.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\EULA.rtf" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\FeaturesDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\FilesAndFoldersDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\FireworksFramework.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\GeneralInformationDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\hostfxr.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\hostpolicy.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\ICSharpCode.AvalonEdit.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiX.bmp" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiX.deps.json" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiX.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiX.exe" KeyPath="yes">
+					<Shortcut Id="sc0E92A21E0413D87C7771C95CAE9C788F" Name="IsWiX" Directory="ProgramMenuFolder" Advertise="yes" />
+				</File>
+				<RegistryValue Id="IsWiXLocation" Action="write" Root="HKLM" Type="string" Key="SOFTWARE\ISWIXLLC\IsWiX" Name="IsWiXFilePath" Value="[INSTALLLOCATION]IsWiX.exe" />
+				<RegistryValue Id="IsWiXAppPath1" Action="write" Root="HKLM" Type="string" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\IsWiX.exe" Value="[INSTALLLOCATION]IsWiX.exe" />
+				<RegistryValue Id="IsWiXAppPath2" Action="write" Root="HKLM" Type="string" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\IsWiX.exe" Value="[INSTALLLOCATION]" Name="Path" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiX.ico" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiX.runtimeconfig.json" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\IsWiXAutomationInterface.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\License.txt" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.CSharp.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.VisualBasic.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.VisualBasic.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.VisualBasic.Forms.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.Win32.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.Win32.Registry.AccessControl.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.Win32.Registry.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Microsoft.Win32.SystemEvents.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\mscordaccore.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\mscordbi.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\mscorlib.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\mscorrc.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\MSIXDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\msquic.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\NamespacesDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\netstandard.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\NewFeaturesDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\NewFilesAndFoldersDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PenImc_cor3.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationCore.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework-SystemCore.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework-SystemData.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework-SystemDrawing.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework-SystemXml.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework-SystemXmlLinq.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.Aero.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.Aero2.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.AeroLite.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.Classic.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.Luna.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationFramework.Royale.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationNative_cor3.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PresentationUI.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\PropertiesDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\ReachFramework.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\bal.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\complus.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\Dependency.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\difxapp.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_bal.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_complus.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_dependency.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_difxapp.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_directx.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_firewall.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_hbt_msix.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_hbt.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_http.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_iis.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_msmq.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_netfx.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_ps.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_sql.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_thmutil.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_ui.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_util.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_vs.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_wix.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fg4_wixloc.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fgappx.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\fgmsix.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\firewall.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\gaming.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\http.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\iis.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\lux.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\msmq.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\netfx.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\ps.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\sql.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\tag.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\thmutil.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\util.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\vs.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\wix.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Schemas">
+				<File Source="$(var.SourceDir)\Schemas\wixloc.xsd" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\ServicesDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\ShortCutsDesigner.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.AppContext.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Buffers.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.CodeDom.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Collections.Concurrent.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Collections.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Collections.Immutable.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Collections.NonGeneric.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Collections.Specialized.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ComponentModel.Annotations.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ComponentModel.DataAnnotations.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ComponentModel.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ComponentModel.EventBasedAsync.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ComponentModel.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ComponentModel.TypeConverter.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Configuration.ConfigurationManager.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Configuration.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Console.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Data.Common.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Data.DataSetExtensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Data.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Design.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.Contracts.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.Debug.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.DiagnosticSource.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.EventLog.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.EventLog.Messages.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.FileVersionInfo.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.PerformanceCounter.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.Process.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.StackTrace.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.TextWriterTraceListener.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.Tools.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.TraceSource.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Diagnostics.Tracing.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.DirectoryServices.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Drawing.Common.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Drawing.Design.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Drawing.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Drawing.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Dynamic.Runtime.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Formats.Asn1.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Formats.Tar.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Globalization.Calendars.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Globalization.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Globalization.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Compression.Brotli.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Compression.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Compression.FileSystem.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Compression.Native.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Compression.ZipFile.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.FileSystem.AccessControl.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.FileSystem.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.FileSystem.DriveInfo.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.FileSystem.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.FileSystem.Watcher.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.IsolatedStorage.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.MemoryMappedFiles.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Packaging.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Pipes.AccessControl.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.Pipes.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.IO.UnmanagedMemoryStream.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Linq.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Linq.Expressions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Linq.Parallel.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Linq.Queryable.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Memory.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Http.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Http.Json.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.HttpListener.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Mail.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.NameResolution.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.NetworkInformation.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Ping.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Quic.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Requests.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Security.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.ServicePoint.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.Sockets.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.WebClient.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.WebHeaderCollection.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.WebProxy.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.WebSockets.Client.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Net.WebSockets.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Numerics.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Numerics.Vectors.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ObjectModel.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Printing.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Private.CoreLib.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Private.DataContractSerialization.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Private.Uri.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Private.Xml.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Private.Xml.Linq.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.DispatchProxy.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.Emit.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.Emit.ILGeneration.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.Emit.Lightweight.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.Metadata.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Reflection.TypeExtensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Resources.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Resources.Reader.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Resources.ResourceManager.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Resources.Writer.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.CompilerServices.Unsafe.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.CompilerServices.VisualC.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Handles.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.InteropServices.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.InteropServices.JavaScript.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.InteropServices.RuntimeInformation.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Intrinsics.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Loader.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Numerics.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Serialization.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Serialization.Formatters.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Serialization.Json.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Serialization.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Runtime.Serialization.Xml.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.AccessControl.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Claims.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Algorithms.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Cng.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Csp.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Encoding.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.OpenSsl.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Pkcs.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.ProtectedData.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.X509Certificates.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Cryptography.Xml.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Permissions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Principal.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.Principal.Windows.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Security.SecureString.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ServiceModel.Web.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ServiceProcess.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Text.Encoding.CodePages.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Text.Encoding.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Text.Encoding.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Text.Encodings.Web.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Text.Json.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Text.RegularExpressions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.AccessControl.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Channels.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Overlapped.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Tasks.Dataflow.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Tasks.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Tasks.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Tasks.Parallel.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Thread.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.ThreadPool.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Threading.Timer.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Transactions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Transactions.Local.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.ValueTuple.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Web.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Web.HttpUtility.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Controls.Ribbon.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Forms.Design.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Forms.Design.Editors.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Forms.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Forms.Primitives.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Input.Manipulations.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Windows.Presentation.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xaml.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.Linq.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.ReaderWriter.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.Serialization.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.XDocument.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.XmlDocument.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.XmlSerializer.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.XPath.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\System.Xml.XPath.XDocument.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION" Subdirectory="Templates\WiX">
+				<File Source="$(var.SourceDir)\Templates\WiX\Product.wxs" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\UIAutomationClient.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\UIAutomationClientSideProviders.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\UIAutomationProvider.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\UIAutomationTypes.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\vcruntime140_cor3.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\WindowsBase.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\WindowsFormsIntegration.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\WixToolset.Dtf.WindowsInstaller.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\wpfgfx_cor3.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.NET5.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Aero.NET5.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.Metro.NET5.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Xceed.Wpf.AvalonDock.Themes.VS2010.NET5.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\Xceed.Wpf.Toolkit.NET5.dll" KeyPath="yes" />
+			</Component>
+			<Component Directory="INSTALLLOCATION">
+				<File Source="$(var.SourceDir)\XmlDesignerCore.dll" KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
 </Wix>
