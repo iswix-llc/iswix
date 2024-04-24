@@ -15,4 +15,5 @@ PropertiesDesigner.dll
 ServicesDesigner.dll
 ShortCutsDesigner.dll
 XmlDesignerCore.dll
+IsWiX.dll
 IsWiX.exe
