@@ -60,6 +60,7 @@
     <None Remove="Schemas\vs.xsd" />
     <None Remove="Schemas\wix.xsd" />
     <None Remove="Schemas\wixloc.xsd" />
+    <None Remove="signing-catalog.txt" />
     <None Remove="Templates\WiX\Product.wxs" />
   </ItemGroup>
 
@@ -79,6 +80,9 @@
     <EmbeddedResource Include="IsWiX.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="signing-catalog.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
