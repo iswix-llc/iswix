@@ -1,0 +1,51 @@
+﻿
+    <Window x:Class="FireworksFramework.Views.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:FireworksFramework.ViewModels"
+        xmlns:services="clr-namespace:FireworksFramework.Services"
+        xmlns:local="clr-namespace:FireworksFramework.Views"
+        mc:Ignorable="d"
+        Title="{Binding Title}">
+    <Window.DataContext>
+        <viewmodels:AboutViewModel x:Name="viewModel"/>
+    </Window.DataContext>
+    <Window.Resources>
+        <services:ImageConverter x:Key="imageConverter" />
+    </Window.Resources>
+    <DockPanel LastChildFill="True">
+        <Image  x:Name="brandingImage" Source="{Binding BrandingBitmap}" DockPanel.Dock="Top"/>
+        <Label Content="InstalledComponents" DockPanel.Dock="Top" FontWeight="Bold"/>
+        <ListView Height="250" DockPanel.Dock="Top" ItemsSource="{Binding PluginDescriptions}"  SelectedItem="{Binding Path=SelectedPluginDescription, Mode=TwoWay}" SelectionChanged="ListView_SelectionChanged">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding PluginImage, Converter={StaticResource imageConverter}}" Width="16"/>
+                                    <Label Content="{Binding PluginName}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Assembly" Width="Auto" DisplayMemberBinding="{Binding Path=PluginAssembly}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <RichTextBox>
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding License}"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+    </DockPanel>
+</Window>

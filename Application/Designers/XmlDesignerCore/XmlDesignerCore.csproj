@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>XmlDesignerCore</Title>
+		<PackageId>XmlDesignerCore</PackageId>
+		<Description>XML designer for use with Fireworks framework core.</Description>
+		<PackageProjectUrl>https://github.com/iswix-llc/XmlDesignerCore</PackageProjectUrl>
+		<PackageTags>wpf c# plugins xml designers</PackageTags>
+		<PackageReleaseNotes>See GitHub</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/iswix-llc/XmlDesignerCore</RepositoryUrl>
+		<Copyright>Copyright 2010-2022 ISWIX, LLC</Copyright>
+		<Authors>iswix-llc</Authors>
+		<Company>iswix-llc</Company>
+		<PackageLicenseFile>License.txt</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="XmlEditor.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="License.txt" />
+		<EmbeddedResource Include="XmlEditor.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="License.txt">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

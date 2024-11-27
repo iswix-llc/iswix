@@ -1,0 +1,11 @@
+﻿Copyright 2010 - 2019 - ISWIX, LLC
+Microsoft Public License (Ms-PL)
+
+Third Party Code:
+
+DiffPlex
+Author: Matthew Manela
+WebSite: https://github.com/mmanela/diffplex
+License: 
+ Apache License
+ https://github.com/mmanela/diffplex/commits/master/License.txt
