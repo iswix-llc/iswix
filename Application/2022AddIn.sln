@@ -20,6 +20,7 @@ Global
 		{C9A455FD-D791-4748-8988-3A88A2471108}.Debug|x64.ActiveCfg = Debug|x64
 		{C9A455FD-D791-4748-8988-3A88A2471108}.Debug|x64.Build.0 = Debug|x64
 		{C9A455FD-D791-4748-8988-3A88A2471108}.Release|x64.ActiveCfg = Release|x64
+		{C9A455FD-D791-4748-8988-3A88A2471108}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
