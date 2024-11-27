@@ -5,7 +5,7 @@
 		<TargetFramework>net9.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<Title>XmlDesignerCore</Title>
 		<PackageId>XmlDesignerCore</PackageId>
 		<Description>XML designer for use with Fireworks framework core.</Description>
@@ -17,6 +17,7 @@
 		<Authors>iswix-llc</Authors>
 		<Company>iswix-llc</Company>
 		<PackageLicenseFile>License.txt</PackageLicenseFile>
+		<Platforms>x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
