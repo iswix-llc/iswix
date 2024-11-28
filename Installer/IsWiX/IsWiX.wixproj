@@ -1,10 +1,11 @@
-﻿<Project Sdk="WixToolset.Sdk/5.0.0">
+﻿<Project Sdk="WixToolset.Sdk/5.0.2">
   <PropertyGroup>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- Default to 0.0.1 for developer builds -->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
-    <OutputName>IsWiX-$(MSIProductVersion)</OutputName>
+    <OutputName>IsWiX-$(MSIProductVersion)-$(Platform)</OutputName>
+    <Platforms>x64;ARM64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
@@ -17,8 +18,8 @@
     <SuppressPdbOutput>True</SuppressPdbOutput>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
-    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.VisualStudio.wixext" Version="5.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
