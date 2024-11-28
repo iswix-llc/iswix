@@ -33,7 +33,7 @@
     </CustomParameters>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec</Assembly>
-    <FullClassName>IsWiXGlobalParams.WizardMPT</FullClassName>
-  </WizardExtension>
+    <Assembly>IsWiX2022AddIn</Assembly>
+    <FullClassName>IsWiX2022AddIn.WizardMPT</FullClassName>
+   </WizardExtension>
 </VSTemplate>

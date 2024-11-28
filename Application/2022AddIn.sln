@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiX2022AddIn", "IsWiX2022AddIn\IsWiX2022AddIn.csproj", "{A8624A95-0317-4F9A-A00D-F80CC20D5F8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXGlobalParams", "IsWiXGlobalParams\IsWiXGlobalParams.csproj", "{C9A455FD-D791-4748-8988-3A88A2471108}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -17,10 +15,6 @@ Global
 		{A8624A95-0317-4F9A-A00D-F80CC20D5F8B}.Debug|x64.Build.0 = Debug|x64
 		{A8624A95-0317-4F9A-A00D-F80CC20D5F8B}.Release|x64.ActiveCfg = Release|x64
 		{A8624A95-0317-4F9A-A00D-F80CC20D5F8B}.Release|x64.Build.0 = Release|x64
-		{C9A455FD-D791-4748-8988-3A88A2471108}.Debug|x64.ActiveCfg = Debug|x64
-		{C9A455FD-D791-4748-8988-3A88A2471108}.Debug|x64.Build.0 = Debug|x64
-		{C9A455FD-D791-4748-8988-3A88A2471108}.Release|x64.ActiveCfg = Release|x64
-		{C9A455FD-D791-4748-8988-3A88A2471108}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

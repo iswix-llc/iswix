@@ -1,5 +1,5 @@
 ﻿
-namespace IsWiXGlobalParams
+namespace IsWiX2022AddIn
 {
   /// <summary>Defines constant values used by the Multi-Project Template Wizard.</summary>
   internal static class Constants

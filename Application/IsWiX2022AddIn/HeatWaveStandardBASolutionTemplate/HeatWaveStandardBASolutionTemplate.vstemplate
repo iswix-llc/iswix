@@ -14,10 +14,10 @@
 		<LanguageTag>WiX</LanguageTag>
 	</TemplateData>
 	<TemplateContent></TemplateContent>
-	<WizardExtension>
-		<Assembly>IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec</Assembly>
-		<FullClassName>IsWiXGlobalParams.WizardMPT</FullClassName>
-	</WizardExtension>
+  <WizardExtension>
+    <Assembly>IsWiX2022AddIn</Assembly>
+    <FullClassName>IsWiX2022AddIn.WizardMPT</FullClassName>
+   </WizardExtension>
 	<WizardData>
 		<Settings>
 			<MappedProjectTemplate name="$projectname$Package" path="$projectname$Package" template="PackageProjectTemplate\IsWixProject.vstemplate" />

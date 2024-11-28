@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IsWiXGlobalParams.Objects
+namespace IsWiX2022AddIn.Objects
 {
   /// <summary>Represents a mapped template.</summary>
   internal class MappedTemplate

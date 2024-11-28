@@ -1,11 +1,11 @@
-﻿using IsWiXGlobalParams.Objects;
+﻿using IsWiX2022AddIn.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace IsWiXGlobalParams.Config
+namespace IsWiX2022AddIn.Config
 {
   /// <summary>Represents settings for the multi-project template wizard.</summary>
   internal class SettingsMPT

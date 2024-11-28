@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace IsWiXGlobalParams
+namespace IsWiX2022AddIn
 {
   /// <summary>Storage for global parameters.</summary>
   public static class Parameters

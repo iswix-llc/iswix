@@ -1,7 +1,7 @@
 ﻿using EnvDTE;
 using EnvDTE80;
-using IsWiXGlobalParams.Config;
-using IsWiXGlobalParams.Objects;
+using IsWiX2022AddIn.Config;
+using IsWiX2022AddIn.Objects;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Xml.Linq;
 
-namespace IsWiXGlobalParams
+namespace IsWiX2022AddIn
 {
   /// <summary>The wizard used to expose replacement parameters across multiple projects.</summary>
   public class WizardMPT : IWizard

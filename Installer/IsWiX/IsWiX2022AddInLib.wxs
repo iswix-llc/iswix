@@ -25,9 +25,6 @@
           <CopyFile Id="dupe4a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="GlobalAssemblyCache" Permanent="yes">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net" />
-      </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
         <File Source="$(var.SourceDir)\IsWiX2022AddIn\MS-PL.txt" KeyPath="yes">
           <CopyFile Id="dupe5a" DestinationProperty="EXTENSIONDIR2022" />
