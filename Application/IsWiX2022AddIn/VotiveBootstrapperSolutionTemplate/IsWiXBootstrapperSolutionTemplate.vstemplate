@@ -13,7 +13,7 @@
   </TemplateData>
   <TemplateContent></TemplateContent>
   <WizardExtension>
-    <Assembly>IsWiX2022AddIn</Assembly>
+    <Assembly>IsWiX2022AddIn, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7b7206b3b2a3a50c</Assembly>
     <FullClassName>IsWiX2022AddIn.WizardMPT</FullClassName>
    </WizardExtension>
   <WizardData>
