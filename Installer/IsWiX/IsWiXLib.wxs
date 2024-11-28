@@ -18,6 +18,9 @@
         <File Source="$(var.SourceDir)\clrgc.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
+        <File Source="$(var.SourceDir)\clrgcexp.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\clrjit.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
@@ -183,6 +186,9 @@
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\PresentationFramework.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION">
+        <File Source="$(var.SourceDir)\PresentationFramework.Fluent.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\PresentationFramework.Luna.dll" KeyPath="yes" />
@@ -461,6 +467,9 @@
         <File Source="$(var.SourceDir)\System.Formats.Asn1.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
+        <File Source="$(var.SourceDir)\System.Formats.Nrbf.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\System.Formats.Tar.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
@@ -513,6 +522,9 @@
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\System.IO.Packaging.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION">
+        <File Source="$(var.SourceDir)\System.IO.Pipelines.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\System.IO.Pipes.AccessControl.dll" KeyPath="yes" />
@@ -615,6 +627,9 @@
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\System.Private.Uri.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION">
+        <File Source="$(var.SourceDir)\System.Private.Windows.Core.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\System.Private.Xml.dll" KeyPath="yes" />
