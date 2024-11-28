@@ -1,4 +1,3 @@
-IsWiX2022AddIn\IsWiXGlobalParams.dll
 IsWiX2022AddIn\IsWiX2022AddIn.dll
 AppXDesigner.dll
 CustomTablesDesigner.dll
