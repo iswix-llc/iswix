@@ -17,7 +17,7 @@
 		<Authors>iswix-llc</Authors>
 		<Company>iswix-llc</Company>
 		<PackageLicenseFile>License.txt</PackageLicenseFile>
-		<Platforms>x64</Platforms>
+		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
