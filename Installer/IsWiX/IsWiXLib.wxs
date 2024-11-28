@@ -98,9 +98,6 @@
         <File Source="$(var.SourceDir)\Microsoft.CSharp.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\Microsoft.VisualBasic.Core.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
