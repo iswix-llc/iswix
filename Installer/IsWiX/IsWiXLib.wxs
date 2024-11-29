@@ -33,9 +33,6 @@
         <File Source="$(var.SourceDir)\CustomTablesDesigner.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\D3DCompiler_47_cor3.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\DiffPlex.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
@@ -96,9 +93,6 @@
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\Microsoft.CSharp.dll" KeyPath="yes" />
-      </Component>
-      <Component Directory="INSTALLLOCATION">
-        <File Source="$(var.SourceDir)\Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" />
       </Component>
       <Component Directory="INSTALLLOCATION">
         <File Source="$(var.SourceDir)\Microsoft.VisualBasic.Core.dll" KeyPath="yes" />
