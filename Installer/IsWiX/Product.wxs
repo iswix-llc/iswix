@@ -17,7 +17,7 @@
       <ComponentGroupRef Id="IsWiXLib"/>
       <?if $(var.Platform)=x64?>
       <Component Directory="INSTALLLOCATION">
-        <File Source="..\Deploy\D3DCompiler_47_cor3.dll" KeyPath="yes" />
+        <File Source="..\Deploy\IsWiX\D3DCompiler_47_cor3.dll" KeyPath="yes" />
       </Component>
       <?endif ?>
       <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
