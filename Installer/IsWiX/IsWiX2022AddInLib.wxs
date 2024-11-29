@@ -2,74 +2,74 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <?define ComponentRules="OneToOne"?>
   <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
-  <?define SourceDir="..\Deploy"?>
+  <?define SourceDir="..\Deploy\IsWiX2022AddIn"?>
   <Fragment Id="IsWiX2022AddInLib">
     <ComponentGroup Id="IsWiX2022AddInLib">
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\extension.vsixmanifest" KeyPath="yes">
+        <File Source="$(var.SourceDir)\extension.vsixmanifest" KeyPath="yes">
           <CopyFile Id="dupe1a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\Icon.png" KeyPath="yes">
+        <File Source="$(var.SourceDir)\Icon.png" KeyPath="yes">
           <CopyFile Id="dupe2a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\IsWiX2022AddIn.dll" KeyPath="yes">
+        <File Source="$(var.SourceDir)\IsWiX2022AddIn.dll" KeyPath="yes">
           <CopyFile Id="dupe3a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\IsWiX2022AddIn.pkgdef" KeyPath="yes">
+        <File Source="$(var.SourceDir)\IsWiX2022AddIn.pkgdef" KeyPath="yes">
           <CopyFile Id="dupe4a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="GlobalAssemblyCache" Permanent="yes">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net" />
+        <File Source="$(var.SourceDir)\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net" />
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\MS-PL.txt" KeyPath="yes">
+        <File Source="$(var.SourceDir)\MS-PL.txt" KeyPath="yes">
           <CopyFile Id="dupe5a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\preview.png" KeyPath="yes">
+        <File Source="$(var.SourceDir)\preview.png" KeyPath="yes">
           <CopyFile Id="dupe6a" DestinationProperty="EXTENSIONDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-		  <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" KeyPath="yes">
+		  <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" KeyPath="yes">
 			  <CopyFile Id="HeatWaveInternalUISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 		  </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
+        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes">
           <CopyFile Id="HeatWaveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes">
+        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes">
           <CopyFile Id="HeatWaveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-		  <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" KeyPath="yes">
+		  <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" KeyPath="yes">
 			  <CopyFile Id="HeatWaveStandardBASolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
 		  </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes">
+        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes">
           <CopyFile Id="VotiveBootstrapperSolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes">
+        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes">
           <CopyFile Id="VotiveMergeModuleProjectTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
       </Component>
       <Component Directory="INSTALLLOCATION" Subdirectory="IsWiX2022AddIn\ProjectTemplates">
-        <File Source="$(var.SourceDir)\IsWiX2022AddIn\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes">
+        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes">
           <CopyFile Id="VotiveMSISolutionTemplate" DestinationProperty="EXTENSIONPROJECTTEMPLATESDIR2022" />
         </File>
       </Component>
