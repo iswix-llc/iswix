@@ -1,7 +1,7 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:vs="http://wixtoolset.org/schemas/v4/wxs/vs">
-	<Package Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e" InstallerVersion="301">
+	<Package Name="IsWiX" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ISWIX LLC" UpgradeCode="9b70a6f1-4a3e-4955-8c34-2d354042b87e" InstallerVersion="500">
 		<MediaTemplate EmbedCab="yes" />
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallValidate" MigrateFeatures="no" AllowSameVersionUpgrades="yes" />
 		<Icon Id="Icon.ico" SourceFile="Resources\Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
 		<UIRef Id="UI" />
@@ -9,6 +9,7 @@
 		<vs:FindVisualStudio />
 		<PropertyRef Id="VS2022_EXTENSIONS_DIR" />
 		<Property Id="DISABLEADVTSHORTCUTS" Value="1" />
+    <Property Id="REINSTALLMODE" Value="amus" />
 		<CustomActionRef Id="VS2022Setup" />
 		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
 		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
