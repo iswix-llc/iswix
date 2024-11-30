@@ -121,13 +121,14 @@ namespace Designers.FilesAndFolders
         public FilesAndFolders()
         {
             InitializeComponent();
+            #if !DEBUG
+             create the column sorter and assign it to the correct control
+            lvColumnSorter = new ListViewColumnSorter();
+            lvSourceFiles.ListViewItemSorter = lvColumnSorter;
 
-            // create the column sorter and assign it to the correct control
-            //lvColumnSorter = new ListViewColumnSorter();
-            //lvSourceFiles.ListViewItemSorter = lvColumnSorter;
-
-            //lvDestinationColumnSorter = new ListViewColumnSorter();
-            //lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
+            lvDestinationColumnSorter = new ListViewColumnSorter();
+            lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
+            #endif
         }
 
         private void PopulateSource()
@@ -143,7 +144,7 @@ namespace Designers.FilesAndFolders
             DisplaySourceListItemsForSelectedNode(tvSourceFiles.SelectedNode);
             Cursor = Cursors.Default;
         }
-        #endregion
+#endregion
 
         public void LoadData()
         {
@@ -438,7 +439,7 @@ namespace Designers.FilesAndFolders
                 originalStartingDirectory.Add(sortedSubDirectories);
             }
         }
-        #endregion
+#endregion
 
         #region (------ Public Properties -----)
         public string FileFilterPattern
