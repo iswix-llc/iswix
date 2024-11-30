@@ -122,7 +122,7 @@ namespace Designers.FilesAndFolders
         {
             InitializeComponent();
             #if !DEBUG
-             create the column sorter and assign it to the correct control
+            // create the column sorter and assign it to the correct control
             lvColumnSorter = new ListViewColumnSorter();
             lvSourceFiles.ListViewItemSorter = lvColumnSorter;
 
