@@ -1,0 +1,59 @@
+{
+  "controlPlacements": [
+    {
+      "controlName": "IsWiXExtension.CommandLaunchIsWiX",
+      "parent": {
+        "legacyParentId": {
+          "guid": "d309f791-903f-11d0-9efc-00a0c911004f",
+          "id": 345
+        },
+        "priority": 0
+      }
+    }
+  ],
+  "customImages": [
+    {
+      "id": "MyImage",
+      "sources": [
+        "Images\\MyImage.16.16.png"
+      ]
+    }
+  ],
+  "commandSets": [
+    {
+      "name": "IsWiXExtension.ExtensionEntrypoint",
+      "serviceMoniker": {
+        "name": "IsWiXExtension.ExtensionEntrypointCommandSet",
+        "version": "1.0"
+      },
+      "commands": [
+        {
+          "tooltipText": "Launch IsWiX",
+          "flags": "None",
+          "icon": {
+            "IconName": "MyImage",
+            "iconSettings": "IconAndText"
+          },
+          "name": "IsWiXExtension.CommandLaunchIsWiX",
+          "displayName": "Launch IsWiX",
+          "contextProviderName": "Editor,Shell"
+        }
+      ],
+      "dynamicCommandAnchors": []
+    }
+  ],
+  "services": [
+    {
+      "host": "dotnetExtensibility",
+      "name": "IsWiXExtension.ExtensionEntrypointCommandSet",
+      "serviceBaseDirectory": ".",
+      "serviceAudience": "Local | RemoteExclusiveClient",
+      "version": "1.0",
+      "entryPoint": {
+        "assemblyPath": "IsWiXExtension.dll",
+        "fullClassName": "IsWiXExtension.ExtensionEntrypoint"
+      },
+      "allowHostingInProcess": false
+    }
+  ]
+}

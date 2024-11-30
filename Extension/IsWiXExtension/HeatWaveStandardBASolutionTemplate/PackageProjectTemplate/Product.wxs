@@ -1,0 +1,31 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!-- 
+  MSIProductVersion is defined in $safeprojectname$.wixproj as 0.0.1 for local desktop builds.  
+  You should pass in the MSBuild Property 'MSIProductVersion' to override it during an automated build.
+  See http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859%28v=vs.85%29.aspx for information on allowable values.
+  
+  The Product@Id attribute (ProductCode Property) will be a random GUID for each build.  This is to support "Major Upgrades" where each install 
+  is a seamless uninstall/reinstall.
+  -->
+<Package Name="$globalsafeprojectname$" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="$globalsafeprojectname$" UpgradeCode="$guid3$">
+    <MediaTemplate EmbedCab="yes" />
+    <!-- Major Upgrade Rule to disallow downgrades -->
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <!-- Uncomment below two lines to require .NET 4.8 or later to install -->
+    <!-- <PropertyRef Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" />  -->
+    <!-- <Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="[ProductName] requires .NET Framework 4.8 or later." /> -->
+    <Property Id="DISABLEADVTSHORTCUTS" Value="1"></Property>
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="CompanyFolder" Name="My Company">
+        <Directory Id="INSTALLLOCATION" Name="$globalsafeprojectname$">
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+    <Feature Id="$globalsafeprojectname$" Title="$globalsafeprojectname$" Description="Installs all the files needed for $globalsafeprojectname$" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentGroupRef Id="$globalsafeprojectname$Files"/>
+      <!-- Uncomment the below line to pull in IIS Metadata.  Otherwise delete if not needed -->
+      <!--<ComponentGroupRef Id="webSite" />-->
+    </Feature>
+    <EnsureTable Id="FeatureComponents"/>
+  </Package>
+</Wix>

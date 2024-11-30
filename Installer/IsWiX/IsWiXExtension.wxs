@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <?define ComponentRules="OneToOne"?>
+  <!-- SourceDir instructs IsWiX the location of the directory that contains files for this merge module -->
+  <?define SourceDir="..\Deploy\IsWiXExtension"?>
+  <Fragment Id="IsWiXExtension">
+    <ComponentGroup Id="IsWiXExtension">
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\.vsextension">
+        <File Source="$(var.SourceDir)\.vsextension\extension.json" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\.vsextension">
+        <File Source="$(var.SourceDir)\.vsextension\string-resources.json" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\extension.vsixmanifest" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\Images">
+        <File Source="$(var.SourceDir)\Images\MyImage.16.16.png" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\IsWiXExtension.deps.json" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\IsWiXExtension.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="GlobalAssemblyCache" Permanent="yes">
+        <File Source="$(var.SourceDir)\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\Microsoft.Extensions.DependencyInjection.Abstractions.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\Microsoft.Extensions.DependencyInjection.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\Microsoft.VisualStudio.Extensibility.Contracts.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\Microsoft.VisualStudio.Extensibility.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\Microsoft.VisualStudio.Extensibility.Framework.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
+        <File Source="$(var.SourceDir)\MS-PL.txt" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
+        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -13,15 +13,15 @@
 		<CustomActionRef Id="VS2022Setup" />
 		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
 		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
-    <Feature Id="IW" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
-      <ComponentGroupRef Id="IsWiXLib"/>
+    <Feature Id="APP" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
+      <ComponentGroupRef Id="IsWiXAll"/>
       <?if $(var.Platform)=x64?>
       <Component Directory="INSTALLLOCATION">
         <File Source="..\Deploy\IsWiX\D3DCompiler_47_cor3.dll" KeyPath="yes" />
       </Component>
       <?endif ?>
-      <Feature Id="ISWIXADDIN" Title="Visual Studio Extension" Description="Visual Studio 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-        <ComponentGroupRef Id="IsWiX2022AddInLib"/>
+      <Feature Id="VSEXT" Title="Visual Studio Extension" Description="Visual Studio 2022 Integration" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+        <ComponentGroupRef Id="IsWiXExtension"/>
       </Feature>
     </Feature>
     <StandardDirectory Id="ProgramFiles6432Folder">
