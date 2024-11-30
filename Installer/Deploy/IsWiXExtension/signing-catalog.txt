@@ -1,0 +1,2 @@
+IsWiXExtension.dll
+IsWiXGlobalParams.dll
