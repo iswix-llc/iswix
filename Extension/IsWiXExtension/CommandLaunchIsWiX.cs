@@ -71,7 +71,12 @@ namespace IsWiXExtension
                 {
                     errorMessage = "IsWiX.exe not found";
                 }
-                System.Diagnostics.Process.Start(isWiXPath, documentPath);
+                ProcessStartInfo processStartInfo = new ProcessStartInfo();
+                processStartInfo.UseShellExecute = true;
+                processStartInfo.WorkingDirectory = new FileInfo(documentPath).Directory.FullName;
+                processStartInfo.FileName = isWiXPath;
+                processStartInfo.Arguments = documentPath;
+                Process.Start(processStartInfo);
             }
             catch (Exception ex)
             {
