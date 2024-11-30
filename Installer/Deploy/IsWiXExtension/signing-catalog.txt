@@ -1,2 +1,2 @@
-IsWiXExtension.dll
-IsWiXGlobalParams.dll
+IsWiX LLC\IsWiX\1.0.0\IsWiXExtension.dll
+IsWiX LLC\IsWiX\1.0.0\IsWiXGlobalParams.dll

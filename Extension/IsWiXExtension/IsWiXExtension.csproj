@@ -69,6 +69,6 @@
 
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /iery &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension&quot;&#xD;&#xA;copy /y &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\finalextension.vsixmanifest&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\extension.vsixmanifest&quot;" />
+    <Exec Command="xcopy /iery &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0&quot;&#xD;&#xA;copy /y &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0\finalextension.vsixmanifest&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0\extension.vsixmanifest&quot;" />
   </Target>
 </Project>

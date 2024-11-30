@@ -11,8 +11,7 @@
 		<Property Id="DISABLEADVTSHORTCUTS" Value="1" />
     <Property Id="REINSTALLMODE" Value="amus" />
 		<CustomActionRef Id="VS2022Setup" />
-		<SetProperty Id="EXTENSIONDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
-		<SetProperty Id="EXTENSIONPROJECTTEMPLATESDIR2022" Value="[VS2022_EXTENSIONS_DIR]\IsWiX LLC\IsWiX\1.0\ProjectTemplates" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
+		<SetProperty Id="ExtensionsFolder" Value="[VS2022_EXTENSIONS_DIR]" After="AppSearch" Sequence="both" Condition="VS2022_EXTENSIONS_DIR"></SetProperty>
     <Feature Id="APP" Title="IsWiX" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION" Display="expand">
       <ComponentGroupRef Id="IsWiXApp"/>
       <?if $(var.Platform)=x64?>
@@ -27,6 +26,7 @@
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CompanyFolder" Name="ISWIX LLC">
         <Directory Id="INSTALLLOCATION" Name="IsWiX">
+          <Directory Id="ExtensionsFolder" Name="ExtensionsFolder" />
         </Directory>
       </Directory>
     </StandardDirectory>

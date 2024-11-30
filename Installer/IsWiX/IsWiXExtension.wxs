@@ -5,65 +5,596 @@
   <?define SourceDir="..\Deploy\IsWiXExtension"?>
   <Fragment Id="IsWiXExtension">
     <ComponentGroup Id="IsWiXExtension">
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\.vsextension">
-        <File Source="$(var.SourceDir)\.vsextension\extension.json" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\.vsextension">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\.vsextension\extension.json" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\.vsextension">
-        <File Source="$(var.SourceDir)\.vsextension\string-resources.json" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\.vsextension">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\.vsextension\string-resources.json" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\extension.vsixmanifest" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\Images">
-        <File Source="$(var.SourceDir)\Images\MyImage.16.16.png" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\IsWiXExtension.deps.json" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\IsWiXExtension.dll" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="GlobalAssemblyCache" Permanent="yes">
-        <File Source="$(var.SourceDir)\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\Microsoft.Extensions.DependencyInjection.Abstractions.dll" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\Microsoft.Extensions.DependencyInjection.dll" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\Microsoft.VisualStudio.Extensibility.Contracts.dll" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\Microsoft.VisualStudio.Extensibility.dll" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\Microsoft.VisualStudio.Extensibility.Framework.dll" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension">
-        <File Source="$(var.SourceDir)\MS-PL.txt" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\cs">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\cs\StreamJsonRpc.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
       </Component>
-      <Component Directory="INSTALLLOCATION" Subdirectory="IsWiXExtension\ProjectTemplates">
-        <File Source="$(var.SourceDir)\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes" />
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\de">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\de\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\en">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\en\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\es">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\es\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\extension.vsixmanifest" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\finalextension.vsixmanifest" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\fr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\fr\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\Images">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Images\MyImage.16.16.png" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\IsWiXExtension.deps.json" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\IsWiXExtension.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\IsWiXExtension.pdb" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\IsWiXExtension.vsix" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\IsWiXGlobalParams.dll" KeyPath="yes" Assembly=".net"/>
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\it">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\it\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ja">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ja\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ko">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ko\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\MessagePack.Annotations.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\MessagePack.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.Bcl.AsyncInterfaces.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.Extensions.DependencyInjection.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.NET.StringTools.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.ServiceHub.Framework.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Composition.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Extensibility.Contracts.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Extensibility.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Extensibility.Editor.Contracts.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Extensibility.Framework.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Interop.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.ProjectSystem.Query.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.RemoteControl.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.RpcContracts.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Telemetry.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Threading.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Utilities.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Utilities.Internal.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Microsoft.VisualStudio.Validation.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\MS-PL.txt" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Nerdbank.Streams.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Newtonsoft.Json.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pl">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pl\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\HeatWaveMSISolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\VotiveMergeModuleProjectTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ProjectTemplates">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ProjectTemplates\VotiveMSISolutionTemplate.zip" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\pt-BR">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\pt-BR\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\ru">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\ru\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\runtimes\win\lib\netcoreapp2.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\StreamJsonRpc.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.ComponentModel.Composition.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.Composition.AttributedModel.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.Composition.Convention.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.Composition.Hosting.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.Composition.Runtime.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.Composition.TypedParts.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.IO.Pipelines.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\System.Management.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\tr">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\tr\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hans">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hans\StreamJsonRpc.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.ServiceHub.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.ServiceHub.Resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Composition.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Extensibility.Contracts.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Extensibility.Framework.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Extensibility.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.ProjectSystem.Query.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Threading.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Utilities.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\Microsoft.VisualStudio.Validation.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\zh-Hant">
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\zh-Hant\StreamJsonRpc.resources.dll" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
