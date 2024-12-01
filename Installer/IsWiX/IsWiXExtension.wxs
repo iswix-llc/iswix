@@ -18,7 +18,7 @@
         <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\extension.vsixmanifest" KeyPath="yes" />
       </Component>
       <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0\Images">
-        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Images\MyImage.16.16.png" KeyPath="yes" />
+        <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\Images\MyImage.128.128.png" KeyPath="yes" />
       </Component>
       <Component Directory="ExtensionsFolder" Subdirectory="IsWiX LLC\IsWiX\1.0.0">
         <File Source="$(var.SourceDir)\IsWiX LLC\IsWiX\1.0.0\IsWiX.png" KeyPath="yes" />

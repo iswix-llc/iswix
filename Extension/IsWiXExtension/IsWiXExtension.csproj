@@ -54,6 +54,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Images\MyImage.128.128.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="Images\MyImage.16.16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
