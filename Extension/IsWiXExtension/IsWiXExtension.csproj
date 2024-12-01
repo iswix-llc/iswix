@@ -5,12 +5,20 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="EULA.rtf" />
+    <None Remove="IsWiX.png" />
     <None Remove="MS-PL.txt" />
     <None Remove="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" />
     <None Remove="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EULA.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="finalextension.vsixmanifest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IsWiX.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MS-PL.txt">
@@ -52,6 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ProjectSource\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
@@ -64,7 +73,7 @@
 
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="IF NOT EXIST &quot;$(ProjectDir)ProjectTemplates&quot; MKDIR &quot;$(ProjectDir)ProjectTemplates&quot;&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)VotiveMergeModuleProjectTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveMergeModuleProjectTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)VotiveMSISolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveMSISolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)VotiveBootstrapperSolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)HeatWaveMergeModuleProjectTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)HeatWaveMSISolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)HeatWaveInternalUISolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)HeatWaveStandardBASolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip' -Force" />
+    <Exec Command="IF NOT EXIST &quot;$(ProjectDir)ProjectTemplates&quot; MKDIR &quot;$(ProjectDir)ProjectTemplates&quot;&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\VotiveMergeModuleProjectTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveMergeModuleProjectTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\VotiveMSISolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveMSISolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\VotiveBootstrapperSolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\VotiveBootstrapperSolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\HeatWaveMergeModuleProjectTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\HeatWaveMSISolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\HeatWaveInternalUISolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip' -Force&#xD;&#xA;&#xD;&#xA;CD &quot;$(ProjectDir)ProjectSource\HeatWaveStandardBASolutionTemplate&quot;&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip' -Force" />
   </Target>
 
 
