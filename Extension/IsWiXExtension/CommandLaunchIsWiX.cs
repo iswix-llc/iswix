@@ -33,7 +33,8 @@ namespace IsWiXExtension
             // Use this object initializer to set optional parameters for the command. The required parameter,
             // displayName, is set above. DisplayName is localized and references an entry in .vsextension\string-resources.json.
             Icon = new(ImageMoniker.Custom("MyImage"), IconSettings.IconAndText),
-            Placements = [CommandPlacement.KnownPlacements.ToolsMenu]             
+            Placements = [CommandPlacement.KnownPlacements.ToolsMenu],
+            EnabledWhen = ActivationConstraint.ClientContext(ClientContextKey.Shell.ActiveSelectionFileName, @"\.(wxs)$"),
         };
 
         /// <inheritdoc />
