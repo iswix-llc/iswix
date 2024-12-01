@@ -2,13 +2,8 @@
   <Metadata>
     <Identity Id="IsWiXExtension.17e9900c-9099-4869-9735-0614ce9a4d78" Version="1.0.0.0" Language="en-US" Publisher="IsWiX LLC" />
     <DisplayName>IsWiX</DisplayName>
-    <Description>IsWiX</Description>
-    <MoreInfo>https://github.com/iswix-llc/iswix</MoreInfo>
-    <Preview>true</Preview>
-    <License>EULA.rtf</License>
+    <Description>Industrial Strength Windows Installer XML ( IsWiX ) makes authoring Windows Installer XML (WiX) Windows Installers (.MSI) a breeze. It includes Visual Studio project templates and graphical designers to aid you in authoring 95% of your source code. From there you can author additional code using standard WiX programming techniques.</Description>
     <Icon>IsWiX.png</Icon>
-    <PreviewImage>Resources\HeatWave.png</PreviewImage>
-    <GettingStartedGuide>https://github.com/iswix-llc/iswix-tutorials</GettingStartedGuide>
   </Metadata>
   <Installation ExtensionType="VisualStudio.Extensibility">
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.12,18.0)">
@@ -17,7 +12,6 @@
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.12,18.0)">
       <ProductArchitecture>arm64</ProductArchitecture>
     </InstallationTarget>
-    <InstalledByMsi>true</InstalledByMsi>
   </Installation>
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.12,)" DisplayName="Visual Studio core editor" />
