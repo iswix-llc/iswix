@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
 using System.Xml.Linq;
 using FireworksFramework.Managers;
 
@@ -28,11 +29,10 @@ namespace IsWiXAutomationInterface
             {
                 _fragment = _documentManager.Document.Descendants(_ns + "Fragment").First();
             }
-
             bool foundComponentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id").ToLower() == _fileName.ToLower()).Any();
             if (foundComponentGroup)
             {
-                _componentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id") == _fileName).First();
+                _componentGroup = _documentManager.Document.Descendants(_ns + "ComponentGroup").Where(e => e.GetOptionalAttribute("Id").ToLower() == _fileName.ToLower()).First();
             }
             EstablishDefines();
         }

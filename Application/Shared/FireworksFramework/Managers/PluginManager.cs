@@ -39,8 +39,8 @@ namespace FireworksFramework.Managers
             _designers = new SortedDictionary<string, IFireworksDesigner>();
             DirectoryInfo dInfo = new DirectoryInfo(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName);
             List<FileInfo> files = new List<FileInfo>();
-            files.AddRange(dInfo.GetFiles("*.dll", SearchOption.AllDirectories).ToList<FileInfo>());
-            files.AddRange(dInfo.GetFiles("*.exe", SearchOption.AllDirectories).ToList<FileInfo>());
+            files.AddRange(dInfo.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList<FileInfo>());
+            files.AddRange(dInfo.GetFiles("*.exe", SearchOption.TopDirectoryOnly).ToList<FileInfo>());
 
             List<Assembly> pluginAssemblies = new List<Assembly>();
 
