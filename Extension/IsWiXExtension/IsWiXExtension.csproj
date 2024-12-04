@@ -57,9 +57,6 @@
     <Content Update="Images\MyImage.128.128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Images\MyImage.16.16.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -81,6 +78,15 @@
 
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /iery &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0&quot;&#xD;&#xA;copy /y &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0\finalextension.vsixmanifest&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0\extension.vsixmanifest&quot;" />
+    <Exec Command="xcopy /iery &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX&quot;&#xD;&#xA;copy /y &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\finalextension.vsixmanifest&quot; &quot;$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\extension.vsixmanifest&quot;" />
   </Target>
+  
+  <Target Name="Replace" AfterTargets="PostBuild">
+    <WriteLinesToFile 
+      File="$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0\extension.vsixmanifest"
+      Lines="$([System.IO.File]::ReadAllText($(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\1.0.0\finalextension.vsixmanifest).Replace('1.0.0.0', '2.0.0.0'))" 
+      Overwrite="true" 
+      Encoding="Unicode"/>
+  </Target>
+  
 </Project>
