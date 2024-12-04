@@ -84,7 +84,7 @@
   <Target Name="Replace" AfterTargets="PostBuild">
     <WriteLinesToFile 
       File="$(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\extension.vsixmanifest"
-      Lines="$([System.IO.File]::ReadAllText($(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\finalextension.vsixmanifest).Replace('1.0.0.0', $(MsiAssemblyVersion))" 
+      Lines="$([System.IO.File]::ReadAllText($(SolutionDir)..\Installer\Deploy\IsWiXExtension\IsWiX LLC\IsWiX\finalextension.vsixmanifest).Replace('1.0.0.0', '$(AssemblyVersion)'))" 
       Overwrite="true" 
       Encoding="Unicode"/>
   </Target>
