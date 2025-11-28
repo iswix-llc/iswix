@@ -15,3 +15,4 @@ ShortCutsDesigner.dll
 XmlDesignerCore.dll
 IsWiX.dll
 IsWiX.exe
+IsWiXExtension2026.vsix
