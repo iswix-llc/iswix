@@ -21,5 +21,10 @@
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveMSISolutionTemplate.zip" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="IsWiXGlobalParams.dll" AssemblyName="IsWiXGlobalParams, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eba4e180870619ec" />
     </Assets>
 </PackageManifest>

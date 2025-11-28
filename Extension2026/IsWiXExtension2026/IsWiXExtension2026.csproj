@@ -50,6 +50,123 @@
     <Compile Include="IsWiXExtension2026Package.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="IsWiXGlobalParams.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\Icon.png" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\IsWixBundleProject.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\splash.bmp" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\HeatWaveInternalUIBootstrapperSolutionTemplate.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\Banner.jpg" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\Dialog.jpg" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveMergeModuleProjectTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\HeatWaveMergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveMSISolutionTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\HeatWaveMSISolutionTemplate\IsWiXCompleteProjectTemplate.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\Banner.jpg" />
+    <Content Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
+    <Content Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\Icon.png" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\IsWixBundleProject.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\RtfTheme.xml" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\HeatWaveStandardBASolutionTemplate.vstemplate" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\Icon.png" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\IsWiXBootstrapperSolutionTemplate.vstemplate" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Banner.jpg" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
+    <Content Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\IsWiXCompleteProjectTemplate.vstemplate" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiX.ico" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Banner.jpg" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Icon.ico" />
+    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\Bundle.wxs" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\IsWiXBundle.wixproj" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\iuipreq.thm" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\BundleProjectTemplate\iuipreq.wxl" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\Files.wxs" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\IISMeta.wxs" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\IsWiXPackageProject.wixproj" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\Product.wxs" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\UI-CustomDialog.wxs" />
+    <None Include="ProjectSource\HeatWaveInternalUISolutionTemplate\PackageProjectTemplate\UI.wxs" />
+    <None Include="ProjectSource\HeatWaveMergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
+    <None Include="ProjectSource\HeatWaveMergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
+    <None Include="ProjectSource\HeatWaveMergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\Files.wxs" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\IISMeta.wxs" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\IsWiXSetupProject.wixproj" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\Product.wxs" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\UI-CustomDialog.wxs" />
+    <None Include="ProjectSource\HeatWaveMSISolutionTemplate\SetupProjectTemplate\UI.wxs" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\Bundle.wxs" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\IsWiXBundle.wixproj" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\BundleProjectTemplate\RtfTheme.wxl" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\Files.wxs" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\IISMeta.wxs" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\IsWiXPackageProject.wixproj" />
+    <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\Product.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\Bundle.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\IsWiXBootstrapper.wixproj" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Features.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\IsWiXSetupProject.wixproj" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Product.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\UI-CustomDialog.wxs" />
+    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\UI.wxs" />
+    <None Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
+    <None Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
+    <None Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\EULA.rtf" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Features.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IISMeta.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IsWiXSetupProject.wixproj" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Product.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\UI-CustomDialog.wxs" />
+    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\UI.wxs" />
+    <Content Include="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -72,6 +189,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="ProjectTemplates\HeatWaveMSISolutionTemplate.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\CommandLaunchIsWiX.png" />
     <VSCTCompile Include="IsWiXExtension2026.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
@@ -86,4 +207,19 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>IF NOT EXIST "$(ProjectDir)ProjectTemplates" MKDIR "$(ProjectDir)ProjectTemplates"
+
+CD "$(ProjectDir)ProjectSource\HeatWaveMergeModuleProjectTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip' -Force
+
+CD "$(ProjectDir)ProjectSource\HeatWaveMSISolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveMSISolutionTemplate.zip' -Force
+
+CD "$(ProjectDir)ProjectSource\HeatWaveInternalUISolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip' -Force
+
+CD "$(ProjectDir)ProjectSource\HeatWaveStandardBASolutionTemplate"
+powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip' -Force</PreBuildEvent>
+  </PropertyGroup>
 </Project>
