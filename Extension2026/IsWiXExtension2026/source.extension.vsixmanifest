@@ -15,6 +15,7 @@
         </InstallationTarget>
     </Installation>
     <Dependencies>
+        <Dependency d:Source="Installed" Id="FireGiant.HeatWave.Dev17" DisplayName="HeatWave for VS2022" Version="[1.0.6,2.0)" d:InstallSource="Download" Location="https://marketplace.visualstudio.com/items?itemName=FireGiant.FireGiantHeatWaveDev17" />
     </Dependencies>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0, )" DisplayName="Visual Studio core editor" />
