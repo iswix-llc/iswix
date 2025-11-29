@@ -50,6 +50,10 @@
     <Compile Include="IsWiXExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GlobalParams.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="IsWiX\CustomTablesDesigner.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
