@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>IsWiX.ico</ApplicationIcon>
+    <UseWindowsForms>True</UseWindowsForms>
+	<Private>false</Private>
+	<EnableDynamicLoading>true</EnableDynamicLoading>
+	  <DeployOnBuild>true</DeployOnBuild>
+	  <PublishProfile>FolderProfile</PublishProfile>
+	  <Platforms>AnyCPU</Platforms>
+	  <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="IsWiX.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="IsWiX.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+</Project>

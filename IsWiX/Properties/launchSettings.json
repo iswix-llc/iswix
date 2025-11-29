@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "IsWiX": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

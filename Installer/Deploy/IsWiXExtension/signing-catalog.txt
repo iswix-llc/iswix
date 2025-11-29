@@ -1,2 +1,0 @@
-IsWiX LLC\IsWiX\IsWiXExtension.dll
-IsWiX LLC\IsWiX\IsWiXGlobalParams.dll
