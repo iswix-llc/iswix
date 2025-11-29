@@ -12,6 +12,7 @@
 			<Button guid="guidIsWiX2026PackageCmdSet" id="CommandLaunchIsWiXId" priority="0x0100" type="Button">
 				<Parent guid="guidIsWiX2026PackageCmdSet" id="MyMenuGroup" />
 				<Icon guid="guidImages" id="bmpPic1" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
 					<ButtonText>Launch IsWiX</ButtonText>
 				</Strings>
@@ -21,8 +22,12 @@
 			<Bitmap guid="guidImages" href="Resources\CommandLaunchIsWiX.png" usedList="bmpPic1"/>
 		</Bitmaps>
 	</Commands>
+	<VisibilityConstraints>
+		<VisibilityItem guid="guidIsWiX2026PackageCmdSet" id="CommandLaunchIsWiXId" context="uiContextSupportedFiles" />
+	</VisibilityConstraints>
 	<Symbols>
 		<GuidSymbol name="guidIsWiX2026Package" value="{6037b2ce-4508-478c-a49e-c361ca5cba63}" />
+		<GuidSymbol name="uiContextSupportedFiles" value="{3c38820f-08cb-401b-8607-60aefa212b46}" />
 		<GuidSymbol name="guidIsWiX2026PackageCmdSet" value="{d7249160-ca26-47c3-b4c3-b18b4360fefb}">
 			<IDSymbol name="MyMenuGroup" value="0x1020" />
 			<IDSymbol name="CommandLaunchIsWiXId" value="0x0100" />
@@ -36,4 +41,5 @@
 			<IDSymbol name="bmpPicStrikethrough" value="6" />
 		</GuidSymbol>
 	</Symbols>
+
 </CommandTable>
