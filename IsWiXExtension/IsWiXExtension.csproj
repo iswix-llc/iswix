@@ -50,7 +50,27 @@
     <Compile Include="IsWiXExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GlobalParams.dll">
+    <Content Include="IsWiX\CustomTablesDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\DiffPlex.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\FeaturesDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\FilesAndFoldersDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\FireworksFramework.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\GeneralInformationDesigner.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -59,6 +79,34 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="IsWiX\IsWiX.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\IsWiXAutomationInterface.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\NamespacesDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\NewFeaturesDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\NewFilesAndFoldersDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\PropertiesDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\ServicesDesigner.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="IsWiX\ShortCutsDesigner.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -132,10 +180,6 @@
     <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
     <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Icon.ico" />
     <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="Xceed.Wpf.Toolkit.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="IsWiX\IsWiX.deps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
