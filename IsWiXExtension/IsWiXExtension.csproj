@@ -167,27 +167,6 @@
     <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\HeatWaveStandardBASolutionTemplate.vstemplate" />
     <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\IsWiX.ico" />
     <Content Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\Icon.png" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\IsWixBootstrapperProject.vstemplate" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\IsWiXBootstrapperSolutionTemplate.vstemplate" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Banner.jpg" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\IsWiXCompleteProjectTemplate.vstemplate" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Banner.jpg" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
     <Content Include="IsWiX\IsWiX.deps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -226,31 +205,6 @@
     <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\IISMeta.wxs" />
     <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\IsWiXPackageProject.wixproj" />
     <None Include="ProjectSource\HeatWaveStandardBASolutionTemplate\PackageProjectTemplate\Product.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\Bundle.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\BootstrapperProjectTemplate\IsWiXBootstrapper.wixproj" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Features.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\IsWiXSetupProject.wixproj" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\Product.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\UI-CustomDialog.wxs" />
-    <None Include="ProjectSource\VotiveBootstrapperSolutionTemplate\SetupProjectTemplate\UI.wxs" />
-    <None Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
-    <None Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
-    <None Include="ProjectSource\VotiveMergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\MergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Features.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IISMeta.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\IsWiXSetupProject.wixproj" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\Product.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\UI-CustomDialog.wxs" />
-    <None Include="ProjectSource\VotiveMSISolutionTemplate\SetupProjectTemplate\UI.wxs" />
     <Content Include="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
