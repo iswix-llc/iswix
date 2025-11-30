@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
@@ -109,22 +110,13 @@ namespace IsWiXExtension
 
             try
             {
-                using (RegistryKey local64Key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
-                {
-                    using (RegistryKey isWiXKey = local64Key.OpenSubKey(@"SOFTWARE\ISWIXLLC\IsWiX", false))
-                    {
-                        isWiXPath = isWiXKey.GetValue("IsWiXFilePath", string.Empty).ToString();
-                    }
-                }
-                if (!File.Exists(isWiXPath))
-                {
-                    errorMessage = "IsWiX.exe not found. Please ensure IsWiX is installed.";
-                }
+                string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string assemblyDirectory = System.IO.Path.GetDirectoryName(assemblyLocation);
+                isWiXPath = Path.Combine(assemblyDirectory, @"IsWiX\IsWiX.exe");
                 System.Diagnostics.Process.Start(isWiXPath, documentPath);
             }
             catch (Exception ex)
             {
-                errorMessage = "IsWiX installation path registry entry not found. Please ensure IsWiX is installed.";
             }
 
             if (!string.IsNullOrEmpty(errorMessage))
