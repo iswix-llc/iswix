@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
 
-namespace IsWiXExtension
+namespace IsWiX
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.

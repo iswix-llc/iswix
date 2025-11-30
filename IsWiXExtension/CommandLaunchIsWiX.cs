@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 
-namespace IsWiXExtension
+namespace IsWiX
 {
     /// <summary>
     /// Command handler

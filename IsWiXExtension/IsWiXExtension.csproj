@@ -13,8 +13,8 @@
     <ProjectGuid>{03A554D2-EA81-4649-B392-F0F6A89A9E9C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IsWiXExtension</RootNamespace>
-    <AssemblyName>IsWiXExtension</AssemblyName>
+    <RootNamespace>IsWiX</RootNamespace>
+    <AssemblyName>IsWiX</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
@@ -135,6 +135,10 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="IsWiX\Xceed.Wpf.Toolkit.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MS-PL.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
