@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-    <Metadata>
-        <Identity Id="IsWiX.c21dbeec-f962-4a75-b3d6-89b67b4e48b2" Version="1.0.0.0" Language="en-US" Publisher="IsWiX LLC" />
-        <DisplayName>IsWiX for Visual Studio</DisplayName>
-        <Description xml:space="preserve">Industrial Strength Windows Installer XML ( IsWiX ) makes authoring Windows Installer XML (WiX) Windows Installers (.MSI) a breeze. It includes Visual Studio project templates and graphical designers to aid you in authoring 95% of your source code. From there you can author additional code using standard WiX programming techniques.</Description>
-        <MoreInfo>https://github.com/iswix-llc/iswix</MoreInfo>
-        <License>MS-PL.txt</License>
-        <GettingStartedGuide>https://github.com/iswix-llc/iswix-tutorials</GettingStartedGuide>
-        <Icon>IsWiX.png</Icon>
-        <PreviewImage>IsWiX.png</PreviewImage>
-        <Tags>iswix, wix, wixtoolset, heatwave, firegiant, msi, installer, setup</Tags>
-    </Metadata>
-    <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[18.0, )">
-            <ProductArchitecture>amd64</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[18.0,)" Id="Microsoft.VisualStudio.Community">
-            <ProductArchitecture>arm64</ProductArchitecture>
-        </InstallationTarget>
-    </Installation>
-    <Dependencies>
-        <Dependency d:Source="Installed" Id="FireGiant.HeatWave.Dev17" DisplayName="HeatWave for VS2022" Version="[1.0.6,2.0)" d:InstallSource="Download" Location="https://marketplace.visualstudio.com/items?itemName=FireGiant.FireGiantHeatWaveDev17" />
-    </Dependencies>
-    <Prerequisites>
-        <Prerequisite Id="Microsoft.NetCore.Component.Runtime.10.0" Version="[18.0.11205.157,19.0)" DisplayName=".NET 10.0 Runtime (Long Term Support)" />
-        <Prerequisite Id="Microsoft.VisualStudio.Component.ManagedDesktop.Prerequisites" Version="[18.0.11101.84,19.0)" DisplayName=".NET desktop development tools" />
-    </Prerequisites>
-    <Assets>
-        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveMSISolutionTemplate.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="GlobalParams.dll" AssemblyName="GlobalParams, Version=2.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Xceed.Wpf.Toolkit.dll" AssemblyName="Xceed.Wpf.Toolkit, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4" d:VsixSubPath="IsWiX" />
-    </Assets>
+	<Metadata>
+		<Identity Id="IsWiX.c21dbeec-f962-4a75-b3d6-89b67b4e48b2" Version="1.0.0.0" Language="en-US" Publisher="IsWiX LLC" />
+		<DisplayName>IsWiX for Visual Studio</DisplayName>
+		<Description xml:space="preserve">Industrial Strength Windows Installer XML ( IsWiX ) makes authoring Windows Installer XML (WiX) Windows Installers (.MSI) a breeze. It includes Visual Studio project templates and graphical designers to aid you in authoring 95% of your source code. From there you can author additional code using standard WiX programming techniques.</Description>
+		<MoreInfo>https://github.com/iswix-llc/iswix</MoreInfo>
+		<License>MS-PL.txt</License>
+		<GettingStartedGuide>https://github.com/iswix-llc/iswix-tutorials</GettingStartedGuide>
+		<Icon>IsWiX.png</Icon>
+		<PreviewImage>IsWiX.png</PreviewImage>
+		<Tags>iswix, wix, wixtoolset, heatwave, firegiant, msi, installer, setup</Tags>
+	</Metadata>
+	<Installation>
+		<InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.12,18.0)">
+			<ProductArchitecture>amd64</ProductArchitecture>
+		</InstallationTarget>
+		<InstallationTarget Version="[17.12,18.0)" Id="Microsoft.VisualStudio.Community">
+			<ProductArchitecture>arm64</ProductArchitecture>
+		</InstallationTarget>
+	</Installation>
+	<Dependencies>
+		<Dependency d:Source="Installed" Id="FireGiant.HeatWave.Dev17" DisplayName="HeatWave for VS2022" Version="[1.0.6,2.0)" d:InstallSource="Download" Location="https://marketplace.visualstudio.com/items?itemName=FireGiant.FireGiantHeatWaveDev17" />
+	</Dependencies>
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveInternalUISolutionTemplate.zip" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveMergeModuleProjectTemplate.zip" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveMSISolutionTemplate.zip" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\HeatWaveStandardBASolutionTemplate.zip" />
+		<Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="GlobalParams.dll" AssemblyName="GlobalParams, Version=2.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0" />
+		<Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Xceed.Wpf.Toolkit.dll" AssemblyName="Xceed.Wpf.Toolkit, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4" d:VsixSubPath="IsWiX" />
+	</Assets>
+	<Prerequisites>
+		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.12.35410.122,18.0)" DisplayName="Visual Studio core editor" />
+		<Prerequisite Id="Microsoft.NetCore.Component.Runtime.8.0" Version="[17.12.35410.122,18.0)" DisplayName=".NET 8.0 Runtime (Long Term Support)" />
+	</Prerequisites>
 </PackageManifest>
