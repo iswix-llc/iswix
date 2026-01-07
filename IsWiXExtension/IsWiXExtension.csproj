@@ -152,8 +152,6 @@
     <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Dialog.jpg" />
     <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Icon.ico" />
     <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetMergeModuleProjectTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\WiXToolSetMergeModuleProjectTemplate\IsWixMergeModule.vstemplate" />
     <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\IsWiX.ico" />
     <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\IsWiXCompleteProjectTemplate.vstemplate" />
     <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Banner.jpg" />
@@ -187,9 +185,6 @@
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Product.wxs" />
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\UI-CustomDialog.wxs" />
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\UI.wxs" />
-    <None Include="ProjectSource\WiXToolSetMergeModuleProjectTemplate\IsWiXMergeModule.wixproj" />
-    <None Include="ProjectSource\WiXToolSetMergeModuleProjectTemplate\IsWiXMergeModule.wxs" />
-    <None Include="ProjectSource\WiXToolSetMergeModuleProjectTemplate\IsWiXMergeModuleCustom.wxs" />
     <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\EULA.rtf" />
     <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Files.wxs" />
     <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\IISMeta.wxs" />
@@ -206,10 +201,6 @@
     <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\IsWiXPackageProject.wixproj" />
     <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\Product.wxs" />
     <Content Include="ProjectTemplates\WiXToolSetInternalUISolutionTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\WiXToolSetMergeModuleProjectTemplate.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -261,10 +252,6 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)ProjectTemplates" MKDIR "$(ProjectDir)ProjectTemplates"
-
-CD "$(ProjectDir)ProjectSource\WiXToolSetMergeModuleProjectTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\WiXToolSetMergeModuleProjectTemplate.zip' -Force
-
 CD "$(ProjectDir)ProjectSource\WiXToolSetMSISolutionTemplate"
 powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\WiXToolSetMSISolutionTemplate.zip' -Force
 

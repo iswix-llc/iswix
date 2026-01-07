@@ -25,7 +25,6 @@
 	<Assets>
 		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
 		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WiXInternalUISolutionTemplate.zip" />
-		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WiXMergeModuleProjectTemplate.zip" />
 		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WiXMSISolutionTemplate.zip" />
 		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WiXStandardBASolutionTemplate.zip" />
 		<Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="GlobalParams.dll" AssemblyName="GlobalParams, Version=2.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0" />
