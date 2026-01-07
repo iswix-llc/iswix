@@ -4,7 +4,7 @@
 		<TemplateID>IsWiX.InstallerProject</TemplateID>
 		<Description>A project for creating a Windows installation package (.msi) file.</Description>
 		<Icon>IsWiX.ico</Icon>
-		<ProjectType>WiX</ProjectType>
+		<ProjectType>HeatWave</ProjectType>
 		<SortOrder>20</SortOrder>
 		<DefaultName>ProductName</DefaultName>
 		<SortOrder>4</SortOrder>
