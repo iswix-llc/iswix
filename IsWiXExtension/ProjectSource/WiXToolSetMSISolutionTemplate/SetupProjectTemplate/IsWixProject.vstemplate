@@ -1,26 +1,31 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>IsWiX Bootstrapper Project</Name>
-    <TemplateID>IsWiX.BootstrapperEXEProject</TemplateID>
-    <Description>A project for creating an IsWiX based EXE file</Description>
+    <Name>IsWiX Setup Project</Name>
+    <TemplateID>IsWiX.InstallerMSIProject</TemplateID>
+    <Description >A project for creating an IsWiX based MSI file</Description>
     <Icon>Icon.ico</Icon>
     <ProjectType>WiX</ProjectType>
     <SortOrder>20</SortOrder>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <CreateNewFolder>true</CreateNewFolder>
-    <CreateInPlace>true</CreateInPlace>
+	<CreateInPlace>true</CreateInPlace>
     <DefaultName>SetupProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
-    <ProjectTypeTag>HeatWave</ProjectTypeTag>
+     <ProjectTypeTag>WiX</ProjectTypeTag>
+    <LanguageTag>WiX</LanguageTag>
   </TemplateData>
   <TemplateContent>
-    <Project File="IsWiXBundle.wixproj" TargetFileName="$safeprojectname$Bundle.wixproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Bundle.wxs">Bundle.wxs</ProjectItem>
+    <Project File="IsWiXSetupProject.wixproj" TargetFileName="$safeprojectname$.wixproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="Product.wxs">Product.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$Files.wxs">Files.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="IISMeta.wxs">IISMeta.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="UI.wxs">UI.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="UI-CustomDialog.wxs">UI-CustomDialog.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Banner.jpg">Banner.jpg</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Dialog.jpg">Dialog.jpg</ProjectItem>
       <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\EULA.rtf">EULA.rtf</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.png">Icon.png</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\RtfTheme.xml">RtfTheme.xml</ProjectItem>
-      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\RtfTheme.wxl">RtfTheme.wxl</ProjectItem>
+      <ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="Resources\Icon.ico">Icon.ico</ProjectItem>
     </Project>
     <CustomParameters>
       <CustomParameter _locID="$loc_WXS_TODO1$" Name="$loc_WXS_TODO1$" Value="TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer." />
@@ -34,5 +39,5 @@
   <WizardExtension>
     <Assembly>GlobalParams, Version=2.0.0.0, Culture=neutral, PublicKeyToken=ea5a5299819fb7c0</Assembly>
     <FullClassName>GlobalParams.WizardMPT</FullClassName>
-  </WizardExtension>
+   </WizardExtension>
 </VSTemplate>

@@ -4,7 +4,7 @@
 		<TemplateID>IsWiX.InstalerMSMProject</TemplateID>
 		<Description>An IsWiX customized project for creating a Windows Installer XML v4 based MSM file</Description>
 		<Icon>IsWiX.ico</Icon>
-		<ProjectType>HeatWave</ProjectType>
+		<ProjectType>WiX</ProjectType>
 		<SortOrder>42</SortOrder>
 		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
 		<CreateNewFolder>true</CreateNewFolder>
@@ -12,7 +12,7 @@
 		<DefaultName>MergeModule</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
-		<ProjectTypeTag>HeatWave</ProjectTypeTag>
+		<ProjectTypeTag>WiX</ProjectTypeTag>
 		<LanguageTag>WiX</LanguageTag>
 	</TemplateData>
 	<TemplateContent PreferedSolutionConfiguration="Debug|x86">
