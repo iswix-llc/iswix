@@ -6,19 +6,19 @@ using FireworksFramework.Managers;
 
 namespace IsWiXAutomationInterface
 {
-    public class IsWiXFeatures4 : List<IsWiXFeature4>
+    public class IsWiXFeatures : List<IsWiXFeature>
     {
         static XNamespace ns;
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public IsWiXFeatures4()
+        public IsWiXFeatures()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
 
             Load(_documentManager.Document.GetSecondOrderRoot());
         }
 
-        public IsWiXFeatures4(string parentId)
+        public IsWiXFeatures(string parentId)
         {
             var elements = from a in _documentManager.Document.Descendants(ns + "Feature")
                            where a.Attribute("Id").Value == parentId
@@ -65,7 +65,7 @@ namespace IsWiXAutomationInterface
 
                 foreach (var element in startingElement.Elements(ns + "Feature"))
                 {
-                    Add(new IsWiXFeature4(element));
+                    Add(new IsWiXFeature(element));
                 }
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace IsWiXAutomationInterface
             }
         }
 
-        public IsWiXFeature4 Create(string id)
+        public IsWiXFeature Create(string id)
         {
 
             XElement featureElement = new XElement(ns+"Feature");
@@ -90,32 +90,32 @@ namespace IsWiXAutomationInterface
                 _documentManager.Document.GetSecondOrderRoot().Add(featureElement);
             }
             
-            IsWiXFeature4 iswixFeature = new IsWiXFeature4(featureElement);
+            IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             this.Add(iswixFeature);
             SortXML();
             return iswixFeature;
         }
 
-        public IsWiXFeature4 Create(string insertAfter, string id)
+        public IsWiXFeature Create(string insertAfter, string id)
         {
 
             XElement featureElement = new XElement(ns + "Feature");
             featureElement.SetAttributeValue("Id", id);
             XElement insertAfterElement = _documentManager.Document.Descendants(ns+"Feature").First(vw => (string)vw.Attribute("Id") == insertAfter);
             insertAfterElement.AddAfterSelf(featureElement);
-            IsWiXFeature4 iswixFeature = new IsWiXFeature4(featureElement);
+            IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             this.Add(iswixFeature);
             SortXML();
             return iswixFeature;
         }
-        public IsWiXFeature4 CreateSubFeature(string parentId, string id)
+        public IsWiXFeature CreateSubFeature(string parentId, string id)
         {
 
             XElement featureElement = new XElement(ns + "Feature");
             featureElement.SetAttributeValue("Id", id);
             XElement parentElement = _documentManager.Document.Descendants(ns + "Feature").First(vw => (string)vw.Attribute("Id") == parentId);
             parentElement.Add(featureElement);
-            IsWiXFeature4 iswixFeature = new IsWiXFeature4(featureElement);
+            IsWiXFeature iswixFeature = new IsWiXFeature(featureElement);
             return iswixFeature;
         }
 
@@ -143,13 +143,13 @@ namespace IsWiXAutomationInterface
     }
     public enum AllowAbsent { no, yes }
 
-    public class IsWiXFeature4
+    public class IsWiXFeature
     {
         XNamespace ns;
         XElement _featureElement;
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public IsWiXFeature4(XElement featureElement)
+        public IsWiXFeature(XElement featureElement)
         {
             _featureElement = featureElement;
             ns = _documentManager.Document.GetWiXNameSpace();

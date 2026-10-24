@@ -10,7 +10,7 @@ namespace FeaturesDesigner
 {
     public partial class Feature : Component
     {
-        IsWiXFeature4 _feature;
+        IsWiXFeature _feature;
         
         public Feature()
         {
@@ -87,7 +87,7 @@ namespace FeaturesDesigner
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
         public string Description { get; set; }
 
-        public void Read(IsWiXFeature4 Feature)
+        public void Read(IsWiXFeature Feature)
         {
             _feature = Feature;
             Id = _feature.Id;

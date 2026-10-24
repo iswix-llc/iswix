@@ -94,7 +94,7 @@ namespace FeaturesDesigner
         private void LoadData2()
         {
             _refresh = false;
-            IsWiXFeatures4 features = new IsWiXFeatures4();
+            IsWiXFeatures features = new IsWiXFeatures();
 
             treeViewFeatures.Nodes.Clear();
             ClearPropertyGrid();
@@ -122,7 +122,7 @@ namespace FeaturesDesigner
 
         private void LoadDataRecurse(TreeNode parentNode, string parentId)
         {
-            IsWiXFeatures4 features = new IsWiXFeatures4(parentId);
+            IsWiXFeatures features = new IsWiXFeatures(parentId);
             foreach (var feature in features)
             {
                 var treeNode = parentNode.Nodes.Add(feature.Id, string.Format("{0}", feature.Id));
@@ -166,7 +166,7 @@ namespace FeaturesDesigner
         {
             if (_refresh)
             {
-                IsWiXFeature4 iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature4;
+                IsWiXFeature iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
                 feature.Read(iswixFeature);
 
                 UpdatePropertyGrid();
@@ -197,7 +197,7 @@ namespace FeaturesDesigner
         {
             if (treeViewFeatures.SelectedNode != null)
             {
-                IsWiXFeature4 feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature4;
+                IsWiXFeature feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
                 IsWiXMerge merge = e.Node.Tag as IsWiXMerge;
                 IsWiXMergeRefs mergeRefs = feature.MergeRefs;
                 propertyGridFeatureProperties.Refresh();
@@ -235,7 +235,7 @@ namespace FeaturesDesigner
                 }
                 else
                 {
-                    IsWiXFeature4 iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature4;
+                    IsWiXFeature iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
                     iswixFeature.Id = e.Label;
                     feature.Id = iswixFeature.Id;
                 }
@@ -258,9 +258,9 @@ namespace FeaturesDesigner
         {
             if (treeViewFeatures.SelectedNode == null)//|| treeViewFeatures.SelectedNode.Parent == null)
             {
-                IsWiXFeatures4 features = new IsWiXFeatures4();
-                string featureName = IsWiXFeatures4.SuggestNextFeatureName();
-                IsWiXFeature4 feature = features.Create(featureName);
+                IsWiXFeatures features = new IsWiXFeatures();
+                string featureName = IsWiXFeatures.SuggestNextFeatureName();
+                IsWiXFeature feature = features.Create(featureName);
                 TreeNode node = treeViewFeatures.Nodes.Add(feature.Id);
                 node.Tag = feature;
                 _refresh = true;
@@ -268,10 +268,10 @@ namespace FeaturesDesigner
             }
             else
             {
-                IsWiXFeatures4 features = new IsWiXFeatures4();
-                string featureName = IsWiXFeatures4.SuggestNextFeatureName();
-                var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature4;
-                IsWiXFeature4 feature = features.Create(iswixFeature.Id, featureName);
+                IsWiXFeatures features = new IsWiXFeatures();
+                string featureName = IsWiXFeatures.SuggestNextFeatureName();
+                var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
+                IsWiXFeature feature = features.Create(iswixFeature.Id, featureName);
 
                 TreeNode node = treeViewFeatures.Nodes.Insert(treeViewFeatures.SelectedNode.Index + 1, feature.Id);
                 node.Tag = feature;
@@ -287,10 +287,10 @@ namespace FeaturesDesigner
 
         private void toolStripMenuItemNewSubFeature_Click(object sender, EventArgs e)
         {
-            IsWiXFeatures4 features = new IsWiXFeatures4();
-            string featureName = IsWiXFeatures4.SuggestNextFeatureName();
-            var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature4;
-            IsWiXFeature4 feature = features.CreateSubFeature(iswixFeature.Id, featureName);
+            IsWiXFeatures features = new IsWiXFeatures();
+            string featureName = IsWiXFeatures.SuggestNextFeatureName();
+            var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
+            IsWiXFeature feature = features.CreateSubFeature(iswixFeature.Id, featureName);
 
             TreeNode node = treeViewFeatures.SelectedNode.Nodes.Add(featureName);
             node.Tag = feature;
@@ -306,7 +306,7 @@ namespace FeaturesDesigner
             toolStripMenuItemRename.Enabled = false;
             toolStripMenuItemNewSubFeature.Enabled = false;
 
-            IsWiXFeature4 feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature4;
+            IsWiXFeature feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
             feature.Delete();
             treeViewFeatures.SelectedNode.Remove();
 
