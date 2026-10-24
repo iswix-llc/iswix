@@ -19,17 +19,17 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # The SDK comes from global.json; IsWiX runs on .NET 8.
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
           dotnet-version: 8.0.x
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@v3
 
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
@@ -42,7 +42,7 @@ jobs:
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal
 
       - name: Upload the VSIX
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: IsWiX-vsix
           path: IsWiXExtension/bin/Release/IsWiX.vsix

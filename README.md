@@ -13,8 +13,9 @@ The version lives in `Directory.Build.props`; the release workflow also writes i
   `main`: it builds `IsWiX.sln`, publishes IsWiX into `IsWiXExtension\IsWiX` (the `FolderProfile` publish
   profile), builds `IsWiXExtension.sln` and uploads the unsigned VSIX as a build artifact.
 - **Publish** (`.github/workflows/publish.yml`) is run by hand from the Actions tab on `main`: choose
-  `patch`, `minor` or `major`. It increments the version, builds, signs IsWiX's own assemblies and then
-  the VSIX with Azure Artifact Signing (the `sign` CLI), commits `Release x.y.z` to `main`, tags it
+  `patch`, `minor` or `major`. It increments the version, builds, signs the VSIX and IsWiX's own
+  assemblies inside it with Azure Artifact Signing (the `sign` CLI; third-party DLLs keep their
+  publishers' signatures), commits `Release x.y.z` to `main`, tags it
   `vx.y.z` and creates a GitHub release with the signed VSIX attached. Uploading that VSIX to the
   Visual Studio Marketplace is done by hand.
 
