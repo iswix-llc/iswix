@@ -58,19 +58,10 @@ namespace IsWiXAutomationInterface
 
                     string schemasDir = Path.Combine(currentDirectory, "Schemas");
 
-                    int wixVersion;
-                    if(_ns == "http://schemas.microsoft.com/wix/2006/wi")
-                    {
-                        wixVersion = 3;
-                    }
-                    else 
-                    {
-                        wixVersion = 4;
-                    }
- 
+                    // Only the WiX v4+ extension schemas (fg4_*.xsd) apply; WiX v3 sources are not supported.
                     foreach (var file in new DirectoryInfo(schemasDir).GetFiles("*.xsd"))
                     {
-                        if ((wixVersion == 3 && !file.Name.StartsWith("fg4"))|| wixVersion == 4 && file.Name.StartsWith("fg4_" ))
+                        if (file.Name.StartsWith("fg4_"))
                         {
                             string prefix = Path.GetFileNameWithoutExtension(file.Name).Replace("fg4_", "");
                             if (!prefix.Equals("wix"))

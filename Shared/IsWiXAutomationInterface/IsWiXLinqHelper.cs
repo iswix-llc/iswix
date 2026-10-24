@@ -8,7 +8,8 @@ using FireworksFramework.Managers;
 namespace IsWiXAutomationInterface
 {
     public enum IsWiXDocumentType { Product, Module, Fragment, None };
-    public enum WiXVersion { v3, v4, Unknown};
+    // WiX v3 sources are not supported: their namespace reports as Unknown and they must be converted with 'wix convert'.
+    public enum WiXVersion { v4, Unknown};
 
     public static class IsWiXExtensionQueries
     {
@@ -72,9 +73,7 @@ namespace IsWiXAutomationInterface
         {
             XNamespace nameSpace = NameSpaces(Document)[""];
             XNamespace finalNameSpace;
-            if(
-                nameSpace=="http://schemas.microsoft.com/wix/2006/wi"||
-                nameSpace=="http://wixtoolset.org/schemas/v4/wxs")
+            if(nameSpace=="http://wixtoolset.org/schemas/v4/wxs")
             {
                 finalNameSpace = nameSpace;
             }
@@ -91,9 +90,6 @@ namespace IsWiXAutomationInterface
             XNamespace nameSpace = NameSpaces(Document)[""];
             switch(nameSpace.ToString())
             {
-                case "http://schemas.microsoft.com/wix/2006/wi":
-                    version = WiXVersion.v3;
-                    break;
                 case "http://wixtoolset.org/schemas/v4/wxs":
                     version = WiXVersion.v4;
                     break;

@@ -404,6 +404,11 @@ namespace FireworksFramework.ViewModels
                 success = true;
 
             }
+            catch (NotSupportedException ex)
+            {
+                // A file IsWiX recognizes but cannot edit, such as a WiX v3 source; the message says what to do.
+                MessageBox.Show(ex.Message, GetProductName(), MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             catch (Exception)
             {
                 MessageBox.Show($"An error occurred loading '{filePath}'. Please make sure it's a valid XML file.");

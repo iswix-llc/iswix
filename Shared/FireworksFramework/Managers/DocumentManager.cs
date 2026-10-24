@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Types;
+using IsWiX.WiXModel.Core;
 using IsWiX.WiXModel.Core.Xml;
 
 namespace FireworksFramework.Managers
@@ -147,11 +148,22 @@ namespace FireworksFramework.Managers
             {
                 // Lossless load: the source text of every node is kept, so saving writes unchanged parts of the
                 // file back exactly as they were (whitespace, quotes, comments, line endings, encoding).
+                XDocument document;
                 using (var stream = File.OpenRead(filePath))
                 {
-                    _document = LosslessXml.Load(stream);
+                    document = LosslessXml.Load(stream);
                 }
 
+                // WiX v3 sources are not supported. Reject them before replacing the current document.
+                if (document.Root?.Name.Namespace == WixNamespaces.WixV3)
+                {
+                    var fileName = Path.GetFileName(filePath);
+                    throw new NotSupportedException(
+                        $"'{fileName}' is a WiX v3 source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
+                        $"Convert it to WiX v4 or later with 'wix convert \"{fileName}\"', then open the converted file.");
+                }
+
+                _document = document;
                 _savedDocument = new XDocument(_document);
                 _documentPath = filePath;
                 _documentState = DocumentStates.Clean;
@@ -159,6 +171,10 @@ namespace FireworksFramework.Managers
                 EnableChangeWatcher();
                 PublishToSubscriber();
 
+            }
+            catch (NotSupportedException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

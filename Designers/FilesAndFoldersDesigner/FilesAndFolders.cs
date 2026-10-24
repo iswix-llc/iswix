@@ -38,7 +38,6 @@ namespace Designers.FilesAndFolders
         private string SourceStart;
         private const bool DoNotProcessPath = false;
         private const bool ProcessPath = true;
-        private bool Merge64;
         private bool SkipSort;
         XNamespace ns;
 
@@ -150,16 +149,6 @@ namespace Designers.FilesAndFolders
         public void LoadData()
         {
             ns = _documentManager.Document.GetWiXNameSpace();
-
-            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v3)
-            {
-                Merge64 = Is64BitMergeModule();
-            }
-            else
-            {
-                // No longer needed in WiX v4
-                Merge64 = false;
-            }
 
             if (String.IsNullOrEmpty(_documentManager.DocumentPath))
             {
@@ -1449,12 +1438,6 @@ namespace Designers.FilesAndFolders
             var component = new XElement(ns + "Component", new XAttribute("Id", "owc" + dirHashResult),
                                          new XAttribute("Guid", componentGuid));
 
-            if (Merge64)
-            {
-                component.Add(new XAttribute("Win64", "yes"));
-            }
-
-
             var file = new XElement(ns + "File", new XAttribute("Id", "owf" + hashResult),
                                     new XAttribute("Source", sourcePath));
 
@@ -1484,11 +1467,6 @@ namespace Designers.FilesAndFolders
             var newPath = (processPath) ? CreateDirectoryStringForHash(path): path;
             var component = new XElement(ns + "Component", new XAttribute("Id", "owc" + GetMd5Hash(newPath)),
                                          new XAttribute("Guid", Guid.NewGuid()));
-
-            if(Merge64)
-            {
-                component.Add(new XAttribute("Win64", "yes"));
-            }
 
             var createFolder = new XElement(ns + "CreateFolder");
 
@@ -2653,17 +2631,6 @@ namespace Designers.FilesAndFolders
                 _documentManager.Document.Descendants(ns + "Wix").First().AddFirst(
                     new XProcessingInstruction("define", string.Format("ComponentRules={0}", componentRules)));
             }
-        }
-
-        private bool Is64BitMergeModule()
-        {
-            bool is64Bit = false;
-            if(_documentManager.Document.Descendants(ns + "Package").First().GetOptionalAttribute("Platform").Contains("64"))
-            {
-                is64Bit = true;
-            }
-
-            return is64Bit;
         }
     }
 }
