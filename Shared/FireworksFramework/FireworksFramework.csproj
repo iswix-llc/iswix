@@ -44,8 +44,8 @@
 
   <ItemGroup>
     <PackageReference Include="DiffPlex" Version="1.7.1" />
-    <!-- Lossless XML load/save: unchanged parts of a file are saved byte-for-byte. -->
-    <PackageReference Include="IsWiX.WiXModel.Core" Version="0.2.1" />
+    <!-- Lossless XML load/save (IsWiX.WiXModel.Core) and IsWiX's canonical element order. -->
+    <PackageReference Include="IsWiX.WiXModel" Version="0.3.1" />
   </ItemGroup>
 
   <ItemGroup>

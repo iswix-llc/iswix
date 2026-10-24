@@ -21,5 +21,8 @@ namespace PropertiesDesigner.Models
         public bool Secure { get { return _secure; } set { _secure = value; RaisePropertyChangedEvent("Secure"); } }
         public bool Hidden { get { return _hidden; } set { _hidden = value; RaisePropertyChangedEvent("Hidden"); } }
         public bool Admin { get { return _admin; } set { _admin = value; RaisePropertyChangedEvent("Admin"); } }
+
+        /// <summary>The &lt;Property&gt; element this row edits.</summary>
+        internal IsWiX.WiXModel.Property Element { get; set; } = null!;
     }
 }

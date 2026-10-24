@@ -1,7 +1,6 @@
 ﻿
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
 using PropertiesDesigner.Models;
 using System;
 using System.Drawing;
@@ -52,15 +51,7 @@ namespace PropertiesDesigner.Views
         }
         public bool IsValidContext()
         {
-
-            if (DocumentManager.DocumentManagerInstance.Document.GetDocumentType() == IsWiXDocumentType.None)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return ViewModels.PropertiesViewModel.IsValidDocument(DocumentManager.DocumentManagerInstance.Document);
         }
 
         public void LoadData()

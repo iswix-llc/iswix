@@ -13,6 +13,7 @@ using FireworksFramework.Interfaces;
 using FireworksFramework.Types;
 using IsWiX.WiXModel.Core;
 using IsWiX.WiXModel.Core.Xml;
+using CanonicalOrder = IsWiX.WiXModel.CanonicalOrder;
 
 namespace FireworksFramework.Managers
 {
@@ -171,6 +172,10 @@ namespace FireworksFramework.Managers
                         $"'{Path.GetFileName(filePath)}' is a merge module source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
                         "IsWiX edits WiX packages and fragments. Packages can still include merge modules through the Features designer.");
                 }
+
+                // Elements added through the typed model go to IsWiX's canonical position, so a file's layout
+                // depends only on its content, which keeps branches and merges clean.
+                WixOrdering.Set(document, CanonicalOrder.Create());
 
                 _document = document;
                 _savedDocument = new XDocument(_document);
