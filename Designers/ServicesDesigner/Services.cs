@@ -49,8 +49,7 @@ namespace ServicesDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module ||
-                (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment))
+            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment)
             {
                 return true;
             }
@@ -62,8 +61,6 @@ namespace ServicesDesigner
 
         public void LoadData()
         {
-            IsWixUpgradeFixer.Fix();
-
             _services = new IsWiXServices();
 
             treeViewServices.Nodes.Clear();

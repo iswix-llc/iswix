@@ -163,6 +163,15 @@ namespace FireworksFramework.Managers
                         $"Convert it to WiX v4 or later with 'wix convert \"{fileName}\"', then open the converted file.");
                 }
 
+                // Merge module sources are not supported either. Packages that consume merge modules
+                // (<Merge> and <MergeRef>) are fine; this is only about editing a <Module> itself.
+                if (document.Root?.Elements().FirstOrDefault()?.Name == WixNamespaces.Wxs + "Module")
+                {
+                    throw new NotSupportedException(
+                        $"'{Path.GetFileName(filePath)}' is a merge module source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
+                        "IsWiX edits WiX packages and fragments. Packages can still include merge modules through the Features designer.");
+                }
+
                 _document = document;
                 _savedDocument = new XDocument(_document);
                 _documentPath = filePath;

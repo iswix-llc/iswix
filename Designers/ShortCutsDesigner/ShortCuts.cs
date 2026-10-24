@@ -84,8 +84,7 @@ namespace ShortCutsDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module ||
-                (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment))
+            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment)
             {
                 return true;
             }
@@ -140,29 +139,18 @@ namespace ShortCutsDesigner
         {
             WixNamespace = _documentManager.Document.GetWiXNameSpace();
 
-            IsWixUpgradeFixer.Fix();
-
             _shortcuts = new IsWiXShortCuts();
             Cursor = Cursors.WaitCursor;
-            SortData();
             tvDestination.Nodes.Clear();
             //Ensure the XML file has any Directories.
             try
             {
-                if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-                {
-                    var firstDirectory = _documentManager.Document.Descendants(WixNamespace + "Directory").First();
-                    AddDirectoryNodesToDestination(firstDirectory, null);
-                }
-                else
-                {
-                    TreeNode treeNode = AddDestinationComputerToDestination(null);
-                    AddFirstLevelFolder(treeNode, "DesktopFolder");
-                    AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
-                    AddFirstLevelFolder(treeNode, "SendToFolder");
-                    //AddFirstLevelFolder(treeNode, "StartMenuFolder");  Old School
-                    AddFirstLevelFolder(treeNode, "StartupFolder");
-                }
+                TreeNode treeNode = AddDestinationComputerToDestination(null);
+                AddFirstLevelFolder(treeNode, "DesktopFolder");
+                AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
+                AddFirstLevelFolder(treeNode, "SendToFolder");
+                //AddFirstLevelFolder(treeNode, "StartMenuFolder");  Old School
+                AddFirstLevelFolder(treeNode, "StartupFolder");
             }
             catch (Exception exception)
             {
@@ -227,52 +215,6 @@ namespace ShortCutsDesigner
             return searchNode;
         }
 
-        private void AddDirectoryNodesToDestination(XElement element, TreeNode treeNode)
-        {
-            if (treeNode == null)
-            {
-                treeNode = AddDestinationComputerToDestination(element);
-                AddDirectoryNodesToDestination(element, treeNode);
-            }
-            else
-            {
-                foreach (var subElement in element.Elements())
-                {
-                    switch (subElement.Name.LocalName)
-                    {
-                        case "Directory":
-                            if (!IsASpecialDirectoryToIgnore(subElement.Attribute("Id").Value))
-                            {
-                                var newNode = treeNode.Nodes.Add(CreateNodeName(subElement));
-                                var newNodeTag = GetElementId(subElement);
-                                newNode.ImageIndex = (int)ImageLibrary.FolderOpen;
-                                newNode.SelectedImageIndex = (int)ImageLibrary.FolderOpen;
-                                newNode.Tag = newNodeTag;
-                                AddDirectoryNodesToDestination(subElement, newNode);
-
-
-                                var shortcuts = from s in _shortcuts
-                                                where s.Directory.Equals(subElement.Attribute("Id").Value)
-                                                select s;
-
-                                foreach (var shortcut in shortcuts)
-                                {
-                                    var newShortcutNode = newNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
-                                    newShortcutNode.ImageIndex = (int)ImageLibrary.Shortcut;
-                                    newShortcutNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
-                                    newShortcutNode.Tag = shortcut;
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-            }
-
-
-        }
         private TreeNode FindNodeRecursiveByText(TreeNode node, string text, string tag)
         {
             if ((node.Text == text) && node.Tag.ToString() == tag)
@@ -661,34 +603,7 @@ namespace ShortCutsDesigner
 
         private void createNewFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-            {
-                AddNodeToDestinationTree();
-            }
-            else
-            {
-                AddNodeToDestinationTreeFragmentStyle();
-            }
-        }
-
-        private void AddNodeToDestinationTree()
-        {
-            // Check for existance of directories that contain the text 'New Folder'
-            var directoryElement = FindDirectoryElement(tvDestination.SelectedNode);
-            var newFolderList = (from s in directoryElement.Elements(WixNamespace + "Directory")
-                                 where s.Attribute("Name").Value.Contains("New Folder")
-                                 select s);
-            var newFolderName = "New Folder";
-            if (newFolderList.Count() > 0)
-            {
-                newFolderName += String.Format(" ({0})", newFolderList.Count());
-            }
-            //create a node
-            var nodeToEdit = tvDestination.SelectedNode.Nodes.Add(newFolderName, newFolderName);
-            nodeToEdit.Tag = newFolderName;
-            tvDestination.SelectedNode = nodeToEdit;
-            tvDestination.LabelEdit = true;
-            tvDestination.SelectedNode.BeginEdit();
+            AddNodeToDestinationTreeFragmentStyle();
         }
 
         private void AddNodeToDestinationTreeFragmentStyle()
@@ -729,15 +644,7 @@ namespace ShortCutsDesigner
                 e.Node.Text = e.Label;
             }
 
-            bool canRename = true;
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-            {
-                canRename = CanRename(previousName, e.Label);
-            }
-            else
-            {
-                canRename = CanRenameFragmentStyle(previousName, e.Label);
-            }
+            bool canRename = CanRenameFragmentStyle(previousName, e.Label);
             if (!canRename)
             {
                 CallMessageBox(String.Format("A folder with the name [{0}] already exists.", e.Node.Text), "Folder Rename Warning");
@@ -747,42 +654,6 @@ namespace ShortCutsDesigner
                 e.CancelEdit = true;
             }
 
-        }
-
-        private bool CanRename(string previousName, string newName)
-        {
-            bool canRename = true;
-            // determine if the node with the previous name exists 
-            var directoryElement = FindDirectoryElement(previousName, newName);
-            if (directoryElement != null)
-            {
-                // find out if a node with the new label exists within document
-                string nodePath = tvDestination.SelectedNode.FullPath;
-                string newDirectoryPath = CreateDirectoryStringForHash(nodePath);
-                var directoryId = "scd" + GetMd5Hash(newDirectoryPath);
-                var directoryElementWithSameNameAsLabel = FindDirectoryElement(newName, directoryId);
-                if (directoryElementWithSameNameAsLabel == null)
-                {
-                    // rename the node
-                    directoryElement.Attribute("Name").Value = newName;
-                    ReCalculateChildrenHashes(directoryElement, newDirectoryPath);
-                    // set the selected node's tag to the new directory id
-                    // so that we can find it again after we load the document
-                    tvDestination.SelectedNode.Tag = directoryId;
-                    //SortData();
-                    LoadDocument();
-                }
-                else
-                {
-                    canRename = false;
-                }
-            }
-            else
-            {
-                // need to take information from node and create directory in XML
-                AddDirectoryToDestination(tvDestination.SelectedNode.Parent, tvDestination.SelectedNode);
-            }
-            return canRename;
         }
 
         private bool CanRenameFragmentStyle(string previousName, string newName)
@@ -943,28 +814,7 @@ namespace ShortCutsDesigner
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-            {
-                RemoveDirectoryFromDocument(tvDestination.SelectedNode);
-            }
-            else
-            {
-                RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
-            }
-        }
-        private void RemoveDirectoryFromDocument(TreeNode treeNode)
-        {
-            var directoryToRemove = FindDirectoryElement(treeNode);
-            var tempNode = treeNode.Parent;
-            directoryToRemove.Remove();
-            //SortData();
-            LoadDocument();
-            var parent = FindNodeRecursiveByText(tvDestination.Nodes[0], tempNode.Text, tempNode.Tag.ToString());
-            if (parent != null)
-            {
-                tvDestination.SelectedNode = parent;
-                tvDestination.SelectedNode.Expand();
-            }
+            RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
         }
         private void RemoveDirectoryFromDocumentFragmentStyle(TreeNode treeNode)
         {
@@ -1016,14 +866,7 @@ namespace ShortCutsDesigner
 
         private void createNewFolderToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-            {
-                AddNodeToDestinationTree();
-            }
-            else
-            {
-                AddNodeToDestinationTreeFragmentStyle();
-            }
+            AddNodeToDestinationTreeFragmentStyle();
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1051,86 +894,6 @@ namespace ShortCutsDesigner
             tvDestination.SelectedNode.Collapse();
         }
 
-        public void SortData()
-        {
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-            {
-
-                var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
-                var tempStartElement = FindDirectoryElement(tempDocument, "SourceDir", "TARGETDIR");
-                var tempDirectoryList = (from item in tempStartElement.Elements(WixNamespace + "Directory")
-                                         orderby item.Attribute("Id").Value ascending
-                                         select item);
-                foreach (var directory in tempDirectoryList)
-                {
-                    if (IsASpecialDirectoryToIgnore(directory))
-                    {
-                        // ignore
-                    }
-                    else
-                    {
-                        SortDirectoriesAndChildren(directory);
-                    }
-                }
-                // put order by list into original document
-                var startingElement = FindDirectoryElement("SourceDir", "TARGETDIR");
-                startingElement.Elements().Remove();
-                startingElement.Add(tempDirectoryList);
-            }
-
-        }
-
-        private void SortDirectoriesAndChildren(XElement originalStartingDirectory)
-        {
-            if (originalStartingDirectory == null) return;
-            var elementName = (originalStartingDirectory.Attribute("Name") != null) ? originalStartingDirectory.Attribute("Name").Value : "[" + originalStartingDirectory.Attribute("Id").Value + "]";
-            var elementId = (originalStartingDirectory.Attribute("Id") != null) ? originalStartingDirectory.Attribute("Id").Value : String.Empty;
-
-            var tempDocument = XDocument.Parse(_documentManager.Document.ToString());
-            var tempStartingDirectory = FindDirectoryElement(tempDocument, elementName, elementId);
-
-
-
-            if (HasSubDirectories(originalStartingDirectory))
-            {
-                IEnumerable<XElement> originalSubDirectories;
-                IOrderedEnumerable<XElement> sortedSubDirectories;
-
-                // sorts the directories 
-                if (originalStartingDirectory.Attribute("Id") != null && originalStartingDirectory.Attribute("Id").Value == "TARGETDIR")
-                {
-                    originalSubDirectories = (from dir in originalStartingDirectory.Elements(WixNamespace + "Directory")
-                                              select dir);
-
-                    sortedSubDirectories = (from dir in tempStartingDirectory.Elements(WixNamespace + "Directory")
-                                            orderby dir.Attribute("Id").Value ascending
-                                            select dir);
-                }
-                else
-                {
-                    originalSubDirectories = (from dir in originalStartingDirectory.Elements(WixNamespace + "Directory")
-                                              where dir.Attribute("Name") != null
-                                              select dir);
-
-                    sortedSubDirectories = (from dir in tempStartingDirectory.Elements(WixNamespace + "Directory")
-                                            where dir.Attribute("Name") != null
-                                            orderby dir.Attribute("Name").Value ascending
-                                            select dir);
-                }
-
-                foreach (var directory in sortedSubDirectories)
-                {
-                    SortDirectoriesAndChildren(directory);
-                }
-                originalSubDirectories.Remove();
-                originalStartingDirectory.Add(sortedSubDirectories);
-            }
-        }
-        private bool HasSubDirectories(XElement directory)
-        {
-            return directory.Elements(WixNamespace + "Directory").Count() > 0;
-        }
-
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             CreateShortCut();
@@ -1153,18 +916,11 @@ namespace ShortCutsDesigner
                     string scDirectory = string.Empty;
                     string scSubdirectory = string.Empty;
 
-                    if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-                    {
-                        scDirectory = tvDestination.SelectedNode.Tag as string;
-                    }
-                    else
-                    {
-                        string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
-                        List<string> parts = fullPath.Split("\\").ToList();
-                        scDirectory = parts[0];
-                        parts.RemoveAt(0);
-                        scSubdirectory = string.Join("\\", parts.ToArray());
-                    }
+                    string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
+                    List<string> parts = fullPath.Split("\\").ToList();
+                    scDirectory = parts[0];
+                    parts.RemoveAt(0);
+                    scSubdirectory = string.Join("\\", parts.ToArray());
 
                     string prefix = picker.FileName;
                     int index = 0;
@@ -1321,14 +1077,7 @@ namespace ShortCutsDesigner
                     var result = MessageBox.Show(message, "Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                     if (DialogResult.OK == result)
                     {
-                        if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-                        {
-                            RemoveDirectoryFromDocument(tvDestination.SelectedNode);
-                        }
-                        else
-                        {
-                            RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
-                        }
+                        RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
                     }
                 }
             }

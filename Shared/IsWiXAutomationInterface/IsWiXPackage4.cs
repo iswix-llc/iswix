@@ -57,10 +57,6 @@ namespace IsWiXAutomationInterface
             }
             set
             {
-                if (value != null && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-                {
-                    throw new Exception("The commpressed attribute can not be set for a merge module.");
-                }
                 _packageElement.SetAttributeValue("Compressed", value);
             }
         }

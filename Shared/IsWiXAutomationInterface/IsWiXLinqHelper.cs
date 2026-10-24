@@ -7,7 +7,8 @@ using FireworksFramework.Managers;
 
 namespace IsWiXAutomationInterface
 {
-    public enum IsWiXDocumentType { Product, Module, Fragment, None };
+    // Merge module sources (<Module>) are not supported and report as None.
+    public enum IsWiXDocumentType { Product, Fragment, None };
     // WiX v3 sources are not supported: their namespace reports as Unknown and they must be converted with 'wix convert'.
     public enum WiXVersion { v4, Unknown};
 
@@ -114,9 +115,6 @@ namespace IsWiXAutomationInterface
                         // Intentional
                         docType = IsWiXDocumentType.Product;
                         break;
-                    case "Module":
-                        docType = IsWiXDocumentType.Module;
-                        break;
                     case "Fragment":
                         docType = IsWiXDocumentType.Fragment;
                         break;
@@ -142,13 +140,6 @@ namespace IsWiXAutomationInterface
             
             switch (Document.GetDocumentType())
             {
-                case IsWiXDocumentType.Module:
-                    elementsInOrder =
-                        "SummaryInformation,Package,MediaTemplate,Majorupgrade,PropertyRef,Laumch,AppId,Binary,Component,ComponentGroupRef,ComponentRef,Configuration,CustomAction,CustomActionRef,CustomTable,Dependency," +
-                        "Directory,DirectoryRef,EmbeddedChainer,EmbeddedChainerRef,EnsureTable,Exclusion,Icon,IgnoreModularization,IgnoreTable,Property,SetDirectory," +
-                        "SetProperty,SFPCatalog,Substitution,UI,UIRef,WixVariable,InstallExecuteSequence,InstallUISequence,AdminExecuteSequence,AdminUISequence,AdvertiseExecuteSequence";
-                    break;
-
                 case IsWiXDocumentType.Product:
                     elementsInOrder =
                         "SummaryInformation,Package,MediaTemplate,Majorupgrade,AppId,Binary,ComplianceCheck,Component,ComponentGroup,Condition,CustomAction,CustomActionRef,CustomTable,Directory,DirectoryRef," +

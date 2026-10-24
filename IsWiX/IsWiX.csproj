@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Designers\CustomTablesDesigner\CustomTablesDesigner.csproj" />
-    <ProjectReference Include="..\Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj" />
     <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj" />
     <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj" />
     <ProjectReference Include="..\Designers\NewFeaturesDesigner\NewFeaturesDesigner.csproj" />

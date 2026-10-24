@@ -56,7 +56,7 @@ namespace GeneralInformationDesigner.Views
         {
             IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
 
-            if (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Module)
+            if (docType == IsWiXDocumentType.Product)
             {
                 return true;
             }
@@ -69,36 +69,6 @@ namespace GeneralInformationDesigner.Views
         public void LoadData()
         {
             viewModel.Load();
-            bool enabled = true;
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Module)
-            {
-                enabled = false;
-            }
-
-            //foreach (Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem property in propertyGridPackage.Properties)
-            //{
-            //    if (property.PropertyName == "Compressed")
-            //    {
-            //        property.IsEnabled = enabled;
-            //        break;
-            //    }
-            //}
-
-        }
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            viewModel.AddDependency();
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-                viewModel.RemoveDependency();
-        }
-
-        private void DataGridDependencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            viewModel.ProcessSelectionChanged();
         }
     }
 }
