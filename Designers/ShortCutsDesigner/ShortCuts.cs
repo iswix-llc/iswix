@@ -15,8 +15,9 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
+using IsWiX.WiXModel.Core;
 using static FireworksFramework.Types.Enums;
+using Wxs = IsWiX.WiXModel;
 
 namespace ShortCutsDesigner
 {
@@ -25,7 +26,7 @@ namespace ShortCutsDesigner
         private XNamespace WixNamespace;
         private const string DestinationPathPrefix = "Destination Computer\\[MergeRedirectFolder]\\";
         private const string MrfHashStringPrefix = "MergeRedirectFolder\\";
-        IsWiXShortCuts _shortcuts;
+        List<Wxs.Shortcut> _shortcuts;
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
         string _oldPath = string.Empty;
         private enum ImageLibrary
@@ -84,14 +85,7 @@ namespace ShortCutsDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ShortcutDocument.IsValidDocument(_documentManager.Document);
         }
 
         public void LoadData()
@@ -137,9 +131,9 @@ namespace ShortCutsDesigner
         #endregion
         private void LoadDocument()
         {
-            WixNamespace = _documentManager.Document.GetWiXNameSpace();
+            WixNamespace = WixNamespaces.Wxs;
 
-            _shortcuts = new IsWiXShortCuts();
+            _shortcuts = ShortcutDocument.Load(_documentManager.Document);
             Cursor = Cursors.WaitCursor;
             tvDestination.Nodes.Clear();
             //Ensure the XML file has any Directories.
@@ -173,7 +167,7 @@ namespace ShortCutsDesigner
                 {
                     if (string.IsNullOrEmpty(shortcut.Subdirectory))
                     {
-                        TreeNode newNode = directoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                        TreeNode newNode = directoryNode.Nodes.Add(CalculateSelectedNodeText(shortcut));
                         newNode.ImageIndex = (int)ImageLibrary.Shortcut;
                         newNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
                         newNode.Tag = shortcut;
@@ -181,7 +175,7 @@ namespace ShortCutsDesigner
                     else
                     {
                         TreeNode subDirectoryNode = GetOrCreateTreeNode(directoryNode, shortcut.Subdirectory);
-                        TreeNode newNode = subDirectoryNode.Nodes.Add(string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath));
+                        TreeNode newNode = subDirectoryNode.Nodes.Add(CalculateSelectedNodeText(shortcut));
                         newNode.ImageIndex = (int)ImageLibrary.Shortcut;
                         newNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
                         newNode.Tag = shortcut;
@@ -675,14 +669,15 @@ namespace ShortCutsDesigner
                 string afterDirectory = after.Split("\\").First();
                 string afterSubDirectory = after.Substring(afterDirectory.Length + 1, after.Length - afterDirectory.Length - 1);
 
-                foreach (IsWiXShortCut shortcut in _shortcuts)
+                foreach (Wxs.Shortcut shortcut in _shortcuts)
                 {
+                    string subdirectory = ShortcutDocument.Subdirectory(shortcut);
                     if (shortcut.Directory == oldDirectory &&
-                        (shortcut.Subdirectory.Equals(oldSubDirectory) ||
-                        shortcut.Subdirectory.StartsWith(oldSubDirectory + "\\")))
+                        (subdirectory.Equals(oldSubDirectory) ||
+                        subdirectory.StartsWith(oldSubDirectory + "\\")))
                     {
-                        string subString = shortcut.Subdirectory.Substring(oldSubDirectory.Length, shortcut.Subdirectory.Length - oldSubDirectory.Length);
-                        shortcut.Subdirectory = afterSubDirectory + subString;
+                        string subString = subdirectory.Substring(oldSubDirectory.Length, subdirectory.Length - oldSubDirectory.Length);
+                        ShortcutDocument.SetSubdirectory(shortcut, afterSubDirectory + subString);
                     }
                 }
                 return true;
@@ -708,7 +703,7 @@ namespace ShortCutsDesigner
             var newPath = String.Format("{0}\\{1}", fullPath, fileName);
             return newPath.Replace(DestinationPathPrefix, MrfHashStringPrefix);
         }
-        static string GetMd5Hash(string input)
+        internal static string GetMd5Hash(string input)
         {
             // Create a new instance of the MD5CryptoServiceProvider object.
             MD5 md5Hasher = MD5.Create();
@@ -822,29 +817,33 @@ namespace ShortCutsDesigner
 
             if (isShortcut)
             {
-                IsWiXShortCut selectedShortcut = (IsWiXShortCut)treeNode.Tag;
-                selectedShortcut.Delete();
+                Wxs.Shortcut selectedShortcut = (Wxs.Shortcut)treeNode.Tag;
+                ShortcutDocument.Delete(selectedShortcut);
+                _shortcuts.Remove(selectedShortcut);
             }
             else
             {
-                List<IsWiXShortCut> shortcuts = new List<IsWiXShortCut>();
-                DirectoryMeta directoryMeta = new DirectoryMeta(treeNode.FullPath);
-                foreach (IsWiXShortCut shortcut in _shortcuts)
-                {
-                    if (shortcut.Directory == directoryMeta.Directory &&
-                        shortcut.Subdirectory.Equals(directoryMeta.Subdirectory) ||
-                        shortcut.Subdirectory.StartsWith(directoryMeta.Subdirectory + @"\"))
-                    {
-                        shortcuts.Add(shortcut);
-                    }
-                }
+                // The folder's shortcuts, including those in its subfolders (and only in this top-level folder).
+                var (directory, subdirectory) = SplitFolderPath(treeNode.FullPath);
+                var shortcuts = _shortcuts.Where(shortcut =>
+                    shortcut.Directory == directory &&
+                    (ShortcutDocument.Subdirectory(shortcut).Equals(subdirectory) ||
+                    ShortcutDocument.Subdirectory(shortcut).StartsWith(subdirectory + @"\"))).ToList();
                 foreach (var shortcut in shortcuts)
                 {
-                    shortcut.Delete();
+                    ShortcutDocument.Delete(shortcut);
+                    _shortcuts.Remove(shortcut);
                 }
             }
             treeNode.Remove();
 
+        }
+
+        // "Destination Computer\[ProgramMenuFolder]\Acme\Tools" is Directory ProgramMenuFolder, Subdirectory Acme\Tools.
+        private static (string Directory, string Subdirectory) SplitFolderPath(string fullPath)
+        {
+            string[] parts = fullPath.Replace(@"Destination Computer\", "").Split('\\');
+            return (parts[0].Replace("[", "").Replace("]", ""), Path.Combine(parts.Skip(1).ToArray()));
         }
 
         private bool ParentDirectoryNowEmpty(TreeNode directoryNode)
@@ -906,7 +905,7 @@ namespace ShortCutsDesigner
 
         private void CreateShortCut()
         {
-            ComponentPicker picker = new ComponentPicker(_shortcuts);
+            ComponentPicker picker = new ComponentPicker(ShortcutDocument.GetShortCutCandidates(_documentManager.Document));
             picker.StartPosition = FormStartPosition.CenterParent;
             DialogResult dr = picker.ShowDialog();
             if (dr != DialogResult.Cancel)
@@ -934,9 +933,7 @@ namespace ShortCutsDesigner
                             foreach (var shortcut in _shortcuts)
                             {
                                 string name = string.Format("{0}{1}", prefix, index);
-                                if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) &&
-                                    shortcut.Subdirectory.Equals(scSubdirectory, StringComparison.InvariantCultureIgnoreCase) &&
-                                    shortcut.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                                if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, name))
                                 {
                                     exists = true;
                                     break;
@@ -953,9 +950,7 @@ namespace ShortCutsDesigner
                             {
                                 foreach (var shortcut in _shortcuts)
                                 {
-                                    if (shortcut.Directory.Equals(scDirectory, StringComparison.InvariantCultureIgnoreCase) &&
-                                        shortcut.Subdirectory.Equals(scSubdirectory, StringComparison.InvariantCultureIgnoreCase) &&
-                                        shortcut.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                    if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, prefix))
                                     {
                                         exists = true;
                                         break;
@@ -968,7 +963,8 @@ namespace ShortCutsDesigner
 
                             }
 
-                            IsWiXShortCut shortCut = _shortcuts.Create(name, scDirectory, scSubdirectory, picker.FileElement);
+                            Wxs.Shortcut shortCut = ShortcutDocument.Create(name, scDirectory, scSubdirectory, picker.FileElement);
+                            _shortcuts.Add(shortCut);
                             AddShortcutNode(shortCut);
                             added = true;
                         }
@@ -979,9 +975,14 @@ namespace ShortCutsDesigner
         }
 
 
-        private void AddShortcutNode(IsWiXShortCut iswixShortcut)
+        private static bool IsInFolderWithName(Wxs.Shortcut shortcut, string directory, string subdirectory, string name) =>
+            string.Equals(shortcut.Directory, directory, StringComparison.InvariantCultureIgnoreCase) &&
+            string.Equals(ShortcutDocument.Subdirectory(shortcut), subdirectory, StringComparison.InvariantCultureIgnoreCase) &&
+            string.Equals(shortcut.Name, name, StringComparison.InvariantCultureIgnoreCase);
+
+        private void AddShortcutNode(Wxs.Shortcut iswixShortcut)
         {
-            var subTreeNode = tvDestination.SelectedNode.Nodes.Add(string.Format("{0} ({1})", iswixShortcut.Name, iswixShortcut.DestinationFilePath));
+            var subTreeNode = tvDestination.SelectedNode.Nodes.Add(CalculateSelectedNodeText(iswixShortcut));
             subTreeNode.ImageIndex = (int)ImageLibrary.Shortcut;
             subTreeNode.SelectedImageIndex = (int)ImageLibrary.Shortcut;
             subTreeNode.Tag = iswixShortcut;
@@ -996,17 +997,18 @@ namespace ShortCutsDesigner
         {
             foreach (var shortcut in _shortcuts)
             {
-                if (shortcut.Directory.Equals(oldId))
+                if (shortcut.Directory == oldId)
                 {
-                    shortcut.Directory = newId;
+                    ShortcutDocument.SetDirectory(shortcut, newId);
                 }
             }
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            IsWiXShortCut shortcut = tvDestination.SelectedNode.Tag as IsWiXShortCut;
-            shortcut.Delete();
+            Wxs.Shortcut shortcut = (Wxs.Shortcut)tvDestination.SelectedNode.Tag;
+            ShortcutDocument.Delete(shortcut);
+            _shortcuts.Remove(shortcut);
             tvDestination.SelectedNode.Remove();
             tvDestination.SelectedNode = tvDestination.Nodes[0];
 
@@ -1016,7 +1018,7 @@ namespace ShortCutsDesigner
         {
             if (IsShortcutNode())
             {
-                shortcut1.Read(e.Node.Tag as IsWiXShortCut);
+                shortcut1.Read((Wxs.Shortcut)e.Node.Tag);
                 propertyGridShortCut.SelectedObject = shortcut1;
             }
             else
@@ -1028,21 +1030,21 @@ namespace ShortCutsDesigner
         private void propertyGridShortCut_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             shortcut1.Write(e.ChangedItem.Label);
+            propertyGridShortCut.Refresh();
             UpdatedSelectedNodeText();
         }
 
         private void UpdatedSelectedNodeText()
         {
-            IsWiXShortCut shortcut = tvDestination.SelectedNode.Tag as IsWiXShortCut;
-            if (shortcut != null)
+            if (tvDestination.SelectedNode.Tag is Wxs.Shortcut shortcut)
             {
                 tvDestination.SelectedNode.Text = CalculateSelectedNodeText(shortcut);
             }
         }
 
-        private string CalculateSelectedNodeText(IsWiXShortCut shortcut)
+        private static string CalculateSelectedNodeText(Wxs.Shortcut shortcut)
         {
-            return string.Format("{0} ({1})", shortcut.Name, shortcut.DestinationFilePath);
+            return string.Format("{0} ({1})", shortcut.Name, ShortcutDocument.DestinationFilePath(shortcut));
         }
 
         private void tvDestination_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)

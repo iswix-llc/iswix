@@ -1,5 +1,4 @@
-﻿using IsWiXAutomationInterface;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -11,7 +10,6 @@ namespace ShortCutsDesigner
         string _fileKey = string.Empty;
         string _fileName = string.Empty;
         XElement _fileElement = null;
-        IsWiXShortCuts _shortCuts;
         List<ShortCutCandidate> _candidates;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -40,10 +38,9 @@ namespace ShortCutsDesigner
             }
         }
 
-        public ComponentPicker(IsWiXShortCuts shortCuts)
+        public ComponentPicker(List<ShortCutCandidate> candidates)
         {
-            _shortCuts = shortCuts;
-            _candidates = _shortCuts.GetShortCutCandidates();
+            _candidates = candidates;
             InitializeComponent();
             PopulateListBox();
             if (treeView1.Nodes.Count == 0 && string.IsNullOrEmpty(FileFilterPattern))

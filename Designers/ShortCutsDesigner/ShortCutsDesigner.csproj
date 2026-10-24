@@ -26,7 +26,8 @@
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="5.0.2" />
   </ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
+		<!-- FireworksFramework also brings IsWiX.WiXModel, so every designer uses the same version. -->
+		<ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj" />
 	</ItemGroup>
 
 </Project>
