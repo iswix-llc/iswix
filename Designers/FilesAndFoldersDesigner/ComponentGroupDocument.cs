@@ -367,60 +367,19 @@ namespace FilesAndFoldersDesigner
             ordering.Canonicalize(_componentGroup.Xml);
         }
 
-        // <?define Name="Value"?> instructions: IsWiX keeps SourceDir and ComponentRules at the top of the file.
-        IEnumerable<XProcessingInstruction> Defines() =>
-            _document.DescendantNodes().OfType<XProcessingInstruction>().Where(pi => pi.Target == "define");
+        // The SourceDir and ComponentRules <?define?>s IsWiX keeps at the top of the file. Changing one rewrites
+        // only its value; a new one goes after the existing defines, on its own line.
+        WixDefines Defines => new WixDefines(_document);
 
-        static string DefineName(XProcessingInstruction define) => define.Data.Split('=')[0].Trim();
+        string? GetDefine(string name) => Defines[name];
 
-        XProcessingInstruction? FindDefine(string name) => Defines().FirstOrDefault(pi => DefineName(pi) == name);
-
-        string? GetDefine(string name)
-        {
-            var define = FindDefine(name);
-            if (define == null)
-            {
-                return null;
-            }
-
-            int equals = define.Data.IndexOf('=');
-            return equals < 0 ? string.Empty : define.Data.Substring(equals + 1).Replace("\"", "").Trim();
-        }
-
-        void SetDefine(string name, string value)
-        {
-            var define = FindDefine(name);
-            string data = $"{name}=\"{value}\"";
-            if (define == null)
-            {
-                AddDefine(data);
-            }
-            else if (define.Data != data)
-            {
-                define.Data = data;
-            }
-        }
+        void SetDefine(string name, string value) => Defines[name] = value;
 
         void EnsureDefine(string name, string value)
         {
-            if (FindDefine(name) == null)
+            if (Defines.Find(name) == null)
             {
-                AddDefine($"{name}=\"{value}\"");
-            }
-        }
-
-        // First in <Wix>, on its own line with the indentation of what follows.
-        void AddDefine(string data)
-        {
-            var define = new XProcessingInstruction("define", data);
-            var root = _document.Root!;
-            if (root.FirstNode is XText whitespace && string.IsNullOrWhiteSpace(whitespace.Value))
-            {
-                whitespace.AddAfterSelf(define, new XText(whitespace.Value));
-            }
-            else
-            {
-                root.AddFirst(define);
+                Defines[name] = value;
             }
         }
     }

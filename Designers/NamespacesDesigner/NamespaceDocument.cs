@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using FireworksFramework.Managers;
+using IsWiX.WiXModel.Core;
 
 namespace NamespacesDesigner
 {
@@ -12,24 +13,10 @@ namespace NamespacesDesigner
     // declared whatever prefix the document gives it.
     internal class NamespaceDocument
     {
-        // The extensions WiX ships, with the prefixes WiX's own sources use for them (WiX v7.0.0, src/ext).
-        static readonly SortedDictionary<string, string> WixExtensions = new SortedDictionary<string, string>
-        {
-            ["bal"] = "http://wixtoolset.org/schemas/v4/wxs/bal",
-            ["complus"] = "http://wixtoolset.org/schemas/v4/wxs/complus",
-            ["dep"] = "http://wixtoolset.org/schemas/v4/wxs/dependency",
-            ["directx"] = "http://wixtoolset.org/schemas/v4/wxs/directx",
-            ["fw"] = "http://wixtoolset.org/schemas/v4/wxs/firewall",
-            ["http"] = "http://wixtoolset.org/schemas/v4/wxs/http",
-            ["iis"] = "http://wixtoolset.org/schemas/v4/wxs/iis",
-            ["msmq"] = "http://wixtoolset.org/schemas/v4/wxs/msmq",
-            ["netfx"] = "http://wixtoolset.org/schemas/v4/wxs/netfx",
-            ["powershell"] = "http://wixtoolset.org/schemas/v4/wxs/powershell",
-            ["sql"] = "http://wixtoolset.org/schemas/v4/wxs/sql",
-            ["ui"] = "http://wixtoolset.org/schemas/v4/wxs/ui",
-            ["util"] = "http://wixtoolset.org/schemas/v4/wxs/util",
-            ["vs"] = "http://wixtoolset.org/schemas/v4/wxs/vs",
-        };
+        // The extensions WiX ships, with the prefixes WiX's own sources use for them (from IsWiX.WiXModel, the same
+        // prefixes it declares when the model adds an extension element).
+        static readonly SortedDictionary<string, string> WixExtensions = new SortedDictionary<string, string>(
+            WixNamespaces.ExtensionPrefixes.ToDictionary(e => e.Value, e => e.Key.NamespaceName));
 
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
