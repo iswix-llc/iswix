@@ -6,10 +6,8 @@
              xmlns:viewmmodels="clr-namespace:PropertiesDesigner.ViewModels"
              xmlns:local="clr-namespace:PropertiesDesigner.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <viewmmodels:PropertiesViewModel x:Name="viewModel"/>
-    </UserControl.DataContext>
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=viewmmodels:PropertiesViewModel}">
     <DockPanel>
         <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" SelectionChanged="DataGridDependencies_SelectionChanged" >
             <DataGrid.Columns>

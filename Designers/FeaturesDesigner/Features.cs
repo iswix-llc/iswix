@@ -21,12 +21,13 @@ namespace FeaturesDesigner
 {
     public partial class Features : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
 
         bool _refresh = false;
         bool _loadingMergeRefs = false;
-        public Features()
+        public Features(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
         }

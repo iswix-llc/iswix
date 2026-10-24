@@ -19,7 +19,7 @@ namespace ShortCutsDesigner
     public partial class ShortCuts : UserControl, IFireworksDesigner
     {
         List<Wxs.Shortcut> _shortcuts = new List<Wxs.Shortcut>();
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
         string _oldPath = string.Empty;
         private enum ImageLibrary
         {
@@ -67,8 +67,9 @@ namespace ShortCutsDesigner
             WindowsFolder,
             WindowsVolume
         }
-        public ShortCuts()
+        public ShortCuts(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
             expandAllToolStripMenuItem2.Image = DesignerImages.MenuImage("expand_all");

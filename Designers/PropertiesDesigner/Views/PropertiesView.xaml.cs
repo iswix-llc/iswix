@@ -16,9 +16,15 @@ namespace PropertiesDesigner.Views
     /// </summary>
     public partial class PropertiesView : UserControl, IFireworksDesigner
     {
+        readonly DocumentManager _documentManager;
+        readonly ViewModels.PropertiesViewModel viewModel;
 
-        public PropertiesView()
+        public PropertiesView(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
+            // Created here rather than in the XAML, which can't pass it the document.
+            viewModel = new ViewModels.PropertiesViewModel(documentManager);
+            DataContext = viewModel;
             InitializeComponent();
         }
 
@@ -51,7 +57,7 @@ namespace PropertiesDesigner.Views
         }
         public bool IsValidContext()
         {
-            return ViewModels.PropertiesViewModel.IsValidDocument(DocumentManager.DocumentManagerInstance.Document);
+            return ViewModels.PropertiesViewModel.IsValidDocument(_documentManager.Document);
         }
 
         public void LoadData()

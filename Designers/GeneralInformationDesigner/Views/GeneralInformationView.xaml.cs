@@ -16,10 +16,15 @@ namespace GeneralInformationDesigner.Views
     /// </summary>
     public partial class GeneralInformationView : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
+        readonly ViewModels.GeneralInformationViewModel viewModel;
 
-        public GeneralInformationView()
+        public GeneralInformationView(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
+            // Created here rather than in the XAML, which can't pass it the document.
+            viewModel = new ViewModels.GeneralInformationViewModel(documentManager);
+            DataContext = viewModel;
             InitializeComponent();
         }
 

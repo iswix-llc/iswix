@@ -6,10 +6,8 @@
              xmlns:viewmmodels="clr-namespace:NamespacesDesigner.ViewModels"
              xmlns:local="clr-namespace:NamespacesDesigner.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <viewmmodels:NamespacesViewModel x:Name="viewModel"/>
-    </UserControl.DataContext>
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=viewmmodels:NamespacesViewModel}">
     <DockPanel>
         <DataGrid ItemsSource="{Binding Namespaces, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies">
             <DataGrid.Columns>

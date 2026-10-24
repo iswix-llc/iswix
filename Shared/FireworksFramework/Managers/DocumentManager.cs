@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Types;
 using IsWiX.WiXModel.Core;
@@ -17,6 +16,10 @@ using CanonicalOrder = IsWiX.WiXModel.CanonicalOrder;
 
 namespace FireworksFramework.Managers
 {
+    /// <summary>
+    /// One open document and its state. Each window (or Visual Studio editor) creates its own and passes it to its
+    /// designers' constructors, so several documents can be open in one process.
+    /// </summary>
     public partial class DocumentManager
     {
         DocumentStates _documentState = DocumentStates.Closed;
@@ -28,14 +31,10 @@ namespace FireworksFramework.Managers
         XNamespace? _previousNamespace;
         string _documentExtension = string.Empty;
         string _templateName = string.Empty;
-        XmlSchemaSet _schemas = new XmlSchemaSet();
         bool _canSave = true;
         Dictionary<string, XNamespace> _namespaces = new Dictionary<string, XNamespace> { [""] = XNamespace.None };
 
         public Dictionary<string, IPublishable> Subscribers { get { return _subscribers; } }
-        private static readonly Lazy<DocumentManager> lazy = new Lazy<DocumentManager>(() => new DocumentManager());
-
-        public static DocumentManager DocumentManagerInstance { get { return lazy.Value; } }
 
         string _documentPath = string.Empty;
         public string DocumentPath { get { return _documentPath; } }
@@ -56,22 +55,6 @@ namespace FireworksFramework.Managers
                 _subscribers.Remove(name);
             }
             Refresh();
-        }
-
-        private DocumentManager()
-        {
-            try
-            {
-                foreach (var file in new DirectoryInfo("Schemas").GetFiles("*.xsd"))
-                {
-                    _schemas.Add(null, file.FullName);
-                }
-                _schemas.CompilationSettings.EnableUpaCheck = true;
-                _schemas.Compile();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         public DocumentStates DocumentState
@@ -305,11 +288,6 @@ namespace FireworksFramework.Managers
             }
 
             return message;
-        }
-
-        public XmlSchemaSet Schemas
-        {
-            get { return _schemas; }
         }
 
         public bool CanSave

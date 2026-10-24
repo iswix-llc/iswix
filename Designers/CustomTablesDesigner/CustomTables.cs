@@ -27,14 +27,14 @@ namespace CustomTablesDesigner
         Wxs.CustomTable _customTableElement = null!;
         // The Row element behind each grid row.
         Dictionary<DataRow, Wxs.Row> _rowElements = new Dictionary<DataRow, Wxs.Row>();
-        DocumentManager _documentManager;
+        readonly DocumentManager _documentManager;
 
-        public CustomTablesDesigner()
+        public CustomTablesDesigner(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             DesignerImages.Add(imageListIcons, typeof(CustomTablesDesigner).Assembly, "CustomTablesDesigner.Images.", "PrimaryKey");
             dataGridViewRows.DataSource = _customTable;
-            _documentManager = DocumentManager.DocumentManagerInstance;
         }
 
         void _customTable_RowChanged(object sender, DataRowChangeEventArgs e)

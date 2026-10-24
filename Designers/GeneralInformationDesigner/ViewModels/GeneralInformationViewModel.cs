@@ -17,7 +17,7 @@ namespace GeneralInformationDesigner.ViewModels
         // The template's placeholder: replaced with a new GUID when the designer opens the package, as before.
         const string EmptyUpgradeCode = "00000000-0000-0000-0000-000000000000";
 
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
 
         Package4Model _package4 = new Package4Model();
         SummaryInformation4Model summaryInformation4Model = new SummaryInformation4Model();
@@ -25,6 +25,11 @@ namespace GeneralInformationDesigner.ViewModels
         Wxs.Package _package = null!;
         // Created when a field is first set and removed again when its last attribute is cleared.
         Wxs.SummaryInformation? _summaryInformation;
+
+        public GeneralInformationViewModel(DocumentManager documentManager)
+        {
+            _documentManager = documentManager;
+        }
 
         Visibility _summaryInformation4PropertyGridVisible = Visibility.Hidden;
         Visibility _package4PropertyGridVisible = Visibility.Hidden;

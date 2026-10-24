@@ -20,7 +20,7 @@ namespace ServicesDesigner
 {
     public partial class Services : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
 
         private enum ImageLibrary
         {
@@ -40,8 +40,9 @@ namespace ServicesDesigner
 
         List<ServiceItem> _services = new List<ServiceItem>();
 
-        public Services()
+        public Services(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
             createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");

@@ -17,7 +17,7 @@ namespace Designers.FilesAndFolders
 
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
         // Set by LoadData, before the designer is shown.
         ComponentGroupDocument _isWiXComponentGroup = null!;
         string rootPath = string.Empty;
@@ -62,8 +62,9 @@ namespace Designers.FilesAndFolders
             }
         }
 
-        public FilesAndFolders()
+        public FilesAndFolders(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
             createNewFolderToolStripMenuItem.Image = DesignerImages.MenuImage("new_folder");
@@ -111,7 +112,7 @@ namespace Designers.FilesAndFolders
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
-            _isWiXComponentGroup = new ComponentGroupDocument();
+            _isWiXComponentGroup = new ComponentGroupDocument(_documentManager);
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 

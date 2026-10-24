@@ -14,8 +14,12 @@ namespace PropertiesDesigner.ViewModels
 {
     public class PropertiesViewModel : ObservableObject
     {
+        readonly DocumentManager _documentManager;
 
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        public PropertiesViewModel(DocumentManager documentManager)
+        {
+            _documentManager = documentManager;
+        }
 
         // The <Package> or <Fragment> whose properties are edited: the document's first element, as before.
         WixElement? _container;

@@ -13,8 +13,14 @@ namespace NamespacesDesigner.ViewModels
 {
     public class NamespacesViewModel : ObservableObject
     {
+        readonly DocumentManager _documentManager;
+        NamespaceDocument _iswixNamespaces;
 
-        NamespaceDocument _iswixNamespaces = new NamespaceDocument();
+        public NamespacesViewModel(DocumentManager documentManager)
+        {
+            _documentManager = documentManager;
+            _iswixNamespaces = new NamespaceDocument(documentManager);
+        }
 
         ObservableCollection<NamespaceModel> _namespaces = new ObservableCollection<NamespaceModel>();
         public ObservableCollection<NamespaceModel> Namespaces
@@ -33,7 +39,7 @@ namespace NamespacesDesigner.ViewModels
         public void LoadData()
         {
             ObservableCollection<NamespaceModel> namespaces = new ObservableCollection<NamespaceModel>();
-            _iswixNamespaces = new NamespaceDocument();
+            _iswixNamespaces = new NamespaceDocument(_documentManager);
 
             foreach (var iswixNamespace in _iswixNamespaces.PossibleNamespaces)
             {
