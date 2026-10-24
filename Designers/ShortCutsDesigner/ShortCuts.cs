@@ -703,7 +703,7 @@ namespace ShortCutsDesigner
             var newPath = String.Format("{0}\\{1}", fullPath, fileName);
             return newPath.Replace(DestinationPathPrefix, MrfHashStringPrefix);
         }
-        internal static string GetMd5Hash(string input)
+        static string GetMd5Hash(string input)
         {
             // Create a new instance of the MD5CryptoServiceProvider object.
             MD5 md5Hasher = MD5.Create();

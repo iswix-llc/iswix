@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FireworksFramework.Authoring;
 using IsWiX.WiXModel.Core;
 using Wxs = IsWiX.WiXModel;
 
@@ -94,17 +95,9 @@ namespace ShortCutsDesigner
 
         static string NullIfEmpty(string value) => string.IsNullOrEmpty(value) ? null : value;
 
-        // A drop-down of the schema's values, plus empty to remove the attribute; an expression can be typed.
-        class ShowConverter : StringConverter
+        class ShowConverter : WixChoiceConverter
         {
-            public override bool GetStandardValuesSupported(ITypeDescriptorContext context) => true;
-
-            public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) => false;
-
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context) =>
-                new StandardValuesCollection(new[] { string.Empty }
-                    .Concat(Enum.GetValues(typeof(Wxs.ShortcutShow)).Cast<Wxs.ShortcutShow>().Select(Wxs.WixEnumConverters.ShortcutShow.Format))
-                    .ToArray());
+            protected override IEnumerable<string> Choices => ChoicesOf(Wxs.WixEnumConverters.ShortcutShow);
         }
     }
 }

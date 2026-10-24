@@ -116,16 +116,16 @@
             this.serviceInstall.Description = null;
             this.serviceInstall.DisplayName = null;
             this.serviceInstall.EraseDescription = null;
-            this.serviceInstall.ErrorControl = IsWiXAutomationInterface.ErrorControl.ignore;
+            this.serviceInstall.ErrorControl = null;
             this.serviceInstall.Interactive = null;
             this.serviceInstall.LoadOrderGroup = null;
             this.serviceInstall.Name = null;
             this.serviceInstall.Password = null;
             this.serviceInstall.Remove = null;
             this.serviceInstall.Start = null;
-            this.serviceInstall.Startup = IsWiXAutomationInterface.Start.auto;
+            this.serviceInstall.Startup = null;
             this.serviceInstall.Stop = null;
-            this.serviceInstall.Type = IsWiXAutomationInterface.Type.ownProcess;
+            this.serviceInstall.Type = null;
             this.serviceInstall.Vital = null;
             this.serviceInstall.Wait = null;
             // 

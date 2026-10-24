@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using FireworksFramework.Authoring;
 using IsWiX.WiXModel.Core;
 using Wxs = IsWiX.WiXModel;
 
@@ -38,7 +39,7 @@ namespace ShortCutsDesigner
 
                 ShortCutCandidate scc = new ShortCutCandidate();
                 scc.FileKey = (string)file.Attribute("Id") ?? string.Empty;
-                scc.DestinationFilePath = DestinationFilePath(file);
+                scc.DestinationFilePath = WixFiles.DestinationFilePath(file);
                 scc.FileName = Path.GetFileNameWithoutExtension(source.Split('\\').Last());
                 scc.FileElement = file;
                 candidates.Add(scc);
@@ -76,7 +77,7 @@ namespace ShortCutsDesigner
         {
             bool generatedId = shortcut.Id == GeneratedId(shortcut.Directory, Subdirectory(shortcut), shortcut.Name) ||
                 // Earlier IsWiX versions renamed with this form.
-                shortcut.Id == "sc" + ShortCuts.GetMd5Hash(shortcut.Directory + shortcut.Name);
+                shortcut.Id == "sc" + WixFiles.IdHash(shortcut.Directory + shortcut.Name);
 
             if (generatedId)
             {
@@ -100,52 +101,10 @@ namespace ShortCutsDesigner
         }
 
         static string GeneratedId(string directory, string subdirectory, string name) =>
-            "sc" + ShortCuts.GetMd5Hash(Path.Combine(directory ?? string.Empty, subdirectory ?? string.Empty, name ?? string.Empty));
+            "sc" + WixFiles.IdHash(Path.Combine(directory ?? string.Empty, subdirectory ?? string.Empty, name ?? string.Empty));
 
         public static string DestinationFilePath(Wxs.Shortcut shortcut) =>
-            shortcut.Xml.Parent?.Name == Wxs.File.ElementName ? DestinationFilePath(shortcut.Xml.Parent) : string.Empty;
-
-        // Where a file is installed, as [Directory]Subdirectory\file.
-        static string DestinationFilePath(XElement file)
-        {
-            string fileName = ((string)file.Attribute("Source") ?? (string)file.Attribute("Name") ?? string.Empty).Split('\\').Last();
-            if (!string.IsNullOrEmpty((string)file.Attribute("Id")))
-            {
-                // Files with an Id are placed by their Directory ancestors.
-                string filePath = fileName;
-                foreach (var ancestor in file.Ancestors(Wxs.Directory.ElementName))
-                {
-                    filePath = ParentDirectoryName(ancestor) + filePath;
-                }
-
-                int firstSlashLocation = filePath.IndexOf('\\');
-                return firstSlashLocation < 0 ? filePath : ("[" + filePath.Insert(firstSlashLocation, "]")).Replace("]\\", "]");
-            }
-
-            // Otherwise by their component's Directory and Subdirectory (the directory may come from the group).
-            var component = file.Parent;
-            string directory = (string)component?.Attribute("Directory") ??
-                (string)component?.Parent?.Attribute("Directory") ?? string.Empty;
-            return "[" + directory + "]" + Path.Combine((string)component?.Attribute("Subdirectory") ?? string.Empty, fileName);
-        }
-
-        static string ParentDirectoryName(XElement element)
-        {
-            string id = (string)element.Attribute("Id");
-            string name = (string)element.Attribute("Name");
-
-            if (!string.IsNullOrEmpty(name) && !name.Equals("SourceDir", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return name + @"\";
-            }
-
-            if (!string.IsNullOrEmpty(id) && !id.Equals("TARGETDIR", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return id + @"\";
-            }
-
-            return string.Empty;
-        }
+            shortcut.Xml.Parent?.Name == Wxs.File.ElementName ? WixFiles.DestinationFilePath(shortcut.Xml.Parent) : string.Empty;
     }
 
     public class ShortCutCandidate

@@ -9,14 +9,13 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
 
 namespace ServicesDesigner
 {
     public partial class ComponentPicker : Form
     {
         string _fileKey = string.Empty;
-        IsWiXServices _services;
+        List<ServiceCandidate> _candidates;
         string _fileName = string.Empty;
         XElement _fileElement = null;
 
@@ -46,9 +45,9 @@ namespace ServicesDesigner
             }
         }
 
-        public ComponentPicker(IsWiXServices services)
+        public ComponentPicker(List<ServiceCandidate> candidates)
         {
-            _services = services;
+            _candidates = candidates;
             InitializeComponent();
             PopulateListBox();
             if(treeView1.Nodes.Count==0)
@@ -63,8 +62,7 @@ namespace ServicesDesigner
         private void PopulateListBox()
         {
 
-            List < ServiceCandidate > candidates = _services.GetServiceCandidates();
-            foreach (var candidate in candidates)
+            foreach (var candidate in _candidates)
             {
                 TreeNode node = treeView1.Nodes.Add(candidate.DestinationFilePath);
                 node.Tag = candidate;

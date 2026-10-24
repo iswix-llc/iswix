@@ -12,7 +12,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
-using IsWiXAutomationInterface;
 using FireworksFramework.Managers;
 using static FireworksFramework.Types.Enums;
 
@@ -38,7 +37,7 @@ namespace ServicesDesigner
             BlueFolderOpen
         }
 
-        IsWiXServices _services;
+        List<ServiceItem> _services;
 
         public Services()
         {
@@ -49,19 +48,12 @@ namespace ServicesDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4 && _documentManager.Document.GetDocumentType() == IsWiXDocumentType.Fragment)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ServiceDocument.IsValidDocument(_documentManager.Document);
         }
 
         public void LoadData()
         {
-            _services = new IsWiXServices();
+            _services = ServiceDocument.Load(_documentManager.Document);
 
             treeViewServices.Nodes.Clear();
             AddComputerDestinationNode();
@@ -82,7 +74,7 @@ namespace ServicesDesigner
             treeViewServices.SelectedNode = subTreeNode;
         }
 
-        private void AddServiceNode(IsWiXService iswixService)
+        private void AddServiceNode(ServiceItem iswixService)
         {
             var subTreeNode = treeViewServices.Nodes[0].Nodes.Add(CalculateSelectedNodeText(iswixService));
             subTreeNode.ImageIndex = (int)ImageLibrary.Services;
@@ -105,16 +97,15 @@ namespace ServicesDesigner
 
         private void UpdatedSelectedNodeText()
         {
-            IsWiXService service = treeViewServices.SelectedNode.Tag as IsWiXService;
-            if (service != null)
+            if (treeViewServices.SelectedNode.Tag is ServiceItem service)
             {
                 treeViewServices.SelectedNode.Text = CalculateSelectedNodeText(service);
             }
         }
 
-        private string CalculateSelectedNodeText(IsWiXService service)
+        private string CalculateSelectedNodeText(ServiceItem service)
         {
-            return string.Format("{0} ({1})", service.ServiceInstall.Name, service.ServiceInstall.DestinationFilePath);
+            return string.Format("{0} ({1})", service.Install.Name, ServiceDocument.DestinationFilePath(service));
         }
 
         public Image PluginImage
@@ -163,14 +154,14 @@ namespace ServicesDesigner
                 treeViewServices.ContextMenuStrip = cmsService;
                 propertyGridServiceInstall.Enabled = true;
                 propertyGridServiceInstall.SelectedObject = serviceInstall;
-                serviceInstall.Read(e.Node.Tag as IsWiXService);
+                serviceInstall.Read((ServiceItem)e.Node.Tag);
 
             }
         }
 
         private void createNewFolderToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ComponentPicker picker = new ComponentPicker(_services);
+            ComponentPicker picker = new ComponentPicker(ServiceDocument.GetServiceCandidates(_documentManager.Document));
             picker.StartPosition = FormStartPosition.CenterParent;
             DialogResult dr = picker.ShowDialog();
             if (dr != DialogResult.Cancel)
@@ -188,7 +179,7 @@ namespace ServicesDesigner
                         foreach (var existingService in _services)
                         {
                             string name = string.Format("{0}{1}", prefix, index);
-                            if (existingService.ServiceInstall.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                            if (string.Equals(existingService.Install.Name, name, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 exists = true;
                                 break;
@@ -204,7 +195,7 @@ namespace ServicesDesigner
                             {
                                 foreach (var existingService in _services)
                                 {
-                                    if (existingService.ServiceInstall.Name.Equals(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                    if (string.Equals(existingService.Install.Name, prefix, StringComparison.InvariantCultureIgnoreCase))
                                     {
                                         exists = true;
                                         break;
@@ -217,7 +208,8 @@ namespace ServicesDesigner
 
                             }
 
-                            IsWiXService service = _services.Create(name, picker.FileKey, picker.FileElement);
+                            ServiceItem service = ServiceDocument.Create(_documentManager.Document, name, picker.FileKey, picker.FileElement);
+                            _services.Add(service);
                             AddServiceNode(service);
                             added = true;
                         }
@@ -229,9 +221,9 @@ namespace ServicesDesigner
         }
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IsWiXService service = treeViewServices.SelectedNode.Tag as IsWiXService;
-            service.ServiceControl.Delete();
-            service.ServiceInstall.Delete();
+            ServiceItem service = (ServiceItem)treeViewServices.SelectedNode.Tag;
+            ServiceDocument.Delete(service);
+            _services.Remove(service);
             treeViewServices.SelectedNode.Remove();
             treeViewServices.SelectedNode = treeViewServices.Nodes[0];
         }
@@ -249,6 +241,7 @@ namespace ServicesDesigner
         private void propertyGridServiceInstall_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             serviceInstall.Write(e.ChangedItem.Label);
+            propertyGridServiceInstall.Refresh();
             UpdatedSelectedNodeText();
         }
     }

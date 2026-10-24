@@ -4,14 +4,17 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using IsWiXAutomationInterface;
+using System.Windows.Forms;
+using FireworksFramework.Authoring;
+using IsWiX.WiXModel.Core;
+using Wxs = IsWiX.WiXModel;
 
 namespace ServicesDesigner
 {
+    // Values are the attribute text, so expressions such as $(var.X) show and are kept.
     public partial class Service : Component
     {
-        IsWiXServiceInstall _serviceInstall;
-        IsWiXServiceControl _serviceControl;
+        ServiceItem _service;
 
         public Service()
         {
@@ -30,47 +33,51 @@ namespace ServicesDesigner
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"This column is the string that gives the service name to install")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Name { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"This column is the string that user interface programs use to identify the service.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string DisplayName { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"Sets the description of the service.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Description { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"Determines whether the existing service description will be ignored. If 'yes', the service description will be null, even if the Description attribute is set.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
-        public YesNo? EraseDescription { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(YesNoChoiceConverter))]
+        public string EraseDescription { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"Contains any command line arguments or properties required to run the service.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Arguments { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"The Windows Installer does not currently support kernelDriver or systemDriver.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
-        public IsWiXAutomationInterface.Type Type { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(ServiceTypeConverter))]
+        public string Type { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"Determines when the service should be started. The Windows Installer does not support boot or system.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public Start Startup { get; set; }
+        [TypeConverter(typeof(StartupConverter))]
+        public string Startup { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"Determines what action should be taken on an error.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public ErrorControl ErrorControl { get; set; }
+        [TypeConverter(typeof(ErrorControlConverter))]
+        public string ErrorControl { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"The account under which to start the service. Valid only when ServiceType is ownProcess.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Account { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
@@ -80,128 +87,177 @@ namespace ServicesDesigner
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"The load ordering group that this service should be a part of.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string LoadOrderGroup { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"Whether or not the service interacts with the desktop.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
-        public YesNo? Interactive { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(YesNoChoiceConverter))]
+        public string Interactive { get; set; }
 
         [CategoryAttribute(SERVICEINSTALL)]
         [Description(@"The overall install should fail if this service fails to install.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public YesNo? Vital { get; set; }
+        [TypeConverter(typeof(YesNoChoiceConverter))]
+        public string Vital { get; set; }
 
         [CategoryAttribute(SERVICECONTROL)]
         [Description(@"Specifies whether the service should be started by the StartServices action on install, uninstall or both. For 'install', the service will be started only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource); for 'uninstall', the service will be started only when the parent component is being removed (msiInstallStateAbsent); for 'both', the service will be started in both cases.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
-        public InstallUninstall? Start { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(InstallUninstallConverter))]
+        public string Start { get; set; }
 
         [CategoryAttribute(SERVICECONTROL)]
         [Description(@"Specifies whether the service should be stopped by the StopServices action on install, uninstall or both. For 'install', the service will be stopped only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource); for 'uninstall', the service will be stopped only when the parent component is being removed (msiInstallStateAbsent); for 'both', the service will be stopped in both cases.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
-        
-        public InstallUninstall? Stop { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(InstallUninstallConverter))]
+        public string Stop { get; set; }
 
         [CategoryAttribute(SERVICECONTROL)]
-        [Description(@"Specifies whether the service should be stopped by the StopServices action on install, uninstall or both. For 'install', the service will be stopped only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource); for 'uninstall', the service will be stopped only when the parent component is being removed (msiInstallStateAbsent); for 'both', the service will be stopped in both cases.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] 
-        public InstallUninstall? Remove { get; set; }
+        [Description(@"Specifies whether the service should be removed by the DeleteServices action on install, uninstall or both. For 'install', the service will be removed only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource); for 'uninstall', the service will be removed only when the parent component is being removed (msiInstallStateAbsent); for 'both', the service will be removed in both cases.")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(InstallUninstallConverter))]
+        public string Remove { get; set; }
 
         [CategoryAttribute(SERVICECONTROL)]
         [Description(@"Specifies whether or not to wait for the service to complete before continuing. The default is 'yes'.")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] public YesNo? Wait { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [TypeConverter(typeof(YesNoChoiceConverter))]
+        public string Wait { get; set; }
 
-        public void Read(IsWiXService service)
+        public void Read(ServiceItem service)
         {
-            _serviceInstall = service.ServiceInstall;
-            _serviceControl = service.ServiceControl;
-            Name = _serviceInstall.Name;
-
-            if (_serviceInstall.Name != _serviceControl.Name)
-            {
-                _serviceControl.Name = _serviceInstall.Name;
-            }
-            DisplayName = _serviceInstall.DisplayName;
-            Description = _serviceInstall.Description;
-            EraseDescription = _serviceInstall.EraseDescription;
-            Arguments = _serviceInstall.Arguments;
-            Type = _serviceInstall.Type;
-            Startup = _serviceInstall.Start;
-            ErrorControl = _serviceInstall.ErrorControl;
-            Account = _serviceInstall.Account;
-            Password = _serviceInstall.Password;
-            LoadOrderGroup = _serviceInstall.LoadOrderGroup;
-            Interactive = _serviceInstall.Interactive;
-            Vital = _serviceInstall.Vital;
-            Start = _serviceControl.Start;
-            Stop = _serviceControl.Stop;
-            Remove = _serviceControl.Remove;
-            Wait = _serviceControl.Wait;
-            
-
+            _service = service;
+            var install = service.Install;
+            var control = service.Control;
+            Name = install.Name;
+            DisplayName = install.DisplayName;
+            Description = install.Description;
+            EraseDescription = WixText.Of(install.EraseDescription, WixConverters.YesNo);
+            Arguments = install.Arguments;
+            Type = WixText.Of(install.Type, Wxs.WixEnumConverters.ServiceInstallType);
+            Startup = WixText.Of(install.Start, Wxs.WixEnumConverters.ServiceInstallStart);
+            ErrorControl = WixText.Of(install.ErrorControl, Wxs.WixEnumConverters.ServiceInstallErrorControl);
+            Account = install.Account;
+            Password = install.Password;
+            LoadOrderGroup = install.LoadOrderGroup;
+            Interactive = WixText.Of(install.Interactive, WixConverters.YesNo);
+            Vital = WixText.Of(install.Vital, WixConverters.YesNo);
+            Start = WixText.Of(control?.Start, Wxs.WixEnumConverters.InstallUninstallType);
+            Stop = WixText.Of(control?.Stop, Wxs.WixEnumConverters.InstallUninstallType);
+            Remove = WixText.Of(control?.Remove, Wxs.WixEnumConverters.InstallUninstallType);
+            Wait = WixText.Of(control?.Wait, WixConverters.YesNo);
         }
 
+        // Only the attribute that changed is written.
         public void Write(string PropertyLabel)
         {
+            var install = _service.Install;
             switch (PropertyLabel)
             {
 
                 case "Name":
-                    _serviceInstall.Name = Name;
-                    _serviceControl.Name = Name;
+                    ServiceDocument.SetName(_service, Name);
                     break;
                 case "DisplayName":
-                    _serviceInstall.DisplayName = DisplayName;
+                    install.DisplayName = NullIfEmpty(DisplayName);
                     break;
                 case "Description":
-                    _serviceInstall.Description = Description;
+                    install.Description = NullIfEmpty(Description);
                     break;
                 case "EraseDescription":
-                    _serviceInstall.EraseDescription = EraseDescription;
+                    Set(EraseDescription, WixConverters.YesNo, PropertyLabel, false, value => install.EraseDescription = value);
                     break;
                 case "Arguments":
-                    _serviceInstall.Arguments = Arguments;
+                    install.Arguments = NullIfEmpty(Arguments);
                     break;
                 case "Type":
-                    _serviceInstall.Type = Type;
+                    Set(Type, Wxs.WixEnumConverters.ServiceInstallType, PropertyLabel, true, value => install.Type = value);
                     break;
                 case "Startup":
-                    _serviceInstall.Start = Startup;
+                    Set(Startup, Wxs.WixEnumConverters.ServiceInstallStart, PropertyLabel, true, value => install.Start = value);
                     break;
                 case "ErrorControl":
-                    _serviceInstall.ErrorControl = ErrorControl;
+                    Set(ErrorControl, Wxs.WixEnumConverters.ServiceInstallErrorControl, PropertyLabel, true, value => install.ErrorControl = value);
                     break;
                 case "Account":
-                    _serviceInstall.Account = Account;
+                    install.Account = NullIfEmpty(Account);
                     break;
                 case "Password":
-                    _serviceInstall.Password = Password;
+                    install.Password = NullIfEmpty(Password);
                     break;
                 case "LoadOrderGroup":
-                    _serviceInstall.LoadOrderGroup = LoadOrderGroup;
+                    install.LoadOrderGroup = NullIfEmpty(LoadOrderGroup);
                     break;
                 case "Interactive":
-                    _serviceInstall.Interactive = Interactive;
+                    Set(Interactive, WixConverters.YesNo, PropertyLabel, false, value => install.Interactive = value);
                     break;
                 case "Vital":
-                    _serviceInstall.Vital = Vital;
+                    Set(Vital, WixConverters.YesNo, PropertyLabel, false, value => install.Vital = value);
                     break;
                 case "Start":
-                    _serviceControl.Start = Start;
+                    Set(Start, Wxs.WixEnumConverters.InstallUninstallType, PropertyLabel, false, value => ServiceDocument.EnsureControl(_service).Start = value);
                     break;
                 case "Stop":
-                    _serviceControl.Stop = Stop;
+                    Set(Stop, Wxs.WixEnumConverters.InstallUninstallType, PropertyLabel, false, value => ServiceDocument.EnsureControl(_service).Stop = value);
                     break;
                 case "Remove":
-                    _serviceControl.Remove = Remove;
+                    Set(Remove, Wxs.WixEnumConverters.InstallUninstallType, PropertyLabel, false, value => ServiceDocument.EnsureControl(_service).Remove = value);
                     break;
                 case "Wait":
-                    _serviceControl.Wait = Wait;
+                    Set(Wait, WixConverters.YesNo, PropertyLabel, false, value => ServiceDocument.EnsureControl(_service).Wait = value);
                     break;
 
             }
+        }
+
+        // A required attribute cannot be emptied; anything else must be a valid value or an expression.
+        void Set<T>(string text, WixValueConverter<T> converter, string label, bool required, Action<WixValue<T>?> set)
+        {
+            if (required && string.IsNullOrEmpty(text))
+            {
+                MessageBox.Show($"{label} is required.", "Services", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else if (!WixText.TryParse(text, converter, out var value))
+            {
+                MessageBox.Show($"'{text}' is not a valid {label}.", "Services", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                set(value);
+                return;
+            }
+
+            Read(_service);
+        }
+
+        static string NullIfEmpty(string value) => string.IsNullOrEmpty(value) ? null : value;
+
+        class ServiceTypeConverter : WixChoiceConverter
+        {
+            protected override IEnumerable<string> Choices => ChoicesOf(Wxs.WixEnumConverters.ServiceInstallType);
+
+            protected override bool Optional => false;
+        }
+
+        class StartupConverter : WixChoiceConverter
+        {
+            protected override IEnumerable<string> Choices => ChoicesOf(Wxs.WixEnumConverters.ServiceInstallStart);
+
+            protected override bool Optional => false;
+        }
+
+        class ErrorControlConverter : WixChoiceConverter
+        {
+            protected override IEnumerable<string> Choices => ChoicesOf(Wxs.WixEnumConverters.ServiceInstallErrorControl);
+
+            protected override bool Optional => false;
+        }
+
+        class InstallUninstallConverter : WixChoiceConverter
+        {
+            protected override IEnumerable<string> Choices => ChoicesOf(Wxs.WixEnumConverters.InstallUninstallType);
         }
     }
 }
