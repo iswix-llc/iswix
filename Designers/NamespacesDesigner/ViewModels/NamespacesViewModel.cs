@@ -38,7 +38,7 @@ namespace NamespacesDesigner.ViewModels
             foreach (var iswixNamespace in _iswixNamespaces.PossibleNamespaces)
             {
                 NamespaceModel namespaceModel = new NamespaceModel();
-                if (_iswixNamespaces.IsDeclared(iswixNamespace.Key))
+                if (_iswixNamespaces.IsDeclared(iswixNamespace.Value))
                 {
                     namespaceModel.Selected = true;
                 }
@@ -63,7 +63,7 @@ namespace NamespacesDesigner.ViewModels
             {
                 _iswixNamespaces.Add(namespaceModel.Prefix, namespaceModel.Uri);
             }
-            else if (!_iswixNamespaces.Remove(namespaceModel.Prefix))
+            else if (!_iswixNamespaces.Remove(namespaceModel.Uri))
             {
                 System.Windows.MessageBox.Show($"The '{namespaceModel.Prefix}' namespace is still used in this document, so it can't be removed.");
                 namespaceModel.Selected = true;

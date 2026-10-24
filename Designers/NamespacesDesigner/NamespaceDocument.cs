@@ -8,89 +8,148 @@ using FireworksFramework.Managers;
 
 namespace NamespacesDesigner
 {
-    // The WiX extension namespaces declared on the document's root (xmlns:prefix="uri").
+    // The WiX extension namespaces declared on the document's root (xmlns:prefix="uri"). A namespace counts as
+    // declared whatever prefix the document gives it.
     internal class NamespaceDocument
     {
+        // The extensions WiX ships, with the prefixes WiX's own sources use for them (WiX v7.0.0, src/ext).
+        static readonly SortedDictionary<string, string> WixExtensions = new SortedDictionary<string, string>
+        {
+            ["bal"] = "http://wixtoolset.org/schemas/v4/wxs/bal",
+            ["complus"] = "http://wixtoolset.org/schemas/v4/wxs/complus",
+            ["dep"] = "http://wixtoolset.org/schemas/v4/wxs/dependency",
+            ["directx"] = "http://wixtoolset.org/schemas/v4/wxs/directx",
+            ["fw"] = "http://wixtoolset.org/schemas/v4/wxs/firewall",
+            ["http"] = "http://wixtoolset.org/schemas/v4/wxs/http",
+            ["iis"] = "http://wixtoolset.org/schemas/v4/wxs/iis",
+            ["msmq"] = "http://wixtoolset.org/schemas/v4/wxs/msmq",
+            ["netfx"] = "http://wixtoolset.org/schemas/v4/wxs/netfx",
+            ["powershell"] = "http://wixtoolset.org/schemas/v4/wxs/powershell",
+            ["sql"] = "http://wixtoolset.org/schemas/v4/wxs/sql",
+            ["ui"] = "http://wixtoolset.org/schemas/v4/wxs/ui",
+            ["util"] = "http://wixtoolset.org/schemas/v4/wxs/util",
+            ["vs"] = "http://wixtoolset.org/schemas/v4/wxs/vs",
+        };
+
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        public bool IsDeclared(string prefix) => _documentManager.NameSpaces.ContainsKey(prefix);
+        XElement Root => _documentManager.Document.Root;
+
+        IEnumerable<XAttribute> Declarations(string uri) =>
+            Root.Attributes().Where(a => a.IsNamespaceDeclaration && a.Name.Namespace == XNamespace.Xmlns && a.Value == uri);
+
+        public bool IsDeclared(string uri) => Declarations(uri).Any();
 
         public void Add(string prefix, string uri)
         {
-            if (!IsDeclared(prefix))
+            if (!IsDeclared(uri))
             {
-                _documentManager.Document.Root.Add(new XAttribute(XNamespace.Xmlns + prefix, uri));
+                Root.Add(new XAttribute(XNamespace.Xmlns + prefix, uri));
                 _documentManager.RefreshNamespaces();
             }
         }
 
         // Returns false, removing nothing, while an element or attribute still uses the namespace: without its
         // declaration it would be saved with a made-up prefix.
-        public bool Remove(string prefix)
+        public bool Remove(string uri)
         {
-            var declaration = _documentManager.Document.Root.Attribute(XNamespace.Xmlns + prefix);
-            if (declaration == null)
-            {
-                return true;
-            }
-
-            XNamespace ns = declaration.Value;
-            var root = _documentManager.Document.Root;
-            if (root.DescendantsAndSelf().Any(e => e.Name.Namespace == ns || e.Attributes().Any(a => !a.IsNamespaceDeclaration && a.Name.Namespace == ns)))
+            XNamespace ns = uri;
+            if (Root.DescendantsAndSelf().Any(e => e.Name.Namespace == ns || e.Attributes().Any(a => !a.IsNamespaceDeclaration && a.Name.Namespace == ns)))
             {
                 return false;
             }
 
-            declaration.Remove();
+            foreach (var declaration in Declarations(uri).ToList())
+            {
+                declaration.Remove();
+            }
             _documentManager.RefreshNamespaces();
             return true;
         }
 
-        // The extensions IsWiX knows: the WiX v4+ extension schemas (fg4_*.xsd) in the Schemas folder next to IsWiX.
+        // WiX's extensions, any extension schemas (fg4_*.xsd) in the Schemas folder next to IsWiX, and any other
+        // namespace the document declares, by prefix.
         public SortedDictionary<string, string> PossibleNamespaces
         {
             get
             {
+                // A namespace the document already declares is listed under the document's prefix.
+                var declared = Root.Attributes()
+                    .Where(a => a.IsNamespaceDeclaration && a.Name.Namespace == XNamespace.Xmlns)
+                    .GroupBy(a => a.Value)
+                    .ToDictionary(g => g.Key, g => g.First().Name.LocalName);
                 var extensions = new SortedDictionary<string, string>();
-
-                try
+                foreach (var extension in WixExtensions)
                 {
-                    string currentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
-                    string schemasDir = Path.Combine(currentDirectory, "Schemas");
+                    extensions[declared.TryGetValue(extension.Value, out var prefix) ? prefix : extension.Key] = extension.Value;
+                }
 
-                    foreach (var file in new DirectoryInfo(schemasDir).GetFiles("fg4_*.xsd"))
+                void AddUnlisted(string prefix, string uri)
+                {
+                    if (!extensions.ContainsValue(uri) && !extensions.ContainsKey(prefix))
                     {
-                        string prefix = Path.GetFileNameWithoutExtension(file.Name).Replace("fg4_", "");
-                        if (prefix.Equals("wix"))
-                        {
-                            continue;
-                        }
-
-                        string targetNameSpace = XDocument.Load(file.FullName).Root.Attribute("targetNamespace").Value;
-
-                        // These schemas don't follow the file name pattern the others do.
-                        switch (prefix)
-                        {
-                            case "fgwixappx":
-                                prefix = "fga";
-                                break;
-                            case "hbt":
-                                prefix = "fg";
-                                break;
-                            case "hbt_msix":
-                                prefix = "msix";
-                                break;
-                        }
-
-                        extensions.Add(prefix, targetNameSpace);
+                        extensions.Add(prefix, uri);
                     }
                 }
-                catch (Exception)
+
+                foreach (var schema in SchemaNamespaces())
                 {
+                    AddUnlisted(schema.Key, schema.Value);
+                }
+
+                foreach (var declaration in Root.Attributes().Where(a => a.IsNamespaceDeclaration && a.Name.Namespace == XNamespace.Xmlns))
+                {
+                    AddUnlisted(declaration.Name.LocalName, declaration.Value);
                 }
 
                 return extensions;
             }
+        }
+
+        static IEnumerable<KeyValuePair<string, string>> SchemaNamespaces()
+        {
+            var schemas = new List<KeyValuePair<string, string>>();
+            try
+            {
+                string currentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+                string schemasDir = Path.Combine(currentDirectory, "Schemas");
+                if (!Directory.Exists(schemasDir))
+                {
+                    return schemas;
+                }
+
+                foreach (var file in new DirectoryInfo(schemasDir).GetFiles("fg4_*.xsd"))
+                {
+                    string prefix = Path.GetFileNameWithoutExtension(file.Name).Replace("fg4_", "");
+                    if (prefix.Equals("wix"))
+                    {
+                        continue;
+                    }
+
+                    string targetNameSpace = XDocument.Load(file.FullName).Root.Attribute("targetNamespace").Value;
+
+                    // These schemas don't follow the file name pattern the others do.
+                    switch (prefix)
+                    {
+                        case "fgwixappx":
+                            prefix = "fga";
+                            break;
+                        case "hbt":
+                            prefix = "fg";
+                            break;
+                        case "hbt_msix":
+                            prefix = "msix";
+                            break;
+                    }
+
+                    schemas.Add(new KeyValuePair<string, string>(prefix, targetNameSpace));
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return schemas;
         }
     }
 }
