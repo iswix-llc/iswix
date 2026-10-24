@@ -13,6 +13,7 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using FireworksFramework.Services;
 using static FireworksFramework.Types.Enums;
 using Wxs = IsWiX.WiXModel;
 
@@ -27,6 +28,7 @@ namespace FeaturesDesigner
         public Features()
         {
             InitializeComponent();
+            DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
         }
 
         #region IFireworksDesigner Members

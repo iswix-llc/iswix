@@ -103,22 +103,8 @@
             // 
             // iImageLibrary
             // 
-            iImageLibrary.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            iImageLibrary.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("iImageLibrary.ImageStream");
+            iImageLibrary.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             iImageLibrary.TransparentColor = System.Drawing.Color.Transparent;
-            iImageLibrary.Images.SetKeyName(0, "folder_open_16x16.gif");
-            iImageLibrary.Images.SetKeyName(1, "folder_closed_16x16.gif");
-            iImageLibrary.Images.SetKeyName(2, "computer1_16x16.gif");
-            iImageLibrary.Images.SetKeyName(3, "SmDll.gif");
-            iImageLibrary.Images.SetKeyName(4, "file_16x16.gif");
-            iImageLibrary.Images.SetKeyName(5, "WEBFILE.ICO");
-            iImageLibrary.Images.SetKeyName(6, "mdf_ndf_dbfiles.ico");
-            iImageLibrary.Images.SetKeyName(7, "nt_service.ico");
-            iImageLibrary.Images.SetKeyName(8, "smXML.gif");
-            iImageLibrary.Images.SetKeyName(9, "blue_folder_closed");
-            iImageLibrary.Images.SetKeyName(10, "delete_16x16.gif");
-            iImageLibrary.Images.SetKeyName(11, "blue_folder_open.PNG");
-            iImageLibrary.Images.SetKeyName(12, "ShortCuts.ico");
             // 
             // propertyGridShortCut
             // 

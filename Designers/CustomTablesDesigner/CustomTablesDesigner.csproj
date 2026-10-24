@@ -19,6 +19,7 @@
   <ItemGroup>
     <EmbeddedResource Include="CustomTables.ico" />
     <EmbeddedResource Include="License.txt" />
+    <EmbeddedResource Include="Images\*.png" />
   </ItemGroup>
 
   <ItemGroup>

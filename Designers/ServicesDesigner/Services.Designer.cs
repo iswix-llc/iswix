@@ -83,20 +83,7 @@
             // 
             // iImageLibrary
             // 
-            this.iImageLibrary.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iImageLibrary.ImageStream")));
             this.iImageLibrary.TransparentColor = System.Drawing.Color.Transparent;
-            this.iImageLibrary.Images.SetKeyName(0, "folder_open_16x16.gif");
-            this.iImageLibrary.Images.SetKeyName(1, "folder_closed_16x16.gif");
-            this.iImageLibrary.Images.SetKeyName(2, "computer1_16x16.gif");
-            this.iImageLibrary.Images.SetKeyName(3, "SmDll.gif");
-            this.iImageLibrary.Images.SetKeyName(4, "file_16x16.gif");
-            this.iImageLibrary.Images.SetKeyName(5, "WEBFILE.ICO");
-            this.iImageLibrary.Images.SetKeyName(6, "mdf_ndf_dbfiles.ico");
-            this.iImageLibrary.Images.SetKeyName(7, "nt_service.ico");
-            this.iImageLibrary.Images.SetKeyName(8, "smXML.gif");
-            this.iImageLibrary.Images.SetKeyName(9, "blue_folder_closed");
-            this.iImageLibrary.Images.SetKeyName(10, "delete_16x16.gif");
-            this.iImageLibrary.Images.SetKeyName(11, "blue_folder_open.PNG");
             // 
             // propertyGridServiceInstall
             // 

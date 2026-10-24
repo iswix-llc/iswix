@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using FireworksFramework.Services;
 using static FireworksFramework.Types.Enums;
 using Wxs = IsWiX.WiXModel;
 
@@ -69,6 +70,8 @@ namespace ShortCutsDesigner
         public ShortCuts()
         {
             InitializeComponent();
+            DesignerImages.AddLibrary(iImageLibrary);
+            DesignerImages.Add(iImageLibrary, typeof(ShortCuts).Assembly, "ShortCutsDesigner.Images.", "shortcut");
         }
 
         #region IFireworksDesigner Members

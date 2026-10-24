@@ -43,6 +43,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Tree icons the WinForms designers share; see Services\DesignerImages.cs. -->
+    <EmbeddedResource Include="Images\Designers\*.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DiffPlex" Version="1.7.1" />
     <!-- Lossless XML load/save (IsWiX.WiXModel.Core) and IsWiX's canonical element order. -->
     <PackageReference Include="IsWiX.WiXModel" Version="0.4.0" />

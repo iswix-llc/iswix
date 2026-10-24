@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
+    <EmbeddedResource Include="Images\*.png" />
     <EmbeddedResource Include="ShortCuts.ico" />
   </ItemGroup>
 

@@ -169,21 +169,8 @@
             // 
             // ilImageLibrary
             // 
-            ilImageLibrary.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            ilImageLibrary.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("ilImageLibrary.ImageStream");
+            ilImageLibrary.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             ilImageLibrary.TransparentColor = System.Drawing.Color.Transparent;
-            ilImageLibrary.Images.SetKeyName(0, "folder_open_16x16.gif");
-            ilImageLibrary.Images.SetKeyName(1, "folder_closed_16x16.gif");
-            ilImageLibrary.Images.SetKeyName(2, "computer1_16x16.gif");
-            ilImageLibrary.Images.SetKeyName(3, "SmDll.gif");
-            ilImageLibrary.Images.SetKeyName(4, "file_16x16.gif");
-            ilImageLibrary.Images.SetKeyName(5, "WEBFILE.ICO");
-            ilImageLibrary.Images.SetKeyName(6, "mdf_ndf_dbfiles.ico");
-            ilImageLibrary.Images.SetKeyName(7, "nt_service.ico");
-            ilImageLibrary.Images.SetKeyName(8, "smXML.gif");
-            ilImageLibrary.Images.SetKeyName(9, "blue_folder_closed.PNG");
-            ilImageLibrary.Images.SetKeyName(10, "delete_16x16.gif");
-            ilImageLibrary.Images.SetKeyName(11, "blue_folder_open.PNG");
             // 
             // lvSourceFiles
             // 

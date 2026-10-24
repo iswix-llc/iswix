@@ -13,6 +13,7 @@ using System.Xml.XPath;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using FireworksFramework.Services;
 using IsWiX.WiXModel.Core;
 using static FireworksFramework.Types.Enums;
 using Wxs = IsWiX.WiXModel;
@@ -31,6 +32,7 @@ namespace CustomTablesDesigner
         public CustomTablesDesigner()
         {
             InitializeComponent();
+            DesignerImages.Add(imageListIcons, typeof(CustomTablesDesigner).Assembly, "CustomTablesDesigner.Images.", "PrimaryKey");
             dataGridViewRows.DataSource = _customTable;
             _documentManager = DocumentManager.DocumentManagerInstance;
         }

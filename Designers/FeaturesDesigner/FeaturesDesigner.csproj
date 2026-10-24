@@ -19,6 +19,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Features.ico" />
     <EmbeddedResource Include="License.txt" />
+    <EmbeddedResource Include="Images\*.png" />
   </ItemGroup>
 
   <ItemGroup>

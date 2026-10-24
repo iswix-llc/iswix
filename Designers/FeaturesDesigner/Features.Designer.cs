@@ -188,10 +188,7 @@
             // 
             // imageLibrary
             // 
-            this.imageLibrary.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageLibrary.ImageStream")));
             this.imageLibrary.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageLibrary.Images.SetKeyName(0, "Features.ico");
-            this.imageLibrary.Images.SetKeyName(1, "database.png");
             // 
             // splitContainer2
             // 

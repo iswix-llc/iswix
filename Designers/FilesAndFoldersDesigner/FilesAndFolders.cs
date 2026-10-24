@@ -1,5 +1,6 @@
 ﻿using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using FireworksFramework.Services;
 using FilesAndFoldersDesigner;
 using FilesAndFoldersDesigner.Enums;
 using System;
@@ -64,6 +65,7 @@ namespace Designers.FilesAndFolders
         public FilesAndFolders()
         {
             InitializeComponent();
+            DesignerImages.AddLibrary(ilImageLibrary);
 
             // The column sorters always exist (the column click handlers use them) but sort only in release builds.
             lvColumnSorter = new ListViewColumnSorter();

@@ -13,6 +13,7 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using FireworksFramework.Services;
 using static FireworksFramework.Types.Enums;
 
 namespace ServicesDesigner
@@ -42,6 +43,7 @@ namespace ServicesDesigner
         public Services()
         {
             InitializeComponent();
+            DesignerImages.AddLibrary(iImageLibrary);
         }
 
         #region IFireworksDesigner Members
