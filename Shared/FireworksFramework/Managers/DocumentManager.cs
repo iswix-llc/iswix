@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Types;
+using IsWiX.WiXModel.Core.Xml;
 
 namespace FireworksFramework.Managers
 {
@@ -144,7 +145,13 @@ namespace FireworksFramework.Managers
         {
             try
             {
-                _document = XDocument.Load(filePath);
+                // Lossless load: the source text of every node is kept, so saving writes unchanged parts of the
+                // file back exactly as they were (whitespace, quotes, comments, line endings, encoding).
+                using (var stream = File.OpenRead(filePath))
+                {
+                    _document = LosslessXml.Load(stream);
+                }
+
                 _savedDocument = new XDocument(_document);
                 _documentPath = filePath;
                 _documentState = DocumentStates.Clean;
@@ -184,7 +191,9 @@ namespace FireworksFramework.Managers
 
         public void Save(string filePath)
         {
-            _document.Save(filePath);
+            // Only what the designers changed is rewritten; new elements are indented like their siblings. The file
+            // is written to a temporary file and swapped in, so a failed save never truncates it.
+            LosslessXml.Save(_document, filePath);
             _savedDocument = new XDocument(_document);
             _documentPath = filePath;
             _documentState = DocumentStates.Clean;
