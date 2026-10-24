@@ -6,16 +6,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiX.WiXModel.Core;
 using static FireworksFramework.Types.Enums;
 using Wxs = IsWiX.WiXModel;
 
@@ -23,9 +17,6 @@ namespace ShortCutsDesigner
 {
     public partial class ShortCuts : UserControl, IFireworksDesigner
     {
-        private XNamespace WixNamespace;
-        private const string DestinationPathPrefix = "Destination Computer\\[MergeRedirectFolder]\\";
-        private const string MrfHashStringPrefix = "MergeRedirectFolder\\";
         List<Wxs.Shortcut> _shortcuts;
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
         string _oldPath = string.Empty;
@@ -131,15 +122,13 @@ namespace ShortCutsDesigner
         #endregion
         private void LoadDocument()
         {
-            WixNamespace = WixNamespaces.Wxs;
-
             _shortcuts = ShortcutDocument.Load(_documentManager.Document);
             Cursor = Cursors.WaitCursor;
             tvDestination.Nodes.Clear();
-            //Ensure the XML file has any Directories.
+            // The folders are each shortcut's Directory and Subdirectory, under the four shortcut locations.
             try
             {
-                TreeNode treeNode = AddDestinationComputerToDestination(null);
+                TreeNode treeNode = AddDestinationComputerToDestination();
                 AddFirstLevelFolder(treeNode, "DesktopFolder");
                 AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
                 AddFirstLevelFolder(treeNode, "SendToFolder");
@@ -209,80 +198,12 @@ namespace ShortCutsDesigner
             return searchNode;
         }
 
-        private TreeNode FindNodeRecursiveByText(TreeNode node, string text, string tag)
+        private TreeNode AddDestinationComputerToDestination()
         {
-            if ((node.Text == text) && node.Tag.ToString() == tag)
-            {
-                return node;
-            }
-            foreach (TreeNode treeNode in node.Nodes)
-            {
-                TreeNode foundNode = FindNodeRecursiveByText(treeNode, text, tag);
-                if (foundNode != null) return foundNode;
-            }
-            return null;
-        }
-
-        private TreeNode AddDestinationComputerToDestination(XElement element)
-        {
-            var nodeName = CreateNodeName(element);
-            var subTreeNode = tvDestination.Nodes.Add(nodeName);
+            var subTreeNode = tvDestination.Nodes.Add("Destination Computer");
             subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
             subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
-            if (element != null)
-            {
-                subTreeNode.Tag = GetElementId(element);
-            }
             return subTreeNode;
-        }
-
-        private string CreateNodeName(XElement element)
-        {
-            if (element == null)
-            {
-                return "Destination Computer";
-            }
-            else
-            {
-                return String.Format("{0}", GetElementName(element));
-            }
-        }
-
-        private bool SubElementIsDirectory(XElement directoryElement)
-        {
-            XElement subElement = directoryElement.Element(WixNamespace + "Directory");
-            return subElement != null;
-        }
-
-        private string GetElementName(XElement element)
-        {
-            var elementId = GetElementId(element);
-            var dirName = (IdIsWithinSystemFolderPropertyEnum(elementId)) ? "[" + elementId + "]" : element.Attribute("Name").Value;
-            //Rename SourceDir to Destination Computer, if needed
-            dirName = (dirName != "SourceDir") ? dirName : "Destination Computer";
-            return dirName;
-        }
-
-        private string GetElementId(XElement element)
-        {
-            var id = (element.Attribute("Id") != null) ? element.Attribute("Id").Value : "No ID";
-            return id;
-        }
-        private bool DirectoryIsNotEmpty(XElement directoryElement)
-        {
-            if (directoryElement.HasElements)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        private bool IsASpecialDirectoryToIgnore(XElement element)
-        {
-            var elementId = GetElementId(element);
-            return IsASpecialDirectoryToIgnore(elementId);
         }
 
         private bool IsASpecialDirectoryToIgnore(string elementId)
@@ -416,183 +337,20 @@ namespace ShortCutsDesigner
         }
         private void AddItemsToDestinationRootMenu()
         {
-            // foreach item on the special folders list, add a menu item for the ones we dont ignore
-            // if it already exists in the document make the item disabled.
+            // The shortcut locations, listed for reference. The tree always shows them, so they are never added and
+            // their items stay disabled.
             foreach (var s in Enum.GetNames(typeof(SystemFolderProperty)))
             {
-                if (IsASpecialDirectoryToIgnore(s))
+                if (IsASpecialDirectoryToIgnore(s) || s == "GlobalAssemblyCache")
                 {
-                    // pass over the item
+                    continue;
                 }
-                else
-                {
-                    if (s == "GlobalAssemblyCache") continue;
-                    var toolStripMenuItem = new ToolStripMenuItem(s);
-                    toolStripMenuItem.Name = s;
-                    if (ExistsInTree(s))
-                    {
-                        toolStripMenuItem.Enabled = false;
-                    }
-                    else
-                    {
-                        // add event handler
-                        toolStripMenuItem.Click += (toolStripMenuItem_Click);
-                    }
-                    cmsDestinationRoot.Items.Add(toolStripMenuItem);
-                }
+
+                var toolStripMenuItem = new ToolStripMenuItem(s);
+                toolStripMenuItem.Name = s;
+                toolStripMenuItem.Enabled = false;
+                cmsDestinationRoot.Items.Add(toolStripMenuItem);
             }
-        }
-        private bool ExistsInTree(string tag)
-        {
-            foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
-            {
-                if (node.Tag == null || node.Tag.ToString() == tag)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        void toolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
-            switch (toolStripMenuItem.Name)
-            {
-                case "DesktopFolder":
-                    AddSpecialFolder("DesktopFolder");
-                    break;
-                case "ProgramMenuFolder":
-                    AddSpecialFolder("ProgramMenuFolder");
-                    break;
-                case "SendToFolder":
-                    AddSpecialFolder("SendToFolder");
-                    break;
-                case "StartMenuFolder":
-                    AddSpecialFolder("StartMenuFolder");
-                    break;
-                case "StartupFolder":
-                    AddSpecialFolder("StartupFolder");
-                    break;
-                default:
-                    break;
-            }
-        }
-        private void AddSpecialFolder(string folderId)
-        {
-            //find DestinationRoot
-            XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
-
-            //add folder with folderId as the Id attribute value
-            XElement specialDirectory = new XElement(WixNamespace + "Directory", new XAttribute("Id", folderId));
-            destinationComputer.Add(specialDirectory);
-
-            //reload the document so the new folder can be seen
-            //SortData();
-            LoadDocument();
-        }
-
-        private void AddSpecialFolder(string folderId, string folderName)
-        {
-            //find DestinationRoot
-            XElement destinationComputer = FindDirectoryElement("SourceDir", "TARGETDIR");
-
-            //add folder with folderId as the Id attribute value
-            XElement specialDirectory = new XElement(WixNamespace + "Directory", new XAttribute("Id", folderId), new XAttribute("Name", folderName));
-            destinationComputer.Add(specialDirectory);
-
-            //reload the document so the new folder can be seen
-            //SortData();
-            LoadDocument();
-        }
-
-        private XElement FindDirectoryElement(TreeNode treeNode)
-        {
-            string tag = string.Empty;
-            if (treeNode.Tag != null)
-            {
-                tag = treeNode.Tag.ToString();
-            }
-
-
-            var selectedDirectory = FindDirectoryElement(_documentManager.Document, treeNode.Text, tag);
-            return selectedDirectory;
-        }
-
-        private XElement FindDirectoryElement(string text, string tag)
-        {
-            var selectedDirectory = FindDirectoryElement(_documentManager.Document, text, tag);
-            return selectedDirectory;
-        }
-
-        private XElement FindDirectoryElement(XDocument document, string text, string tag)
-        {
-            XElement selectedDirectory;
-            try
-            {
-                switch (text)
-                {
-                    case "[DesktopFolder]":
-
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
-                                             where
-                                                 item.Attribute("Id") != null &&
-                                                 item.Attribute("Id").Value == "DesktopFolder"
-                                             select item).First();
-                        break;
-
-                    case "[ProgramMenuFolder]":
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
-                                             where
-                                                 item.Attribute("Id") != null &&
-                                                 item.Attribute("Id").Value == "ProgramMenuFolder"
-                                             select item).First();
-                        break;
-
-                    case "[SendToFolder]":
-
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
-                                             where
-                                                 item.Attribute("Id") != null &&
-                                                 item.Attribute("Id").Value == "SendToFolder"
-                                             select item).First();
-                        break;
-
-                    case "[StartMenuFolder]":
-
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
-                                             where
-                                                 item.Attribute("Id") != null &&
-                                                 item.Attribute("Id").Value == "StartMenuFolder"
-                                             select item).First();
-                        break;
-
-                    case "[StartupFolder]":
-
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
-                                             where
-                                                 item.Attribute("Id") != null &&
-                                                 item.Attribute("Id").Value == "StartupFolder"
-                                             select item).First();
-                        break;
-
-                    default:
-                        selectedDirectory = (from item in document.Descendants(WixNamespace + "Directory")
-                                             where
-                                                 item.Attribute("Name") != null &&
-                                                 item.Attribute("Name").Value == text
-                                                 && item.Attribute("Id") != null &&
-                                                 item.Attribute("Id").Value == tag
-                                             select item).First();
-                        break;
-
-                }
-            }
-            catch (Exception)
-            {
-                selectedDirectory = null;
-            }
-
-            return selectedDirectory;
         }
 
         private void createNewFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -687,118 +445,9 @@ namespace ShortCutsDesigner
                 return false;
             }
         }
-        private static string CreateDirectoryStringForHash(string path, string newDirectory)
-        {
-            var newPath = String.Format("{0}\\{1}", path, newDirectory);
-            return newPath.Replace(DestinationPathPrefix, MrfHashStringPrefix);
-        }
-
-        private static string CreateDirectoryStringForHash(string path)
-        {
-            return path.Replace(DestinationPathPrefix, MrfHashStringPrefix);
-        }
-
-        private static string CreateFilePathForHash(string fullPath, string fileName)
-        {
-            var newPath = String.Format("{0}\\{1}", fullPath, fileName);
-            return newPath.Replace(DestinationPathPrefix, MrfHashStringPrefix);
-        }
-        static string GetMd5Hash(string input)
-        {
-            // Create a new instance of the MD5CryptoServiceProvider object.
-            MD5 md5Hasher = MD5.Create();
-
-            // Convert the input string to a byte array and compute the hash.
-            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input.ToUpper()));
-
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            // Return the hexadecimal string.
-            return sBuilder.ToString().ToUpper();
-        }
-        private void ReCalculateChildrenHashes(XElement directoryElement, string newDirectoryPath)
-        {
-            // recalculate hash for directory
-            string newIdHash = GetMd5Hash(newDirectoryPath);
-
-            UpdateShortcutDirectory(directoryElement.Attribute("Id").Value, "scd" + newIdHash);
-            directoryElement.Attribute("Id").Value = "scd" + newIdHash;
-
-            // repeat the task for each subdirectory of directoryElement
-            var directoryList = directoryElement.Elements(WixNamespace + "Directory");
-            foreach (XElement subDirectory in directoryList)
-            {
-                var newSubDirectoryPath = String.Format("{0}\\{1}", newDirectoryPath, subDirectory.Attribute("Name").Value);
-                ReCalculateChildrenHashes(subDirectory, newSubDirectoryPath);
-            }
-        }
         private static void CallMessageBox(string message, string caption)
         {
             MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-        private void AddDirectoryToDestination(TreeNode destinationFolder, TreeNode sourceFolder)
-        {
-            if (!DestinationContainsFolder(destinationFolder, sourceFolder))
-            {
-                // create new folder in destination
-                var directory = CreateNewDirectory(destinationFolder, sourceFolder);
-                var parentDirectory = FindDirectoryElement(destinationFolder);
-                parentDirectory.Add(directory);
-
-                // need to reload data so that the newly added directory can be found in the tree view
-                //SortData();
-                LoadDocument();
-
-                // the following code choses the newly added child folder as the place in which
-                // to add files.
-                TreeNode foundNode = FindNodeRecursiveByText(tvDestination.Nodes[0], sourceFolder.Text, GetElementId(directory));
-                if (foundNode != null)
-                {
-                    tvDestination.SelectedNode = foundNode;
-                    foundNode.EnsureVisible();
-                }
-
-            }
-            else
-            {
-                CallMessageBox(String.Format("Directory [{0}] already exists in destination location.", sourceFolder.Text), "Copy Directory Warning");
-                sourceFolder.Remove();
-            }
-        }
-        private bool DestinationContainsFolder(TreeNode destinationFolder, TreeNode sourceFolder)
-        {
-            var directory = FindDirectoryElement(destinationFolder);
-            var subDirectories = directory.Elements(WixNamespace + "Directory");
-
-            foreach (var subDirectory in subDirectories)
-            {
-                if (subDirectory.Attribute("Name") != null)
-                {
-                    if (subDirectory.Attribute("Name").Value.ToLower().Equals(sourceFolder.Text.ToLower())) return true;
-                }
-            }
-            return false;
-        }
-        private XElement CreateNewDirectory(TreeNode treeNode, TreeNode sourceFolder)
-        {
-            var nodeInTree = FindNodeRecursiveByText(tvDestination.Nodes[0], treeNode.Text, treeNode.Tag.ToString());
-            var path = nodeInTree.FullPath;
-            var newDirectory = sourceFolder.Text;
-            var input = CreateDirectoryStringForHash(path, newDirectory);
-
-            var directory = new XElement(WixNamespace + "Directory",
-                                    new XAttribute("Id", "scd" + GetMd5Hash(input)),
-                                    new XAttribute("Name", sourceFolder.Text));
-
-            return directory;
         }
 
         private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -844,23 +493,6 @@ namespace ShortCutsDesigner
         {
             string[] parts = fullPath.Replace(@"Destination Computer\", "").Split('\\');
             return (parts[0].Replace("[", "").Replace("]", ""), Path.Combine(parts.Skip(1).ToArray()));
-        }
-
-        private bool ParentDirectoryNowEmpty(TreeNode directoryNode)
-        {
-            var directoryElement = FindDirectoryElement(directoryNode);
-            return !directoryElement.HasElements;
-        }
-        private static bool IsRootDirectory(TreeNode node)
-        {
-            if (IdIsWithinSystemFolderPropertyEnum(node.Tag.ToString()))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         private void createNewFolderToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -993,16 +625,6 @@ namespace ShortCutsDesigner
             UpdatedSelectedNodeText();
         }
 
-        private void UpdateShortcutDirectory(string oldId, string newId)
-        {
-            foreach (var shortcut in _shortcuts)
-            {
-                if (shortcut.Directory == oldId)
-                {
-                    ShortcutDocument.SetDirectory(shortcut, newId);
-                }
-            }
-        }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {

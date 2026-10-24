@@ -70,9 +70,6 @@ namespace ShortCutsDesigner
         public static void SetSubdirectory(Wxs.Shortcut shortcut, string subdirectory) =>
             Move(shortcut, shortcut.Directory, subdirectory, shortcut.Name);
 
-        public static void SetDirectory(Wxs.Shortcut shortcut, string directory) =>
-            Move(shortcut, directory, Subdirectory(shortcut), shortcut.Name);
-
         static void Move(Wxs.Shortcut shortcut, string directory, string subdirectory, string name)
         {
             bool generatedId = shortcut.Id == GeneratedId(shortcut.Directory, Subdirectory(shortcut), shortcut.Name) ||
