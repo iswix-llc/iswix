@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- FireworksFramework also brings IsWiX.WiXModel, so every designer uses the same version. -->
     <ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj" />
-    <ProjectReference Include="..\..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
   </ItemGroup>
 
 </Project>

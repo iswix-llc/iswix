@@ -1,6 +1,6 @@
 ﻿using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
+using FilesAndFoldersDesigner;
 using FilesAndFoldersDesigner.Enums;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Designers.FilesAndFolders
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
     {
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
-        IsWiXComponentGroup _isWiXComponentGroup;
+        ComponentGroupDocument _isWiXComponentGroup;
         string rootPath;
 
         private const string Seperator = ";";
@@ -96,7 +96,7 @@ namespace Designers.FilesAndFolders
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
-            _isWiXComponentGroup = new IsWiXComponentGroup();
+            _isWiXComponentGroup = new ComponentGroupDocument();
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
@@ -495,7 +495,7 @@ namespace Designers.FilesAndFolders
 
         public bool IsValidContext()
         {
-            return IsWiXComponentGroup.IsValidDocument();
+            return ComponentGroupDocument.IsValidDocument(_documentManager.Document);
         }
 
         public System.Drawing.Image PluginImage
