@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
-    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
