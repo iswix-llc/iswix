@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using IsWiXAutomationInterface;
 
-namespace NewFeaturesDesigner
+namespace FeaturesDesigner
 {
     public partial class Feature : Component
     {

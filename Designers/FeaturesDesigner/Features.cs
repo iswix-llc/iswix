@@ -16,7 +16,7 @@ using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
 using static FireworksFramework.Types.Enums;
 
-namespace NewFeaturesDesigner
+namespace FeaturesDesigner
 {
     public partial class Features : UserControl, IFireworksDesigner
     {
@@ -57,7 +57,7 @@ namespace NewFeaturesDesigner
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("NewFeaturesDesigner.Features.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.Features.ico"));
             }
         }
 
@@ -65,7 +65,7 @@ namespace NewFeaturesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("NewFeaturesDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.License.txt")).ReadToEnd();
             }
         }
 

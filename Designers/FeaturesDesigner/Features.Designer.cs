@@ -1,4 +1,4 @@
-﻿namespace NewFeaturesDesigner
+﻿namespace FeaturesDesigner
 {
     partial class Features
     {
@@ -49,7 +49,7 @@
             this.treeViewMerges = new System.Windows.Forms.TreeView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.propertyGridFeatureProperties = new System.Windows.Forms.PropertyGrid();
-            this.feature = new NewFeaturesDesigner.Feature(this.components);
+            this.feature = new FeaturesDesigner.Feature(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();

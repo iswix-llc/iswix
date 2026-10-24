@@ -38,7 +38,7 @@
     <ProjectReference Include="..\Designers\CustomTablesDesigner\CustomTablesDesigner.csproj" />
     <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj" />
     <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj" />
-    <ProjectReference Include="..\Designers\NewFeaturesDesigner\NewFeaturesDesigner.csproj" />
+    <ProjectReference Include="..\Designers\FeaturesDesigner\FeaturesDesigner.csproj" />
     <ProjectReference Include="..\Designers\NewFilesAndFoldersDesigner\NewFilesAndFoldersDesigner.csproj" />
     <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj" />
     <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj" />

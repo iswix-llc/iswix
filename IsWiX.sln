@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertiesDesigner", "Desig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamespacesDesigner", "Designers\NamespacesDesigner\NamespacesDesigner.csproj", "{641230F3-6F40-F77C-B886-13657133DE87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewFeaturesDesigner", "Designers\NewFeaturesDesigner\NewFeaturesDesigner.csproj", "{FFBC9A16-7136-3DBE-0037-66C9CC38DE89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeaturesDesigner", "Designers\FeaturesDesigner\FeaturesDesigner.csproj", "{FFBC9A16-7136-3DBE-0037-66C9CC38DE89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

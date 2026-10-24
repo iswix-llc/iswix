@@ -1,4 +1,4 @@
-﻿namespace NewFeaturesDesigner
+﻿namespace FeaturesDesigner
 {
     public partial class Feature
     {
