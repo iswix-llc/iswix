@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using IsWiXAutomationInterface;
 using NamespacesDesigner.Models;
 using System.Collections.ObjectModel;
 
@@ -15,8 +14,7 @@ namespace NamespacesDesigner.ViewModels
     public class NamespacesViewModel : ObservableObject
     {
 
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
-        WiXNamespaces _iswixNamespaces;
+        NamespaceDocument _iswixNamespaces;
 
         ObservableCollection<NamespaceModel> _namespaces = new ObservableCollection<NamespaceModel>();
         public ObservableCollection<NamespaceModel> Namespaces
@@ -35,12 +33,12 @@ namespace NamespacesDesigner.ViewModels
         public void LoadData()
         {
             ObservableCollection<NamespaceModel> namespaces = new ObservableCollection<NamespaceModel>();
-            _iswixNamespaces = new WiXNamespaces();
+            _iswixNamespaces = new NamespaceDocument();
 
             foreach (var iswixNamespace in _iswixNamespaces.PossibleNamespaces)
             {
                 NamespaceModel namespaceModel = new NamespaceModel();
-                if (_documentManager.Document.NameSpaces().ContainsKey(iswixNamespace.Key))
+                if (_iswixNamespaces.IsDeclared(iswixNamespace.Key))
                 {
                     namespaceModel.Selected = true;
                 }
@@ -56,13 +54,19 @@ namespace NamespacesDesigner.ViewModels
         private void PropertyModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             NamespaceModel namespaceModel = sender as NamespaceModel;
+            if (e.PropertyName != nameof(NamespaceModel.Selected))
+            {
+                return;
+            }
+
             if(namespaceModel.Selected)
             {
                 _iswixNamespaces.Add(namespaceModel.Prefix, namespaceModel.Uri);
             }
-            else
+            else if (!_iswixNamespaces.Remove(namespaceModel.Prefix))
             {
-                _iswixNamespaces.Remove(namespaceModel.Prefix);
+                System.Windows.MessageBox.Show($"The '{namespaceModel.Prefix}' namespace is still used in this document, so it can't be removed.");
+                namespaceModel.Selected = true;
             }
 
         }

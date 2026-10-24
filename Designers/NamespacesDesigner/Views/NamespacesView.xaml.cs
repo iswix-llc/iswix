@@ -1,7 +1,7 @@
 ﻿using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using FireworksFramework.Types;
-using IsWiXAutomationInterface;
+using IsWiX.WiXModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -67,14 +67,7 @@ namespace NamespacesDesigner.Views
 
         public bool IsValidContext()
         {
-            if (_documentManager.DefaultNamespace == _documentManager.Document.GetWiXNameSpace())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _documentManager.DefaultNamespace == WixNamespaces.Wxs;
         }
 
         public void LoadData()

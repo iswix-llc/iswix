@@ -44,7 +44,6 @@
     <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj" />
     <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj" />
     <ProjectReference Include="..\Shared\FireworksFramework\FireworksFramework.csproj" />
-    <ProjectReference Include="..\Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj" />
   </ItemGroup>
 
 </Project>

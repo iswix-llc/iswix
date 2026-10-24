@@ -13,16 +13,18 @@ using System.Xml.XPath;
 using System.Windows.Forms;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
+using IsWiX.WiXModel.Core;
 using static FireworksFramework.Types.Enums;
+using Wxs = IsWiX.WiXModel;
 
 namespace CustomTablesDesigner
 {
     public partial class CustomTablesDesigner : UserControl, IFireworksDesigner
     {
-        XNamespace ns;
         DataTable _customTable = new DataTable();
-        XElement _customTableElement;
+        Wxs.CustomTable _customTableElement;
+        // The Row element behind each grid row.
+        Dictionary<DataRow, Wxs.Row> _rowElements = new Dictionary<DataRow, Wxs.Row>();
         DocumentManager _documentManager;
 
         public CustomTablesDesigner()
@@ -41,23 +43,11 @@ namespace CustomTablesDesigner
 
         public bool IsValidContext()
         {
-
-            IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
-
-            if (docType != IsWiXDocumentType.None)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return CustomTableDocument.IsValidDocument(_documentManager.Document);
         }
 
         public void LoadData()
         {
-            ns = _documentManager.Document.GetWiXNameSpace();
-
             _customTable.RowChanged -= new DataRowChangeEventHandler(_customTable_RowChanged);
 
             _customTable.Clear();
@@ -67,10 +57,9 @@ namespace CustomTablesDesigner
 
             try
             {
-                XElement moduleElement = _documentManager.Document.GetSecondOrderRoot();
-                foreach (var tableElement in moduleElement.Elements(ns + "CustomTable"))
+                foreach (var table in CustomTableDocument.Tables(_documentManager.Document))
                 {
-                    listBoxTables.Items.Add(tableElement.Attribute("Id").Value);
+                    listBoxTables.Items.Add(table.Id);
                 }
 
                 if (listBoxTables.Items.Count > 0)
@@ -141,25 +130,14 @@ namespace CustomTablesDesigner
             if (listBoxTables.SelectedItems.Count > 0)
             {
 
-                _customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
-                                       where
-                                           item.Attribute("Id") != null &&
-                                           item.Attribute("Id").Value == listBoxTables.SelectedItem.ToString()
-                                       select item).First();
+                _customTableElement = CustomTableDocument.Find(_documentManager.Document, listBoxTables.SelectedItem.ToString());
 
-                foreach (var column in _customTableElement.Elements(ns + "Column"))
+                foreach (var column in _customTableElement.Columns)
                 {
-                    var item = listViewColumns.Items.Add(column.Attribute("Id").Value);
-
-                    try
+                    var item = listViewColumns.Items.Add(column.Id);
+                    if (IsYes(column.PrimaryKey))
                     {
-                        if (column.Attribute("PrimaryKey").Value == "yes")
-                        {
-                            item.ImageKey = "PrimaryKey";
-                        }
-                    }
-                    catch (Exception)
-                    {
+                        item.ImageKey = "PrimaryKey";
                     }
                 }
 
@@ -172,10 +150,7 @@ namespace CustomTablesDesigner
                         {
                             MessageBox.Show("Notice: Marking the first column as Primary due to Windows Installer requirements.");
                             item.ImageKey = "PrimaryKey";
-                            XElement columnElement = (from myitem in _customTableElement.Elements(ns + "Column")
-                                                      where myitem.Attribute("Id").Value == item.Text
-                                                      select myitem).First();
-                            columnElement.Attribute("PrimaryKey").Value = "yes";
+                            FindColumn(item.Text).PrimaryKey = true;
                         }
                     }
                     else
@@ -186,10 +161,7 @@ namespace CustomTablesDesigner
                             {
                                 MessageBox.Show("Notice: Marking column '" + item.Text + "' as non-primary due to Window Installer requirements.");
                                 item.ImageKey = null;
-                                XElement columnElement = (from myitem in _customTableElement.Elements(ns + "Column")
-                                                          where myitem.Attribute("Id").Value == item.Text
-                                                          select myitem).First();
-                                columnElement.Attribute("PrimaryKey").Value = "no";
+                                FindColumn(item.Text).PrimaryKey = false;
                             }
                         }
                         else
@@ -208,13 +180,7 @@ namespace CustomTablesDesigner
                     try
                     {
 
-                        XElement customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
-                                                       where
-                                                           item.Attribute("Id") != null &&
-                                                           item.Attribute("Id").Value == listBoxTables.Text
-                                                       select item).First();
-
-                        foreach (var column in customTableElement.Elements(ns + "Column"))
+                        foreach (var column in _customTableElement.Columns.Select(c => c.Xml))
                         {
                             var dc = new DataColumn(column.Attribute("Id").Value);
 
@@ -296,25 +262,7 @@ namespace CustomTablesDesigner
                             _customTable.Columns.Add(dc);
                         }
 
-                        foreach (var row in customTableElement.Elements(ns + "Row"))
-                        {
-                            DataRow dr = _customTable.NewRow();
-
-                            foreach (var data in row.Elements(ns + "Data"))
-                            {
-                                string columnName = data.Attribute("Column").Value;
-                                if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
-                                {
-                                    dr[columnName] = data.GetOptionalAttribute("Value");
-                                }
-                                else
-                                {
-                                    dr[columnName] = data.Value;
-                                }
-                            }
-                            _customTable.Rows.Add(dr);
-
-                        }
+                        _rowElements = CustomTableDocument.LoadRows(_customTableElement, _customTable);
                         _customTable.AcceptChanges();
                     }
                     catch (Exception ex)
@@ -359,37 +307,7 @@ namespace CustomTablesDesigner
 
         private void SaveTable()
         {
-            XElement customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
-                                           where
-                                               item.Attribute("Id") != null &&
-                                               item.Attribute("Id").Value == listBoxTables.Text
-                                           select item).First();
-
-
-            var rows = customTableElement.Elements(ns + "Row");
-            rows.Remove();
-
-            foreach (DataRow row in _customTable.Rows)
-            {
-                var xrow = new XElement(ns + "Row");
-                foreach (DataColumn column in _customTable.Columns)
-                {
-                    var xcolumn = new XElement(ns + "Data");
-                    xcolumn.Add(new XAttribute("Column", column.ColumnName));
-                    if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
-                    {
-                        xcolumn.SetAttributeValue("Value", row[column.ColumnName].ToString());
-                    }
-                    else
-                    {
-                        xcolumn.Value = row[column.ColumnName].ToString();
-                    }
-                    xrow.Add(xcolumn);
-
-                }
-                customTableElement.Add(xrow);
-            }
-
+            CustomTableDocument.SaveRows(CustomTableDocument.Find(_documentManager.Document, listBoxTables.Text), _customTable, _rowElements);
         }
 
         private void toolStripMenuItemRowAdd_Click(object sender, EventArgs e)
@@ -432,13 +350,7 @@ namespace CustomTablesDesigner
 
         private void toolStripMenuItemTableDrop_Click(object sender, EventArgs e)
         {
-            XElement customTableElement = (from item in _documentManager.Document.Descendants(ns + "CustomTable")
-                                           where
-                                               item.Attribute("Id") != null &&
-                                               item.Attribute("Id").Value == listBoxTables.SelectedItem.ToString()
-                                           select item).First();
-
-            customTableElement.Remove();
+            CustomTableDocument.Drop(_documentManager.Document, CustomTableDocument.Find(_documentManager.Document, listBoxTables.SelectedItem.ToString()));
             listBoxTables.Items.Remove(listBoxTables.SelectedItem);
         }
 
@@ -471,23 +383,9 @@ namespace CustomTablesDesigner
             Binary,
         } ;
 
-        private bool IsAttributeYes(XElement element, string attributeName)
-        {
-            bool set = false;
+        private static bool IsYes(WixValue<bool>? value) => value is { IsLiteral: true } literal && literal.Value;
 
-            try
-            {
-                if (element.Attribute(attributeName).Value == "yes")
-                {
-                    set = true;
-                }
-            }
-            catch (Exception)
-            {
-            }
-
-            return set;
-        }
+        private Wxs.Column FindColumn(string id) => _customTableElement.Columns.First(c => c.Id == id);
         private void dataGridViewRows_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show(e.Exception.Message);
@@ -497,20 +395,18 @@ namespace CustomTablesDesigner
         {
             if (listViewColumns.SelectedItems.Count > 0)
             {
-                XElement columnElement = (from item in _customTableElement.Elements(ns + "Column")
-                                          where item.Attribute("Id").Value == listViewColumns.SelectedItems[0].Text
-                                          select item).First();
+                var column = FindColumn(listViewColumns.SelectedItems[0].Text);
 
-                textBoxName.Text = columnElement.Attribute("Id").Value;
+                textBoxName.Text = column.Id;
                 //textBoxName.Enabled = true;
 
-                comboBoxType.Text = columnElement.Attribute("Type").Value;
+                comboBoxType.Text = column.GetAttributeValue("Type") ?? string.Empty;
                 //comboBoxType.Enabled = true;
 
-                textBoxLength.Text = columnElement.Attribute("Width").Value;
+                textBoxLength.Text = column.GetAttributeValue("Width") ?? string.Empty;
                 //textBoxLength.Enabled = true;
 
-                checkBoxNullable.Checked = IsAttributeYes(columnElement, "Nullable");
+                checkBoxNullable.Checked = IsYes(column.Nullable);
                 //checkBoxNullable.Enabled = true;
 
             }
@@ -528,7 +424,7 @@ namespace CustomTablesDesigner
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                _customTableElement.Attribute("Id").Value = dialog.TableName;
+                CustomTableDocument.Rename(_documentManager.Document, _customTableElement, dialog.TableName);
                 LoadData();
             }
         }
@@ -545,33 +441,7 @@ namespace CustomTablesDesigner
 
             if (dialog.ShowDialog() == DialogResult.OK)
             { 
-                string identifier = "Identifier";
-                if(_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
-                {
-                    identifier = identifier.ToLower();
-                }
-                XElement previousElement = _documentManager.Document.GetElementToAddAfterSelf("CustomTable");
-                XElement newElement =    new XElement(ns + "CustomTable", new XAttribute("Id", dialog.TableName),
-                    new XElement( ns + "Column",
-                        new XAttribute( "Id", "Id" ),
-                        new XAttribute( "Category", identifier ),
-                        new XAttribute( "PrimaryKey", "yes" ),
-                        new XAttribute( "Nullable", "no" ),
-                        new XAttribute( "Type", "string" ),
-                        new XAttribute( "Width", "72" )));
-
-                if (previousElement == null)
-                {
-                    _documentManager.Document.GetSecondOrderRoot().AddFirst(newElement);
-                }
-                else
-                {
-                    previousElement.AddAfterSelf(newElement);
-                }
-                if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
-                {
-                    newElement.AddAfterSelf(new XElement(ns + "EnsureTable", new XAttribute("Id", dialog.TableName)));
-                }
+                CustomTableDocument.Create(_documentManager.Document, dialog.TableName);
                 LoadData();
             }
         }
