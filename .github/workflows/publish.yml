@@ -123,21 +123,6 @@ jobs:
             --verbosity warning
           if ($LASTEXITCODE -ne 0) { throw 'Signing the VSIX failed.' }
 
-      # VsixPublisher ships in the Microsoft.VSSDK.BuildTools package the extension already restores.
-      - name: Publish to the Visual Studio Marketplace
-        shell: pwsh
-        env:
-          VS_MARKETPLACE_PAT: ${{ secrets.VS_MARKETPLACE_PAT }}
-        run: |
-          $project = [IO.File]::ReadAllText('IsWiXExtension/IsWiXExtension.csproj')
-          if ($project -notmatch 'Include="Microsoft.VSSDK.BuildTools" Version="([^"]+)"') { throw 'No Microsoft.VSSDK.BuildTools reference found.' }
-          $publisher = Join-Path $env:USERPROFILE ".nuget\packages\microsoft.vssdk.buildtools\$($Matches[1])\tools\vssdk\bin\lib\VsixPublisher.exe"
-          & $publisher publish `
-            -payload IsWiXExtension/bin/Release/IsWiX.vsix `
-            -publishManifest IsWiXExtension/publishManifest.json `
-            -personalAccessToken $env:VS_MARKETPLACE_PAT
-          if ($LASTEXITCODE -ne 0) { throw 'Publishing to the Marketplace failed.' }
-
       - name: Commit and tag the release
         shell: pwsh
         run: |
