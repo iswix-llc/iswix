@@ -19,9 +19,10 @@ namespace GeneralInformationDesigner.ViewModels
 
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        Package4Model _package4;
-        SummaryInformation4Model summaryInformation4Model;
-        Wxs.Package _package;
+        Package4Model _package4 = new Package4Model();
+        SummaryInformation4Model summaryInformation4Model = new SummaryInformation4Model();
+        // Set by Load, before the grids are shown.
+        Wxs.Package _package = null!;
         // Created when a field is first set and removed again when its last attribute is cleared.
         Wxs.SummaryInformation? _summaryInformation;
 
@@ -87,7 +88,7 @@ namespace GeneralInformationDesigner.ViewModels
         }
 
         // Only the attribute that changed is written, so the others keep their exact text.
-        private void Package4_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Package4_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -127,7 +128,7 @@ namespace GeneralInformationDesigner.ViewModels
             }
         }
 
-        private void SummaryInformation_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void SummaryInformation_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -164,7 +165,7 @@ namespace GeneralInformationDesigner.ViewModels
         }
 
         // Empty clears the attribute; anything else must be a valid value or a preprocessor/localization expression.
-        void SetValue<T>(string text, WixValueConverter<T> converter, string name, Action<WixValue<T>?> set)
+        void SetValue<T>(string? text, WixValueConverter<T> converter, string name, Action<WixValue<T>?> set)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -183,8 +184,8 @@ namespace GeneralInformationDesigner.ViewModels
             set(value);
         }
 
-        static string Text<T>(WixValue<T>? value, WixValueConverter<T> converter) => value.HasValue ? converter.ToText(value.Value) : null;
+        static string? Text<T>(WixValue<T>? value, WixValueConverter<T> converter) => value.HasValue ? converter.ToText(value.Value) : null;
 
-        static string NullIfEmpty(string value) => string.IsNullOrEmpty(value) ? null : value;
+        static string? NullIfEmpty(string? value) => string.IsNullOrEmpty(value) ? null : value;
     }
 }

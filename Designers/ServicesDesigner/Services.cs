@@ -37,7 +37,7 @@ namespace ServicesDesigner
             BlueFolderOpen
         }
 
-        List<ServiceItem> _services;
+        List<ServiceItem> _services = new List<ServiceItem>();
 
         public Services()
         {
@@ -112,7 +112,7 @@ namespace ServicesDesigner
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ServicesDesigner.Services.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ServicesDesigner.Services.ico")!);
             }
         }
 
@@ -120,7 +120,7 @@ namespace ServicesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ServicesDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ServicesDesigner.License.txt")!).ReadToEnd();
             }
         }
 
@@ -143,7 +143,7 @@ namespace ServicesDesigner
 
         private void treeViewServices_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (e.Node.Level.Equals(0))
+            if (e.Node!.Level.Equals(0))
             {
                 treeViewServices.ContextMenuStrip = cmsComputer;
                 propertyGridServiceInstall.Enabled = false;
@@ -238,9 +238,9 @@ namespace ServicesDesigner
             e.Cancel = true;
         }
 
-        private void propertyGridServiceInstall_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        private void propertyGridServiceInstall_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
         {
-            serviceInstall.Write(e.ChangedItem.Label);
+            serviceInstall.Write(e.ChangedItem?.Label ?? string.Empty);
             propertyGridServiceInstall.Refresh();
             UpdatedSelectedNodeText();
         }

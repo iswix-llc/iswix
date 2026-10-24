@@ -15,7 +15,7 @@ namespace FireworksFramework.Managers
     // This class reflects application directory looking for assemblies that contain designers
     public partial class PluginManager
     {
-        SortedDictionary<string, IFireworksDesigner> _designers;
+        SortedDictionary<string, IFireworksDesigner> _designers = new SortedDictionary<string, IFireworksDesigner>();
 
         private static readonly Lazy<PluginManager> lazy = new Lazy<PluginManager>(() => new PluginManager());
 
@@ -36,8 +36,8 @@ namespace FireworksFramework.Managers
         }
         private void PopulateDesigners()
         {
-            _designers = new SortedDictionary<string, IFireworksDesigner>();
-            DirectoryInfo dInfo = new DirectoryInfo(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName);
+            _designers.Clear();
+            DirectoryInfo dInfo = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory!;
             List<FileInfo> files = new List<FileInfo>();
             files.AddRange(dInfo.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList<FileInfo>());
             files.AddRange(dInfo.GetFiles("*.exe", SearchOption.TopDirectoryOnly).ToList<FileInfo>());
@@ -65,10 +65,9 @@ namespace FireworksFramework.Managers
                     Type[] types = pluginAssembly.GetTypes();
                     foreach (var type in types)
                     {
-                        Type iDesigner = type.GetInterface(typeof(IFireworksDesigner).FullName);
-                        if (iDesigner != null)
+                        if (type.GetInterface(typeof(IFireworksDesigner).FullName!) != null &&
+                            Activator.CreateInstance(type) is IFireworksDesigner designer)
                         {
-                            IFireworksDesigner designer = Activator.CreateInstance(type) as IFireworksDesigner;
                             _designers.Add(designer.PluginType + designer.PluginOrder + Guid.NewGuid().ToString(), designer);
                         }
                     }

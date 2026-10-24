@@ -47,7 +47,7 @@ namespace NamespacesDesigner.Views
         {
             get
             {
-                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("NamespacesDesigner.Namespaces.ico"));
+                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("NamespacesDesigner.Namespaces.ico")!);
             }
         }
         public PluginType PluginType { get { return PluginType.Designer; } }
@@ -60,7 +60,7 @@ namespace NamespacesDesigner.Views
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("NamespacesDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("NamespacesDesigner.License.txt")!).ReadToEnd();
             }
         }
 

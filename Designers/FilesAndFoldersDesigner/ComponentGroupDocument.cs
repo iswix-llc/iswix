@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,8 +16,8 @@ namespace FilesAndFoldersDesigner
 
     public class FileMeta
     {
-        public string Source { get; set; }
-        public string Destination { get; set; }
+        public string Source { get; set; } = string.Empty;
+        public string Destination { get; set; } = string.Empty;
     }
 
     // "Destination Computer\[INSTALLFOLDER]\bin\x64" is Directory INSTALLFOLDER, Subdirectory bin\x64.
@@ -51,7 +52,7 @@ namespace FilesAndFoldersDesigner
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
         XDocument _document;
         Wxs.Wix _wix;
-        Wxs.ComponentGroup _componentGroup;
+        Wxs.ComponentGroup? _componentGroup;
         string _fileName;
 
         public ComponentGroupDocument()
@@ -95,7 +96,7 @@ namespace FilesAndFoldersDesigner
         {
             EnsureComponentGroup();
 
-            Wxs.Component directoryComponent;
+            Wxs.Component? directoryComponent;
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
 
             if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
@@ -128,6 +129,7 @@ namespace FilesAndFoldersDesigner
         }
 
         // A file's fragment and component group are created when the first file or folder is added.
+        [MemberNotNull(nameof(_componentGroup))]
         void EnsureComponentGroup()
         {
             if (_componentGroup != null)
@@ -142,7 +144,7 @@ namespace FilesAndFoldersDesigner
         public string GetRootPath()
         {
             string sourceDir = GetDefine(SourceDirDefine) ?? ".";
-            return new DirectoryInfo(Path.Combine(new FileInfo(_documentManager.DocumentPath).Directory.FullName, sourceDir)).FullName;
+            return new DirectoryInfo(Path.Combine(new FileInfo(_documentManager.DocumentPath).DirectoryName ?? string.Empty, sourceDir)).FullName;
         }
 
         public ComponentRules GetComponentRules() =>
@@ -176,7 +178,7 @@ namespace FilesAndFoldersDesigner
             {
                 foreach (var fileElement in FindFiles(file).ToList())
                 {
-                    var component = (Wxs.Component)fileElement.Parent;
+                    var component = (Wxs.Component)fileElement.Parent!;
                     fileElement.RemoveFromParent();
                     if (!component.Xml.HasElements)
                     {
@@ -312,7 +314,7 @@ namespace FilesAndFoldersDesigner
         }
 
         // Folder components are "owd" + the hash of their path; renames in earlier IsWiX versions wrote "owc".
-        static bool IsGeneratedId(string id, string directory, string subdirectory)
+        static bool IsGeneratedId(string? id, string directory, string subdirectory)
         {
             string hash = GetSHA256Hash(Path.Combine(directory, subdirectory));
             return id == "owd" + hash || id == "owc" + hash;
@@ -371,9 +373,9 @@ namespace FilesAndFoldersDesigner
 
         static string DefineName(XProcessingInstruction define) => define.Data.Split('=')[0].Trim();
 
-        XProcessingInstruction FindDefine(string name) => Defines().FirstOrDefault(pi => DefineName(pi) == name);
+        XProcessingInstruction? FindDefine(string name) => Defines().FirstOrDefault(pi => DefineName(pi) == name);
 
-        string GetDefine(string name)
+        string? GetDefine(string name)
         {
             var define = FindDefine(name);
             if (define == null)
@@ -411,7 +413,7 @@ namespace FilesAndFoldersDesigner
         void AddDefine(string data)
         {
             var define = new XProcessingInstruction("define", data);
-            var root = _document.Root;
+            var root = _document.Root!;
             if (root.FirstNode is XText whitespace && string.IsNullOrWhiteSpace(whitespace.Value))
             {
                 whitespace.AddAfterSelf(define, new XText(whitespace.Value));

@@ -32,7 +32,7 @@ namespace FireworksFramework.ViewModels
         string _templateName = string.Empty;
         string _documentExtension = string.Empty;
         string _documentDirectoryMRU = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
         public string FilePath
         {
             get
@@ -61,14 +61,14 @@ namespace FireworksFramework.ViewModels
         public bool EnableSave { get { return _enableSave; } set { _enableSave = value; RaisePropertyChangedEvent("EnableSave"); } }
         public bool EnableSaveButton { get { return _enableSaveButton; } set { _enableSaveButton = value; RaisePropertyChangedEvent("EnableSaveButton"); } }
 
-        string _title;
+        string _title = string.Empty;
         public string Title { get { return _title; } set { _title = value; RaisePropertyChangedEvent("Title"); } }
 
         Visibility _gridVisibility;
         public Visibility GridVisibility { get { return _gridVisibility; } set { _gridVisibility = value; RaisePropertyChangedEvent("GridVisibility"); } }
 
-        List<IFireworksDesigner> _activeDesigners;
-        public List<IFireworksDesigner> ActiveDesigners
+        List<IFireworksDesigner>? _activeDesigners;
+        public List<IFireworksDesigner>? ActiveDesigners
         {
             get
             {
@@ -81,8 +81,8 @@ namespace FireworksFramework.ViewModels
             }
         }
 
-        IFireworksDesigner _activeDesigner;
-        public IFireworksDesigner ActiveDesigner
+        IFireworksDesigner? _activeDesigner;
+        public IFireworksDesigner? ActiveDesigner
         {
             get
             {
@@ -120,7 +120,7 @@ namespace FireworksFramework.ViewModels
                     _documentManager.Close();
                     if (TryLoad(_documentPath))
                     {
-                        _documentDirectoryMRU = new FileInfo(_documentPath).Directory.FullName;
+                        _documentDirectoryMRU = new FileInfo(_documentPath).DirectoryName ?? _documentDirectoryMRU;
                         Settings.Default.DocumentDirectoryMRU = _documentDirectoryMRU;
                         Settings.Default.Save();
                         _documentExtension = Path.GetExtension(_documentPath);
@@ -134,7 +134,7 @@ namespace FireworksFramework.ViewModels
             {
                 try
                 {
-                    string templatePath = Path.Combine(Path.GetDirectoryName(GetExecutableFilePath()), "Templates\\" + templateRelativePath);
+                    string templatePath = Path.Combine(Path.GetDirectoryName(GetExecutableFilePath()) ?? string.Empty, "Templates\\" + templateRelativePath);
                     _documentExtension = Path.GetExtension(templatePath);
                     _documentManager.UnSubscribe("mainform");
                     _documentManager.Load(templatePath);
@@ -159,7 +159,7 @@ namespace FireworksFramework.ViewModels
         }
         public bool SaveAs()
         {
-            return SaveAs(new FileInfo(_documentManager.DocumentPath).DirectoryName);
+            return SaveAs(new FileInfo(_documentManager.DocumentPath).DirectoryName ?? _documentDirectoryMRU);
         }
         public bool SaveAs(string initialDirectory)
         {
@@ -179,7 +179,7 @@ namespace FireworksFramework.ViewModels
                     try
                     {
                         _documentManager.Save(saveDialog.FileName);
-                        _documentDirectoryMRU = new FileInfo(saveDialog.FileName).Directory.FullName;
+                        _documentDirectoryMRU = new FileInfo(saveDialog.FileName).DirectoryName ?? _documentDirectoryMRU;
                         Settings.Default.DocumentDirectoryMRU = _documentDirectoryMRU;
                         Settings.Default.Save();
 
@@ -267,7 +267,7 @@ namespace FireworksFramework.ViewModels
                 }
                 else if (new FileInfo(_documentManager.DocumentPath).IsReadOnly == true)
                 {
-                    SaveAs(new FileInfo(_documentManager.DocumentPath).DirectoryName);
+                    SaveAs(new FileInfo(_documentManager.DocumentPath).DirectoryName ?? _documentDirectoryMRU);
                 }
                 else
                 {
@@ -364,14 +364,14 @@ namespace FireworksFramework.ViewModels
                 {
                     if (designer.PluginType == PluginType.Designer && designer.IsValidContext())
                     {
-                        activeDesigners.Add(designer as IFireworksDesigner);
+                        activeDesigners.Add(designer);
                     }
                 }
                 ActiveDesigners = activeDesigners;
                 ActiveDesigner = null;
                 if (activeDesigners.Any())
                 {
-                    ActiveDesigner = ActiveDesigners.First();
+                    ActiveDesigner = activeDesigners.First();
                 }
             }
 
@@ -386,12 +386,12 @@ namespace FireworksFramework.ViewModels
 
         private string GetExecutablePath()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
         }
 
         private string GetExecutableFilePath()
         {
-            return Assembly.GetEntryAssembly().Location;
+            return Assembly.GetEntryAssembly()?.Location ?? string.Empty;
         }
 
 

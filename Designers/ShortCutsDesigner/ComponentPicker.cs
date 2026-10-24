@@ -9,12 +9,12 @@ namespace ShortCutsDesigner
     {
         string _fileKey = string.Empty;
         string _fileName = string.Empty;
-        XElement _fileElement = null;
+        XElement? _fileElement = null;
         List<ShortCutCandidate> _candidates;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string FileFilterPattern { get; set; }
-        public XElement FileElement
+        public string FileFilterPattern { get; set; } = string.Empty;
+        public XElement? FileElement
         {
             get
             {
@@ -68,7 +68,10 @@ namespace ShortCutsDesigner
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ShortCutCandidate scc = treeView1.SelectedNode.Tag as ShortCutCandidate;
+            if (treeView1.SelectedNode?.Tag is not ShortCutCandidate scc)
+            {
+                return;
+            }
             _fileKey = scc.FileKey;
             _fileName = scc.FileName;
             _fileElement = scc.FileElement;

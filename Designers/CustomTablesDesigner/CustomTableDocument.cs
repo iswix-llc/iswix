@@ -20,7 +20,7 @@ namespace CustomTablesDesigner
         }
 
         // The <Package> or <Fragment> the tables belong to.
-        static WixElement Container(XDocument document) => WixElement.Wrap(document.Root.Elements().First());
+        static WixElement Container(XDocument document) => WixElement.Wrap(document.Root!.Elements().First());
 
         public static IEnumerable<Wxs.CustomTable> Tables(XDocument document) => Container(document) switch
         {
@@ -31,7 +31,7 @@ namespace CustomTablesDesigner
 
         public static Wxs.CustomTable Find(XDocument document, string id) => Tables(document).First(t => t.Id == id);
 
-        static IEnumerable<Wxs.EnsureTable> EnsureTables(XDocument document, string id) =>
+        static IEnumerable<Wxs.EnsureTable> EnsureTables(XDocument document, string? id) =>
             document.Descendants(Wxs.EnsureTable.ElementName).Select(e => (Wxs.EnsureTable)WixElement.Wrap(e)).Where(e => e.Id == id);
 
         // A table with a primary key column, and the EnsureTable that makes sure it is created even when empty. Both
@@ -74,7 +74,7 @@ namespace CustomTablesDesigner
 
         public static void Drop(XDocument document, Wxs.CustomTable table)
         {
-            string id = table.Id;
+            string? id = table.Id;
             table.RemoveFromParent();
             if (!Tables(document).Any(t => t.Id == id))
             {
@@ -136,7 +136,7 @@ namespace CustomTablesDesigner
 
                 foreach (DataColumn column in dataTable.Columns)
                 {
-                    string value = dataRow[column].ToString();
+                    string value = dataRow[column].ToString() ?? string.Empty;
                     var data = row.DataElements.FirstOrDefault(d => d.Column == column.ColumnName);
                     if (data == null)
                     {

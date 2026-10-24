@@ -33,7 +33,8 @@ namespace NamespacesDesigner
 
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
-        XElement Root => _documentManager.Document.Root;
+        // The designer is only offered for an open WiX document, which has a root.
+        XElement Root => _documentManager.Document.Root!;
 
         IEnumerable<XAttribute> Declarations(string uri) =>
             Root.Attributes().Where(a => a.IsNamespaceDeclaration && a.Name.Namespace == XNamespace.Xmlns && a.Value == uri);
@@ -111,7 +112,7 @@ namespace NamespacesDesigner
             var schemas = new List<KeyValuePair<string, string>>();
             try
             {
-                string currentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+                string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
                 string schemasDir = Path.Combine(currentDirectory, "Schemas");
                 if (!Directory.Exists(schemasDir))
                 {
@@ -126,7 +127,11 @@ namespace NamespacesDesigner
                         continue;
                     }
 
-                    string targetNameSpace = XDocument.Load(file.FullName).Root.Attribute("targetNamespace").Value;
+                    string? targetNameSpace = (string?)XDocument.Load(file.FullName).Root?.Attribute("targetNamespace");
+                    if (targetNameSpace == null)
+                    {
+                        continue;
+                    }
 
                     // These schemas don't follow the file name pattern the others do.
                     switch (prefix)

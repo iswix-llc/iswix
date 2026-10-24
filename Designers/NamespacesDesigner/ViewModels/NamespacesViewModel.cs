@@ -14,7 +14,7 @@ namespace NamespacesDesigner.ViewModels
     public class NamespacesViewModel : ObservableObject
     {
 
-        NamespaceDocument _iswixNamespaces;
+        NamespaceDocument _iswixNamespaces = new NamespaceDocument();
 
         ObservableCollection<NamespaceModel> _namespaces = new ObservableCollection<NamespaceModel>();
         public ObservableCollection<NamespaceModel> Namespaces
@@ -51,9 +51,13 @@ namespace NamespacesDesigner.ViewModels
 
         }
 
-        private void PropertyModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void PropertyModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            NamespaceModel namespaceModel = sender as NamespaceModel;
+            if (sender is not NamespaceModel namespaceModel)
+            {
+                return;
+            }
+
             if (e.PropertyName != nameof(NamespaceModel.Selected))
             {
                 return;

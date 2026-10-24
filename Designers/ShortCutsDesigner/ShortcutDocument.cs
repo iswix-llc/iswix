@@ -31,14 +31,14 @@ namespace ShortCutsDesigner
             List<ShortCutCandidate> candidates = new List<ShortCutCandidate>();
             foreach (var file in document.Descendants(Wxs.File.ElementName))
             {
-                string source = (string)file.Attribute("Source") ?? string.Empty;
+                string source = (string?)file.Attribute("Source") ?? string.Empty;
                 if (source.EndsWith(".dll") || source.EndsWith(".pdb"))
                 {
                     continue;
                 }
 
                 ShortCutCandidate scc = new ShortCutCandidate();
-                scc.FileKey = (string)file.Attribute("Id") ?? string.Empty;
+                scc.FileKey = (string?)file.Attribute("Id") ?? string.Empty;
                 scc.DestinationFilePath = WixFiles.DestinationFilePath(file);
                 scc.FileName = Path.GetFileNameWithoutExtension(source.Split('\\').Last());
                 scc.FileElement = file;
@@ -64,13 +64,13 @@ namespace ShortCutsDesigner
         public static void Delete(Wxs.Shortcut shortcut) => shortcut.RemoveFromParent();
 
         // The Id follows the shortcut's folder and name, unless it was given another Id by hand.
-        public static void SetName(Wxs.Shortcut shortcut, string name) =>
+        public static void SetName(Wxs.Shortcut shortcut, string? name) =>
             Move(shortcut, shortcut.Directory, Subdirectory(shortcut), name);
 
-        public static void SetSubdirectory(Wxs.Shortcut shortcut, string subdirectory) =>
+        public static void SetSubdirectory(Wxs.Shortcut shortcut, string? subdirectory) =>
             Move(shortcut, shortcut.Directory, subdirectory, shortcut.Name);
 
-        static void Move(Wxs.Shortcut shortcut, string directory, string subdirectory, string name)
+        static void Move(Wxs.Shortcut shortcut, string? directory, string? subdirectory, string? name)
         {
             bool generatedId = shortcut.Id == GeneratedId(shortcut.Directory, Subdirectory(shortcut), shortcut.Name) ||
                 // Earlier IsWiX versions renamed with this form.
@@ -97,7 +97,7 @@ namespace ShortCutsDesigner
             }
         }
 
-        static string GeneratedId(string directory, string subdirectory, string name) =>
+        static string GeneratedId(string? directory, string? subdirectory, string? name) =>
             "sc" + WixFiles.IdHash(Path.Combine(directory ?? string.Empty, subdirectory ?? string.Empty, name ?? string.Empty));
 
         public static string DestinationFilePath(Wxs.Shortcut shortcut) =>
@@ -106,9 +106,9 @@ namespace ShortCutsDesigner
 
     public class ShortCutCandidate
     {
-        public string FileKey { get; set; }
-        public string FileName { get; set; }
-        public string DestinationFilePath { get; set; }
-        public XElement FileElement { get; set; }
+        public string FileKey { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public string DestinationFilePath { get; set; } = string.Empty;
+        public XElement FileElement { get; set; } = null!;
     }
 }

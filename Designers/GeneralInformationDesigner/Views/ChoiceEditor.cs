@@ -61,9 +61,9 @@ namespace GeneralInformationDesigner.Views
             return value?.ToString() ?? Null;
         }
 
-        public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
-            string s = value?.ToString();
+            string? s = value?.ToString();
             return s == Null ? null : s;
         }
     }

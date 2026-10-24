@@ -16,14 +16,14 @@ namespace FireworksFramework.Managers
         private static readonly Lazy<FireworksManager> lazy = new Lazy<FireworksManager>(() => new FireworksManager());
         public static FireworksManager FireworksManagerInstance { get { return lazy.Value; } }
 
-        public string FilePath { get; set; }
-        public BitmapImage BrandingBitMap { get; set; }
-        public string ProductName { get; set; }
+        public string FilePath { get; set; } = string.Empty;
+        public BitmapImage? BrandingBitMap { get; set; }
+        public string ProductName { get; set; } = string.Empty;
         private FireworksManager()
         {
             try
             {
-                Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+                Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName!;
             }
             catch (Exception)
             {

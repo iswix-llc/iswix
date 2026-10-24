@@ -22,7 +22,8 @@ namespace CustomTablesDesigner
     public partial class CustomTablesDesigner : UserControl, IFireworksDesigner
     {
         DataTable _customTable = new DataTable();
-        Wxs.CustomTable _customTableElement;
+        // Set when a table is selected; the column and rename commands need one.
+        Wxs.CustomTable _customTableElement = null!;
         // The Row element behind each grid row.
         Dictionary<DataRow, Wxs.Row> _rowElements = new Dictionary<DataRow, Wxs.Row>();
         DocumentManager _documentManager;
@@ -59,7 +60,7 @@ namespace CustomTablesDesigner
             {
                 foreach (var table in CustomTableDocument.Tables(_documentManager.Document))
                 {
-                    listBoxTables.Items.Add(table.Id);
+                    listBoxTables.Items.Add(table.Id ?? string.Empty);
                 }
 
                 if (listBoxTables.Items.Count > 0)
@@ -78,7 +79,7 @@ namespace CustomTablesDesigner
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CustomTablesDesigner.CustomTables.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CustomTablesDesigner.CustomTables.ico")!);
             }
         }
 
@@ -86,7 +87,7 @@ namespace CustomTablesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("CustomTablesDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("CustomTablesDesigner.License.txt")!).ReadToEnd();
             }
         }
 
@@ -130,7 +131,7 @@ namespace CustomTablesDesigner
             if (listBoxTables.SelectedItems.Count > 0)
             {
 
-                _customTableElement = CustomTableDocument.Find(_documentManager.Document, listBoxTables.SelectedItem.ToString());
+                _customTableElement = CustomTableDocument.Find(_documentManager.Document, (string)listBoxTables.SelectedItem!);
 
                 foreach (var column in _customTableElement.Columns)
                 {
@@ -160,7 +161,7 @@ namespace CustomTablesDesigner
                             if (isPreviousPK == false)
                             {
                                 MessageBox.Show("Notice: Marking column '" + item.Text + "' as non-primary due to Window Installer requirements.");
-                                item.ImageKey = null;
+                                item.ImageKey = string.Empty;
                                 FindColumn(item.Text).PrimaryKey = false;
                             }
                         }
@@ -182,7 +183,7 @@ namespace CustomTablesDesigner
 
                         foreach (var column in _customTableElement.Columns.Select(c => c.Xml))
                         {
-                            var dc = new DataColumn(column.Attribute("Id").Value);
+                            var dc = new DataColumn((string?)column.Attribute("Id") ?? string.Empty);
 
                             ColumnDataType colDT = ColumnDataType.Unknown;
                             int width = 0;
@@ -350,8 +351,8 @@ namespace CustomTablesDesigner
 
         private void toolStripMenuItemTableDrop_Click(object sender, EventArgs e)
         {
-            CustomTableDocument.Drop(_documentManager.Document, CustomTableDocument.Find(_documentManager.Document, listBoxTables.SelectedItem.ToString()));
-            listBoxTables.Items.Remove(listBoxTables.SelectedItem);
+            CustomTableDocument.Drop(_documentManager.Document, CustomTableDocument.Find(_documentManager.Document, (string)listBoxTables.SelectedItem!));
+            listBoxTables.Items.Remove(listBoxTables.SelectedItem!);
         }
 
         private void listBoxTables_MouseDown(object sender, MouseEventArgs e)
@@ -362,7 +363,7 @@ namespace CustomTablesDesigner
                 listBoxTables.SelectedIndex = listBoxTables.IndexFromPoint(p);
             }
         }
-        private void dataGridViewRows_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewRows_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -388,7 +389,7 @@ namespace CustomTablesDesigner
         private Wxs.Column FindColumn(string id) => _customTableElement.Columns.First(c => c.Id == id);
         private void dataGridViewRows_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show(e.Exception.Message);
+            MessageBox.Show(e.Exception?.Message);
         }
 
         private void listViewColumns_SelectedIndexChanged(object sender, EventArgs e)
@@ -418,7 +419,7 @@ namespace CustomTablesDesigner
 
             foreach (var item in listBoxTables.Items)
             {
-                tables.Add(item.ToString());
+                tables.Add((string)item);
             }
             var dialog = new FormTableName( listBoxTables.Text, tables );
 
@@ -435,7 +436,7 @@ namespace CustomTablesDesigner
 
             foreach (var item in listBoxTables.Items)
             {
-                tables.Add(item.ToString());
+                tables.Add((string)item);
             }
             var dialog = new FormTableName(string.Empty, tables);
 

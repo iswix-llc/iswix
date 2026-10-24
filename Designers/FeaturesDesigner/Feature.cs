@@ -14,7 +14,7 @@ namespace FeaturesDesigner
     // Values are the attribute text, so expressions such as $(var.X) show and are kept.
     public partial class Feature : Component
     {
-        Wxs.Feature _feature;
+        Wxs.Feature? _feature;
 
         public Feature()
         {
@@ -46,56 +46,56 @@ namespace FeaturesDesigner
         [CategoryAttribute("\tIdentity")]
         [Description(@"Unique identifier of the feature.")]
         [ReadOnly(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] public string Id { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] public string? Id { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"Short string of text identifying the feature. This string is listed as an item by the SelectionTree control of the Selection Dialog. ")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] public string Title { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)] public string? Title { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"This attribute determines if a user will have the option to set a feature to absent in the user interface.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [TypeConverter(typeof(YesNoChoiceConverter))]
-        public string AllowAbsent { get; set; }
+        public string? AllowAbsent { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"This attribute determines whether the feature can be advertised.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [TypeConverter(typeof(YesNoChoiceConverter))]
-        public string AllowAdvertise { get; set; }
+        public string? AllowAdvertise { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"Specify the Id of a Directory that can be configured by the user at installation time. This identifier must be a public property and therefore completely uppercase.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string ConfigurableDirectory { get; set; }
+        public string? ConfigurableDirectory { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"This attribute determines the default install/run location of a feature. This attribute cannot be specified if the value of the FollowParent attribute is 'yes' since that would ask the installer to force this feature to follow the parent installation state and simultaneously favor a particular installation state just for this feature.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [TypeConverter(typeof(InstallDefaultConverter))]
-        public string InstallDefault { get; set; }
+        public string? InstallDefault { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"This attribute determines the default advertise state of the feature.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [TypeConverter(typeof(TypicalDefaultConverter))]
-        public string TypicalDefault { get; set; }
+        public string? TypicalDefault { get; set; }
 
         [CategoryAttribute("Properties")]
         [Description(@"Sets the install level of this feature. A value of 0 will disable the feature. Processing the Condition Table can modify the level value (this is set via the Condition child element). The default value is '1'.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string Level { get; set; }
+        public string? Level { get; set; }
 
         [CategoryAttribute("Display")]
         [Description(@"Determines the initial display of this feature in the feature tree: collapse, expand, hidden, or a number giving its position.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [TypeConverter(typeof(DisplayConverter))]
-        public string Display { get; set; }
+        public string? Display { get; set; }
 
         [CategoryAttribute("Display")]
         [Description(@"Longer string of text describing the feature. ")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public void Read(Wxs.Feature Feature)
         {
@@ -115,44 +115,50 @@ namespace FeaturesDesigner
         // Only the attribute that changed is written. (The Id is changed by renaming the feature in the tree.)
         public void Write(string PropertyLabel)
         {
+            var feature = _feature;
+            if (feature == null)
+            {
+                return;
+            }
+
             switch (PropertyLabel)
             {
                 case "Title":
-                    _feature.Title = NullIfEmpty(Title);
+                    feature.Title = NullIfEmpty(Title);
                     break;
 
                 case "AllowAbsent":
-                    Set(AllowAbsent, WixConverters.YesNo, PropertyLabel, value => _feature.AllowAbsent = value);
+                    Set(AllowAbsent, WixConverters.YesNo, PropertyLabel, value => feature.AllowAbsent = value);
                     break;
 
                 case "AllowAdvertise":
-                    Set(AllowAdvertise, WixConverters.YesNo, PropertyLabel, value => _feature.AllowAdvertise = value);
+                    Set(AllowAdvertise, WixConverters.YesNo, PropertyLabel, value => feature.AllowAdvertise = value);
                     break;
 
                 case "ConfigurableDirectory":
-                    _feature.ConfigurableDirectory = NullIfEmpty(ConfigurableDirectory);
+                    feature.ConfigurableDirectory = NullIfEmpty(ConfigurableDirectory);
                     break;
 
                 case "InstallDefault":
-                    Set(InstallDefault, Wxs.WixEnumConverters.FeatureInstallDefault, PropertyLabel, value => _feature.InstallDefault = value);
+                    Set(InstallDefault, Wxs.WixEnumConverters.FeatureInstallDefault, PropertyLabel, value => feature.InstallDefault = value);
                     break;
                 case "TypicalDefault":
-                    Set(TypicalDefault, Wxs.WixEnumConverters.FeatureTypicalDefault, PropertyLabel, value => _feature.TypicalDefault = value);
+                    Set(TypicalDefault, Wxs.WixEnumConverters.FeatureTypicalDefault, PropertyLabel, value => feature.TypicalDefault = value);
                     break;
                 case "Level":
-                    Set(Level, WixConverters.Int32, PropertyLabel, value => _feature.Level = value);
+                    Set(Level, WixConverters.Int32, PropertyLabel, value => feature.Level = value);
                     break;
                 case "Description":
-                    _feature.Description = NullIfEmpty(Description);
+                    feature.Description = NullIfEmpty(Description);
                     break;
                 case "Display":
-                    _feature.Display = NullIfEmpty(Display);
+                    feature.Display = NullIfEmpty(Display);
                     break;
             }
         }
 
         // Anything but empty must be a valid value or an expression.
-        void Set<T>(string text, WixValueConverter<T> converter, string label, Action<WixValue<T>?> set)
+        void Set<T>(string? text, WixValueConverter<T> converter, string label, Action<WixValue<T>?> set)
         {
             if (WixText.TryParse(text, converter, out var value))
             {
@@ -161,10 +167,13 @@ namespace FeaturesDesigner
             }
 
             MessageBox.Show($"'{text}' is not a valid {label}.", "Features", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            Read(_feature);
+            if (_feature != null)
+            {
+                Read(_feature);
+            }
         }
 
-        static string NullIfEmpty(string value) => string.IsNullOrEmpty(value) ? null : value;
+        static string? NullIfEmpty(string? value) => string.IsNullOrEmpty(value) ? null : value;
 
         class InstallDefaultConverter : WixChoiceConverter
         {

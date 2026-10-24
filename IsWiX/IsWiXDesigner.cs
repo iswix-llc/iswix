@@ -24,7 +24,7 @@ namespace IsWiX
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.IsWiX.ico")!);
             }
         }
 
@@ -37,7 +37,7 @@ namespace IsWiX
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("IsWiX.License.txt")!).ReadToEnd();
             }
         }
 

@@ -9,8 +9,8 @@ namespace PropertiesDesigner.Models
 {
     public class PropertyModel : ObservableObject
     {
-        string _id;
-        string _value;
+        string _id = string.Empty;
+        string _value = string.Empty;
         bool _suppressModularization;
         bool _secure;
         bool _hidden;

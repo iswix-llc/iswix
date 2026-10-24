@@ -9,8 +9,8 @@ namespace NamespacesDesigner.Models
 {
     public class NamespaceModel : ObservableObject
     {
-        string _prefix;
-        string _uri;
+        string _prefix = string.Empty;
+        string _uri = string.Empty;
         bool _selected;
         public bool Selected { get { return _selected; } set { _selected = value; RaisePropertyChangedEvent("Selected"); } }
         public string Prefix { get { return _prefix; } set { _prefix = value; RaisePropertyChangedEvent("Prefix"); } }

@@ -17,9 +17,9 @@ namespace ServicesDesigner
         string _fileKey = string.Empty;
         List<ServiceCandidate> _candidates;
         string _fileName = string.Empty;
-        XElement _fileElement = null;
+        XElement? _fileElement = null;
 
-        public XElement FileElement
+        public XElement? FileElement
         {
             get
             {
@@ -73,7 +73,10 @@ namespace ServicesDesigner
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ServiceCandidate sc=treeView1.SelectedNode.Tag as ServiceCandidate;
+            if (treeView1.SelectedNode?.Tag is not ServiceCandidate sc)
+            {
+                return;
+            }
             _fileKey = sc.Id;
             _fileName = sc.FileName;
             _fileElement = sc.FileElement;

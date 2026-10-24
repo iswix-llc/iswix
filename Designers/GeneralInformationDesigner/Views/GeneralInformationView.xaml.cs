@@ -27,7 +27,7 @@ namespace GeneralInformationDesigner.Views
         {
             get
             {
-                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneralInformationDesigner.GeneralInformation.ico"));
+                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneralInformationDesigner.GeneralInformation.ico")!);
             }
         }
 
@@ -37,7 +37,7 @@ namespace GeneralInformationDesigner.Views
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneralInformationDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneralInformationDesigner.License.txt")!).ReadToEnd();
             }
         }
 

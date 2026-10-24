@@ -24,7 +24,7 @@ namespace FireworksFramework.Views
         {
             try
             {
-                Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+                Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName!;
             }
             catch (Exception)
             {
@@ -74,17 +74,14 @@ namespace FireworksFramework.Views
             this.gridControlContainer.Children.Clear();
             if (viewModel.ActiveDesigner != null)
             {
-                System.Windows.Forms.Control winFormControl = viewModel.ActiveDesigner as System.Windows.Forms.Control;
-                UIElement wpfControl = viewModel.ActiveDesigner as UIElement;
-
-                if(winFormControl != null)
+                if (viewModel.ActiveDesigner is System.Windows.Forms.Control winFormControl)
                 {
                     _host.Child = winFormControl;
                     this.gridControlContainer.Children.Add(_host);
 
                 }
 
-                if(wpfControl != null)
+                if (viewModel.ActiveDesigner is UIElement wpfControl)
                 {
                     this.gridControlContainer.Children.Add(wpfControl);
                 }

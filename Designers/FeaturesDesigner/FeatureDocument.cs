@@ -21,7 +21,7 @@ namespace FeaturesDesigner
         }
 
         // The <Package> or <Fragment> the features belong to.
-        public static WixElement Container(XDocument document) => WixElement.Wrap(document.Root.Elements().First());
+        public static WixElement Container(XDocument document) => WixElement.Wrap(document.Root!.Elements().First());
 
         public static IEnumerable<Wxs.Feature> Features(WixElement parent) => parent switch
         {
@@ -33,7 +33,7 @@ namespace FeaturesDesigner
 
         public static string SuggestNextFeatureName(XDocument document)
         {
-            var ids = new HashSet<string>(document.Descendants(Wxs.Feature.ElementName).Select(f => (string)f.Attribute("Id") ?? string.Empty));
+            var ids = new HashSet<string>(document.Descendants(Wxs.Feature.ElementName).Select(f => (string?)f.Attribute("Id") ?? string.Empty));
             int i = 1;
             while (ids.Contains($"NewFeature{i}"))
             {
@@ -55,14 +55,14 @@ namespace FeaturesDesigner
         };
 
         // Returns why the Id cannot be used, or null when it can.
-        public static string ValidateId(XDocument document, Wxs.Feature feature, string id)
+        public static string? ValidateId(XDocument document, Wxs.Feature feature, string id)
         {
             if (string.IsNullOrEmpty(id))
             {
                 return "A feature needs an Id.";
             }
 
-            if (document.Descendants(Wxs.Feature.ElementName).Any(f => f != feature.Xml && (string)f.Attribute("Id") == id))
+            if (document.Descendants(Wxs.Feature.ElementName).Any(f => f != feature.Xml && (string?)f.Attribute("Id") == id))
             {
                 return "Duplicate Feature Name";
             }
@@ -84,7 +84,7 @@ namespace FeaturesDesigner
         // and added back. A sub-feature stays where it is.
         public static void Rename(Wxs.Feature feature, string id)
         {
-            var parent = feature.Parent;
+            var parent = feature.Parent!;
             feature.Id = id;
             if (!(parent is Wxs.Feature))
             {
@@ -102,10 +102,10 @@ namespace FeaturesDesigner
         public static string Describe(Wxs.Merge merge) =>
             "<Merge " + string.Join(" ", merge.Xml.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => $"{a.Name.LocalName}=\"{a.Value}\"")) + " />";
 
-        public static bool References(Wxs.Feature feature, string mergeId) => feature.MergeRefs.Any(r => r.Id == mergeId);
+        public static bool References(Wxs.Feature feature, string? mergeId) => feature.MergeRefs.Any(r => r.Id == mergeId);
 
         // Checking a merge module adds a MergeRef; unchecking removes just that one, so the others keep their attributes.
-        public static void SetReference(Wxs.Feature feature, string mergeId, bool referenced)
+        public static void SetReference(Wxs.Feature feature, string? mergeId, bool referenced)
         {
             if (referenced && !References(feature, mergeId))
             {

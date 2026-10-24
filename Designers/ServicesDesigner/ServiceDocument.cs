@@ -12,16 +12,16 @@ namespace ServicesDesigner
     // A service: its ServiceInstall and the ServiceControl in the same component, if there is one yet.
     public class ServiceItem
     {
-        public Wxs.ServiceInstall Install { get; set; }
-        public Wxs.ServiceControl Control { get; set; }
+        public Wxs.ServiceInstall Install { get; set; } = null!;
+        public Wxs.ServiceControl? Control { get; set; }
     }
 
     public class ServiceCandidate
     {
-        public string Id { get; set; }
-        public string FileName { get; set; }
-        public string DestinationFilePath { get; set; }
-        public XElement FileElement { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public string DestinationFilePath { get; set; } = string.Empty;
+        public XElement FileElement { get; set; } = null!;
     }
 
     // The services in a fragment, read and written through the typed model.
@@ -49,11 +49,11 @@ namespace ServicesDesigner
             List<ServiceCandidate> candidates = new List<ServiceCandidate>();
             foreach (var file in document.Descendants(Wxs.File.ElementName))
             {
-                string source = (string)file.Attribute("Source") ?? string.Empty;
+                string source = (string?)file.Attribute("Source") ?? string.Empty;
                 if (IsKeyPath(file) && source.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
                 {
                     ServiceCandidate sc = new ServiceCandidate();
-                    sc.Id = (string)file.Attribute("Id") ?? string.Empty;
+                    sc.Id = (string?)file.Attribute("Id") ?? string.Empty;
                     sc.DestinationFilePath = WixFiles.DestinationFilePath(file);
                     sc.FileElement = file;
                     sc.FileName = Path.GetFileNameWithoutExtension(source.Split('\\').Last());
@@ -64,10 +64,10 @@ namespace ServicesDesigner
         }
 
         // Added through the model to the file's component, with IsWiX's defaults.
-        public static ServiceItem Create(XDocument document, string name, string fileId, XElement fileElement = null)
+        public static ServiceItem Create(XDocument document, string name, string fileId, XElement? fileElement = null)
         {
-            fileElement ??= document.Descendants(Wxs.File.ElementName).First(f => (string)f.Attribute("Id") == fileId);
-            var component = (Wxs.Component)WixElement.Wrap(fileElement.Parent);
+            fileElement ??= document.Descendants(Wxs.File.ElementName).First(f => (string?)f.Attribute("Id") == fileId);
+            var component = (Wxs.Component)WixElement.Wrap(fileElement.Parent!);
 
             var install = component.Add(new Wxs.ServiceInstall
             {
@@ -96,7 +96,7 @@ namespace ServicesDesigner
         {
             if (service.Control == null)
             {
-                var component = (Wxs.Component)WixElement.Wrap(service.Install.Xml.Parent);
+                var component = (Wxs.Component)WixElement.Wrap(service.Install.Xml.Parent!);
                 service.Control = component.Add(new Wxs.ServiceControl { Id = ControlId(service.Install.Name), Name = service.Install.Name });
             }
 
@@ -104,7 +104,7 @@ namespace ServicesDesigner
         }
 
         // Renames both elements. Their Ids follow the name unless they were given other Ids by hand.
-        public static void SetName(ServiceItem service, string name)
+        public static void SetName(ServiceItem service, string? name)
         {
             var install = service.Install;
             if (install.Id == InstallId(install.Name))
@@ -142,8 +142,8 @@ namespace ServicesDesigner
         static bool IsKeyPath(XElement file) =>
             ((Wxs.File)WixElement.Wrap(file)).KeyPath is { IsLiteral: true } keyPath && keyPath.Value;
 
-        static string InstallId(string name) => "si" + WixFiles.IdHash(name ?? string.Empty);
+        static string InstallId(string? name) => "si" + WixFiles.IdHash(name ?? string.Empty);
 
-        static string ControlId(string name) => "sc" + WixFiles.IdHash(name ?? string.Empty);
+        static string ControlId(string? name) => "sc" + WixFiles.IdHash(name ?? string.Empty);
     }
 }

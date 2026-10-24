@@ -17,18 +17,19 @@ namespace Designers.FilesAndFolders
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
     {
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
-        ComponentGroupDocument _isWiXComponentGroup;
-        string rootPath;
+        // Set by LoadData, before the designer is shown.
+        ComponentGroupDocument _isWiXComponentGroup = null!;
+        string rootPath = string.Empty;
 
         private const string Seperator = ";";
         private const string Wildcard = "*";
         private const string BaseExcludePattern = "";
         private const string SourceDirVar = "$(var.SourceDir)";
-        private string SourceStart;
-        protected string fileFilterPattern;
-        protected string fileExcludePattern;
-        private string DragSourceName;
-        private TreeNode HoverNode;
+        private string SourceStart = string.Empty;
+        protected string fileFilterPattern = string.Empty;
+        protected string fileExcludePattern = string.Empty;
+        private string DragSourceName = string.Empty;
+        private TreeNode? HoverNode;
         private const string ListViewItemCollectionFormatIdentifier = "System.Windows.Forms.ListView+SelectedListViewItemCollection";
 
 
@@ -63,13 +64,12 @@ namespace Designers.FilesAndFolders
         public FilesAndFolders()
         {
             InitializeComponent();
-#if !DEBUG
 
-            // create the column sorter and assign it to the correct control
+            // The column sorters always exist (the column click handlers use them) but sort only in release builds.
             lvColumnSorter = new ListViewColumnSorter();
-            lvSourceFiles.ListViewItemSorter = lvColumnSorter;
-
             lvDestinationColumnSorter = new ListViewColumnSorter();
+#if !DEBUG
+            lvSourceFiles.ListViewItemSorter = lvColumnSorter;
             lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
 #endif
         }
@@ -114,7 +114,7 @@ namespace Designers.FilesAndFolders
                 if (!rootPath.Contains(":"))
                 {
                     var documentInfo = new FileInfo(_documentManager.DocumentPath);
-                    rootPath = System.IO.Path.Combine(documentInfo.DirectoryName, rootPath);
+                    rootPath = System.IO.Path.Combine(documentInfo.DirectoryName ?? string.Empty, rootPath);
                 }
 
                 if (!Directory.Exists(rootPath))
@@ -170,8 +170,8 @@ namespace Designers.FilesAndFolders
             string pathSeparator = @"\";
             foreach (var dir in dirs)
             {
-                string subPathAgg = null;
-                TreeNode lastNode = null;
+                string subPathAgg = string.Empty;
+                TreeNode? lastNode = null;
                 foreach (string subPath in dir.Split(pathSeparator))
                 {
                     subPathAgg += subPath + pathSeparator;
@@ -252,7 +252,7 @@ namespace Designers.FilesAndFolders
             //    e.Node.Nodes.Clear();
             //    PopulateSourceTree(e.Node.FullPath, e.Node);
             //}
-            DisplaySourceListItemsForSelectedNode(e.Node);
+            DisplaySourceListItemsForSelectedNode(e.Node!);
             //e.Node.Expand();
         }
 
@@ -308,7 +308,7 @@ namespace Designers.FilesAndFolders
             // get values for exclude and filter pattern from parent control
             var fileInfos = GetFilteredFiles(directoryInfo, FileExcludePattern, FileFilterPattern);
 
-            if (fileInfos == null) return null;
+
             List<ListViewItem> listItems = CreateItemList(fileInfos);
             return listItems;
         }
@@ -321,7 +321,7 @@ namespace Designers.FilesAndFolders
             }
             catch (UnauthorizedAccessException)
             {
-                return null;
+                return Array.Empty<FileInfo>();
             }
         }
 
@@ -488,7 +488,7 @@ namespace Designers.FilesAndFolders
 
         private void tvSourceFiles_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            PopulateSourceTree(e.Node.FullPath, e.Node, PopulateMode.OneLevel);
+            PopulateSourceTree(e.Node!.FullPath, e.Node, PopulateMode.OneLevel);
         }
 
         #region IFireworksDesigner Members
@@ -502,7 +502,7 @@ namespace Designers.FilesAndFolders
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.FilesAndFolders.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.FilesAndFolders.ico")!);
             }
         }
 
@@ -510,7 +510,7 @@ namespace Designers.FilesAndFolders
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.License.txt")!).ReadToEnd();
             }
         }
 
@@ -579,7 +579,7 @@ namespace Designers.FilesAndFolders
 
         private void tvDestination_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (e.Node.Level.Equals(0))
+            if (e.Node!.Level.Equals(0))
             {
                 lvDestination.Items.Clear();
                 lvDestination.Enabled = false;
@@ -758,10 +758,10 @@ namespace Designers.FilesAndFolders
             }
         }
 
-        void toolStripMenuItem_Click(object sender, EventArgs e)
+        void toolStripMenuItem_Click(object? sender, EventArgs e)
         {
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
-            AddSpecialFolder(toolStripMenuItem.Name);
+            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender!;
+            AddSpecialFolder(toolStripMenuItem.Name!);
         }
 
         bool IsASpecialDirectoryToIgnore(string elementId)
@@ -824,7 +824,7 @@ namespace Designers.FilesAndFolders
         }
         private void lvDestination_DragEnter(object sender, DragEventArgs e)
         {
-            if ((e.Data.GetDataPresent(typeof(ListView.SelectedListViewItemCollection))) || (e.Data.GetDataPresent(typeof(TreeNode))))
+            if ((e.Data!.GetDataPresent(typeof(ListView.SelectedListViewItemCollection))) || (e.Data!.GetDataPresent(typeof(TreeNode))))
             {
                 if (tvDestination.SelectedNode != null)
                 {
@@ -844,9 +844,9 @@ namespace Designers.FilesAndFolders
         private void lvDestination_DragDrop(object sender, DragEventArgs e)
         {
             //_documentManager.DisableChangeWatcher();
-            if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+            if (e.Data!.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
-                var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
+                var itemCollection = (ListView.SelectedListViewItemCollection)e.Data!.GetData(ListViewItemCollectionFormatIdentifier)!;
                 List<FileMeta> files = new List<FileMeta>();
                 string sourcePath = tvSourceFiles.SelectedNode.FullPath;
                 string destinationPath = tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", "");
@@ -865,16 +865,16 @@ namespace Designers.FilesAndFolders
                 DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
             }
 
-            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            if (e.Data!.GetDataPresent(typeof(TreeNode)))
             {
-                if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+                if (e.Data!.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
                 {
 
                     var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
                     TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
                     if (dropNode != null && dropNode.Text != "Destination Computer")
                     {
-                        var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                        var sourceFolder = (TreeNode)e.Data!.GetData(typeof(TreeNode))!;
                         if (sourceFolder == tvSourceFiles.Nodes[0])
                         {
                             CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
@@ -898,12 +898,12 @@ namespace Designers.FilesAndFolders
                     }
                 }
             }
-            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            if (e.Data!.GetDataPresent(typeof(TreeNode)))
             {
                 TreeNode dropNode = tvSourceFiles.SelectedNode;
                 if (dropNode != null)
                 {
-                    var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                    var sourceFolder = (TreeNode)e.Data!.GetData(typeof(TreeNode))!;
                     if (sourceFolder == tvSourceFiles.Nodes[0])
                     {
                         CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
@@ -934,7 +934,7 @@ namespace Designers.FilesAndFolders
         private void tvSourceFiles_ItemDrag(object sender, ItemDragEventArgs e)
         {
             DragSourceName = "tvSourceFiles";
-            tvSourceFiles.DoDragDrop(e.Item, DragDropEffects.Copy);
+            tvSourceFiles.DoDragDrop(e.Item!, DragDropEffects.Copy);
             //LoadDocument();
         }
 
@@ -950,14 +950,14 @@ namespace Designers.FilesAndFolders
             Cursor = Cursors.WaitCursor;
            // _documentManager.DisableChangeWatcher();
 
-            if (e.Data.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
+            if (e.Data!.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
                 var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
                 TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
                 if (dropNode != null && dropNode.Text != "Destination Computer")
                 {
                     List<FileMeta> fileMetas = new List<FileMeta>();
-                    var itemCollection = (ListView.SelectedListViewItemCollection)e.Data.GetData(ListViewItemCollectionFormatIdentifier);
+                    var itemCollection = (ListView.SelectedListViewItemCollection)e.Data!.GetData(ListViewItemCollectionFormatIdentifier)!;
                     foreach (ListViewItem item in itemCollection)
                     {
                         FileMeta fileMeta = new FileMeta();
@@ -975,13 +975,13 @@ namespace Designers.FilesAndFolders
                 }
             }
 
-            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            if (e.Data!.GetDataPresent(typeof(TreeNode)))
             {
                 var point = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
                 TreeNode dropNode = ((TreeView)sender).GetNodeAt(point);
                 if (dropNode != null && dropNode.Text != "Destination Computer")
                 {
-                    var sourceFolder = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                    var sourceFolder = (TreeNode)e.Data!.GetData(typeof(TreeNode))!;
                     if (sourceFolder == tvSourceFiles.Nodes[0])
                     {
                         CallMessageBox("Copying the root node of the source tree is not allowed. Please choose a different folder to add to the project.", "Copy Directory Warning");
@@ -1005,8 +1005,11 @@ namespace Designers.FilesAndFolders
                 }
             }
             _isWiXComponentGroup.SortComponents();
-            HoverNode.BackColor = Color.White;
-            HoverNode.ForeColor = Color.Black;
+            if (HoverNode != null)
+            {
+                HoverNode.BackColor = Color.White;
+                HoverNode.ForeColor = Color.Black;
+            }
          //   _documentManager.EnableChangeWatcher();
             Cursor = Cursors.Arrow;
         }
@@ -1030,7 +1033,7 @@ namespace Designers.FilesAndFolders
             }
             foreach (var fileInfo in fileInfos)
             {
-                string subDirectory = (fileInfo.DirectoryName.Replace(rootPath + "\\", ""));
+                string subDirectory = ((fileInfo.DirectoryName ?? string.Empty).Replace(rootPath + "\\", ""));
                 FileMeta fileMeta = new FileMeta();
                 fileMeta.Source = fileInfo.FullName;
                 fileMeta.Destination = Path.Combine(destinationDirectoryPath, parent);
@@ -1044,7 +1047,7 @@ namespace Designers.FilesAndFolders
 
         private void tvDestination_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof(ListView.SelectedListViewItemCollection)))
+            if (e.Data!.GetDataPresent(typeof(ListView.SelectedListViewItemCollection)))
             {
                 switch (DragSourceName)
                 {
@@ -1058,7 +1061,7 @@ namespace Designers.FilesAndFolders
                         break;
                 }
             }
-            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            if (e.Data!.GetDataPresent(typeof(TreeNode)))
             {
                 e.Effect = DragDropEffects.Copy;
             }

@@ -7,7 +7,7 @@ namespace Designers.FilesAndFolders
 
         #region IFormatProvider Members
 
-        public object GetFormat(Type formatType)
+        public object? GetFormat(Type? formatType)
         {
             return formatType == typeof(ICustomFormatter) ? this : null;
         }
@@ -16,9 +16,9 @@ namespace Designers.FilesAndFolders
 
         #region ICustomFormatter Members
 
-        public string Format(string format, object arg, IFormatProvider formatProvider)
+        public string Format(string? format, object? arg, IFormatProvider? formatProvider)
         {
-            if (!this.Equals(formatProvider)) return null;
+            if (!this.Equals(formatProvider) || arg == null) return string.Empty;
 
             var fileSize = (long)arg;
 

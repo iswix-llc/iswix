@@ -20,23 +20,24 @@ namespace FireworksFramework.Managers
     public partial class DocumentManager
     {
         DocumentStates _documentState = DocumentStates.Closed;
-        XDocument _document;
-        XDocument _savedDocument;
+        // Never null: an empty document while none is open.
+        XDocument _document = new XDocument();
+        XDocument _savedDocument = new XDocument();
         string _prevdocumentPath = string.Empty;
         Dictionary<string, IPublishable> _subscribers = new Dictionary<string, IPublishable>();
-        XNamespace _previousNamespace;
+        XNamespace? _previousNamespace;
         string _documentExtension = string.Empty;
         string _templateName = string.Empty;
         XmlSchemaSet _schemas = new XmlSchemaSet();
         bool _canSave = true;
-        Dictionary<string, XNamespace> _namespaces;
+        Dictionary<string, XNamespace> _namespaces = new Dictionary<string, XNamespace> { [""] = XNamespace.None };
 
         public Dictionary<string, IPublishable> Subscribers { get { return _subscribers; } }
         private static readonly Lazy<DocumentManager> lazy = new Lazy<DocumentManager>(() => new DocumentManager());
 
         public static DocumentManager DocumentManagerInstance { get { return lazy.Value; } }
 
-        string _documentPath;
+        string _documentPath = string.Empty;
         public string DocumentPath { get { return _documentPath; } }
 
         public void Subscribe(string name, IPublishable subscriber)
@@ -71,8 +72,6 @@ namespace FireworksFramework.Managers
             catch (Exception)
             {
             }
-
-            _document = new XDocument();
         }
 
         public DocumentStates DocumentState
@@ -106,7 +105,7 @@ namespace FireworksFramework.Managers
 
             try
             {
-                var result = _document.Root.Attributes().
+                var result = (_document.Root?.Attributes() ?? Enumerable.Empty<XAttribute>()).
                         Where(a => a.IsNamespaceDeclaration).
                         GroupBy(a => a.Name.Namespace == XNamespace.None ? String.Empty : a.Name.LocalName,
                                 a => XNamespace.Get(a.Value)).
@@ -192,7 +191,7 @@ namespace FireworksFramework.Managers
             }
             catch (Exception ex)
             {
-                throw new Exception("Load Failed");
+                throw new Exception("Load Failed", ex);
             }
         }
 
@@ -233,12 +232,12 @@ namespace FireworksFramework.Managers
         public void Close()
         {
             _documentState = DocumentStates.Closed;
-            _document = null;
+            _document = new XDocument();
             _documentPath = string.Empty;
             PublishToSubscriber();
         }
 
-        void DocumentChanged(object sender, XObjectChangeEventArgs e)
+        void DocumentChanged(object? sender, XObjectChangeEventArgs e)
         {
             CompareDocuments();
         }

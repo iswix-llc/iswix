@@ -13,7 +13,7 @@ namespace ShortCutsDesigner
 {
     public partial class Shortcut : Component
     {
-        Wxs.Shortcut _shortcut;
+        Wxs.Shortcut? _shortcut;
 
         public Shortcut()
         {
@@ -44,33 +44,39 @@ namespace ShortCutsDesigner
         [Description(@"This column is the string that gives the shortcut a name.")]
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [TypeConverter(typeof(ShowConverter))]
-        public string Show { get; set; }
+        public string? Show { get; set; }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string WorkingDirectory { get; set; }
+        public string? WorkingDirectory { get; set; }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string Arguments { get; set; }
+        public string? Arguments { get; set; }
 
         // Only the attribute that changed is written.
         public void Write(string PropertyLabel)
         {
+            var shortcut = _shortcut;
+            if (shortcut == null)
+            {
+                return;
+            }
+
             switch (PropertyLabel)
             {
 
                 case "Name":
-                    ShortcutDocument.SetName(_shortcut, Name);
+                    ShortcutDocument.SetName(shortcut, Name);
                     break;
                 case "Description":
-                    _shortcut.Description = NullIfEmpty(Description);
+                    shortcut.Description = NullIfEmpty(Description);
                     break;
                 case "Show":
                     if (string.IsNullOrEmpty(Show))
                     {
-                        _shortcut.Show = null;
+                        shortcut.Show = null;
                         break;
                     }
 
@@ -78,22 +84,22 @@ namespace ShortCutsDesigner
                     if (show.Kind == WixValueKind.Invalid)
                     {
                         MessageBox.Show($"'{Show}' is not a valid Show value.", "Shortcut", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        Read(_shortcut);
+                        Read(shortcut);
                         break;
                     }
 
-                    _shortcut.Show = show;
+                    shortcut.Show = show;
                     break;
                 case "WorkingDirectory":
-                    _shortcut.WorkingDirectory = NullIfEmpty(WorkingDirectory);
+                    shortcut.WorkingDirectory = NullIfEmpty(WorkingDirectory);
                     break;
                 case "Arguments":
-                    _shortcut.Arguments = NullIfEmpty(Arguments);
+                    shortcut.Arguments = NullIfEmpty(Arguments);
                     break;
             }
         }
 
-        static string NullIfEmpty(string value) => string.IsNullOrEmpty(value) ? null : value;
+        static string? NullIfEmpty(string? value) => string.IsNullOrEmpty(value) ? null : value;
 
         class ShowConverter : WixChoiceConverter
         {

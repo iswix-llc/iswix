@@ -42,7 +42,7 @@ namespace FeaturesDesigner
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.Features.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.Features.ico")!);
             }
         }
 
@@ -50,7 +50,7 @@ namespace FeaturesDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FeaturesDesigner.License.txt")!).ReadToEnd();
             }
         }
 
@@ -132,7 +132,7 @@ namespace FeaturesDesigner
             }
         }
 
-        private static TreeNode FindNode(TreeNodeCollection nodes, Wxs.Feature feature)
+        private static TreeNode? FindNode(TreeNodeCollection nodes, Wxs.Feature feature)
         {
             foreach (TreeNode node in nodes)
             {
@@ -211,16 +211,16 @@ namespace FeaturesDesigner
             }
         }
 
-        private void propertyGridFeatureProperties_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        private void propertyGridFeatureProperties_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
         {
-            feature.Write(e.ChangedItem.Label);
+            feature.Write(e.ChangedItem?.Label ?? string.Empty);
         }
         private void treeViewMerges_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (treeViewFeatures.SelectedNode != null && !_loadingMergeRefs)
             {
                 Wxs.Feature feature = (Wxs.Feature)treeViewFeatures.SelectedNode.Tag;
-                Wxs.Merge merge = (Wxs.Merge)e.Node.Tag;
+                Wxs.Merge merge = (Wxs.Merge)e.Node!.Tag;
                 propertyGridFeatureProperties.Refresh();
                 FeatureDocument.SetReference(feature, merge.Id, e.Node.Checked);
             }
@@ -234,13 +234,13 @@ namespace FeaturesDesigner
                 return;
             }
 
-            Wxs.Feature iswixFeature = (Wxs.Feature)e.Node.Tag;
+            Wxs.Feature iswixFeature = (Wxs.Feature)e.Node!.Tag;
             if (e.Label == iswixFeature.Id)
             {
                 return;
             }
 
-            string error = FeatureDocument.ValidateId(_documentManager.Document, iswixFeature, e.Label);
+            string? error = FeatureDocument.ValidateId(_documentManager.Document, iswixFeature, e.Label);
             if (error != null)
             {
                 MessageBox.Show(error);

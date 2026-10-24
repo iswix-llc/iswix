@@ -17,7 +17,7 @@ namespace ShortCutsDesigner
 {
     public partial class ShortCuts : UserControl, IFireworksDesigner
     {
-        List<Wxs.Shortcut> _shortcuts;
+        List<Wxs.Shortcut> _shortcuts = new List<Wxs.Shortcut>();
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
         string _oldPath = string.Empty;
         private enum ImageLibrary
@@ -92,7 +92,7 @@ namespace ShortCutsDesigner
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutsDesigner.ShortCuts.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutsDesigner.ShortCuts.ico")!);
             }
         }
 
@@ -100,7 +100,7 @@ namespace ShortCutsDesigner
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutsDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutsDesigner.License.txt")!).ReadToEnd();
             }
         }
 
@@ -126,19 +126,12 @@ namespace ShortCutsDesigner
             Cursor = Cursors.WaitCursor;
             tvDestination.Nodes.Clear();
             // The folders are each shortcut's Directory and Subdirectory, under the four shortcut locations.
-            try
-            {
-                TreeNode treeNode = AddDestinationComputerToDestination();
-                AddFirstLevelFolder(treeNode, "DesktopFolder");
-                AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
-                AddFirstLevelFolder(treeNode, "SendToFolder");
-                //AddFirstLevelFolder(treeNode, "StartMenuFolder");  Old School
-                AddFirstLevelFolder(treeNode, "StartupFolder");
-            }
-            catch (Exception exception)
-            {
-                throw exception;
-            }
+            TreeNode treeNode = AddDestinationComputerToDestination();
+            AddFirstLevelFolder(treeNode, "DesktopFolder");
+            AddFirstLevelFolder(treeNode, "ProgramMenuFolder");
+            AddFirstLevelFolder(treeNode, "SendToFolder");
+            //AddFirstLevelFolder(treeNode, "StartMenuFolder");  Old School
+            AddFirstLevelFolder(treeNode, "StartupFolder");
             tvDestination.ExpandAll();
 
             Cursor = Cursors.Default;
@@ -151,7 +144,6 @@ namespace ShortCutsDesigner
             directoryNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
             foreach (var shortcut in _shortcuts)
             {
-                TreeNode parentNode = null;
                 if (shortcut.Directory == folderName)
                 {
                     if (string.IsNullOrEmpty(shortcut.Subdirectory))
@@ -386,7 +378,7 @@ namespace ShortCutsDesigner
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             tvDestination.LabelEdit = false;
-            var previousName = e.Node.Text;
+            var previousName = e.Node!.Text;
             if (String.IsNullOrEmpty(e.Label))
             {
                 e.CancelEdit = true;
@@ -408,7 +400,7 @@ namespace ShortCutsDesigner
 
         }
 
-        private bool CanRenameFragmentStyle(string previousName, string newName)
+        private bool CanRenameFragmentStyle(string previousName, string? newName)
         {
             int count = 0;
             foreach (TreeNode node in tvDestination.SelectedNode.Parent.Nodes)
@@ -542,7 +534,7 @@ namespace ShortCutsDesigner
             DialogResult dr = picker.ShowDialog();
             if (dr != DialogResult.Cancel)
             {
-                if (!string.IsNullOrEmpty(picker.FileKey) || picker.FileElement != null)
+                if (picker.FileElement != null)
                 {
                     string scDirectory = string.Empty;
                     string scSubdirectory = string.Empty;
@@ -560,18 +552,14 @@ namespace ShortCutsDesigner
                     {
                         index++;
                         bool exists = false;
-                        if (_shortcuts != null)
+                        foreach (var shortcut in _shortcuts)
                         {
-                            foreach (var shortcut in _shortcuts)
+                            string name = string.Format("{0}{1}", prefix, index);
+                            if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, name))
                             {
-                                string name = string.Format("{0}{1}", prefix, index);
-                                if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, name))
-                                {
-                                    exists = true;
-                                    break;
-                                }
+                                exists = true;
+                                break;
                             }
-
                         }
 
                         if (exists == false)
@@ -640,7 +628,7 @@ namespace ShortCutsDesigner
         {
             if (IsShortcutNode())
             {
-                shortcut1.Read((Wxs.Shortcut)e.Node.Tag);
+                shortcut1.Read((Wxs.Shortcut)e.Node!.Tag);
                 propertyGridShortCut.SelectedObject = shortcut1;
             }
             else
@@ -649,9 +637,9 @@ namespace ShortCutsDesigner
             }
         }
 
-        private void propertyGridShortCut_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        private void propertyGridShortCut_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
         {
-            shortcut1.Write(e.ChangedItem.Label);
+            shortcut1.Write(e.ChangedItem?.Label ?? string.Empty);
             propertyGridShortCut.Refresh();
             UpdatedSelectedNodeText();
         }

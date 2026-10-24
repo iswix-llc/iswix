@@ -26,7 +26,7 @@ namespace PropertiesDesigner.Views
         {
             get
             {
-                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("PropertiesDesigner.Properties.ico"));
+                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("PropertiesDesigner.Properties.ico")!);
             }
         }
 
@@ -34,7 +34,7 @@ namespace PropertiesDesigner.Views
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("PropertiesDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("PropertiesDesigner.License.txt")!).ReadToEnd();
             }
         }
 

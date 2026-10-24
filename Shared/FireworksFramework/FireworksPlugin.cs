@@ -25,7 +25,7 @@ namespace FireworksFramework
         {
             get
             {
-                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FireworksFramework.Fireworks.ico"));
+                return System.Drawing.Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FireworksFramework.Fireworks.ico")!);
             }
         }
 
@@ -38,7 +38,7 @@ namespace FireworksFramework
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FireworksFramework.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FireworksFramework.License.txt")!).ReadToEnd();
             }
         }
 
