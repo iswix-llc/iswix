@@ -13,8 +13,8 @@ using System.Xml.XPath;
 using System.ComponentModel;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
 using static FireworksFramework.Types.Enums;
+using Wxs = IsWiX.WiXModel;
 
 namespace FeaturesDesigner
 {
@@ -23,6 +23,7 @@ namespace FeaturesDesigner
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
 
         bool _refresh = false;
+        bool _loadingMergeRefs = false;
         public Features()
         {
             InitializeComponent();
@@ -32,23 +33,7 @@ namespace FeaturesDesigner
 
         public bool IsValidContext()
         {
-            if (_documentManager.Document.GetWiXVersion() == WiXVersion.v4)
-            {
-                var docType = _documentManager.Document.GetDocumentType();
-
-                if (docType == IsWiXDocumentType.Product || docType == IsWiXDocumentType.Fragment)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            return FeatureDocument.IsValidDocument(_documentManager.Document);
         }
 
 
@@ -94,7 +79,7 @@ namespace FeaturesDesigner
         private void LoadData2()
         {
             _refresh = false;
-            IsWiXFeatures features = new IsWiXFeatures();
+            var container = FeatureDocument.Container(_documentManager.Document);
 
             treeViewFeatures.Nodes.Clear();
             ClearPropertyGrid();
@@ -102,11 +87,11 @@ namespace FeaturesDesigner
             toolStripMenuItemRename.Enabled = false;
             toolStripMenuItemNewSubFeature.Enabled = false;
 
-            foreach (var feature in features)
+            foreach (var feature in FeatureDocument.Features(container))
             {
                 var treeNode = treeViewFeatures.Nodes.Add(feature.Id, string.Format("{0}", feature.Id));
                 treeNode.Tag = feature;
-                LoadDataRecurse(treeNode, feature.Id);
+                LoadDataRecurse(treeNode, feature);
 
             }
             UpdateMergeModules();
@@ -120,16 +105,50 @@ namespace FeaturesDesigner
             }
         }
 
-        private void LoadDataRecurse(TreeNode parentNode, string parentId)
+        private void LoadDataRecurse(TreeNode parentNode, Wxs.Feature parent)
         {
-            IsWiXFeatures features = new IsWiXFeatures(parentId);
-            foreach (var feature in features)
+            foreach (var feature in FeatureDocument.Features(parent))
             {
                 var treeNode = parentNode.Nodes.Add(feature.Id, string.Format("{0}", feature.Id));
                 treeNode.Tag = feature;
-                LoadDataRecurse(treeNode, feature.Id);
+                LoadDataRecurse(treeNode, feature);
 
             }
+        }
+
+        // Reloads the tree (top-level features are in Id order) and selects a feature, optionally renaming it.
+        private void ReloadAndSelect(Wxs.Feature feature, bool beginEdit)
+        {
+            LoadData2();
+            var node = FindNode(treeViewFeatures.Nodes, feature);
+            if (node != null)
+            {
+                _refresh = true;
+                treeViewFeatures.SelectedNode = node;
+                if (beginEdit)
+                {
+                    node.BeginEdit();
+                }
+            }
+        }
+
+        private static TreeNode FindNode(TreeNodeCollection nodes, Wxs.Feature feature)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is Wxs.Feature tagged && tagged.Xml == feature.Xml)
+                {
+                    return node;
+                }
+
+                var found = FindNode(node.Nodes, feature);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
 
         private void UpdateMergeModules()
@@ -145,10 +164,10 @@ namespace FeaturesDesigner
             }
 
             treeViewMerges.Nodes.Clear();
-            IsWiXMerges merges = new IsWiXMerges();
+            var merges = FeatureDocument.Merges(_documentManager.Document);
             foreach (var merge in merges)
             {
-                TreeNode mergeNode = treeViewMerges.Nodes.Add(merge.Id, merge.ToString(), 1);
+                TreeNode mergeNode = treeViewMerges.Nodes.Add(merge.Id, FeatureDocument.Describe(merge), 1);
                 mergeNode.Tag = merge;
             }
             if(merges.Count>0)
@@ -166,20 +185,23 @@ namespace FeaturesDesigner
         {
             if (_refresh)
             {
-                IsWiXFeature iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
+                Wxs.Feature iswixFeature = (Wxs.Feature)treeViewFeatures.SelectedNode.Tag;
                 feature.Read(iswixFeature);
 
                 UpdatePropertyGrid();
                 UpdateMergeModules();
 
-                foreach (var mergeRef in iswixFeature.MergeRefs.Values)
+                // Checking nodes to show the feature's references must not write them back.
+                _loadingMergeRefs = true;
+                foreach (var mergeRef in iswixFeature.MergeRefs)
                 {
-                    var nodes = treeViewMerges.Nodes.Find(mergeRef.Id, true);
+                    var nodes = treeViewMerges.Nodes.Find(mergeRef.Id ?? string.Empty, true);
                     foreach (var node in nodes)
                     {
                         node.Checked = true;
                     }
                 }
+                _loadingMergeRefs = false;
                 toolStripMenuItemNewSubFeature.Enabled = true;
                 toolStripMenuItemRename.Enabled = true;
                 toolStripMenuItemDelete.Enabled = true;
@@ -195,58 +217,41 @@ namespace FeaturesDesigner
         }
         private void treeViewMerges_AfterCheck(object sender, TreeViewEventArgs e)
         {
-            if (treeViewFeatures.SelectedNode != null)
+            if (treeViewFeatures.SelectedNode != null && !_loadingMergeRefs)
             {
-                IsWiXFeature feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
-                IsWiXMerge merge = e.Node.Tag as IsWiXMerge;
-                IsWiXMergeRefs mergeRefs = feature.MergeRefs;
+                Wxs.Feature feature = (Wxs.Feature)treeViewFeatures.SelectedNode.Tag;
+                Wxs.Merge merge = (Wxs.Merge)e.Node.Tag;
                 propertyGridFeatureProperties.Refresh();
-
-                if (e.Node.Checked)
-                {
-
-
-                    if (!mergeRefs.Keys.Contains(merge.Id))
-                    {
-                        IsWiXMergeRef mergeRef = new IsWiXMergeRef();
-                        mergeRef.Id = merge.Id;
-                        mergeRefs.Add(mergeRef.Id, mergeRef);
-                        mergeRefs.Save();
-                    }
-                }
-                else
-                {
-                    if (feature.MergeRefs.Keys.Contains(merge.Id))
-                    {
-                        mergeRefs.Remove(merge.Id);
-                        mergeRefs.Save();
-                    }
-                }
+                FeatureDocument.SetReference(feature, merge.Id, e.Node.Checked);
             }
         }
 
         private void treeViewFeatures_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            try
+            // A null label means the edit was cancelled.
+            if (e.Label == null)
             {
-                if (string.IsNullOrEmpty(e.Label))
-                {
-                    e.CancelEdit = true;
-                }
-                else
-                {
-                    IsWiXFeature iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
-                    iswixFeature.Id = e.Label;
-                    feature.Id = iswixFeature.Id;
-                }
+                return;
+            }
 
-                propertyGridFeatureProperties.Refresh();
-            }
-            catch (Exception ex)
+            Wxs.Feature iswixFeature = (Wxs.Feature)e.Node.Tag;
+            if (e.Label == iswixFeature.Id)
             {
-                MessageBox.Show(ex.Message);
-                e.CancelEdit = true;
+                return;
             }
+
+            string error = FeatureDocument.ValidateId(_documentManager.Document, iswixFeature, e.Label);
+            if (error != null)
+            {
+                MessageBox.Show(error);
+                e.CancelEdit = true;
+                return;
+            }
+
+            FeatureDocument.Rename(iswixFeature, e.Label);
+            // The tree is rebuilt for the feature's new place, after this edit ends.
+            e.CancelEdit = true;
+            BeginInvoke(new Action(() => ReloadAndSelect(iswixFeature, false)));
         }
 
         private void toolStripMenuItemRename_Click(object sender, EventArgs e)
@@ -256,47 +261,20 @@ namespace FeaturesDesigner
 
         private void toolStripMenuItemNewFeature_Click(object sender, EventArgs e)
         {
-            if (treeViewFeatures.SelectedNode == null)//|| treeViewFeatures.SelectedNode.Parent == null)
-            {
-                IsWiXFeatures features = new IsWiXFeatures();
-                string featureName = IsWiXFeatures.SuggestNextFeatureName();
-                IsWiXFeature feature = features.Create(featureName);
-                TreeNode node = treeViewFeatures.Nodes.Add(feature.Id);
-                node.Tag = feature;
-                _refresh = true;
-                treeViewFeatures.SelectedNode = node;
-            }
-            else
-            {
-                IsWiXFeatures features = new IsWiXFeatures();
-                string featureName = IsWiXFeatures.SuggestNextFeatureName();
-                var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
-                IsWiXFeature feature = features.Create(iswixFeature.Id, featureName);
-
-                TreeNode node = treeViewFeatures.Nodes.Insert(treeViewFeatures.SelectedNode.Index + 1, feature.Id);
-                node.Tag = feature;
-                _refresh = true;
-                treeViewFeatures.SelectedNode = node;
-
-            }
-            treeViewFeatures.SelectedNode.BeginEdit();
-            
+            // A new top-level feature; it lands in Id order.
+            string featureName = FeatureDocument.SuggestNextFeatureName(_documentManager.Document);
+            var feature = FeatureDocument.Create(FeatureDocument.Container(_documentManager.Document), featureName);
+            ReloadAndSelect(feature, true);
         }
 
    
 
         private void toolStripMenuItemNewSubFeature_Click(object sender, EventArgs e)
         {
-            IsWiXFeatures features = new IsWiXFeatures();
-            string featureName = IsWiXFeatures.SuggestNextFeatureName();
-            var iswixFeature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
-            IsWiXFeature feature = features.CreateSubFeature(iswixFeature.Id, featureName);
-
-            TreeNode node = treeViewFeatures.SelectedNode.Nodes.Add(featureName);
-            node.Tag = feature;
-            _refresh = true;
-            treeViewFeatures.SelectedNode = node;
-            treeViewFeatures.SelectedNode.BeginEdit();
+            string featureName = FeatureDocument.SuggestNextFeatureName(_documentManager.Document);
+            var parent = (Wxs.Feature)treeViewFeatures.SelectedNode.Tag;
+            var feature = FeatureDocument.Create(parent, featureName);
+            ReloadAndSelect(feature, true);
             
         }
 
@@ -306,8 +284,8 @@ namespace FeaturesDesigner
             toolStripMenuItemRename.Enabled = false;
             toolStripMenuItemNewSubFeature.Enabled = false;
 
-            IsWiXFeature feature = treeViewFeatures.SelectedNode.Tag as IsWiXFeature;
-            feature.Delete();
+            Wxs.Feature feature = (Wxs.Feature)treeViewFeatures.SelectedNode.Tag;
+            FeatureDocument.Delete(feature);
             treeViewFeatures.SelectedNode.Remove();
 
             if (treeViewFeatures.Nodes.Count > 0)
