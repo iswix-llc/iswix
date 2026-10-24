@@ -1,7 +1,7 @@
 ﻿using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using IsWiXAutomationInterface;
-using NewFilesAndFoldersDesigner.Enums;
+using FilesAndFoldersDesigner.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using static FireworksFramework.Types.Enums;
 
-namespace Designers.NewFilesAndFolders
+namespace Designers.FilesAndFolders
 {
 
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
@@ -502,7 +502,7 @@ namespace Designers.NewFilesAndFolders
         {
             get
             {
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("NewFilesAndFoldersDesigner.FilesAndFolders.ico"));
+                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.FilesAndFolders.ico"));
             }
         }
 
@@ -510,7 +510,7 @@ namespace Designers.NewFilesAndFolders
         {
             get
             {
-                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("NewFilesAndFoldersDesigner.License.txt")).ReadToEnd();
+                return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("FilesAndFoldersDesigner.License.txt")).ReadToEnd();
             }
         }
 

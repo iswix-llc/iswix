@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireworksFramework", "Share
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXAutomationInterface", "Shared\IsWiXAutomationInterface\IsWiXAutomationInterface.csproj", "{DD05D1CC-F0F9-6118-D192-94D523AD65D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewFilesAndFoldersDesigner", "Designers\NewFilesAndFoldersDesigner\NewFilesAndFoldersDesigner.csproj", "{33ADA147-C6E8-DB04-81D6-7A8467403CDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilesAndFoldersDesigner", "Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj", "{33ADA147-C6E8-DB04-81D6-7A8467403CDA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShortCutsDesigner", "Designers\ShortCutsDesigner\ShortCutsDesigner.csproj", "{B52265E4-FC60-E7CF-9517-0D91BCC0F60C}"
 EndProject

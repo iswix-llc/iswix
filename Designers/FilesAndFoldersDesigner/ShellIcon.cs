@@ -5,7 +5,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Designers.NewFilesAndFolders
+namespace Designers.FilesAndFolders
 {
     public static class ShellIcon
     {

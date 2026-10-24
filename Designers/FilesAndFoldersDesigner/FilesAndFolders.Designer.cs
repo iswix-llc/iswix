@@ -1,4 +1,4 @@
-﻿namespace Designers.NewFilesAndFolders
+﻿namespace Designers.FilesAndFolders
 {
     partial class FilesAndFolders
     {

@@ -90,7 +90,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="IsWiX\NewFilesAndFoldersDesigner.dll">
+    <Content Include="IsWiX\FilesAndFoldersDesigner.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

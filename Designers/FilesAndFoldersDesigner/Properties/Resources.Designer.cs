@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NewFilesAndFoldersDesigner.Properties {
+namespace FilesAndFoldersDesigner.Properties {
     using System;
     
     

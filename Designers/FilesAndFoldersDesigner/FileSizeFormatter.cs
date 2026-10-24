@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Designers.NewFilesAndFolders
+namespace Designers.FilesAndFolders
 {
     class FileSizeFormatter : IFormatProvider, ICustomFormatter
     {
