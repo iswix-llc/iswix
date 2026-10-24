@@ -1,7 +1,6 @@
 ﻿using Designers.GeneralInformation.Models;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
-using IsWiXAutomationInterface;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -54,16 +53,7 @@ namespace GeneralInformationDesigner.Views
 
         public bool IsValidContext()
         {
-            IsWiXDocumentType docType = _documentManager.Document.GetDocumentType();
-
-            if (docType == IsWiXDocumentType.Product)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ViewModels.GeneralInformationViewModel.IsValidDocument(_documentManager.Document);
         }
 
         public void LoadData()
@@ -71,4 +61,4 @@ namespace GeneralInformationDesigner.Views
             viewModel.Load();
         }
     }
-}
+}

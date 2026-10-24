@@ -1,26 +1,30 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Xml.Linq;
+using System.Linq;
 using System.Windows;
+using System.Xml.Linq;
 using FireworksFramework.Managers;
 using FireworksFramework.Types;
-using IsWiXAutomationInterface;
+using IsWiX.WiXModel.Core;
 using Designers.GeneralInformation.Models;
+using Wxs = IsWiX.WiXModel;
 
 namespace GeneralInformationDesigner.ViewModels
 {
 
     class GeneralInformationViewModel : ObservableObject
     {
+        // The template's placeholder: replaced with a new GUID when the designer opens the package, as before.
+        const string EmptyUpgradeCode = "00000000-0000-0000-0000-000000000000";
+
         DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
-        XNamespace ns;
 
         Package4Model _package4;
         SummaryInformation4Model summaryInformation4Model;
-        IsWiXPackage4 _iswixPackage4;
-        IsWiXSummaryInformation4 _iswixSummaryInformation4;
+        Wxs.Package _package;
+        // Created when a field is first set and removed again when its last attribute is cleared.
+        Wxs.SummaryInformation? _summaryInformation;
 
-        Visibility _productProperty4GridVisible = Visibility.Hidden;
         Visibility _summaryInformation4PropertyGridVisible = Visibility.Hidden;
         Visibility _package4PropertyGridVisible = Visibility.Hidden;
         public Package4Model Package4 { get { return _package4; } set { _package4 = value; RaisePropertyChangedEvent("Package4"); } }
@@ -28,15 +32,21 @@ namespace GeneralInformationDesigner.ViewModels
         public Visibility SummaryInformation4PropertyGridVisible { get { return _summaryInformation4PropertyGridVisible; } set { _summaryInformation4PropertyGridVisible = value; RaisePropertyChangedEvent("SummaryInformation4PropertyGridVisible"); } }
         public Visibility Package4PropertyGridVisible { get { return _package4PropertyGridVisible; } set { _package4PropertyGridVisible = value; RaisePropertyChangedEvent("Package4PropertyGridVisible"); } }
 
+        /// <summary>Gets whether the document is one this designer edits: a WiX package.</summary>
+        public static bool IsValidDocument(XDocument? document)
+        {
+            var root = document?.Root;
+            return root?.Name == Wxs.Wix.ElementName && root.Elements().FirstOrDefault()?.Name == Wxs.Package.ElementName;
+        }
+
         public void Load()
         {
-            ns = _documentManager.Document.GetWiXNameSpace();
+            var document = Wxs.WixDocument.FromXml(_documentManager.Document);
+            _package = document.Root.Packages.First();
+            _summaryInformation = _package.SummaryInformationElements.FirstOrDefault();
 
-            if (_documentManager.Document.GetDocumentType() == IsWiXDocumentType.Product)
-            {
-                Package4PropertyGridVisible = Visibility.Visible;
-                Package4  = LoadPackage4();
-            }
+            Package4 = LoadPackage4();
+            Package4PropertyGridVisible = Visibility.Visible;
             SummaryInformation4 = LoadSummaryInformation4();
             SummaryInformation4PropertyGridVisible = Visibility.Visible;
         }
@@ -44,71 +54,75 @@ namespace GeneralInformationDesigner.ViewModels
         SummaryInformation4Model LoadSummaryInformation4()
         {
             SummaryInformation4Model summaryInformation4Model = new SummaryInformation4Model();
-            _iswixSummaryInformation4 = new IsWiXSummaryInformation4();
-            summaryInformation4Model.Codepage = _iswixSummaryInformation4.Codepage;
-            summaryInformation4Model.Description = _iswixSummaryInformation4.Description;
-            summaryInformation4Model.Keywords = _iswixSummaryInformation4.Keywords;
-            summaryInformation4Model.Manufacturer = _iswixSummaryInformation4.Manufacturer;
+            summaryInformation4Model.Codepage = _summaryInformation?.Codepage;
+            summaryInformation4Model.Description = _summaryInformation?.Description;
+            summaryInformation4Model.Keywords = _summaryInformation?.Keywords;
+            summaryInformation4Model.Manufacturer = _summaryInformation?.Manufacturer;
             summaryInformation4Model.PropertyChanged += SummaryInformation_PropertyChanged;
             return summaryInformation4Model;
         }
 
         Package4Model LoadPackage4()
         {
+            if (_package.UpgradeCode == EmptyUpgradeCode)
+            {
+                _package.UpgradeCode = Guid.NewGuid().ToString();
+            }
+
+            // Values are shown as written, so expressions such as $(var.Version) can be seen and edited.
             Package4Model package = new Package4Model();
-            _iswixPackage4 = new IsWiXPackage4();
-            package.Codepage = _iswixPackage4.Codepage;
-            package.ProductCode = _iswixPackage4.ProductCode;
-            package.UpgradeCode = _iswixPackage4.UpgradeCode;
-            package.Compressed = _iswixPackage4.Compressed;
-            package.Version = _iswixPackage4.Version;
-            package.InstallerVersion = _iswixPackage4.InstallerVersion;
-            package.Language = _iswixPackage4.Language;
-            package.Manufacturer = _iswixPackage4.Manufacturer;
-            package.Name = _iswixPackage4.Name;
-            package.ProductCode = _iswixPackage4.ProductCode;
-            package.Scope = _iswixPackage4.Scope;
-            package.ShortNames = _iswixPackage4.ShortNames;
+            package.Codepage = _package.Codepage;
+            package.ProductCode = _package.ProductCode;
+            package.UpgradeCode = _package.UpgradeCode;
+            package.Compressed = Text(_package.Compressed, WixConverters.YesNo);
+            package.Version = _package.Version;
+            package.InstallerVersion = Text(_package.InstallerVersion, WixConverters.Int32);
+            package.Language = Text(_package.Language, WixConverters.Int32);
+            package.Manufacturer = _package.Manufacturer;
+            package.Name = _package.Name;
+            package.Scope = Text(_package.Scope, Wxs.WixEnumConverters.PackageScopeType);
+            package.ShortNames = Text(_package.ShortNames, WixConverters.YesNo);
             package.PropertyChanged += Package4_PropertyChanged;
             return package;
         }
 
+        // Only the attribute that changed is written, so the others keep their exact text.
         private void Package4_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case "Scope":
-                    _iswixPackage4.Scope = Package4.Scope;
+                    SetValue(Package4.Scope, Wxs.WixEnumConverters.PackageScopeType, "Scope", value => _package.Scope = value);
                     break;
                 case "Manufacturer":
-                    _iswixPackage4.Manufacturer = Package4.Manufacturer;
+                    _package.Manufacturer = NullIfEmpty(Package4.Manufacturer);
                     break;
                 case "Version":
-                    _iswixPackage4.Version = Package4.Version;
+                    _package.Version = NullIfEmpty(Package4.Version);
                     break;
                 case "InstallerVersion":
-                    _iswixPackage4.InstallerVersion = Package4.InstallerVersion;
+                    SetValue(Package4.InstallerVersion, WixConverters.Int32, "InstallerVersion", value => _package.InstallerVersion = value);
                     break;
                 case "Language":
-                    _iswixPackage4.Language = Package4.Language;
+                    SetValue(Package4.Language, WixConverters.Int32, "Language", value => _package.Language = value);
                     break;
                 case "Codepage":
-                    _iswixPackage4.Codepage = Package4.Codepage;
+                    _package.Codepage = NullIfEmpty(Package4.Codepage);
                     break;
                 case "Compressed":
-                    _iswixPackage4.Compressed = Package4.Compressed;
+                    SetValue(Package4.Compressed, WixConverters.YesNo, "Compressed", value => _package.Compressed = value);
                     break;
                 case "ShortNames":
-                    _iswixPackage4.ShortNames = Package4.ShortNames;
+                    SetValue(Package4.ShortNames, WixConverters.YesNo, "ShortNames", value => _package.ShortNames = value);
                     break;
                 case "Name":
-                    _iswixPackage4.Name = Package4.Name;
+                    _package.Name = NullIfEmpty(Package4.Name);
                     break;
                 case "ProductCode":
-                    _iswixPackage4.ProductCode = Package4.ProductCode;
+                    _package.ProductCode = NullIfEmpty(Package4.ProductCode);
                     break;
                 case "UpgradeCode":
-                    _iswixPackage4.UpgradeCode = Package4.UpgradeCode;
+                    _package.UpgradeCode = NullIfEmpty(Package4.UpgradeCode);
                     break;
             }
         }
@@ -118,18 +132,59 @@ namespace GeneralInformationDesigner.ViewModels
             switch (e.PropertyName)
             {
                 case "Manufacturer":
-                    _iswixSummaryInformation4.Manufacturer = SummaryInformation4.Manufacturer;
+                    SetSummaryInformation(s => s.Manufacturer = NullIfEmpty(SummaryInformation4.Manufacturer));
                     break;
                 case "Description":
-                    _iswixSummaryInformation4.Description = SummaryInformation4.Description;
+                    SetSummaryInformation(s => s.Description = NullIfEmpty(SummaryInformation4.Description));
                     break;
                 case "Codepage":
-                    _iswixSummaryInformation4.Codepage = SummaryInformation4.Codepage;
+                    SetSummaryInformation(s => s.Codepage = NullIfEmpty(SummaryInformation4.Codepage));
                     break;
                 case "Keywords":
-                    _iswixSummaryInformation4.Keywords = SummaryInformation4.Keywords;
+                    SetSummaryInformation(s => s.Keywords = NullIfEmpty(SummaryInformation4.Keywords));
                     break;
             }
         }
+
+        void SetSummaryInformation(Action<Wxs.SummaryInformation> set)
+        {
+            if (_summaryInformation == null)
+            {
+                // Added through the model, so it lands at its canonical position (first in the package).
+                _summaryInformation = _package.Add(new Wxs.SummaryInformation());
+            }
+
+            set(_summaryInformation);
+
+            if (!_summaryInformation.Xml.HasAttributes && _summaryInformation.Xml.IsEmpty)
+            {
+                _summaryInformation.RemoveFromParent();
+                _summaryInformation = null;
+            }
+        }
+
+        // Empty clears the attribute; anything else must be a valid value or a preprocessor/localization expression.
+        void SetValue<T>(string text, WixValueConverter<T> converter, string name, Action<WixValue<T>?> set)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                set(null);
+                return;
+            }
+
+            var value = converter.Parse(text);
+            if (value.Kind == WixValueKind.Invalid)
+            {
+                MessageBox.Show($"'{text}' is not a valid {name}.");
+                Load();
+                return;
+            }
+
+            set(value);
+        }
+
+        static string Text<T>(WixValue<T>? value, WixValueConverter<T> converter) => value.HasValue ? converter.ToText(value.Value) : null;
+
+        static string NullIfEmpty(string value) => string.IsNullOrEmpty(value) ? null : value;
     }
 }

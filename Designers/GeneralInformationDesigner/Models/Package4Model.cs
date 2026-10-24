@@ -1,11 +1,11 @@
 ﻿using FireworksFramework.Types;
 using GeneralInformationDesigner.Views;
-using IsWiXAutomationInterface;
 using System;
 using System.ComponentModel;
 
 namespace Designers.GeneralInformation.Models
 {
+    // Values are the attribute text, so preprocessor and localization expressions ($(var.X), !(loc.X)) can be shown and kept.
     public class Package4Model : ObservableObject
     {
         string _codepage;
@@ -13,21 +13,21 @@ namespace Designers.GeneralInformation.Models
         [Description(@"The code page integer value or web name for the resulting MSI.")]
         public string Codepage { get { return _codepage; } set { _codepage = value; RaisePropertyChangedEvent("Codepage"); } }
 
-        YesNo? _compressed;
+        string _compressed;
         [CategoryAttribute("Package")]
         [Description("Set to 'yes' to have compressed files in the source. This attribute cannot be set for merge modules. ")]
-        [Editor(typeof(CustomEditor<YesNo>), typeof(CustomEditor<YesNo>))]
-        public YesNo? Compressed { get { return _compressed; } set { _compressed = value; RaisePropertyChangedEvent("Compressed"); } }
+        [Editor(typeof(YesNoEditor), typeof(YesNoEditor))]
+        public string Compressed { get { return _compressed; } set { _compressed = value; RaisePropertyChangedEvent("Compressed"); } }
 
-        Int32? _installerVersion;
+        string _installerVersion;
         [CategoryAttribute("Package")]
         [Description("The minimum version of the Windows Installer required to install this package. Take the major version of the required Windows Installer and multiply by a 100 then add the minor version of the Windows Installer. For example, \"200\" would represent Windows Installer 2.0 and \"405\" would represent Windows Installer 4.5. For 64-bit Windows Installer packages, this property must be set to 200 or greater. ")]
-        public Int32? InstallerVersion { get { return _installerVersion; } set { _installerVersion = value; RaisePropertyChangedEvent("InstallerVersion"); } }
+        public string InstallerVersion { get { return _installerVersion; } set { _installerVersion = value; RaisePropertyChangedEvent("InstallerVersion"); } }
 
-        Int32 _language;
+        string _language;
         [CategoryAttribute("Package")]
-        [Description("The decimal language ID (LCID) of the merge module.")]
-        public Int32 Language { get { return _language; } set { _language = value; RaisePropertyChangedEvent("Language"); } }
+        [Description("The decimal language ID (LCID) for the product.")]
+        public string Language { get { return _language; } set { _language = value; RaisePropertyChangedEvent("Language"); } }
 
         string _manufacturer;
         [CategoryAttribute("Package")]
@@ -44,19 +44,20 @@ namespace Designers.GeneralInformation.Models
         [Description(@"The product code GUID for the product.")]
         public string ProductCode { get { return _productCode; } set { _productCode = value; RaisePropertyChangedEvent("ProductCode"); } }
 
-        InstallScope? _scope;
+        string _scope;
         [CategoryAttribute("Package")]
-        [Description(@"Use this attribute to specify the installation scope of this package: per-machine or per-user. This attribute's value must be one of the following:
-perMachine Set this value to declare that the package is a per-machine installation and requires elevated privileges to install. Sets the ALLUSERS property to 1. 
-perUser Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to 'limited.'")]
-        [Editor(typeof(CustomEditor<InstallScope>), typeof(CustomEditor<InstallScope>))]
-        public InstallScope? Scope { get { return _scope; } set { _scope = value; RaisePropertyChangedEvent("Scope"); } }
+        [Description(@"Use this attribute to specify the installation scope of this package. This attribute's value must be one of the following:
+perMachine Set this value to declare that the package is a per-machine installation and requires elevated privileges to install. Sets the ALLUSERS property to 1.
+perUser Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to 'limited.'
+perMachineOrUser, perUserOrMachine Set one of these values to let the user choose, defaulting to per-machine or per-user.")]
+        [Editor(typeof(ScopeEditor), typeof(ScopeEditor))]
+        public string Scope { get { return _scope; } set { _scope = value; RaisePropertyChangedEvent("Scope"); } }
 
-        YesNo? _shortNames;
+        string _shortNames;
         [CategoryAttribute("Package")]
         [Description(@"Set to 'yes' to have short filenames in the source.")]
-        [Editor(typeof(CustomEditor<YesNo>), typeof(CustomEditor<YesNo>))]
-        public YesNo? ShortNames { get { return _shortNames; } set { _shortNames = value; RaisePropertyChangedEvent("ShortNames"); } }
+        [Editor(typeof(YesNoEditor), typeof(YesNoEditor))]
+        public string ShortNames { get { return _shortNames; } set { _shortNames = value; RaisePropertyChangedEvent("ShortNames"); } }
 
         string _upgradeCode;
         [CategoryAttribute("Product")]

@@ -13,10 +13,4 @@
         yes,
         no
     } ;
-
-    public enum InstallScope
-    {
-        perMachine,
-        perUser
-    }
 }
