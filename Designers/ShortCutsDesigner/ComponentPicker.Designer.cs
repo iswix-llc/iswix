@@ -135,7 +135,6 @@
             Controls.Add(treeView1);
             Controls.Add(panel2);
             Controls.Add(panel1);
-            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             Name = "ComponentPicker";
             Text = "ComponentPicker - IsWiX";

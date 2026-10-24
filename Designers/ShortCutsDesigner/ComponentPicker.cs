@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FireworksFramework.Services;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -42,6 +43,8 @@ namespace ShortCutsDesigner
         {
             _candidates = candidates;
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            Icon = DesignerImages.ComponentPickerIcon();
             PopulateListBox();
             if (treeView1.Nodes.Count == 0 && string.IsNullOrEmpty(FileFilterPattern))
             {

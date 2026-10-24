@@ -65,6 +65,19 @@ namespace Designers.FilesAndFolders
         public FilesAndFolders()
         {
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            createNewFolderToolStripMenuItem.Image = DesignerImages.MenuImage("new_folder");
+            renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
+            deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
+            expandAllToolStripMenuItem1.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem.Image = DesignerImages.MenuImage("collapse_all");
+            createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");
+            expandAllToolStripMenuItem.Image = DesignerImages.MenuImage("expand_all");
+            refreshSourceFilesToolStripMenuItem.Image = DesignerImages.MenuImage("refresh");
+            refreshToolStripMenuItem.Image = DesignerImages.MenuImage("refresh");
+            removeFileFromProjectToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
+            expandAllToolStripMenuItem2.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem1.Image = DesignerImages.MenuImage("collapse_all");
             DesignerImages.AddLibrary(ilImageLibrary);
 
             // The column sorters always exist (the column click handlers use them) but sort only in release builds.
@@ -174,7 +187,7 @@ namespace Designers.FilesAndFolders
             {
                 string subPathAgg = string.Empty;
                 TreeNode? lastNode = null;
-                foreach (string subPath in dir.Split(pathSeparator))
+                foreach (string subPath in dir.Split(pathSeparator[0]))
                 {
                     subPathAgg += subPath + pathSeparator;
                     TreeNode[] nodes = subTreeNode.Nodes.Find(subPathAgg, true);

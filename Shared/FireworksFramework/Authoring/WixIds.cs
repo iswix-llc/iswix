@@ -11,7 +11,10 @@ namespace FireworksFramework.Authoring
         /// </summary>
         public static bool IsValidIdentifier(string? id) =>
             !string.IsNullOrEmpty(id) &&
-            (char.IsAsciiLetter(id[0]) || id[0] == '_') &&
-            id.All(c => char.IsAsciiLetterOrDigit(c) || c == '_' || c == '.');
+            (IsAsciiLetter(id[0]) || id[0] == '_') &&
+            id.All(c => IsAsciiLetter(c) || (c >= '0' && c <= '9') || c == '_' || c == '.');
+
+        // char.IsAsciiLetter is .NET 7+; the designers also build for .NET Framework.
+        private static bool IsAsciiLetter(char c) => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
     }
 }

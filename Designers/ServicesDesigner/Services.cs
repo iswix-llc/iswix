@@ -43,6 +43,10 @@ namespace ServicesDesigner
         public Services()
         {
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");
+            renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
+            deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
         }
 

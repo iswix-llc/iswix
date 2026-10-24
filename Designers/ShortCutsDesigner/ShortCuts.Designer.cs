@@ -125,7 +125,6 @@
             // 
             // expandAllToolStripMenuItem2
             // 
-            expandAllToolStripMenuItem2.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem2.Image");
             expandAllToolStripMenuItem2.Name = "expandAllToolStripMenuItem2";
             expandAllToolStripMenuItem2.Size = new System.Drawing.Size(144, 30);
             expandAllToolStripMenuItem2.Text = "Expand All";
@@ -133,7 +132,6 @@
             // 
             // collapseAllToolStripMenuItem1
             // 
-            collapseAllToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("collapseAllToolStripMenuItem1.Image");
             collapseAllToolStripMenuItem1.Name = "collapseAllToolStripMenuItem1";
             collapseAllToolStripMenuItem1.Size = new System.Drawing.Size(144, 30);
             collapseAllToolStripMenuItem1.Text = "Collapse All";
@@ -153,7 +151,6 @@
             // 
             // createNewFolderToolStripMenuItem
             // 
-            createNewFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("createNewFolderToolStripMenuItem.Image");
             createNewFolderToolStripMenuItem.Name = "createNewFolderToolStripMenuItem";
             createNewFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
@@ -162,7 +159,6 @@
             // 
             // renameFolderToolStripMenuItem
             // 
-            renameFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("renameFolderToolStripMenuItem.Image");
             renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
             renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
             renameFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
@@ -171,7 +167,6 @@
             // 
             // deleteToolStripMenuItem
             // 
-            deleteToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("deleteToolStripMenuItem.Image");
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             deleteToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
@@ -180,7 +175,6 @@
             // 
             // toolStripMenuItemCreateSC
             // 
-            toolStripMenuItemCreateSC.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItemCreateSC.Image");
             toolStripMenuItemCreateSC.Name = "toolStripMenuItemCreateSC";
             toolStripMenuItemCreateSC.Size = new System.Drawing.Size(220, 30);
             toolStripMenuItemCreateSC.Text = "Create ShortCut";
@@ -193,7 +187,6 @@
             // 
             // expandAllToolStripMenuItem1
             // 
-            expandAllToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem1.Image");
             expandAllToolStripMenuItem1.Name = "expandAllToolStripMenuItem1";
             expandAllToolStripMenuItem1.Size = new System.Drawing.Size(220, 30);
             expandAllToolStripMenuItem1.Text = "Expand All";
@@ -201,7 +194,6 @@
             // 
             // collapseAllToolStripMenuItem
             // 
-            collapseAllToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("collapseAllToolStripMenuItem.Image");
             collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
             collapseAllToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
             collapseAllToolStripMenuItem.Text = "Collapse All";
@@ -216,7 +208,6 @@
             // 
             // createNewFolderToolStripMenuItem1
             // 
-            createNewFolderToolStripMenuItem1.Image = (System.Drawing.Image)resources.GetObject("createNewFolderToolStripMenuItem1.Image");
             createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(201, 30);
@@ -225,7 +216,6 @@
             // 
             // toolStripMenuItemCreateShortCut
             // 
-            toolStripMenuItemCreateShortCut.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItemCreateShortCut.Image");
             toolStripMenuItemCreateShortCut.Name = "toolStripMenuItemCreateShortCut";
             toolStripMenuItemCreateShortCut.Size = new System.Drawing.Size(201, 30);
             toolStripMenuItemCreateShortCut.Text = "Create ShortCut";
@@ -238,7 +228,6 @@
             // 
             // expandAllToolStripMenuItem
             // 
-            expandAllToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("expandAllToolStripMenuItem.Image");
             expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
             expandAllToolStripMenuItem.Size = new System.Drawing.Size(201, 30);
             expandAllToolStripMenuItem.Text = "Expand All";
@@ -253,7 +242,6 @@
             // 
             // toolStripMenuItem3
             // 
-            toolStripMenuItem3.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItem3.Image");
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             toolStripMenuItem3.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             toolStripMenuItem3.Size = new System.Drawing.Size(220, 30);

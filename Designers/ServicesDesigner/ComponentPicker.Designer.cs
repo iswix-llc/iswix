@@ -106,7 +106,6 @@
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ComponentPicker";
             this.Text = "ComponentPicker - IsWiX";
             this.panel1.ResumeLayout(false);

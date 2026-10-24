@@ -70,6 +70,19 @@ namespace ShortCutsDesigner
         public ShortCuts()
         {
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            expandAllToolStripMenuItem2.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem1.Image = DesignerImages.MenuImage("collapse_all");
+            createNewFolderToolStripMenuItem.Image = DesignerImages.MenuImage("new_folder");
+            renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
+            deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
+            toolStripMenuItemCreateSC.Image = DesignerImages.MenuImage("new_shortcut");
+            expandAllToolStripMenuItem1.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem.Image = DesignerImages.MenuImage("collapse_all");
+            createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");
+            toolStripMenuItemCreateShortCut.Image = DesignerImages.MenuImage("new_shortcut");
+            expandAllToolStripMenuItem.Image = DesignerImages.MenuImage("expand_all");
+            toolStripMenuItem3.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
             DesignerImages.Add(iImageLibrary, typeof(ShortCuts).Assembly, "ShortCutsDesigner.Images.", "shortcut");
         }
@@ -171,7 +184,7 @@ namespace ShortCutsDesigner
         private TreeNode GetOrCreateTreeNode(TreeNode directoryNode, string path)
         {
             TreeNode searchNode = directoryNode;
-            foreach (var part in path.Split("\\"))
+            foreach (var part in path.Split('\\'))
             {
                 bool found = false;
                 foreach (TreeNode subNode in searchNode.Nodes)
@@ -416,10 +429,10 @@ namespace ShortCutsDesigner
             if (count < 2)
             {
                 string old = _oldPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
-                string oldDirectory = old.Split("\\").First();
+                string oldDirectory = old.Split('\\').First();
                 string oldSubDirectory = old.Substring(oldDirectory.Length + 1, old.Length - oldDirectory.Length - 1);
                 string after = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
-                string afterDirectory = after.Split("\\").First();
+                string afterDirectory = after.Split('\\').First();
                 string afterSubDirectory = after.Substring(afterDirectory.Length + 1, after.Length - afterDirectory.Length - 1);
 
                 foreach (Wxs.Shortcut shortcut in _shortcuts)
@@ -543,7 +556,7 @@ namespace ShortCutsDesigner
                     string scSubdirectory = string.Empty;
 
                     string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
-                    List<string> parts = fullPath.Split("\\").ToList();
+                    List<string> parts = fullPath.Split('\\').ToList();
                     scDirectory = parts[0];
                     parts.RemoveAt(0);
                     scSubdirectory = string.Join("\\", parts.ToArray());

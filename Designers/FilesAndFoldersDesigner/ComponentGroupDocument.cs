@@ -293,7 +293,7 @@ namespace FilesAndFoldersDesigner
             string[] parts = directoryMeta.Subdirectory.Split('\\');
             parts[parts.Length - 1] = newName;
 
-            string newSubDirectory = string.Join('\\', parts);
+            string newSubDirectory = string.Join(@"\", parts);
 
             if (DirectoryExists(directory, newSubDirectory))
             {

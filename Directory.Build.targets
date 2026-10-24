@@ -1,0 +1,8 @@
+<Project>
+  <!-- .NET Framework's libraries have no nullable annotations, so nullability warnings there are noise;
+       the net8.0-windows build of the same code reports the real ones. (Set here, after the projects'
+       own <Nullable>enable</Nullable>.) -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+</Project>

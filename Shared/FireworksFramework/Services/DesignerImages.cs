@@ -26,6 +26,38 @@ namespace FireworksFramework.Services
             Add(imageList, typeof(DesignerImages).Assembly, "FireworksFramework.Images.Designers.", Library);
 
         /// <summary>
+        /// Gets one of the menu images the WinForms designers share (<c>Images\Menus</c>): <c>new_folder</c>,
+        /// <c>rename</c>, <c>delete</c>, <c>expand_all</c>, <c>collapse_all</c>, <c>refresh</c> or <c>new_shortcut</c>.
+        /// </summary>
+        /// <remarks>
+        /// Set in code rather than stored in the .resx: images dotnet build writes into a .resx for .NET Framework
+        /// need System.Resources.Extensions and a binding redirect, which Visual Studio can't be given.
+        /// </remarks>
+        public static Image MenuImage(string name)
+        {
+            using var stream = MenuResource(name);
+            using var image = Image.FromStream(stream);
+            return new Bitmap(image);
+        }
+
+        /// <summary>Gets the icon of the component picker dialogs.</summary>
+        public static Icon ComponentPickerIcon()
+        {
+            using var stream = MenuResource("component_picker");
+            return new Icon(stream);
+        }
+
+        // The menu images keep their original formats (GIF, PNG, BMP, ICO), so the name has no extension.
+        private static System.IO.Stream MenuResource(string name)
+        {
+            var assembly = typeof(DesignerImages).Assembly;
+            var prefix = "FireworksFramework.Images.Menus." + name + ".";
+            var resource = Array.Find(assembly.GetManifestResourceNames(), r => r.StartsWith(prefix, StringComparison.Ordinal))
+                ?? throw new InvalidOperationException($"No menu image '{name}' is embedded in {assembly.GetName().Name}.");
+            return assembly.GetManifestResourceStream(resource)!;
+        }
+
+        /// <summary>
         /// Adds <c>{resourcePrefix}{name}.png</c> from <paramref name="assembly"/> for each name, keyed by the name.
         /// The list is switched to 32-bit color so the PNGs keep their transparency.
         /// </summary>

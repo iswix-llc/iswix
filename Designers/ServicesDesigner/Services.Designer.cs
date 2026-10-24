@@ -126,7 +126,6 @@
             // 
             // createNewFolderToolStripMenuItem1
             // 
-            this.createNewFolderToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("createNewFolderToolStripMenuItem1.Image")));
             this.createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             this.createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             this.createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
@@ -149,7 +148,6 @@
             // 
             // renameFolderToolStripMenuItem
             // 
-            this.renameFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("renameFolderToolStripMenuItem.Image")));
             this.renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
             this.renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
             this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
@@ -159,7 +157,6 @@
             // 
             // deleteToolStripMenuItem
             // 
-            this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
