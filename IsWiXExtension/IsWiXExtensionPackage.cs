@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -26,6 +28,11 @@ namespace IsWiX
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(IsWiXPackage.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    // The in-Visual Studio designer (preview), offered under Open With for .wxs files. A low priority keeps the
+    // usual editor (HeatWave's or the XML editor) the default.
+    [ProvideEditorFactory(typeof(Designer.WixDesignerEditorFactory), 110, TrustLevel = __VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
+    [ProvideEditorExtension(typeof(Designer.WixDesignerEditorFactory), ".wxs", 0x10, NameResourceID = 110)]
+    [ProvideEditorLogicalView(typeof(Designer.WixDesignerEditorFactory), VSConstants.LOGVIEWID.Designer_string)]
     [ProvideUIContextRule(_uiContextSupportedFiles,
         name: "Supported Files",
         expression: "WiX",
@@ -54,6 +61,8 @@ namespace IsWiX
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await CommandLaunchIsWiX.InitializeAsync(this);
+            RegisterEditorFactory(new Designer.WixDesignerEditorFactory(this));
+            await CommandOpenDesigner.InitializeAsync(this);
         }
 
         #endregion

@@ -17,6 +17,18 @@
 					<ButtonText>Launch IsWiX</ButtonText>
 				</Strings>
 			</Button>
+			<!-- Opens the .wxs in the in-Visual Studio designer (preview). Takes an optional file path, so it can be
+			     run as "IsWiX.OpenDesigner path" from the Command Window. -->
+			<Button guid="guidIsWiXPackageCmdSet" id="CommandOpenDesignerId" priority="0x0101" type="Button">
+				<Parent guid="guidIsWiXPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<CommandFlag>AllowParams</CommandFlag>
+				<Strings>
+					<ButtonText>Open in IsWiX Designer (Preview)</ButtonText>
+					<CanonicalName>.IsWiX.OpenDesigner</CanonicalName>
+					<LocCanonicalName>.IsWiX.OpenDesigner</LocCanonicalName>
+				</Strings>
+			</Button>
 		</Buttons>
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="Resources\CommandLaunchIsWiX.png" usedList="bmpPic1"/>
@@ -31,6 +43,7 @@
 		<GuidSymbol name="guidIsWiXPackageCmdSet" value="{d7249160-ca26-47c3-b4c3-b18b4360fefb}">
 			<IDSymbol name="MyMenuGroup" value="0x1020" />
 			<IDSymbol name="CommandLaunchIsWiXId" value="0x0100" />
+			<IDSymbol name="CommandOpenDesignerId" value="0x0101" />
 		</GuidSymbol>
 		<GuidSymbol name="guidImages" value="{61E4BD4D-8F35-441C-8B1E-DF6B4184712F}" >
 			<IDSymbol name="bmpPic1" value="1" />

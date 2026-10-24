@@ -91,7 +91,7 @@ jobs:
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal
 
       # The sign CLI signs the VSIX package and, inside it, the files the file list names: IsWiX's own (the
-      # extension's IsWiX.dll and the app). It signs everything inside otherwise, so third-party DLLs (Xceed,
+      # extension's IsWiX.dll, the designers it hosts, and the app). It signs everything inside otherwise, so third-party DLLs (Xceed,
       # DiffPlex, GlobalParams) would carry IsWiX's signature in place of their publishers' (or none).
       # Same Artifact Signing account and profile as IsWiX.WiXModel, which is signed when it is published.
       - name: Install the sign CLI
@@ -103,6 +103,9 @@ jobs:
           $fileList = Join-Path $env:RUNNER_TEMP 'sign-files.txt'
           @(
             'IsWiX.dll'
+            # The .NET Framework builds the in-Visual Studio designer (preview) loads.
+            'FireworksFramework.dll'
+            '*Designer.dll'
             'IsWiX/IsWiX.exe'
             'IsWiX/IsWiX.dll'
             'IsWiX/FireworksFramework.dll'
