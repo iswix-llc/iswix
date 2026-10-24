@@ -3,3 +3,21 @@ Industrial Strength Windows Installer XML ( IsWiX ) makes authoring Windows Inst
 Starting with v6, IsWiX is only distributed via the Visual Studio Marketplace as a Visual Studio 2022/2026 Extension.  You can find it [here](https://marketplace.visualstudio.com/items?itemName=ISWIX-LLC.IsWiX).
 
 Please see our [tutorials](https://github.com/iswix-llc/iswix-tutorials) to learn how to get started.
+
+## Building and releasing
+
+The version lives in `Directory.Build.props`; the release workflow also writes it into the VSIX manifest
+(`IsWiXExtension/source.extension.vsixmanifest`) and `IsWiXExtension/Properties/AssemblyInfo.cs`.
+
+- **CI** (`.github/workflows/ci.yml`) runs on every push to `dev` and every pull request to `dev` or
+  `main`: it builds `IsWiX.sln`, publishes IsWiX into `IsWiXExtension\IsWiX` (the `FolderProfile` publish
+  profile), builds `IsWiXExtension.sln` and uploads the unsigned VSIX as a build artifact.
+- **Publish** (`.github/workflows/publish.yml`) is run by hand from the Actions tab on `main`: choose
+  `patch`, `minor` or `major`. It increments the version, builds, signs IsWiX's own assemblies and then
+  the VSIX with Azure Artifact Signing (the `sign` CLI), publishes the VSIX to the Visual Studio
+  Marketplace with `IsWiXExtension/publishManifest.json` and `overview.md`, commits `Release x.y.z` to
+  `main`, tags it `vx.y.z` and creates a GitHub release with the VSIX attached.
+
+The publish workflow needs the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` and
+`VS_MARKETPLACE_PAT` repository secrets, and an Azure federated credential for this repository's `main`
+branch with the Artifact Signing Certificate Profile Signer role on the `ISWIX-LLC` account.

@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <!-- IsWiX's version. The app and designers take it from here; the release workflow
+         (.github/workflows/publish.yml) bumps it and writes it into the VSIX manifest and the
+         extension's AssemblyInfo.cs too. -->
+    <Version>6.0.6</Version>
+  </PropertyGroup>
+</Project>
