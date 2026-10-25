@@ -27,7 +27,6 @@ namespace IsWiX
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(IsWiXPackage.PackageGuidString)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
     // The .wxs editor: Design and XML tabs over one document. Its priority makes it the default for .wxs; Open With
     // still offers the XML editor (and Set as Default switches back).
     [ProvideEditorFactory(typeof(Designer.WixDesignerEditorFactory), 110, TrustLevel = __VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
@@ -54,9 +53,7 @@ namespace IsWiX
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await CommandLaunchIsWiX.InitializeAsync(this);
             RegisterEditorFactory(new Designer.WixDesignerEditorFactory(this));
-            await CommandOpenDesigner.InitializeAsync(this);
         }
 
         #endregion

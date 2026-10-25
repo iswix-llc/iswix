@@ -31,12 +31,9 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v3
 
+      # The standalone app and the designers' .NET 8 builds. The extension builds what it hosts itself.
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
-
-      # The VSIX packs the app from IsWiXExtension\IsWiX, which FolderProfile publishes to.
-      - name: Publish IsWiX into the extension
-        run: dotnet publish IsWiX/IsWiX.csproj -c Release -p:PublishProfile=FolderProfile
 
       - name: Build the extension
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal

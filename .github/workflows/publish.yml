@@ -76,10 +76,6 @@ jobs:
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
 
-      # The VSIX packs the app from IsWiXExtension\IsWiX, which FolderProfile publishes to.
-      - name: Publish IsWiX into the extension
-        run: dotnet publish IsWiX/IsWiX.csproj -c Release -p:PublishProfile=FolderProfile
-
       - name: Sign in to Azure (federated identity)
         uses: azure/login@v3
         with:
@@ -91,8 +87,9 @@ jobs:
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal
 
       # The sign CLI signs the VSIX package and, inside it, the files the file list names: IsWiX's own (the
-      # extension's IsWiX.dll, the designers it hosts, and the app). It signs everything inside otherwise, so third-party DLLs (Xceed,
-      # DiffPlex, GlobalParams) would carry IsWiX's signature in place of their publishers' (or none).
+      # extension's IsWiX.dll and the framework and designers it hosts). It signs everything inside otherwise, so
+      # third-party DLLs (Xceed, DiffPlex, GlobalParams) would carry IsWiX's signature in place of their publishers'
+      # (or none).
       # Same Artifact Signing account and profile as IsWiX.WiXModel, which is signed when it is published.
       - name: Install the sign CLI
         run: dotnet tool install --global sign --version 0.9.1-beta.26475.3
@@ -103,13 +100,8 @@ jobs:
           $fileList = Join-Path $env:RUNNER_TEMP 'sign-files.txt'
           @(
             'IsWiX.dll'
-            # The .NET Framework builds the in-Visual Studio designer (preview) loads.
             'FireworksFramework.dll'
             '*Designer.dll'
-            'IsWiX/IsWiX.exe'
-            'IsWiX/IsWiX.dll'
-            'IsWiX/FireworksFramework.dll'
-            'IsWiX/*Designer.dll'
           ) | Set-Content -Path $fileList -Encoding utf8
           sign code artifact-signing IsWiXExtension/bin/Release/IsWiX.vsix `
             --file-list $fileList `

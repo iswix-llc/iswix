@@ -47,93 +47,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandLaunchIsWiX.cs" />
     <Compile Include="Designer\WixDesignerEditorFactory.cs" />
     <Compile Include="Designer\WixDesignerPane.cs" />
     <Compile Include="Designer\CodeWindowHost.cs" />
     <Compile Include="Designer\VsTheme.cs" />
-    <Compile Include="CommandOpenDesigner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsWiXExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GlobalParams.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\CustomTablesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\DiffPlex.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\FireworksFramework.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\GeneralInformationDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.WiXModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.WiXModel.Core.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\NamespacesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\FeaturesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\FilesAndFoldersDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\PropertiesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\ServicesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\ShortCutsDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.Themes.Aero.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.Themes.Metro.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.Themes.VS2010.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.Toolkit.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -164,14 +86,6 @@
     <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\WiXToolSetStandardBASolutionTemplate.vstemplate" />
     <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\IsWiX.ico" />
     <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="IsWiX\IsWiX.deps.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.runtimeconfig.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\Bundle.wxs" />
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\EULA.rtf" />
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\IsWiXBundle.wixproj" />
@@ -290,10 +204,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\CommandLaunchIsWiX.png" />
-    <VSCTCompile Include="IsWiXExtension.vsct">
-      <ResourceName>Menus.ctmenu</ResourceName>
-    </VSCTCompile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
