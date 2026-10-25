@@ -85,8 +85,50 @@ namespace CustomTablesDesigner
             }
         }
 
+        // The grid's view of a table: a column for each Column, typed and constrained as the table defines it (integers
+        // 2 or 4 bytes wide, strings no longer than their width, the primary key columns together unique), and a row for
+        // each Row. Throws when the rows don't fit the columns, which is how a schema change is checked before it's made.
+        public static DataTable BuildDataTable(Wxs.CustomTable table, out Dictionary<DataRow, Wxs.Row> rows)
+        {
+            var dataTable = new DataTable(table.Id ?? string.Empty);
+            var keys = new List<DataColumn>();
+            foreach (var column in table.Columns)
+            {
+                var dataColumn = new DataColumn(column.Id ?? string.Empty)
+                {
+                    // Nullable unless it says otherwise, though WiX's default is no: sources often leave it out.
+                    AllowDBNull = Literal(column.Nullable) ?? true,
+                };
+                int width = Literal(column.Width) ?? 0;
+                switch (Literal(column.Type))
+                {
+                    case Wxs.ColumnType.Int:
+                        dataColumn.DataType = width == 2 ? typeof(short) : typeof(int);
+                        break;
+                    case Wxs.ColumnType.String when width > 0:
+                        dataColumn.MaxLength = width;
+                        break;
+                }
+
+                dataTable.Columns.Add(dataColumn);
+                if (Literal(column.PrimaryKey) == true)
+                {
+                    keys.Add(dataColumn);
+                }
+            }
+
+            if (keys.Count > 0)
+            {
+                dataTable.PrimaryKey = keys.ToArray();
+            }
+
+            rows = LoadRows(table, dataTable);
+            dataTable.AcceptChanges();
+            return dataTable;
+        }
+
         // The Row element behind each grid row, so saving only touches what changed.
-        public static Dictionary<DataRow, Wxs.Row> LoadRows(Wxs.CustomTable table, DataTable dataTable)
+        static Dictionary<DataRow, Wxs.Row> LoadRows(Wxs.CustomTable table, DataTable dataTable)
         {
             var rows = new Dictionary<DataRow, Wxs.Row>();
             foreach (var row in table.Rows)
@@ -96,13 +138,148 @@ namespace CustomTablesDesigner
                 {
                     if (data.Column != null && dataTable.Columns.Contains(data.Column))
                     {
-                        dataRow[data.Column] = Text(data);
+                        // An empty value in a number column is no value.
+                        string text = Text(data);
+                        var dataColumn = dataTable.Columns[data.Column]!;
+                        bool number = dataColumn.DataType != typeof(string);
+                        if (text.Length > 0 || !number)
+                        {
+                            try
+                            {
+                                dataRow[dataColumn] = text;
+                            }
+                            catch (Exception ex) when (ex is ArgumentException or FormatException or OverflowException)
+                            {
+                                throw new InvalidOperationException(number
+                                    ? $"The value '{text}' in the column '{data.Column}' isn't a whole number that fits it."
+                                    : $"The value '{text}' is longer than the column '{data.Column}' allows.", ex);
+                            }
+                        }
                     }
                 }
                 dataTable.Rows.Add(dataRow);
                 rows.Add(dataRow, row);
             }
             return rows;
+        }
+
+        static T? Literal<T>(WixValue<T>? value) where T : struct => value is { IsLiteral: true } literal ? literal.Value : null;
+
+        public static Wxs.Column Column(Wxs.CustomTable table, string id) => table.Columns.First(c => c.Id == id);
+
+        // "Column1", "Column2"... whichever the table doesn't have yet.
+        public static string NewColumnId(Wxs.CustomTable table)
+        {
+            int index = 1;
+            while (table.Columns.Any(c => c.Id == "Column" + index))
+            {
+                index++;
+            }
+
+            return "Column" + index;
+        }
+
+        // A nullable text column, beside another one.
+        public static void InsertColumn(Wxs.CustomTable table, string id, string besideId, bool below)
+        {
+            var column = new Wxs.Column
+            {
+                Id = id,
+                Category = Wxs.ColumnCategory.Text,
+                Nullable = true,
+                Type = Wxs.ColumnType.String,
+                Width = 72,
+            };
+            PlaceNextTo(column.Xml, Column(table, besideId).Xml, below);
+        }
+
+        // The rows' values follow the column.
+        public static void RenameColumn(Wxs.CustomTable table, string id, string newId)
+        {
+            Column(table, id).Id = newId;
+            foreach (var data in table.Rows.SelectMany(r => r.DataElements).Where(d => d.Column == id).ToList())
+            {
+                data.Column = newId;
+            }
+        }
+
+        // The rows' values go with it.
+        public static void DeleteColumn(Wxs.CustomTable table, string id)
+        {
+            Column(table, id).RemoveFromParent();
+            foreach (var data in table.Rows.SelectMany(r => r.DataElements).Where(d => d.Column == id).ToList())
+            {
+                data.RemoveFromParent();
+            }
+        }
+
+        // One place up (-1) or down (1).
+        public static void MoveColumn(Wxs.CustomTable table, string id, int offset)
+        {
+            var columns = table.Columns.ToList();
+            int index = columns.FindIndex(c => c.Id == id);
+            MoveNextTo(columns[index].Xml, columns[index + offset].Xml, below: offset > 0);
+        }
+
+        // A key column can't be null.
+        public static void SetPrimaryKey(Wxs.CustomTable table, string id, bool key)
+        {
+            var column = Column(table, id);
+            if (key)
+            {
+                column.PrimaryKey = true;
+                column.Nullable = false;
+            }
+            else
+            {
+                column.PrimaryKey = null;
+            }
+        }
+
+        // Windows Installer's rules for a table's primary key: the first column is in it, and its columns come first.
+        public static void CheckKeys(Wxs.CustomTable table)
+        {
+            var keys = table.Columns.Select(c => Literal(c.PrimaryKey) == true).ToList();
+            if (keys.Count == 0)
+            {
+                throw new InvalidOperationException("A table needs at least one column.");
+            }
+
+            if (!keys[0])
+            {
+                throw new InvalidOperationException("The first column must be in the primary key: Windows Installer requires one.");
+            }
+
+            if (keys.SkipWhile(k => k).Any(k => k))
+            {
+                throw new InvalidOperationException("The primary key's columns must come first, before the others.");
+            }
+        }
+
+        // Moves an element next to a sibling: it takes its line along, and starts a line indented like the sibling's.
+        static void MoveNextTo(XElement element, XElement sibling, bool below)
+        {
+            if (element == sibling)
+            {
+                return;
+            }
+
+            WixElement.Wrap(element).RemoveFromParent();
+            PlaceNextTo(element, sibling, below);
+        }
+
+        // Puts a detached element next to a sibling, on a line of its own indented like the sibling's.
+        static void PlaceNextTo(XElement element, XElement sibling, bool below)
+        {
+            string? indent = sibling.PreviousNode is XText text && string.IsNullOrWhiteSpace(text.Value) ? text.Value : null;
+            if (below)
+            {
+                sibling.AddAfterSelf(indent is null ? new object[] { element } : new object[] { new XText(indent), element });
+            }
+            else
+            {
+                sibling.AddBeforeSelf(indent is null ? new object[] { element } : new object[] { element, new XText(indent) });
+            }
         }
 
         // Writes the grid back: removed rows are removed, new rows added after the others, and in the rest only the

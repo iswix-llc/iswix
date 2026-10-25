@@ -46,11 +46,29 @@ namespace CustomTablesDesigner
 
             AddToolbar(splitContainer2.Panel1, toolStripMenuItemTableCreate, toolStripMenuItemRenameTable, toolStripMenuItemTableDrop);
             AddToolbar(splitContainer1.Panel2, toolStripMenuItemRowAdd, toolStripMenuItemRowRemove);
+
+            setKeyToolStripMenuItem.Click += (s, e) => SetKey(true);
+            clearKeyToolStripMenuItem.Click += (s, e) => SetKey(false);
+            insertAboveToolStripMenuItem.Click += (s, e) => InsertColumn(below: false);
+            insertBelowToolStripMenuItem.Click += (s, e) => InsertColumn(below: true);
+            deleteToolStripMenuItem.Click += (s, e) => DeleteColumn();
+            renameToolStripMenuItem.Click += (s, e) => RenameColumn();
+            moveUpToolStripMenuItem.Click += (s, e) => MoveColumn(-1);
+            moveDownToolStripMenuItem.Click += (s, e) => MoveColumn(1);
+            var columnsToolbar = AddToolbar(splitContainer2.Panel2, insertBelowToolStripMenuItem, deleteToolStripMenuItem, moveUpToolStripMenuItem, moveDownToolStripMenuItem);
+            // The columns' label, list and schema box are placed in pixels: they move down below the toolbar.
+            foreach (Control control in splitContainer2.Panel2.Controls)
+            {
+                if (control != columnsToolbar)
+                {
+                    control.Top += columnsToolbar.Height;
+                }
+            }
         }
 
-        // The tables' and rows' commands as buttons above them too: nothing else shows that right-clicking adds one.
-        // The buttons run the menu items and are enabled as they are.
-        static void AddToolbar(Control panel, params ToolStripMenuItem[] menuItems)
+        // The tables', columns' and rows' commands as buttons above them too: nothing else shows that right-clicking
+        // adds one. The buttons run the menu items and are enabled as they are.
+        static ToolStrip AddToolbar(Control panel, params ToolStripMenuItem[] menuItems)
         {
             var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
             foreach (var menuItem in menuItems)
@@ -63,6 +81,7 @@ namespace CustomTablesDesigner
             }
 
             panel.Controls.Add(toolbar);
+            return toolbar;
         }
 
         bool _fitting;
@@ -174,7 +193,11 @@ namespace CustomTablesDesigner
 
         #endregion
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) => ShowTable(null);
+
+        // Shows the selected table: its columns, with the column named (else the first) selected and its schema in the
+        // property grid, and its rows in the grid.
+        private void ShowTable(string? selectColumn)
         {
             this.dataGridViewRows.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRows_CellValueChanged);
 
@@ -182,18 +205,11 @@ namespace CustomTablesDesigner
             toolStripMenuItemRenameTable.Enabled = false;
             // Rows can be added to a selected table only.
             toolStripMenuItemRowAdd.Enabled = false;
-            _customTable.Clear();
-            _customTable.Rows.Clear();
-            _customTable.Constraints.Clear();
-            _customTable.Columns.Clear();
+            _customTable = new DataTable();
+            _rowElements = new Dictionary<DataRow, Wxs.Row>();
+            dataGridViewRows.DataSource = _customTable;
             listViewColumns.Items.Clear();
-            
-            // The column schema fields only show the selected column; they are read-only rather than disabled, so
-            // they stay readable in Visual Studio's dark theme.
-            textBoxName.Text = "";
-            textBoxType.Text = "";
-            textBoxLength.Text = "";
-            checkBoxNullable.Checked = false;
+            propertyGridColumn.SelectedObject = null;
             if (listBoxTables.SelectedItems.Count > 0)
             {
 
@@ -237,111 +253,32 @@ namespace CustomTablesDesigner
                         }
                     }
                 }
-                listViewColumns.Items[0].Selected = true;
-
-                if (!String.IsNullOrEmpty(listBoxTables.Text))
+                toolStripMenuItemRenameTable.Enabled = true;
+                toolStripMenuItemTableDrop.Enabled = true;
+                toolStripMenuItemRowAdd.Enabled = true;
+                try
                 {
-                    toolStripMenuItemRenameTable.Enabled = true;
-                    toolStripMenuItemTableDrop.Enabled = true;
-                    toolStripMenuItemRowAdd.Enabled = true;
-                    _customTable.TableName = listBoxTables.Text;
-                    try
-                    {
+                    _customTable = CustomTableDocument.BuildDataTable(_customTableElement, out _rowElements);
+                    dataGridViewRows.DataSource = _customTable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"The rows of the table '{listBoxTables.Text}' don't fit its columns, so they can't be shown: {ex.Message}");
+                    toolStripMenuItemRowAdd.Enabled = false;
+                }
 
-                        foreach (var column in _customTableElement.Columns.Select(c => c.Xml))
-                        {
-                            var dc = new DataColumn((string?)column.Attribute("Id") ?? string.Empty);
-
-                            ColumnDataType colDT = ColumnDataType.Unknown;
-                            int width = 0;
-                            int length = 0;
-
-                            foreach (var attribute in column.Attributes())
-                            {
-                                switch (attribute.Name.LocalName)
-                                {
-                                    case "Nullable":
-                                        if (attribute.Value == "no")
-                                            dc.AllowDBNull = false;
-                                        else
-                                            dc.AllowDBNull = true;
-                                        break;
-
-                                    case "PrimaryKey":
-                                        if (attribute.Value == "no")
-                                            dc.Unique = false;
-                                        else
-                                            dc.Unique = true;
-                                        break;
-
-                                    case "Type":
-                                        switch (attribute.Value)
-                                        {
-                                            case "binary":
-                                                colDT = ColumnDataType.String; // We don't really store blobs in wxs files.
-                                                break;
-                                            case "integer":
-                                                colDT = ColumnDataType.Int;
-                                                break;
-                                            case "string":
-                                                colDT = ColumnDataType.String;
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                        break;
-
-                                    case "Width":
-                                        width = Convert.ToInt32(attribute.Value);
-                                        break;
-
-                                    case "Length":
-                                        length = Convert.ToInt32(attribute.Value);
-                                        break;
-
-                                    default:
-                                        break;
-                                }
-                            }
-
-                            if (colDT == ColumnDataType.Int)
-                            {
-                                if (width == 2)
-                                {
-                                    dc.DataType = typeof(UInt32);
-                                }
-
-                                if (width == 4)
-                                {
-                                    dc.DataType = typeof(UInt64);
-                                }
-                            }
-
-                            if (colDT == ColumnDataType.String)
-                            {
-                                dc.DataType = typeof(string);
-                                if (length > 0)
-                                {
-                                    dc.MaxLength = length;
-                                }
-                            }
-
-
-                            _customTable.Columns.Add(dc);
-                        }
-
-                        _rowElements = CustomTableDocument.LoadRows(_customTableElement, _customTable);
-                        _customTable.AcceptChanges();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Malformed XML detected (Get Table '" + listBoxTables.Text + "' )" + ex.Message);
-                        dataGridViewRows.DataSource = null;
-                    }
+                var selected = listViewColumns.Items.Cast<ListViewItem>().FirstOrDefault(i => i.Text == selectColumn)
+                    ?? listViewColumns.Items.Cast<ListViewItem>().FirstOrDefault();
+                if (selected != null)
+                {
+                    selected.Selected = true;
+                    selected.Focused = true;
+                    selected.EnsureVisible();
                 }
             }
-            this.dataGridViewRows.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRows_CellValueChanged);
 
+            UpdateColumnCommands();
+            this.dataGridViewRows.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRows_CellValueChanged);
         }
 
         private void toolStripMenuItemRowRemove_Click(object sender, EventArgs e)
@@ -378,40 +315,37 @@ namespace CustomTablesDesigner
             CustomTableDocument.SaveRows(CustomTableDocument.Find(_documentManager.Document, listBoxTables.Text), _customTable, _rowElements);
         }
 
+        // A row with the first free key ("Id1", or 1 in a number column, then 2...) and the columns that can't be empty
+        // given an empty or zero value.
         private void toolStripMenuItemRowAdd_Click(object sender, EventArgs e)
         {
-            bool added = false;
-            Int16 index = 0;
-
-            do
+            var keys = new HashSet<DataColumn>(_customTable.PrimaryKey);
+            for (int index = 1; index <= 10000; index++)
             {
+                DataRow dr = _customTable.NewRow();
+                foreach (DataColumn dc in _customTable.Columns)
+                {
+                    bool number = dc.DataType != typeof(string);
+                    if (keys.Contains(dc))
+                    {
+                        dr[dc] = number ? index : (object)("Id" + index);
+                    }
+                    else if (!dc.AllowDBNull)
+                    {
+                        dr[dc] = number ? 0 : (object)string.Empty;
+                    }
+                }
+
                 try
                 {
-                    index++;
-                    DataRow dr = _customTable.NewRow();
-
-                    foreach (DataColumn dc in _customTable.Columns)
-                    {
-                        if (!dc.AllowDBNull)
-                        {
-                            if (dc.Unique)
-                            {
-                                dr[dc] = "Id" + index.ToString();
-                            }
-                            else
-                            {
-                                dr[dc] = "0";
-                            }
-                        }
-                    }
                     _customTable.Rows.Add(dr);
-                    added = true;
+                    break;
                 }
-                catch (Exception)
+                catch (ConstraintException)
                 {
+                    // That key is taken: try the next.
                 }
             }
-            while (added == false);
             _customTable.AcceptChanges();
             SaveTable();
         }
@@ -443,14 +377,6 @@ namespace CustomTablesDesigner
             }
         }
 
-        public enum ColumnDataType
-        {
-            Unknown,
-            String,
-            Int,
-            Binary,
-        } ;
-
         private static bool IsYes(WixValue<bool>? value) => value is { IsLiteral: true } literal && literal.Value;
 
         private Wxs.Column FindColumn(string id) => _customTableElement.Columns.First(c => c.Id == id);
@@ -459,17 +385,135 @@ namespace CustomTablesDesigner
             MessageBox.Show(e.Exception?.Message);
         }
 
+        // The selected column's schema, in the property grid.
         private void listViewColumns_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listViewColumns.SelectedItems.Count > 0)
+            propertyGridColumn.SelectedObject = SelectedColumnId is string id ? new ColumnProperties(FindColumn(id)) : null;
+            propertyGridColumn.ExpandAllGridItems();
+            UpdateColumnCommands();
+        }
+
+        private string? SelectedColumnId => listViewColumns.SelectedItems.Count > 0 ? listViewColumns.SelectedItems[0].Text : null;
+
+        private void propertyGridColumn_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
+        {
+            if (propertyGridColumn.SelectedObject is not ColumnProperties properties || e.ChangedItem?.PropertyDescriptor is not { } property)
             {
-                var column = FindColumn(listViewColumns.SelectedItems[0].Text);
+                return;
+            }
 
-                textBoxName.Text = column.Id;
-                textBoxType.Text = column.GetAttributeValue("Type") ?? string.Empty;
-                textBoxLength.Text = column.GetAttributeValue("Width") ?? string.Empty;
-                checkBoxNullable.Checked = IsYes(column.Nullable);
+            object? value = e.ChangedItem.Value;
+            string select = property.Name == nameof(ColumnProperties.Id) ? ((string?)value ?? string.Empty).Trim() : properties.ColumnId;
+            ChangeSchema(table => ColumnProperties.Write(table, properties.ColumnId, property.Name, value), select);
+        }
 
+        // Makes a change to the selected table's columns: first to a copy, which must still meet Windows Installer's key
+        // rules and fit the rows, then (if it does) to the document, and shows the table again. When it doesn't, the
+        // document is left as it was and the reason shown.
+        private void ChangeSchema(Action<Wxs.CustomTable> change, string? selectColumn)
+        {
+            dataGridViewRows.EndEdit();
+            try
+            {
+                var copy = (Wxs.CustomTable)WixElement.Wrap(new XElement(_customTableElement.Xml));
+                change(copy);
+                CustomTableDocument.CheckKeys(copy);
+                CustomTableDocument.BuildDataTable(copy, out _);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or ArgumentException or DataException or FormatException or OverflowException)
+            {
+                MessageBox.Show(ex.Message, "Custom Tables", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowTable(SelectedColumnId);
+                return;
+            }
+
+            change(_customTableElement);
+            ShowTable(selectColumn);
+        }
+
+        // The column commands, enabled as Windows Installer's key rules allow for the selected column: the key's columns
+        // come first, the first column is always in it.
+        private void UpdateColumnCommands()
+        {
+            var columns = _customTableElement?.Columns.ToList() ?? new List<Wxs.Column>();
+            int index = SelectedColumnId is string id ? columns.FindIndex(c => c.Id == id) : -1;
+            bool selected = index >= 0;
+            bool key = selected && IsYes(columns[index].PrimaryKey);
+            bool previousKey = index > 0 && IsYes(columns[index - 1].PrimaryKey);
+            bool nextKey = selected && index < columns.Count - 1 && IsYes(columns[index + 1].PrimaryKey);
+
+            setKeyToolStripMenuItem.Enabled = selected && !key && previousKey;
+            clearKeyToolStripMenuItem.Enabled = key && index > 0 && !nextKey;
+            insertAboveToolStripMenuItem.Enabled = selected && !key;
+            insertBelowToolStripMenuItem.Enabled = selected && !nextKey;
+            deleteToolStripMenuItem.Enabled = selected && columns.Count > 1 && !(index == 0 && !nextKey);
+            renameToolStripMenuItem.Enabled = selected;
+            moveUpToolStripMenuItem.Enabled = index > 0 && key == previousKey;
+            moveDownToolStripMenuItem.Enabled = selected && index < columns.Count - 1 && key == nextKey;
+        }
+
+        private void InsertColumn(bool below)
+        {
+            if (SelectedColumnId is not string beside)
+            {
+                return;
+            }
+
+            string id = CustomTableDocument.NewColumnId(_customTableElement);
+            ChangeSchema(table => CustomTableDocument.InsertColumn(table, id, beside, below), id);
+        }
+
+        private void DeleteColumn()
+        {
+            if (SelectedColumnId is not string id)
+            {
+                return;
+            }
+
+            int values = _customTableElement.Rows.SelectMany(r => r.DataElements).Count(d => d.Column == id);
+            if (values > 0 && MessageBox.Show($"Delete the column '{id}', and its values in {values} rows?", "Custom Tables",
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+            {
+                return;
+            }
+
+            var ids = _customTableElement.Columns.Select(c => c.Id).ToList();
+            int index = ids.IndexOf(id);
+            string? select = index + 1 < ids.Count ? ids[index + 1] : index > 0 ? ids[index - 1] : null;
+            ChangeSchema(table => CustomTableDocument.DeleteColumn(table, id), select);
+        }
+
+        private void MoveColumn(int offset)
+        {
+            if (SelectedColumnId is string id)
+            {
+                ChangeSchema(table => CustomTableDocument.MoveColumn(table, id, offset), id);
+            }
+        }
+
+        private void SetKey(bool key)
+        {
+            if (SelectedColumnId is string id)
+            {
+                ChangeSchema(table => CustomTableDocument.SetPrimaryKey(table, id, key), id);
+            }
+        }
+
+        // The name is edited in the property grid: its row is selected there, ready to type in.
+        private void RenameColumn()
+        {
+            var root = propertyGridColumn.SelectedGridItem;
+            while (root?.Parent != null)
+            {
+                root = root.Parent;
+            }
+
+            var idItem = root?.GridItems.Cast<GridItem>().SelectMany(c => c.GridItems.Cast<GridItem>().Prepend(c))
+                .FirstOrDefault(i => i.PropertyDescriptor?.Name == nameof(ColumnProperties.Id));
+            if (idItem != null)
+            {
+                propertyGridColumn.Focus();
+                idItem.Select();
             }
         }
 
@@ -505,11 +549,6 @@ namespace CustomTablesDesigner
                 CustomTableDocument.Create(_documentManager.Document, dialog.TableName);
                 LoadData();
             }
-        }
-
-        private void labelName_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

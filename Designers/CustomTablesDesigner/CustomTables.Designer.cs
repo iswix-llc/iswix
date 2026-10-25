@@ -38,13 +38,7 @@
             this.toolStripMenuItemRenameTable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTableDrop = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxColumnSchema = new System.Windows.Forms.GroupBox();
-            this.checkBoxNullable = new System.Windows.Forms.CheckBox();
-            this.textBoxLength = new System.Windows.Forms.TextBox();
-            this.textBoxType = new System.Windows.Forms.TextBox();
-            this.textBoxName = new System.Windows.Forms.TextBox();
-            this.labelLength = new System.Windows.Forms.Label();
-            this.labelType = new System.Windows.Forms.Label();
-            this.labelName = new System.Windows.Forms.Label();
+            this.propertyGridColumn = new System.Windows.Forms.PropertyGrid();
             this.listViewColumns = new System.Windows.Forms.ListView();
             this.contextMenuStripColumns = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -170,91 +164,24 @@
             // 
             // groupBoxColumnSchema
             // 
-            this.groupBoxColumnSchema.Controls.Add(this.checkBoxNullable);
-            this.groupBoxColumnSchema.Controls.Add(this.textBoxLength);
-            this.groupBoxColumnSchema.Controls.Add(this.textBoxType);
-            this.groupBoxColumnSchema.Controls.Add(this.textBoxName);
-            this.groupBoxColumnSchema.Controls.Add(this.labelLength);
-            this.groupBoxColumnSchema.Controls.Add(this.labelType);
-            this.groupBoxColumnSchema.Controls.Add(this.labelName);
+            this.groupBoxColumnSchema.Controls.Add(this.propertyGridColumn);
             this.groupBoxColumnSchema.Location = new System.Drawing.Point(207, 14);
             this.groupBoxColumnSchema.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBoxColumnSchema.Name = "groupBoxColumnSchema";
             this.groupBoxColumnSchema.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxColumnSchema.Size = new System.Drawing.Size(285, 291);
+            this.groupBoxColumnSchema.Size = new System.Drawing.Size(360, 420);
             this.groupBoxColumnSchema.TabIndex = 23;
             this.groupBoxColumnSchema.TabStop = false;
             this.groupBoxColumnSchema.Text = "Column Schema:";
             // 
-            // checkBoxNullable
+            // propertyGridColumn
             // 
-            this.checkBoxNullable.AutoSize = true;
-            this.checkBoxNullable.AutoCheck = false;
-            this.checkBoxNullable.Location = new System.Drawing.Point(124, 226);
-            this.checkBoxNullable.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.checkBoxNullable.Name = "checkBoxNullable";
-            this.checkBoxNullable.Size = new System.Drawing.Size(91, 24);
-            this.checkBoxNullable.TabIndex = 6;
-            this.checkBoxNullable.Text = "Nullable";
-            this.checkBoxNullable.UseVisualStyleBackColor = true;
-            // 
-            // textBoxLength
-            // 
-            this.textBoxLength.ReadOnly = true;
-            this.textBoxLength.Location = new System.Drawing.Point(67, 158);
-            this.textBoxLength.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxLength.Name = "textBoxLength";
-            this.textBoxLength.Size = new System.Drawing.Size(148, 26);
-            this.textBoxLength.TabIndex = 5;
-            // 
-            // textBoxType
-            //
-            this.textBoxType.ReadOnly = true;
-            this.textBoxType.Location = new System.Drawing.Point(67, 99);
-            this.textBoxType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxType.Name = "textBoxType";
-            this.textBoxType.Size = new System.Drawing.Size(148, 26);
-            this.textBoxType.TabIndex = 4;
-            //
-            // textBoxName
-            //
-            this.textBoxName.ReadOnly = true;
-            this.textBoxName.Location = new System.Drawing.Point(67, 42);
-            this.textBoxName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(148, 26);
-            this.textBoxName.TabIndex = 3;
-            // 
-            // labelLength
-            // 
-            this.labelLength.AutoSize = true;
-            this.labelLength.Location = new System.Drawing.Point(8, 158);
-            this.labelLength.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelLength.Name = "labelLength";
-            this.labelLength.Size = new System.Drawing.Size(63, 20);
-            this.labelLength.TabIndex = 2;
-            this.labelLength.Text = "Length:";
-            // 
-            // labelType
-            // 
-            this.labelType.AutoSize = true;
-            this.labelType.Location = new System.Drawing.Point(8, 100);
-            this.labelType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelType.Name = "labelType";
-            this.labelType.Size = new System.Drawing.Size(47, 20);
-            this.labelType.TabIndex = 1;
-            this.labelType.Text = "Type:";
-            // 
-            // labelName
-            // 
-            this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(8, 42);
-            this.labelName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(55, 20);
-            this.labelName.TabIndex = 0;
-            this.labelName.Text = "Name:";
-            this.labelName.Click += new System.EventHandler(this.labelName_Click);
+            this.propertyGridColumn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGridColumn.HelpVisible = true;
+            this.propertyGridColumn.Name = "propertyGridColumn";
+            this.propertyGridColumn.TabIndex = 0;
+            this.propertyGridColumn.ToolbarVisible = false;
+            this.propertyGridColumn.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridColumn_PropertyValueChanged);
             // 
             // listViewColumns
             // 
@@ -264,7 +191,7 @@
             this.listViewColumns.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listViewColumns.MultiSelect = false;
             this.listViewColumns.Name = "listViewColumns";
-            this.listViewColumns.Size = new System.Drawing.Size(193, 264);
+            this.listViewColumns.Size = new System.Drawing.Size(193, 396);
             this.listViewColumns.SmallImageList = this.imageListIcons;
             this.listViewColumns.TabIndex = 24;
             this.listViewColumns.UseCompatibleStateImageBehavior = false;
@@ -354,7 +281,7 @@
             this.labelColumns.Name = "labelColumns";
             this.labelColumns.Size = new System.Drawing.Size(195, 20);
             this.labelColumns.TabIndex = 18;
-            this.labelColumns.Text = "Columns: (Not Completed)";
+            this.labelColumns.Text = "Columns:";
             // 
             // dataGridViewRows
             // 
@@ -437,13 +364,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ListBox listBoxTables;
         private System.Windows.Forms.GroupBox groupBoxColumnSchema;
-        private System.Windows.Forms.CheckBox checkBoxNullable;
-        private System.Windows.Forms.TextBox textBoxLength;
-        private System.Windows.Forms.TextBox textBoxType;
-        private System.Windows.Forms.TextBox textBoxName;
-        private System.Windows.Forms.Label labelLength;
-        private System.Windows.Forms.Label labelType;
-        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.PropertyGrid propertyGridColumn;
         private System.Windows.Forms.ListView listViewColumns;
         private System.Windows.Forms.ImageList imageListIcons;
         private System.Windows.Forms.Label labelColumns;
