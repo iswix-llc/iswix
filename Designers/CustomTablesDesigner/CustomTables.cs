@@ -43,6 +43,26 @@ namespace CustomTablesDesigner
             groupBoxColumnSchema.SizeChanged += (s, e) => FitColumnEditor();
             splitContainer1.SizeChanged += (s, e) => FitColumnEditor();
             splitContainer2.SizeChanged += (s, e) => FitColumnEditor();
+
+            AddToolbar(splitContainer2.Panel1, toolStripMenuItemTableCreate, toolStripMenuItemRenameTable, toolStripMenuItemTableDrop);
+            AddToolbar(splitContainer1.Panel2, toolStripMenuItemRowAdd, toolStripMenuItemRowRemove);
+        }
+
+        // The tables' and rows' commands as buttons above them too: nothing else shows that right-clicking adds one.
+        // The buttons run the menu items and are enabled as they are.
+        static void AddToolbar(Control panel, params ToolStripMenuItem[] menuItems)
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            foreach (var menuItem in menuItems)
+            {
+                // No tooltip: it would only repeat the button's text.
+                var button = new ToolStripButton(menuItem.Text) { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = menuItem.Enabled, AutoToolTip = false };
+                button.Click += (s, e) => menuItem.PerformClick();
+                menuItem.EnabledChanged += (s, e) => button.Enabled = menuItem.Enabled;
+                toolbar.Items.Add(button);
+            }
+
+            panel.Controls.Add(toolbar);
         }
 
         bool _fitting;
@@ -100,6 +120,10 @@ namespace CustomTablesDesigner
 
             listBoxTables.Items.Clear();
             listViewColumns.Items.Clear();
+            // Until a table is selected (there may be none).
+            toolStripMenuItemRenameTable.Enabled = false;
+            toolStripMenuItemTableDrop.Enabled = false;
+            toolStripMenuItemRowAdd.Enabled = false;
 
             try
             {
@@ -156,6 +180,8 @@ namespace CustomTablesDesigner
 
             toolStripMenuItemTableDrop.Enabled = false;
             toolStripMenuItemRenameTable.Enabled = false;
+            // Rows can be added to a selected table only.
+            toolStripMenuItemRowAdd.Enabled = false;
             _customTable.Clear();
             _customTable.Rows.Clear();
             _customTable.Constraints.Clear();
@@ -217,6 +243,7 @@ namespace CustomTablesDesigner
                 {
                     toolStripMenuItemRenameTable.Enabled = true;
                     toolStripMenuItemTableDrop.Enabled = true;
+                    toolStripMenuItemRowAdd.Enabled = true;
                     _customTable.TableName = listBoxTables.Text;
                     try
                     {

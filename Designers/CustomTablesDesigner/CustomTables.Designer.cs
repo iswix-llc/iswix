@@ -149,7 +149,7 @@
             // 
             this.toolStripMenuItemTableCreate.Name = "toolStripMenuItemTableCreate";
             this.toolStripMenuItemTableCreate.Size = new System.Drawing.Size(147, 30);
-            this.toolStripMenuItemTableCreate.Text = "Create";
+            this.toolStripMenuItemTableCreate.Text = "New Table";
             this.toolStripMenuItemTableCreate.Click += new System.EventHandler(this.toolStripMenuItemTableCreate_Click);
             // 
             // toolStripMenuItemRenameTable
@@ -165,7 +165,7 @@
             this.toolStripMenuItemTableDrop.Enabled = false;
             this.toolStripMenuItemTableDrop.Name = "toolStripMenuItemTableDrop";
             this.toolStripMenuItemTableDrop.Size = new System.Drawing.Size(147, 30);
-            this.toolStripMenuItemTableDrop.Text = "Drop";
+            this.toolStripMenuItemTableDrop.Text = "Delete";
             this.toolStripMenuItemTableDrop.Click += new System.EventHandler(this.toolStripMenuItemTableDrop_Click);
             // 
             // groupBoxColumnSchema
@@ -387,14 +387,14 @@
             // 
             this.toolStripMenuItemRowAdd.Name = "toolStripMenuItemRowAdd";
             this.toolStripMenuItemRowAdd.Size = new System.Drawing.Size(148, 30);
-            this.toolStripMenuItemRowAdd.Text = "Add";
+            this.toolStripMenuItemRowAdd.Text = "New Row";
             this.toolStripMenuItemRowAdd.Click += new System.EventHandler(this.toolStripMenuItemRowAdd_Click);
             // 
             // toolStripMenuItemRowRemove
             // 
             this.toolStripMenuItemRowRemove.Name = "toolStripMenuItemRowRemove";
             this.toolStripMenuItemRowRemove.Size = new System.Drawing.Size(148, 30);
-            this.toolStripMenuItemRowRemove.Text = "Remove";
+            this.toolStripMenuItemRowRemove.Text = "Delete";
             this.toolStripMenuItemRowRemove.Click += new System.EventHandler(this.toolStripMenuItemRowRemove_Click);
             // 
             // CustomTablesDesigner
