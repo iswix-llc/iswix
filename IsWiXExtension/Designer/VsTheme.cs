@@ -421,6 +421,7 @@ namespace IsWiX.Designer
             }
 
             OwnerDrawn.Add(list, new object());
+            DoubleBuffer(list);
             list.OwnerDraw = true;
             list.DrawColumnHeader += (s, e) =>
             {
@@ -453,6 +454,13 @@ namespace IsWiX.Designer
             };
             list.GotFocus += (s, e) => list.Invalidate();
             list.LostFocus += (s, e) => list.Invalidate();
+        }
+
+        // Owner-drawn lists erase and redraw each row on screen, which flickers whenever they repaint (the mouse moving
+        // over them, focus changes, Visual Studio redrawing around them); painting off screen first stops it.
+        static void DoubleBuffer(WinForms.Control control)
+        {
+            typeof(WinForms.Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.SetValue(control, true);
         }
 
         static void DrawListItem(WinForms.ListView list, Drawing.Graphics graphics, WinForms.ListViewItem item, Drawing.Rectangle bounds, int column, string text)
@@ -505,6 +513,7 @@ namespace IsWiX.Designer
             }
 
             OwnerDrawn.Add(listBox, new object());
+            DoubleBuffer(listBox);
             listBox.DrawMode = WinForms.DrawMode.OwnerDrawFixed;
             listBox.ItemHeight = listBox.Font.Height + 4;
             listBox.DrawItem += (s, e) =>
