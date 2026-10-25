@@ -534,6 +534,28 @@ namespace IsWiX.Designer
             }
         }
 
+        /// <summary>
+        /// Themes a dialog a designer opens: its colors as the designers', and its title bar dark with a dark theme
+        /// (once its window exists).
+        /// </summary>
+        public static void ThemeDialog(WinForms.Form dialog)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Apply(dialog);
+            var dark = Color(EnvironmentColors.ToolWindowBackgroundColorKey).GetBrightness() < 0.5f;
+            dialog.HandleCreated += (s, e) => SetDarkTitleBar(dialog.Handle, dark);
+        }
+
+        [System.Runtime.InteropServices.DllImport("dwmapi.dll")]
+        static extern int DwmSetWindowAttribute(IntPtr window, int attribute, ref int value, int size);
+
+        static void SetDarkTitleBar(IntPtr window, bool dark)
+        {
+            // DWMWA_USE_IMMERSIVE_DARK_MODE; Windows older than 10 1809 ignore it and keep the light title bar.
+            var value = dark ? 1 : 0;
+            DwmSetWindowAttribute(window, 20, ref value, sizeof(int));
+        }
+
         static readonly ConditionalWeakTable<WinForms.Control, object> MenuWatched = new ConditionalWeakTable<WinForms.Control, object>();
 
         static void Apply(WinForms.ToolStrip strip)
