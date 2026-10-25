@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-          dotnet-version: 8.0.x
+          dotnet-version: 8.0.32
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v3
