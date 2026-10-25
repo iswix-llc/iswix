@@ -329,9 +329,13 @@ namespace IsWiX.Designer
                     tree.BackColor = window;
                     tree.ForeColor = windowText;
                     tree.LineColor = border;
+                    // As Solution Explorer: the Explorer style's expand arrows, without its dotted lines.
+                    tree.ShowLines = false;
                     ThemeImages(tree.ImageList, window);
                     ThemeImages(tree.StateImageList, window);
                     ThemeLabelEdit(tree, input, inputText);
+                    // Its items aren't redrawn for new colors and images by themselves (on a theme change).
+                    tree.Invalidate();
                     break;
                 case WinForms.ListView list:
                     list.BackColor = window;
@@ -648,7 +652,8 @@ namespace IsWiX.Designer
                 : WinForms.TextFormatFlags.Left);
 
         // The images as the designers made them, so each theme change starts from the originals.
-        static readonly ConditionalWeakTable<WinForms.ImageList, Drawing.Image[]> OriginalLists = new ConditionalWeakTable<WinForms.ImageList, Drawing.Image[]>();
+        // Each list's images and their keys as the designer gave them, before any theme.
+        static readonly ConditionalWeakTable<WinForms.ImageList, (Drawing.Image Image, string Key)[]> OriginalLists = new ConditionalWeakTable<WinForms.ImageList, (Drawing.Image Image, string Key)[]>();
         static readonly ConditionalWeakTable<WinForms.ToolStripItem, Drawing.Image> OriginalItemImages = new ConditionalWeakTable<WinForms.ToolStripItem, Drawing.Image>();
 
         // Adapts an image list's icons to the background they're drawn on, keeping their indexes and keys.
@@ -661,13 +666,19 @@ namespace IsWiX.Designer
 
             if (!OriginalLists.TryGetValue(list, out var originals))
             {
-                originals = Enumerable.Range(0, list.Images.Count).Select(i => list.Images[i]).ToArray();
+                originals = Enumerable.Range(0, list.Images.Count).Select(i => (list.Images[i], list.Images.Keys[i])).ToArray();
                 OriginalLists.Add(list, originals);
             }
 
+            // Images drawn for dark backgrounds are used as they are there; others are adapted as Visual Studio does.
+            var darks = FireworksFramework.Services.DesignerImages.DarkImages(list);
+            var dark = background.GetBrightness() < 0.5f;
             for (var i = 0; i < originals.Length && i < list.Images.Count; i++)
             {
-                list.Images[i] = ImageThemingUtilities.GetThemedBitmap(new Drawing.Bitmap(originals[i]), background);
+                var (image, key) = originals[i];
+                list.Images[i] = dark && !string.IsNullOrEmpty(key) && darks.TryGetValue(key, out var drawn)
+                    ? new Drawing.Bitmap(drawn)
+                    : ImageThemingUtilities.GetThemedBitmap(new Drawing.Bitmap(image), background);
             }
         }
 
@@ -691,11 +702,29 @@ namespace IsWiX.Designer
         public static void ThemeScrollBars(IServiceProvider services, WinForms.Control control)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (services.GetService(typeof(SVsUIShell)) is IVsUIShell5 shell && control.IsHandleCreated)
+            if (!control.IsHandleCreated)
+            {
+                return;
+            }
+
+            // Visual Studio's theming gives a tree view its own copy of the tree's images, adapted for the theme then:
+            // it inverts images drawn for dark backgrounds, ignores later changes to the image list, and keeps the old
+            // theme's images and colors after a theme change. Trees get the Explorer style the theme calls for instead,
+            // which themes their scrollbars and leaves their images and colors to Apply.
+            if (control is WinForms.TreeView)
+            {
+                SetWindowTheme(control.Handle, Background.GetBrightness() < 0.5f ? "DarkMode_Explorer" : "Explorer", null);
+                return;
+            }
+
+            if (services.GetService(typeof(SVsUIShell)) is IVsUIShell5 shell)
             {
                 shell.ThemeWindow(control.Handle);
             }
         }
+
+        [System.Runtime.InteropServices.DllImport("uxtheme.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+        static extern int SetWindowTheme(IntPtr window, string? subAppName, string? subIdList);
 
         sealed class MenuColors : WinForms.ProfessionalColorTable
         {

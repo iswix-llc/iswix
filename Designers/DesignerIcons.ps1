@@ -1,6 +1,7 @@
 ﻿# Draws the IsWiX designer icons as tinted tiles: a soft rounded square in the designer's hue with a line glyph in a
 # strong shade of it. Each designer gets <Name>.ico (for light backgrounds, and the standalone app) and <Name>.dark.ico
-# (for Visual Studio's dark themes), each with 16, 20, 24, 32 and 48 pixel images, 32-bit with alpha. Glyphs are drawn
+# (for Visual Studio's dark themes), each with 16, 20, 24, 32 and 48 pixel images, 32-bit with alpha; tree icons the
+# designers use are written as 16 pixel PNGs the same way (see $treeIcons). Glyphs are drawn
 # on a 24-unit grid; 16 and 20 pixels use simpler glyphs where the full ones are too busy.
 #
 # Run from Windows PowerShell 5.1 (it uses WPF):  powershell -STA -File Designers\DesignerIcons.ps1 [-Preview sheet.png]
@@ -115,6 +116,28 @@ foreach ($d in $designers) {
     Write-Icon $d $false (Join-Path $dir "$($d.Name).ico")
     Write-Icon $d $true (Join-Path $dir "$($d.Name).dark.ico")
     "{0}: {1}.ico and {1}.dark.ico" -f $d.Dir, $d.Name
+}
+
+# Tree icons, the same tiles at 16 px as PNGs: <Name>.png and <Name>.dark.png, which DesignerImages.Add loads together.
+$treeIcons = @(
+    @{ Dir = 'FeaturesDesigner\Images'; Name = 'feature';  Hue = 'purple'; Paths = $designers[1].Small }
+    @{ Dir = 'FeaturesDesigner\Images'; Name = 'database'; Hue = 'blue';   Paths = @('M5 6.5 A7 2.5 0 1 0 19 6.5 A7 2.5 0 1 0 5 6.5', 'M5 6.5 L5 17.5 A7 2.5 0 0 0 19 17.5 L19 6.5', 'M5 12 A7 2.5 0 0 0 19 12') }
+)
+
+function Write-Png([byte[]]$pixels, [int]$size, [string]$path) {
+    $bitmap = New-Object System.Drawing.Bitmap $size, $size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+    $data = $bitmap.LockBits((New-Object System.Drawing.Rectangle 0, 0, $size, $size), 'WriteOnly', $bitmap.PixelFormat)
+    for ($y = 0; $y -lt $size; $y++) { [Runtime.InteropServices.Marshal]::Copy($pixels, $y * $size * 4, [IntPtr]($data.Scan0.ToInt64() + $y * $data.Stride), $size * 4) }
+    $bitmap.UnlockBits($data)
+    $bitmap.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
+    $bitmap.Dispose()
+}
+
+foreach ($t in $treeIcons) {
+    $dir = Join-Path $Repo "Designers\$($t.Dir)"
+    Write-Png (Render $t 16 $false) 16 (Join-Path $dir "$($t.Name).png")
+    Write-Png (Render $t 16 $true) 16 (Join-Path $dir "$($t.Name).dark.png")
+    "{0}: {1}.png and {1}.dark.png" -f $t.Dir, $t.Name
 }
 
 if (-not $Preview) { return }
