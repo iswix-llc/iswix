@@ -49,6 +49,22 @@ namespace ServicesDesigner
             renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
             deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
+            AddToolbar();
+        }
+
+        ToolStripButton _deleteButton = null!;
+
+        // The tree's commands as buttons above it too: nothing else shows that right-clicking it adds a service.
+        private void AddToolbar()
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            var newButton = new ToolStripButton("New Service") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false };
+            newButton.Click += (s, e) => createNewFolderToolStripMenuItem1.PerformClick();
+            _deleteButton = new ToolStripButton("Delete") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+            _deleteButton.Click += (s, e) => deleteToolStripMenuItem.PerformClick();
+            toolbar.Items.Add(newButton);
+            toolbar.Items.Add(_deleteButton);
+            splitContainer1.Panel1.Controls.Add(toolbar);
         }
 
         #region IFireworksDesigner Members
@@ -150,6 +166,7 @@ namespace ServicesDesigner
 
         private void treeViewServices_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            _deleteButton.Enabled = !e.Node!.Level.Equals(0);
             if (e.Node!.Level.Equals(0))
             {
                 treeViewServices.ContextMenuStrip = cmsComputer;
@@ -233,6 +250,7 @@ namespace ServicesDesigner
             _services.Remove(service);
             treeViewServices.SelectedNode.Remove();
             treeViewServices.SelectedNode = treeViewServices.Nodes[0];
+            _deleteButton.Enabled = false;
         }
 
         private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)

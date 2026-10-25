@@ -494,11 +494,28 @@ namespace IsWiX.Designer
                 Apply(contextMenu);
             }
 
+            // Designers swap a control's menu for what's selected (a tree's root and its items, say); the one set later
+            // is themed when it's set.
+            if (!MenuWatched.TryGetValue(control, out _))
+            {
+                MenuWatched.Add(control, new object());
+                control.ContextMenuStripChanged += (s, e) =>
+                {
+                    ThreadHelper.ThrowIfNotOnUIThread();
+                    if (control.ContextMenuStrip is { } changed)
+                    {
+                        Apply(changed);
+                    }
+                };
+            }
+
             foreach (WinForms.Control child in control.Controls)
             {
                 Apply(child);
             }
         }
+
+        static readonly ConditionalWeakTable<WinForms.Control, object> MenuWatched = new ConditionalWeakTable<WinForms.Control, object>();
 
         static void Apply(WinForms.ToolStrip strip)
         {

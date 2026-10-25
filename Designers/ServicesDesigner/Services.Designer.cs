@@ -119,8 +119,7 @@
             // cmsComputer
             // 
             this.cmsComputer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createNewFolderToolStripMenuItem1,
-            this.toolStripSeparator2});
+            this.createNewFolderToolStripMenuItem1});
             this.cmsComputer.Name = "cmsMergeRedirectFolder";
             this.cmsComputer.Size = new System.Drawing.Size(198, 32);
             // 
@@ -129,7 +128,7 @@
             this.createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             this.createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             this.createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
-            this.createNewFolderToolStripMenuItem1.Text = "Create New Service";
+            this.createNewFolderToolStripMenuItem1.Text = "New Service";
             this.createNewFolderToolStripMenuItem1.Click += new System.EventHandler(this.createNewFolderToolStripMenuItem1_Click);
             // 
             // toolStripSeparator2
@@ -141,8 +140,7 @@
             // 
             this.cmsService.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.renameFolderToolStripMenuItem,
-            this.deleteToolStripMenuItem,
-            this.toolStripSeparator1});
+            this.deleteToolStripMenuItem});
             this.cmsService.Name = "cmsDestinationTreeDefault";
             this.cmsService.Size = new System.Drawing.Size(182, 54);
             // 
@@ -160,7 +158,7 @@
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.deleteToolStripMenuItem.Text = "Remove Service";
+            this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
