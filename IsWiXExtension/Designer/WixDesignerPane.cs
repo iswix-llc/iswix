@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms.Integration;
+using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -104,8 +105,11 @@ namespace IsWiX.Designer
         void BuildDesignView()
         {
             var image = new FrameworkElementFactory(typeof(Image));
-            image.SetBinding(Image.SourceProperty, new Binding(nameof(IFireworksDesigner.PluginImage)) { Converter = new VsTheme.ThemedImageConverter() });
+            // Bound to the designer, which may carry an icon drawn for dark themes as well as its PluginImage.
+            image.SetBinding(Image.SourceProperty, new Binding { Converter = new VsTheme.ThemedImageConverter() });
             image.SetValue(FrameworkElement.WidthProperty, 16.0);
+            image.SetValue(FrameworkElement.HeightProperty, 16.0);
+            image.SetValue(RenderOptions.BitmapScalingModeProperty, BitmapScalingMode.HighQuality);
             var name = new FrameworkElementFactory(typeof(TextBlock));
             name.SetBinding(TextBlock.TextProperty, new Binding(nameof(IFireworksDesigner.PluginName)));
             name.SetValue(FrameworkElement.MarginProperty, new Thickness(5, 0, 0, 0));

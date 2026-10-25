@@ -14,11 +14,14 @@
   <ItemGroup>
     <None Remove="License.txt" />
     <None Remove="Namespaces.ico" />
+    <None Remove="Namespaces.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
     <EmbeddedResource Include="Namespaces.ico" />
+    <!-- The designer list's icon in Visual Studio's dark themes. -->
+    <EmbeddedResource Include="Namespaces.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>

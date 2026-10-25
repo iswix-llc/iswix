@@ -35,19 +35,60 @@ namespace IsWiX.Designer
         }
 
         /// <summary>
-        /// Converts an icon (a System.Drawing image, as designers give them) to WPF, adapted to the theme's background
-        /// the way Visual Studio adapts its own icons: images drawn for a light background are inverted in luminance
-        /// on a dark one, keeping their hues.
+        /// Gives a designer's icon for the designer list (bound to the designer itself). A designer that embeds a
+        /// <c>.dark.ico</c> beside its icon has one drawn for each kind of background: the dark one is used in dark
+        /// themes and the other in light ones, as drawn. A designer without one has its icon adapted the way Visual
+        /// Studio adapts its own: drawn for a light background, it's inverted in luminance on a dark one, keeping its hues.
         /// </summary>
         public sealed class ThemedImageConverter : IValueConverter
         {
             readonly FireworksFramework.Services.ImageConverter _toWpf = new FireworksFramework.Services.ImageConverter();
 
-            public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
-                _toWpf.Convert(value, targetType, parameter, culture) is BitmapSource source ? ThemedBitmapSource(source) : null;
+            public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                if (value is not FireworksFramework.Interfaces.IFireworksDesigner designer)
+                {
+                    return null;
+                }
+
+                var background = Color(TreeViewColors.BackgroundColorKey);
+                var dark = background.GetBrightness() < 0.5f;
+                if (DesignerIcon(designer, dark: true) != null)
+                {
+                    return DesignerIcon(designer, dark);
+                }
+
+                var source = DesignerIcon(designer, dark: false) ?? _toWpf.Convert(designer.PluginImage, targetType, parameter, culture) as BitmapSource;
+                return source is null ? null : ThemedBitmapSource(source);
+            }
 
             public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
                 throw new NotSupportedException();
+        }
+
+        // The designer list shows icons at 16 x 16 logical pixels.
+        const int ListIconSize = 16;
+
+        // A designer assembly's icon, or its .dark.ico, at the image size closest above what 16 logical pixels are on
+        // this screen, so the 16 px drawing (often simplified) is the one shown at 100% scaling.
+        static BitmapSource? DesignerIcon(FireworksFramework.Interfaces.IFireworksDesigner designer, bool dark)
+        {
+            var assembly = designer.GetType().Assembly;
+            var name = assembly.GetManifestResourceNames().FirstOrDefault(n =>
+                n.EndsWith(".ico", StringComparison.OrdinalIgnoreCase) &&
+                n.EndsWith(".dark.ico", StringComparison.OrdinalIgnoreCase) == dark);
+            if (name is null)
+            {
+                return null;
+            }
+
+            using var stream = assembly.GetManifestResourceStream(name)!;
+            var frames = new IconBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames;
+            var scale = Application.Current?.MainWindow is { } window ? VisualTreeHelper.GetDpi(window).DpiScaleX : 1.0;
+            var wanted = (int)Math.Round(ListIconSize * scale);
+            var frame = frames.OrderBy(f => f.PixelWidth).FirstOrDefault(f => f.PixelWidth >= wanted) ?? frames.OrderBy(f => f.PixelWidth).Last();
+            frame.Freeze();
+            return frame;
         }
 
         static BitmapSource ThemedBitmapSource(BitmapSource source)

@@ -14,12 +14,15 @@
   <ItemGroup>
     <None Remove="License.txt" />
     <None Remove="ShortCuts.ico" />
+    <None Remove="ShortCuts.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
     <EmbeddedResource Include="Images\*.png" />
     <EmbeddedResource Include="ShortCuts.ico" />
+    <!-- The designer list's icon in Visual Studio's dark themes. -->
+    <EmbeddedResource Include="ShortCuts.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
