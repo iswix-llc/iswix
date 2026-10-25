@@ -136,6 +136,8 @@ $treeIcons = @(
     @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'folder_open';        Hue = 'amber'; Paths = $folderOpen }
     @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'blue_folder_closed'; Hue = 'blue';  Paths = $folderClosed }
     @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'blue_folder_open';   Hue = 'blue';  Paths = $folderOpen }
+    # A service, as the Services designer's icon.
+    @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'service';            Hue = 'gray';  Paths = $designers[5].Paths; Small = $designers[5].Small }
 )
 
 function Write-Png([byte[]]$pixels, [int]$size, [string]$path) {
