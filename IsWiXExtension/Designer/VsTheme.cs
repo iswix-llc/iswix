@@ -553,6 +553,88 @@ namespace IsWiX.Designer
             };
             list.GotFocus += (s, e) => list.Invalidate();
             list.LostFocus += (s, e) => list.Invalidate();
+
+            var filler = new HeaderFiller();
+            if (list.IsHandleCreated)
+            {
+                filler.Attach(list);
+            }
+
+            list.HandleCreated += (s, e) => filler.Attach(list);
+        }
+
+        // Owner drawing reaches the column headers only; the header control paints the area past the last column
+        // itself, in the system's light colors. It's painted over here, after the header paints, in the header color.
+        sealed class HeaderFiller : WinForms.NativeWindow
+        {
+            const int WM_PAINT = 0x000F;
+            const int LVM_GETHEADER = 0x101F;
+            const int HDM_GETITEMCOUNT = 0x1200;
+            const int HDM_GETITEMRECT = 0x1207;
+            const int HDM_ORDERTOINDEX = 0x120F;
+
+            public void Attach(WinForms.ListView list)
+            {
+                var header = SendMessage(list.Handle, LVM_GETHEADER, IntPtr.Zero, IntPtr.Zero);
+                if (header != IntPtr.Zero && header != Handle)
+                {
+                    if (Handle != IntPtr.Zero)
+                    {
+                        ReleaseHandle();
+                    }
+
+                    AssignHandle(header);
+                }
+            }
+
+            protected override void WndProc(ref WinForms.Message m)
+            {
+                base.WndProc(ref m);
+                if (m.Msg == WM_PAINT)
+                {
+                    FillPastLastColumn();
+                }
+            }
+
+            void FillPastLastColumn()
+            {
+                // The right edge of the last column in display order (0 with none).
+                var right = 0;
+                var count = (int)SendMessage(Handle, HDM_GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero);
+                if (count > 0)
+                {
+                    var last = SendMessage(Handle, HDM_ORDERTOINDEX, (IntPtr)(count - 1), IntPtr.Zero);
+                    if (SendMessage(Handle, HDM_GETITEMRECT, last, out var item) != IntPtr.Zero)
+                    {
+                        right = item.Right;
+                    }
+                }
+
+                GetClientRect(Handle, out var client);
+                if (right >= client.Right)
+                {
+                    return;
+                }
+
+                using var graphics = Drawing.Graphics.FromHwnd(Handle);
+                using var back = new Drawing.SolidBrush(Color(HeaderColors.DefaultColorKey));
+                using var line = new Drawing.Pen(Color(EnvironmentColors.ToolWindowBorderColorKey));
+                graphics.FillRectangle(back, right, 0, client.Right - right, client.Bottom);
+                graphics.DrawLine(line, right, client.Bottom - 1, client.Right, client.Bottom - 1);
+            }
+
+            [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+            struct RECT
+            {
+                public int Left;
+                public int Top;
+                public int Right;
+                public int Bottom;
+            }
+
+            [System.Runtime.InteropServices.DllImport("user32.dll")] static extern IntPtr SendMessage(IntPtr window, int message, IntPtr wParam, IntPtr lParam);
+            [System.Runtime.InteropServices.DllImport("user32.dll")] static extern IntPtr SendMessage(IntPtr window, int message, IntPtr wParam, out RECT lParam);
+            [System.Runtime.InteropServices.DllImport("user32.dll")] static extern bool GetClientRect(IntPtr window, out RECT rect);
         }
 
         // Owner-drawn lists erase and redraw each row on screen, which flickers whenever they repaint (the mouse moving
