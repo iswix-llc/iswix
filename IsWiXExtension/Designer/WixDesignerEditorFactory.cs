@@ -11,9 +11,9 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 namespace IsWiX.Designer
 {
     /// <summary>
-    /// Opens a .wxs file in the IsWiX designer (preview), offered under Open With. The designer edits Visual Studio's
-    /// in-memory copy of the file, a text buffer it shares with the XML editor, so undo, the unsaved-changes marker,
-    /// save and source control all work as they do for text.
+    /// The default editor for .wxs files: a Design tab with IsWiX's designers and an XML tab with Visual Studio's XML
+    /// editor. Both edit Visual Studio's in-memory copy of the file, a text buffer, so undo, the unsaved-changes
+    /// marker, save and source control all work as they do for text.
     /// </summary>
     [Guid(GuidString)]
     internal sealed class WixDesignerEditorFactory : IVsEditorFactory
@@ -91,7 +91,8 @@ namespace IsWiX.Designer
             var pane = new WixDesignerPane(_package, textLines, pszMkDocument);
             ppunkDocView = Marshal.GetIUnknownForObject(pane);
             ppunkDocData = Marshal.GetIUnknownForObject(textLines);
-            pbstrEditorCaption = " [IsWiX]";
+            // No suffix: the window is the file's, with its Design and XML tabs.
+            pbstrEditorCaption = string.Empty;
             return VSConstants.S_OK;
         }
 

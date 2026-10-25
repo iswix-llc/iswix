@@ -28,10 +28,10 @@ namespace IsWiX
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(IsWiXPackage.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    // The in-Visual Studio designer (preview), offered under Open With for .wxs files. A low priority keeps the
-    // usual editor (HeatWave's or the XML editor) the default.
+    // The .wxs editor: Design and XML tabs over one document. Its priority makes it the default for .wxs; Open With
+    // still offers the XML editor (and Set as Default switches back).
     [ProvideEditorFactory(typeof(Designer.WixDesignerEditorFactory), 110, TrustLevel = __VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
-    [ProvideEditorExtension(typeof(Designer.WixDesignerEditorFactory), ".wxs", 0x10, NameResourceID = 110)]
+    [ProvideEditorExtension(typeof(Designer.WixDesignerEditorFactory), ".wxs", 0x40, NameResourceID = 110)]
     [ProvideEditorLogicalView(typeof(Designer.WixDesignerEditorFactory), VSConstants.LOGVIEWID.Designer_string)]
     [ProvideUIContextRule(_uiContextSupportedFiles,
         name: "Supported Files",

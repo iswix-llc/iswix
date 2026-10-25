@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="110" xml:space="preserve">
-    <value>IsWiX Designer (Preview)</value>
+    <value>IsWiX Designer</value>
     <comment>The editor's name in Open With.</comment>
   </data>
 </root>

@@ -222,17 +222,48 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <!-- The in-Visual Studio designer (preview) hosts the designers' .NET Framework builds. -->
+    <!-- The in-Visual Studio designer (preview) hosts the designers' .NET Framework builds;
+         PluginManager finds them next to FireworksFramework, as in the app. -->
     <ProjectReference Include="..\Shared\FireworksFramework\FireworksFramework.csproj">
       <Name>FireworksFramework</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\CustomTablesDesigner\CustomTablesDesigner.csproj">
+      <Name>CustomTablesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\FeaturesDesigner\FeaturesDesigner.csproj">
+      <Name>FeaturesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj">
+      <Name>FilesAndFoldersDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj">
+      <Name>GeneralInformationDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj">
+      <Name>NamespacesDesigner</Name>
       <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
     </ProjectReference>
     <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj">
       <Name>PropertiesDesigner</Name>
       <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
     </ProjectReference>
+    <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj">
+      <Name>ServicesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj">
+      <Name>ShortCutsDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>

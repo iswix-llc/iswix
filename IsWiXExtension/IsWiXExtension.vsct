@@ -17,14 +17,14 @@
 					<ButtonText>Launch IsWiX</ButtonText>
 				</Strings>
 			</Button>
-			<!-- Opens the .wxs in the in-Visual Studio designer (preview). Takes an optional file path, so it can be
+			<!-- Opens the .wxs in the IsWiX designer (Design and XML tabs). Takes an optional file path, so it can be
 			     run as "IsWiX.OpenDesigner path" from the Command Window. -->
 			<Button guid="guidIsWiXPackageCmdSet" id="CommandOpenDesignerId" priority="0x0101" type="Button">
 				<Parent guid="guidIsWiXPackageCmdSet" id="MyMenuGroup" />
 				<Icon guid="guidImages" id="bmpPic1" />
 				<CommandFlag>AllowParams</CommandFlag>
 				<Strings>
-					<ButtonText>Open in IsWiX Designer (Preview)</ButtonText>
+					<ButtonText>Open in IsWiX Designer</ButtonText>
 					<CanonicalName>.IsWiX.OpenDesigner</CanonicalName>
 					<LocCanonicalName>.IsWiX.OpenDesigner</LocCanonicalName>
 				</Strings>
