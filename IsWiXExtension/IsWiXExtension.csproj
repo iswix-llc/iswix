@@ -50,6 +50,8 @@
     <Compile Include="CommandLaunchIsWiX.cs" />
     <Compile Include="Designer\WixDesignerEditorFactory.cs" />
     <Compile Include="Designer\WixDesignerPane.cs" />
+    <Compile Include="Designer\CodeWindowHost.cs" />
+    <Compile Include="Designer\VsTheme.cs" />
     <Compile Include="CommandOpenDesigner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsWiXExtensionPackage.cs" />

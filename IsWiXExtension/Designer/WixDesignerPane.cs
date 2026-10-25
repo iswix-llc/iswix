@@ -15,9 +15,10 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using static FireworksFramework.Types.Enums;
 using IServiceProvider = System.IServiceProvider;
@@ -26,17 +27,17 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 namespace IsWiX.Designer
 {
     /// <summary>
-    /// The .wxs document window: a Design tab with IsWiX's designers and an XML tab with Visual Studio's XML editor,
-    /// both over Visual Studio's text buffer for the file. A designer edit is written to the buffer as one edit
-    /// covering only the text that changed; text edits (typing, undo, a merge) reach the designers when the Design tab
-    /// is shown, or right away if it already is.
+    /// The .wxs document window: a Design view with IsWiX's designers and an XML view with Visual Studio's XML editor,
+    /// switched by tabs at the bottom, both over Visual Studio's text buffer for the file. A designer edit is written to
+    /// the buffer as one edit covering only the text that changed; text edits (typing, undo, a merge) reach the designers
+    /// when the Design view is shown, or right away if it already is.
     /// </summary>
     internal sealed class WixDesignerPane : WindowPane, IOleCommandTarget, IPublishable, IVsTextBufferDataEvents
     {
-        // How long text changes must pause before a showing Design tab reloads.
+        // How long text changes must pause before a showing Design view reloads.
         static readonly TimeSpan ReloadDelay = TimeSpan.FromMilliseconds(400);
 
-        // Visual Studio's XML language service, for colorizing and IntelliSense in the XML tab.
+        // Visual Studio's XML language service: colorizing and IntelliSense in the XML view.
         static readonly Guid XmlLanguageService = new Guid("f6819a78-a205-47b5-be1c-675b3c7f0b8e");
 
         readonly IVsTextLines _textLines;
@@ -45,17 +46,25 @@ namespace IsWiX.Designer
         readonly object _editTag = new object();
         readonly DispatcherTimer _reloadTimer;
 
-        readonly TabControl _tabs = new TabControl { TabStripPlacement = Dock.Bottom };
+        // The tabs are only a strip; both views stay alive in _views and the strip shows one, so the XML editor's
+        // window isn't destroyed and recreated on every switch.
+        readonly DockPanel _root = new DockPanel { LastChildFill = true };
+        readonly TabControl _tabs = new TabControl();
         readonly TabItem _designTab = new TabItem { Header = "Design" };
         readonly TabItem _xmlTab = new TabItem { Header = "XML" };
+        readonly Grid _views = new Grid();
+        readonly DockPanel _designView = new DockPanel { LastChildFill = true };
+        readonly Border _xmlView = new Border { Visibility = Visibility.Collapsed };
         readonly TextBlock _status = new TextBlock { Margin = new Thickness(6, 3, 6, 3), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
         readonly ListView _designerList = new ListView { SelectionMode = SelectionMode.Single };
         readonly Grid _designerHost = new Grid();
         readonly WindowsFormsHost _winFormsHost = new WindowsFormsHost();
+        readonly HashSet<System.Windows.Forms.Control> _themedWinForms = new HashSet<System.Windows.Forms.Control>();
 
         IReadOnlyList<IFireworksDesigner> _designers = Array.Empty<IFireworksDesigner>();
         ITextBuffer? _buffer;
-        IVsTextView? _textView;
+        IVsCodeWindow? _codeWindow;
+        CodeWindowHost? _codeWindowHost;
         IConnectionPoint? _dataEventsPoint;
         uint _dataEventsCookie;
         bool _designStale = true;
@@ -65,22 +74,34 @@ namespace IsWiX.Designer
         public WixDesignerPane(IServiceProvider serviceProvider, IVsTextLines textLines, string filePath)
             : base(serviceProvider)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             _textLines = textLines;
             _filePath = filePath;
             _reloadTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = ReloadDelay };
-            _reloadTimer.Tick += (s, e) => { _reloadTimer.Stop(); ReloadDesigners(); };
+            _reloadTimer.Tick += (s, e) =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                _reloadTimer.Stop();
+                ReloadDesigners();
+            };
 
-            _designTab.Content = BuildDesignView();
+            BuildDesignView();
+            _views.Children.Add(_designView);
+            _views.Children.Add(_xmlView);
             _tabs.Items.Add(_designTab);
             _tabs.Items.Add(_xmlTab);
             _tabs.SelectionChanged += OnTabChanged;
-            Content = _tabs;
+            VsTheme.ApplyTabStrip(_tabs);
+            DockPanel.SetDock(_tabs, Dock.Bottom);
+            _root.Children.Add(_tabs);
+            _root.Children.Add(_views);
+            Content = _root;
         }
 
         bool DesignShowing => ReferenceEquals(_tabs.SelectedItem, _designTab);
 
         // The standalone app's layout: the designers that apply to the document on the left, the chosen one on the right.
-        FrameworkElement BuildDesignView()
+        void BuildDesignView()
         {
             var image = new FrameworkElementFactory(typeof(Image));
             image.SetBinding(Image.SourceProperty, new Binding(nameof(IFireworksDesigner.PluginImage)) { Converter = new FireworksFramework.Services.ImageConverter() });
@@ -94,7 +115,11 @@ namespace IsWiX.Designer
             item.AppendChild(image);
             item.AppendChild(name);
             _designerList.ItemTemplate = new DataTemplate { VisualTree = item };
-            _designerList.SelectionChanged += (s, e) => ShowSelectedDesigner();
+            _designerList.SelectionChanged += (s, e) =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                ShowSelectedDesigner();
+            };
 
             var grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(180) });
@@ -107,11 +132,12 @@ namespace IsWiX.Designer
             Grid.SetColumn(_designerHost, 2);
             grid.Children.Add(_designerHost);
 
-            var panel = new DockPanel { LastChildFill = true };
             DockPanel.SetDock(_status, Dock.Top);
-            panel.Children.Add(_status);
-            panel.Children.Add(grid);
-            return panel;
+            _designView.Children.Add(_status);
+            _designView.Children.Add(grid);
+
+            // Visual Studio's colors (light, dark, blue) for the view and the WPF designers in it.
+            VsTheme.Apply(_designView);
         }
 
         protected override void Initialize()
@@ -122,6 +148,7 @@ namespace IsWiX.Designer
             _designers = PluginManager.PluginManagerInstance.CreateDesigners(_documentManager)
                 .Where(d => d.PluginType == PluginType.Designer)
                 .ToList();
+            VSColorTheme.ThemeChanged += OnThemeChanged;
 
             // An existing buffer (the file was open in another editor) has its text already; a new one is loaded by
             // Visual Studio after the editor is created, and says so through IVsTextBufferDataEvents.
@@ -135,24 +162,6 @@ namespace IsWiX.Designer
             }
         }
 
-        // Visual Studio's own editor over the same buffer, so the XML tab has its colorizing, IntelliSense, find and
-        // keyboard commands, which reach it through this pane's IOleCommandTarget.
-        FrameworkElement CreateXmlEditor()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var componentModel = (IComponentModel)GetService(typeof(SComponentModel));
-            var adapters = componentModel.GetService<IVsEditorAdaptersFactoryService>();
-            var editorFactory = componentModel.GetService<ITextEditorFactoryService>();
-            var roles = editorFactory.CreateTextViewRoleSet(
-                PredefinedTextViewRoles.Analyzable, PredefinedTextViewRoles.Document, PredefinedTextViewRoles.Editable,
-                PredefinedTextViewRoles.Interactive, PredefinedTextViewRoles.PrimaryDocument, PredefinedTextViewRoles.Structured,
-                PredefinedTextViewRoles.Zoomable);
-            _textView = adapters.CreateVsTextViewAdapter((IOleServiceProvider)GetService(typeof(IOleServiceProvider)), roles);
-            var flags = (uint)TextViewInitFlags.VIF_HSCROLL | (uint)TextViewInitFlags.VIF_VSCROLL | (uint)TextViewInitFlags3.VIF_NO_HWND_SUPPORT;
-            ErrorHandler.ThrowOnFailure(_textView.Initialize(_textLines, IntPtr.Zero, flags, new[] { new INITVIEW { fSelectionMargin = 0, fWidgetMargin = 0, fVirtualSpace = 0, fDragDropMove = 1 } }));
-            return adapters.GetWpfTextViewHost(_textView).HostControl;
-        }
-
         bool TryAttachBuffer()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -163,7 +172,8 @@ namespace IsWiX.Designer
                 return false;
             }
 
-            // A .wxs is XML; without HeatWave nothing else says so, and the XML tab would be plain text.
+            // A .wxs is XML; without HeatWave nothing else says so. Set before the code window is created, which is
+            // when the language service attaches.
             if (ErrorHandler.Succeeded(_textLines.GetLanguageServiceID(out var language)) && language != XmlLanguageService)
             {
                 _textLines.SetLanguageServiceID(XmlLanguageService);
@@ -172,21 +182,44 @@ namespace IsWiX.Designer
             _buffer.Changed += OnBufferChanged;
             Log("Attached to the text buffer of " + _filePath);
 
-            // The text view can only be created over a buffer that has its text.
             try
             {
-                _xmlTab.Content = CreateXmlEditor();
+                CreateCodeWindow();
             }
             catch (Exception ex)
             {
                 Log("The XML editor failed to open: " + ex);
-                _xmlTab.Content = new TextBlock { Margin = new Thickness(6), TextWrapping = TextWrapping.Wrap, Text = "The XML editor failed to open: " + ex.Message };
+                _xmlView.Child = new TextBlock { Margin = new Thickness(6), TextWrapping = TextWrapping.Wrap, Text = "The XML editor failed to open: " + ex.Message };
             }
 
-            // Open on the Design tab when a designer applies to the file, else on the XML.
+            // Open on the Design view when a designer applies to the file, else on the XML.
             ReloadDesigners();
             _tabs.SelectedItem = _designerList.Items.Count > 0 ? _designTab : _xmlTab;
             return true;
+        }
+
+        // The code window the XML editor itself uses, over the same buffer: colorizing, IntelliSense, find, outlining.
+        // Keyboard commands reach it through this pane's IOleCommandTarget.
+        void CreateCodeWindow()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var componentModel = (IComponentModel)GetService(typeof(SComponentModel));
+            var adapters = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+            _codeWindow = adapters.CreateVsCodeWindowAdapter((IOleServiceProvider)GetService(typeof(IOleServiceProvider)));
+            var behavior = (uint)(_codewindowbehaviorflags.CWB_DISABLESPLITTER | _codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR);
+            ErrorHandler.ThrowOnFailure(((IVsCodeWindowEx)_codeWindow).Initialize(behavior, VSUSERCONTEXTATTRIBUTEUSAGE.VSUC_Usage_Filter, string.Empty, string.Empty, 0, new INITVIEW[1]));
+            ErrorHandler.ThrowOnFailure(_codeWindow.SetBuffer(_textLines));
+            _codeWindowHost = new CodeWindowHost(_codeWindow);
+            _xmlView.Child = _codeWindowHost;
+        }
+
+        IVsTextView? TextView
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                return _codeWindowHost?.TextView;
+            }
         }
 
         // Visual Studio's activity log (devenv /log) records what the designer does, for diagnosing the preview.
@@ -233,19 +266,31 @@ namespace IsWiX.Designer
 
         void OnTabChanged(object sender, SelectionChangedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (!ReferenceEquals(e.OriginalSource, _tabs))
             {
                 return;
             }
 
-            if (DesignShowing && _designStale)
+            _designView.Visibility = DesignShowing ? Visibility.Visible : Visibility.Collapsed;
+            _xmlView.Visibility = DesignShowing ? Visibility.Collapsed : Visibility.Visible;
+            if (DesignShowing)
             {
-                ReloadDesigners();
+                if (_designStale)
+                {
+                    ReloadDesigners();
+                }
+            }
+            else
+            {
+                // Put the caret in the editor, as switching to a code view does, once the view is laid out.
+                ThreadHelper.JoinableTaskFactory.StartOnIdle(() => TextView?.SendExplicitFocus()).FileAndForget("iswix/designer/focusxml");
             }
         }
 
         void ReloadDesigners()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (_buffer is null)
             {
                 return;
@@ -303,6 +348,7 @@ namespace IsWiX.Designer
 
         void ShowSelectedDesigner()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             _designerHost.Children.Clear();
             _winFormsHost.Child = null;
             if (_designerList.SelectedItem is not IFireworksDesigner designer)
@@ -321,6 +367,37 @@ namespace IsWiX.Designer
             }
 
             designer.LoadData();
+            if (designer is System.Windows.Forms.Control loaded)
+            {
+                // After LoadData, which fills the trees and lists.
+                ThemeWinForms(loaded);
+            }
+        }
+
+        void ThemeWinForms(System.Windows.Forms.Control control)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            VsTheme.Apply(control);
+            VsTheme.ThemeScrollBars(this, control);
+            foreach (var child in Descendants(control))
+            {
+                VsTheme.ThemeScrollBars(this, child);
+            }
+
+            _themedWinForms.Add(control);
+        }
+
+        static IEnumerable<System.Windows.Forms.Control> Descendants(System.Windows.Forms.Control control) =>
+            control.Controls.Cast<System.Windows.Forms.Control>().SelectMany(c => new[] { c }.Concat(Descendants(c)));
+
+        void OnThemeChanged(ThemeChangedEventArgs e)
+        {
+            // The WPF views follow by themselves; the WinForms designers' colors are set, so set them again.
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (var control in _themedWinForms)
+            {
+                ThemeWinForms(control);
+            }
         }
 
         void ShowStatus(string? message)
@@ -392,31 +469,94 @@ namespace IsWiX.Designer
         {
         }
 
-        // Commands: everything goes to the XML editor while its tab shows. On the Design tab, undo and redo still go to
-        // it (they are the buffer's, and so cover designer edits); other commands are left to the designer controls.
-        IOleCommandTarget? CommandTarget(ref Guid group, uint id)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            return _textView as IOleCommandTarget is { } target && (!DesignShowing || IsUndoRedo(group, id)) ? target : null;
-        }
+        // Commands: everything goes to the XML editor while its view shows. On the Design view, undo and redo go to the
+        // buffer's undo manager (they cover designer edits too, which are buffer edits); other commands are left to the
+        // designer controls.
+        static bool IsUndo(Guid group, uint id) =>
+            group == VSConstants.GUID_VSStandardCommandSet97 && (id == (uint)VSConstants.VSStd97CmdID.Undo || id == (uint)VSConstants.VSStd97CmdID.MultiLevelUndo);
 
-        static bool IsUndoRedo(Guid group, uint id) =>
-            group == VSConstants.GUID_VSStandardCommandSet97 &&
-            (id == (uint)VSConstants.VSStd97CmdID.Undo || id == (uint)VSConstants.VSStd97CmdID.Redo ||
-             id == (uint)VSConstants.VSStd97CmdID.MultiLevelUndo || id == (uint)VSConstants.VSStd97CmdID.MultiLevelRedo);
+        static bool IsRedo(Guid group, uint id) =>
+            group == VSConstants.GUID_VSStandardCommandSet97 && (id == (uint)VSConstants.VSStd97CmdID.Redo || id == (uint)VSConstants.VSStd97CmdID.MultiLevelRedo);
+
+        IOleUndoManager? UndoManager
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                return ErrorHandler.Succeeded(_textLines.GetUndoManager(out var manager)) ? manager : null;
+            }
+        }
 
         int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var target = cCmds == 1 ? CommandTarget(ref pguidCmdGroup, prgCmds[0].cmdID) : (DesignShowing ? null : _textView as IOleCommandTarget);
-            return target?.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText) ?? (int)Constants.OLECMDERR_E_NOTSUPPORTED;
+            if (!DesignShowing)
+            {
+                return TextView is IOleCommandTarget target
+                    ? target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText)
+                    : (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
+            }
+
+            if (cCmds == 1 && UndoManager is { } undo && (IsUndo(pguidCmdGroup, prgCmds[0].cmdID) || IsRedo(pguidCmdGroup, prgCmds[0].cmdID)))
+            {
+                var available = CanUndoOrRedo(undo, IsUndo(pguidCmdGroup, prgCmds[0].cmdID));
+                prgCmds[0].cmdf = (uint)(OLECMDF.OLECMDF_SUPPORTED | (available ? OLECMDF.OLECMDF_ENABLED : 0));
+                return VSConstants.S_OK;
+            }
+
+            return (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return CommandTarget(ref pguidCmdGroup, nCmdID)?.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut)
-                ?? (int)Constants.OLECMDERR_E_NOTSUPPORTED;
+            if (!DesignShowing)
+            {
+                return TextView is IOleCommandTarget target
+                    ? target.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut)
+                    : (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
+            }
+
+            if (UndoManager is { } undo)
+            {
+                if (IsUndo(pguidCmdGroup, nCmdID))
+                {
+                    undo.UndoTo(null);
+                    return VSConstants.S_OK;
+                }
+
+                if (IsRedo(pguidCmdGroup, nCmdID))
+                {
+                    undo.RedoTo(null);
+                    return VSConstants.S_OK;
+                }
+            }
+
+            return (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
+        }
+
+        // The undo manager reports an empty stack by failing (an exception), not with a result.
+        static bool CanUndoOrRedo(IOleUndoManager undo, bool isUndo)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            try
+            {
+                string description;
+                if (isUndo)
+                {
+                    undo.GetLastUndoDescription(out description);
+                }
+                else
+                {
+                    undo.GetLastRedoDescription(out description);
+                }
+
+                return true;
+            }
+            catch (System.Runtime.InteropServices.COMException)
+            {
+                return false;
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -425,6 +565,7 @@ namespace IsWiX.Designer
             if (disposing)
             {
                 _reloadTimer.Stop();
+                VSColorTheme.ThemeChanged -= OnThemeChanged;
                 _documentManager.UnSubscribe("vsdesigner");
                 if (_buffer != null)
                 {
@@ -437,8 +578,8 @@ namespace IsWiX.Designer
                     _dataEventsPoint = null;
                 }
 
-                _textView?.CloseView();
-                _textView = null;
+                _codeWindowHost?.Dispose();
+                _codeWindow?.Close();
                 _winFormsHost.Dispose();
             }
 
