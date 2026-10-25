@@ -30,6 +30,23 @@ namespace FeaturesDesigner
             _documentManager = documentManager;
             InitializeComponent();
             DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
+            AddToolbar();
+        }
+
+        // The tree's commands as buttons above it too: with no features the tree is empty, and nothing shows that
+        // right-clicking it adds one.
+        private void AddToolbar()
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            foreach (var menuItem in new[] { toolStripMenuItemNewFeature, toolStripMenuItemNewSubFeature, toolStripMenuItemRename, toolStripMenuItemDelete })
+            {
+                var button = new ToolStripButton(menuItem.Text) { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = menuItem.Enabled };
+                button.Click += (s, e) => menuItem.PerformClick();
+                menuItem.EnabledChanged += (s, e) => button.Enabled = menuItem.Enabled;
+                toolbar.Items.Add(button);
+            }
+
+            splitContainer1.Panel1.Controls.Add(toolbar);
         }
 
         #region IFireworksDesigner Members
