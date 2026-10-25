@@ -126,10 +126,8 @@
             // createNewFolderToolStripMenuItem1
             // 
             this.createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
-            this.createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             this.createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
             this.createNewFolderToolStripMenuItem1.Text = "New Service";
-            this.createNewFolderToolStripMenuItem1.Click += new System.EventHandler(this.createNewFolderToolStripMenuItem1_Click);
             // 
             // toolStripSeparator2
             // 

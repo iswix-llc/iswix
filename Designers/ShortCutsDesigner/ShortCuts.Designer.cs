@@ -178,7 +178,6 @@
             toolStripMenuItemCreateSC.Name = "toolStripMenuItemCreateSC";
             toolStripMenuItemCreateSC.Size = new System.Drawing.Size(220, 30);
             toolStripMenuItemCreateSC.Text = "New Shortcut";
-            toolStripMenuItemCreateSC.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator1
             // 
@@ -219,7 +218,6 @@
             toolStripMenuItemCreateShortCut.Name = "toolStripMenuItemCreateShortCut";
             toolStripMenuItemCreateShortCut.Size = new System.Drawing.Size(201, 30);
             toolStripMenuItemCreateShortCut.Text = "New Shortcut";
-            toolStripMenuItemCreateShortCut.Click += toolStripMenuItemCreateShortCut_Click;
             // 
             // toolStripSeparator2
             // 

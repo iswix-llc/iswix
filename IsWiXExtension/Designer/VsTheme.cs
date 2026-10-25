@@ -546,9 +546,24 @@ namespace IsWiX.Designer
             {
                 item.ForeColor = strip.ForeColor;
                 ThemeImage(item, strip.BackColor);
-                if (item is WinForms.ToolStripDropDownItem { HasDropDownItems: true } dropDown)
+                if (item is WinForms.ToolStripDropDownItem dropDown)
                 {
-                    Apply(dropDown.DropDown);
+                    if (dropDown.HasDropDownItems)
+                    {
+                        Apply(dropDown.DropDown);
+                    }
+
+                    // Designers fill some drop-downs as they open (the files to make a service or shortcut for); this
+                    // handler is added after theirs, so it themes what they've just added.
+                    if (!MenuWatched.TryGetValue(dropDown.DropDown, out _))
+                    {
+                        MenuWatched.Add(dropDown.DropDown, new object());
+                        dropDown.DropDownOpening += (s, e) =>
+                        {
+                            ThreadHelper.ThrowIfNotOnUIThread();
+                            Apply(dropDown.DropDown);
+                        };
+                    }
                 }
             }
         }

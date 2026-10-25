@@ -45,7 +45,7 @@
   <ItemGroup>
     <!-- Tree icons the WinForms designers share; see Services\DesignerImages.cs. -->
     <EmbeddedResource Include="Images\Designers\*.png" />
-    <!-- Menu images and the component picker icon; see DesignerImages.MenuImage. -->
+    <!-- Menu images, light and dark; see DesignerImages.MenuImage. -->
     <EmbeddedResource Include="Images\Menus\*" />
   </ItemGroup>
 

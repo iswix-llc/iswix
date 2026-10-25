@@ -54,14 +54,6 @@ namespace FireworksFramework.Services
         /// </summary>
         public static Image? DarkMenuImage(Image image) => MenuDarks.TryGetValue(image, out var dark) ? dark : null;
 
-        /// <summary>Gets the icon of the component picker dialogs.</summary>
-        public static Icon ComponentPickerIcon()
-        {
-            using var stream = typeof(DesignerImages).Assembly.GetManifestResourceStream(MenuPrefix + "component_picker.ico")
-                ?? throw new InvalidOperationException("The component picker icon is not embedded in FireworksFramework.");
-            return new Icon(stream);
-        }
-
         // The menu images are drawn by Designers\DesignerIcons.ps1, each with a .dark.png beside it.
         private const string MenuPrefix = "FireworksFramework.Images.Menus.";
 

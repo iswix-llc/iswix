@@ -90,7 +90,7 @@ namespace ShortCutsDesigner
         }
 
         ToolStripButton _newFolderButton = null!;
-        ToolStripButton _newShortcutButton = null!;
+        ToolStripDropDownButton _newShortcutButton = null!;
         ToolStripButton _renameButton = null!;
         ToolStripButton _deleteButton = null!;
 
@@ -118,7 +118,26 @@ namespace ShortCutsDesigner
             }
 
             _newFolderButton = Button("New Folder", AddNodeToDestinationTreeFragmentStyle);
-            _newShortcutButton = Button("New Shortcut", CreateShortCut);
+
+            // New Shortcut lists the files a shortcut can be made for, by folder, here and in the tree's menus.
+            _newShortcutButton = new ToolStripDropDownButton("New Shortcut") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+            FillNewShortcutMenu(_newShortcutButton.DropDownItems);
+            _newShortcutButton.DropDownOpening += (s, e) =>
+            {
+                if (tvDestination.SelectedNode is { IsEditing: true } editing)
+                {
+                    editing.EndEdit(false);
+                }
+
+                FillNewShortcutMenu(_newShortcutButton.DropDownItems);
+            };
+            toolbar.Items.Add(_newShortcutButton);
+            foreach (var (menu, item) in new[] { (cmsDestinationTreeDefault, toolStripMenuItemCreateSC), (cmsMergeRedirectFolder, toolStripMenuItemCreateShortCut) })
+            {
+                FillNewShortcutMenu(item.DropDownItems);
+                menu.Opening += (s, e) => FillNewShortcutMenu(item.DropDownItems);
+            }
+
             _renameButton = Button("Rename", () =>
             {
                 tvDestination.LabelEdit = true;
@@ -592,81 +611,32 @@ namespace ShortCutsDesigner
             tvDestination.SelectedNode.Collapse();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        // A shortcut can be made for any file but a .dll or .pdb.
+        private void FillNewShortcutMenu(ToolStripItemCollection items)
         {
-            CreateShortCut();
+            var candidates = _documentManager.Document is null
+                ? new List<ShortCutCandidate>()
+                : ShortcutDocument.GetShortCutCandidates(_documentManager.Document);
+            CandidateMenu.Fill(items, candidates, c => c.DestinationFilePath, CreateShortCut,
+                "No files to make a shortcut for", byFolder: true);
         }
 
-        private void toolStripMenuItemCreateShortCut_Click(object sender, EventArgs e)
+        // In the selected folder, named for the file, numbered if a shortcut in the folder already has that name.
+        private void CreateShortCut(ShortCutCandidate candidate)
         {
-            CreateShortCut();
-        }
+            List<string> parts = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "").Split('\\').ToList();
+            string scDirectory = parts[0];
+            string scSubdirectory = string.Join("\\", parts.Skip(1));
 
-        private void CreateShortCut()
-        {
-            ComponentPicker picker = new ComponentPicker(ShortcutDocument.GetShortCutCandidates(_documentManager.Document));
-            picker.StartPosition = FormStartPosition.CenterParent;
-            DialogResult dr = picker.ShowDialog();
-            if (dr != DialogResult.Cancel)
+            string name = candidate.FileName;
+            for (int index = 1; _shortcuts.Any(s => IsInFolderWithName(s, scDirectory, scSubdirectory, name)); index++)
             {
-                if (picker.FileElement != null)
-                {
-                    string scDirectory = string.Empty;
-                    string scSubdirectory = string.Empty;
-
-                    string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
-                    List<string> parts = fullPath.Split('\\').ToList();
-                    scDirectory = parts[0];
-                    parts.RemoveAt(0);
-                    scSubdirectory = string.Join("\\", parts.ToArray());
-
-                    string prefix = picker.FileName;
-                    int index = 0;
-                    bool added = false;
-                    do
-                    {
-                        index++;
-                        bool exists = false;
-                        foreach (var shortcut in _shortcuts)
-                        {
-                            string name = string.Format("{0}{1}", prefix, index);
-                            if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, name))
-                            {
-                                exists = true;
-                                break;
-                            }
-                        }
-
-                        if (exists == false)
-                        {
-                            string name = string.Format("{0}{1}", prefix, index);
-
-                            if (index == 1)
-                            {
-                                foreach (var shortcut in _shortcuts)
-                                {
-                                    if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, prefix))
-                                    {
-                                        exists = true;
-                                        break;
-                                    }
-                                }
-                                if (exists == false)
-                                {
-                                    name = prefix;
-                                }
-
-                            }
-
-                            Wxs.Shortcut shortCut = ShortcutDocument.Create(name, scDirectory, scSubdirectory, picker.FileElement);
-                            _shortcuts.Add(shortCut);
-                            AddShortcutNode(shortCut);
-                            added = true;
-                        }
-                    }
-                    while (added == false);
-                }
+                name = candidate.FileName + index;
             }
+
+            Wxs.Shortcut shortCut = ShortcutDocument.Create(name, scDirectory, scSubdirectory, candidate.FileElement);
+            _shortcuts.Add(shortCut);
+            AddShortcutNode(shortCut);
         }
 
 
