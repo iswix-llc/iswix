@@ -59,7 +59,7 @@ namespace IsWiX.Designer
         readonly TextBlock _status = new TextBlock { Margin = new Thickness(6, 3, 6, 3), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
         readonly ListView _designerList = new ListView { SelectionMode = SelectionMode.Single };
         readonly Grid _designerHost = new Grid();
-        readonly WindowsFormsHost _winFormsHost = new WindowsFormsHost();
+        readonly Dictionary<IFireworksDesigner, WindowsFormsHost> _winFormsHosts = new Dictionary<IFireworksDesigner, WindowsFormsHost>();
         readonly HashSet<System.Windows.Forms.Control> _themedWinForms = new HashSet<System.Windows.Forms.Control>();
 
         IReadOnlyList<IFireworksDesigner> _designers = Array.Empty<IFireworksDesigner>();
@@ -358,21 +358,42 @@ namespace IsWiX.Designer
         void ShowSelectedDesigner()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            _designerHost.Children.Clear();
-            _winFormsHost.Child = null;
+            UIElement? view = null;
+            if (_designerList.SelectedItem is System.Windows.Forms.Control winForms and IFireworksDesigner winFormsDesigner)
+            {
+                // Each WinForms designer keeps a host of its own, made once with the theme's background and the
+                // designer themed before it's first shown: moving a designer into another host re-creates its window,
+                // which shows white until it paints.
+                if (!_winFormsHosts.TryGetValue(winFormsDesigner, out var host))
+                {
+                    host = new WindowsFormsHost();
+                    host.SetResourceReference(WindowsFormsHost.BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
+                    VsTheme.Apply(winForms);
+                    host.Child = winForms;
+                    _winFormsHosts.Add(winFormsDesigner, host);
+                }
+
+                view = host;
+            }
+            else if (_designerList.SelectedItem is UIElement wpf)
+            {
+                view = wpf;
+            }
+
+            // Designers shown before stay in the view, hidden, so switching back to one doesn't rebuild it.
+            if (view != null && !_designerHost.Children.Contains(view))
+            {
+                _designerHost.Children.Add(view);
+            }
+
+            foreach (UIElement child in _designerHost.Children)
+            {
+                child.Visibility = ReferenceEquals(child, view) ? Visibility.Visible : Visibility.Collapsed;
+            }
+
             if (_designerList.SelectedItem is not IFireworksDesigner designer)
             {
                 return;
-            }
-
-            if (designer is System.Windows.Forms.Control winForms)
-            {
-                _winFormsHost.Child = winForms;
-                _designerHost.Children.Add(_winFormsHost);
-            }
-            else if (designer is UIElement wpf)
-            {
-                _designerHost.Children.Add(wpf);
             }
 
             designer.LoadData();
@@ -612,7 +633,10 @@ namespace IsWiX.Designer
 
                 _codeWindowHost?.Dispose();
                 _codeWindow?.Close();
-                _winFormsHost.Dispose();
+                foreach (var host in _winFormsHosts.Values)
+                {
+                    host.Dispose();
+                }
             }
 
             base.Dispose(disposing);
