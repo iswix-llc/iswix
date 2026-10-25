@@ -299,6 +299,11 @@ namespace FeaturesDesigner
                 treeViewFeatures.ExpandAll();
 
             }
+            else
+            {
+                // The last feature is gone: nothing left to show properties for.
+                ClearPropertyGrid();
+            }
 
         }
 
@@ -331,17 +336,18 @@ namespace FeaturesDesigner
 
         }
 
+        // With no feature selected (none in the file, or the last one deleted) the property grid is hidden rather than
+        // showing an empty feature's properties.
         private void ClearPropertyGrid()
         {
             feature.Clear();
-            propertyGridFeatureProperties.Enabled = false;
-            propertyGridFeatureProperties.Refresh();
+            propertyGridFeatureProperties.Visible = false;
         }
 
+        // PropertyValueChanged is subscribed once, in InitializeComponent.
         private void UpdatePropertyGrid()
         {
-            propertyGridFeatureProperties.Enabled = true;
-            propertyGridFeatureProperties.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridFeatureProperties_PropertyValueChanged);
+            propertyGridFeatureProperties.Visible = true;
             propertyGridFeatureProperties.Refresh();
         }
 
