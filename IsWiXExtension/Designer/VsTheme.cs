@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -157,11 +157,10 @@ namespace IsWiX.Designer
             splitter.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.ToolWindowBorderBrushKey));
             styles[typeof(GridSplitter)] = splitter;
 
-            var menu = new Style(typeof(ContextMenu));
-            menu.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.CommandBarMenuBackgroundGradientBeginBrushKey));
-            menu.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextActiveBrushKey));
-            menu.Setters.Add(Dynamic(Control.BorderBrushProperty, EnvironmentColors.CommandBarMenuBorderBrushKey));
-            styles[typeof(ContextMenu)] = menu;
+            styles[typeof(ContextMenu)] = ContextMenuStyle();
+            styles[typeof(MenuItem)] = MenuItemStyle();
+            styles[typeof(ToolBar)] = ToolBarStyle();
+            styles[ToolBar.ButtonStyleKey] = ToolBarButtonStyle();
 
             // Xceed's property grid (General Information): the grid, its rows and its editors, which are TextBox and
             // ComboBox subclasses that implicit TextBox and ComboBox styles don't reach.
@@ -247,6 +246,94 @@ namespace IsWiX.Designer
             selected.Setters.Add(Dynamic(Control.BackgroundProperty, TreeViewColors.SelectedItemActiveBrushKey));
             selected.Setters.Add(Dynamic(Control.ForegroundProperty, TreeViewColors.SelectedItemActiveTextBrushKey));
             style.Triggers.Add(selected);
+            return style;
+        }
+
+        // Context menus: the default templates draw a light icon column whatever the menu's colors, so menus and their
+        // items are drawn plainly, as Visual Studio's menus without icons are. Items with submenus keep the default.
+        static Style ContextMenuStyle()
+        {
+            var items = new FrameworkElementFactory(typeof(StackPanel));
+            items.SetValue(Panel.IsItemsHostProperty, true);
+            items.SetValue(System.Windows.Input.KeyboardNavigation.DirectionalNavigationProperty, System.Windows.Input.KeyboardNavigationMode.Cycle);
+            var border = new FrameworkElementFactory(typeof(Border));
+            border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Control.BackgroundProperty));
+            border.SetValue(Border.BorderBrushProperty, new TemplateBindingExtension(Control.BorderBrushProperty));
+            border.SetValue(Border.BorderThicknessProperty, new Thickness(1));
+            border.SetValue(Border.PaddingProperty, new Thickness(2));
+            border.AppendChild(items);
+
+            var style = new Style(typeof(ContextMenu));
+            style.Setters.Add(new Setter(Control.TemplateProperty, new ControlTemplate(typeof(ContextMenu)) { VisualTree = border }));
+            style.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.CommandBarMenuBackgroundGradientBeginBrushKey));
+            style.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextActiveBrushKey));
+            style.Setters.Add(Dynamic(Control.BorderBrushProperty, EnvironmentColors.CommandBarMenuBorderBrushKey));
+            return style;
+        }
+
+        static Style MenuItemStyle()
+        {
+            var header = new FrameworkElementFactory(typeof(ContentPresenter));
+            header.SetValue(ContentPresenter.ContentSourceProperty, "Header");
+            header.SetValue(ContentPresenter.RecognizesAccessKeyProperty, true);
+            header.SetValue(FrameworkElement.MarginProperty, new Thickness(24, 4, 24, 4));
+            var border = new FrameworkElementFactory(typeof(Border));
+            border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Control.BackgroundProperty));
+            border.AppendChild(header);
+            var plain = new ControlTemplate(typeof(MenuItem)) { VisualTree = border };
+
+            var style = new Style(typeof(MenuItem));
+            style.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Transparent));
+            style.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextActiveBrushKey));
+            var leaf = new Trigger { Property = MenuItem.RoleProperty, Value = MenuItemRole.SubmenuItem };
+            leaf.Setters.Add(new Setter(Control.TemplateProperty, plain));
+            style.Triggers.Add(leaf);
+            var hover = new Trigger { Property = MenuItem.IsHighlightedProperty, Value = true };
+            hover.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.CommandBarMenuItemMouseOverBrushKey));
+            hover.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarMenuItemMouseOverTextBrushKey));
+            style.Triggers.Add(hover);
+            var disabled = new Trigger { Property = UIElement.IsEnabledProperty, Value = false };
+            disabled.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextInactiveBrushKey));
+            style.Triggers.Add(disabled);
+            return style;
+        }
+
+        // Toolbars, like the WinForms designers': the toolbar's background, flat text buttons with the toolbar hover
+        // color (for pressed too), and no grip or overflow button.
+        static Style ToolBarStyle()
+        {
+            var panel = new FrameworkElementFactory(typeof(ToolBarPanel), "PART_ToolBarPanel");
+            panel.SetValue(Panel.IsItemsHostProperty, true);
+            var border = new FrameworkElementFactory(typeof(Border));
+            border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Control.BackgroundProperty));
+            border.SetValue(Border.PaddingProperty, new Thickness(2, 1, 2, 1));
+            border.AppendChild(panel);
+
+            var style = new Style(typeof(ToolBar));
+            style.Setters.Add(new Setter(Control.TemplateProperty, new ControlTemplate(typeof(ToolBar)) { VisualTree = border }));
+            style.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.CommandBarMenuBackgroundGradientBeginBrushKey));
+            style.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextActiveBrushKey));
+            return style;
+        }
+
+        static Style ToolBarButtonStyle()
+        {
+            var content = new FrameworkElementFactory(typeof(ContentPresenter));
+            content.SetValue(FrameworkElement.MarginProperty, new Thickness(6, 2, 6, 2));
+            var border = new FrameworkElementFactory(typeof(Border));
+            border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Control.BackgroundProperty));
+            border.AppendChild(content);
+
+            var style = new Style(typeof(Button));
+            style.Setters.Add(new Setter(Control.TemplateProperty, new ControlTemplate(typeof(Button)) { VisualTree = border }));
+            style.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Transparent));
+            style.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextActiveBrushKey));
+            var hover = new Trigger { Property = UIElement.IsMouseOverProperty, Value = true };
+            hover.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.CommandBarMouseOverBackgroundBeginBrushKey));
+            style.Triggers.Add(hover);
+            var disabled = new Trigger { Property = UIElement.IsEnabledProperty, Value = false };
+            disabled.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.CommandBarTextInactiveBrushKey));
+            style.Triggers.Add(disabled);
             return style;
         }
 
