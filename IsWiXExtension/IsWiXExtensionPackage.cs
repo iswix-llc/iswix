@@ -33,18 +33,12 @@ namespace IsWiX
     [ProvideEditorFactory(typeof(Designer.WixDesignerEditorFactory), 110, TrustLevel = __VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
     [ProvideEditorExtension(typeof(Designer.WixDesignerEditorFactory), ".wxs", 0x40, NameResourceID = 110)]
     [ProvideEditorLogicalView(typeof(Designer.WixDesignerEditorFactory), VSConstants.LOGVIEWID.Designer_string)]
-    [ProvideUIContextRule(_uiContextSupportedFiles,
-        name: "Supported Files",
-        expression: "WiX",
-        termNames: new[] { "WiX" },
-        termValues: new[] { "HierSingleSelectionName:.wxs$" })]
     public sealed class IsWiXPackage : AsyncPackage
     {
         /// <summary>
         /// IsWiXPackage GUID string.
         /// </summary>
         public const string PackageGuidString = "6037b2ce-4508-478c-a49e-c361ca5cba63";
-        private const string _uiContextSupportedFiles = "3c38820f-08cb-401b-8607-60aefa212b46"; // Must match guid in VsCommandTable.vsct
 
         #region Package Members
 

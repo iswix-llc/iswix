@@ -11,8 +11,8 @@ using Task = System.Threading.Tasks.Task;
 namespace IsWiX
 {
     /// <summary>
-    /// Tools > Open in IsWiX Designer: opens a .wxs in the IsWiX editor (its Design and XML tabs). The file is the one
-    /// passed as an argument (<c>IsWiX.OpenDesigner path</c> in the Command Window), else the one selected in
+    /// IsWiX.OpenDesigner, a Command Window command on no menu: opens a .wxs in the IsWiX editor (its Design and XML
+    /// tabs). The file is the one passed as an argument (<c>IsWiX.OpenDesigner path</c>), else the one selected in
     /// Solution Explorer, else the active document.
     /// </summary>
     internal sealed class CommandOpenDesigner
