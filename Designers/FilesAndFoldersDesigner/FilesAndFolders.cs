@@ -595,14 +595,16 @@ namespace Designers.FilesAndFolders
 
         private void tvDestination_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // Files go in a folder, not on Destination Computer itself. Drops are refused there rather than the list
+            // being disabled, which would draw it in the light system colors in Visual Studio's dark theme.
             if (e.Node!.Level.Equals(0))
             {
                 lvDestination.Items.Clear();
-                lvDestination.Enabled = false;
+                lvDestination.AllowDrop = false;
             }
             else
             {
-                lvDestination.Enabled = true;
+                lvDestination.AllowDrop = true;
                 DisplayDestinationItemsFromSelectedNode(e.Node);
             }
         }
@@ -1023,8 +1025,8 @@ namespace Designers.FilesAndFolders
             _isWiXComponentGroup.SortComponents();
             if (HoverNode != null)
             {
-                HoverNode.BackColor = Color.White;
-                HoverNode.ForeColor = Color.Black;
+                HoverNode.BackColor = Color.Empty;
+                HoverNode.ForeColor = Color.Empty;
             }
          //   _documentManager.EnableChangeWatcher();
             Cursor = Cursors.Arrow;
@@ -1096,8 +1098,8 @@ namespace Designers.FilesAndFolders
                 }
                 else if (HoverNode != node)
                 {
-                    HoverNode.BackColor = Color.White;
-                    HoverNode.ForeColor = Color.Black;
+                    HoverNode.BackColor = Color.Empty;
+                    HoverNode.ForeColor = Color.Empty;
                     node.BackColor = Color.SteelBlue;
                     node.ForeColor = Color.White;
                     HoverNode = node;

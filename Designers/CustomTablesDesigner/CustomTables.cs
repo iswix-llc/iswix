@@ -119,17 +119,12 @@ namespace CustomTablesDesigner
             _customTable.Columns.Clear();
             listViewColumns.Items.Clear();
             
+            // The column schema fields only show the selected column; they are read-only rather than disabled, so
+            // they stay readable in Visual Studio's dark theme.
             textBoxName.Text = "";
-            textBoxName.Enabled = false;
-
-            comboBoxType.Text = "";
-            comboBoxType.Enabled = false;
-
+            textBoxType.Text = "";
             textBoxLength.Text = "";
-            textBoxLength.Enabled = false;
-
             checkBoxNullable.Checked = false;
-            checkBoxNullable.Enabled = false;
             if (listBoxTables.SelectedItems.Count > 0)
             {
 
@@ -401,16 +396,9 @@ namespace CustomTablesDesigner
                 var column = FindColumn(listViewColumns.SelectedItems[0].Text);
 
                 textBoxName.Text = column.Id;
-                //textBoxName.Enabled = true;
-
-                comboBoxType.Text = column.GetAttributeValue("Type") ?? string.Empty;
-                //comboBoxType.Enabled = true;
-
+                textBoxType.Text = column.GetAttributeValue("Type") ?? string.Empty;
                 textBoxLength.Text = column.GetAttributeValue("Width") ?? string.Empty;
-                //textBoxLength.Enabled = true;
-
                 checkBoxNullable.Checked = IsYes(column.Nullable);
-                //checkBoxNullable.Enabled = true;
 
             }
         }

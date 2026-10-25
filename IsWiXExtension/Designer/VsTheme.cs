@@ -1,5 +1,9 @@
 using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
@@ -27,6 +31,30 @@ namespace IsWiX.Designer
             root.SetResourceReference(Control.BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
             root.SetResourceReference(TextElement.ForegroundProperty, EnvironmentColors.ToolWindowTextBrushKey);
             root.Resources.MergedDictionaries.Add(Styles(root));
+            ImageThemingUtilities.SetThemeScrollBars(root, true);
+        }
+
+        /// <summary>
+        /// Converts an icon (a System.Drawing image, as designers give them) to WPF, adapted to the theme's background
+        /// the way Visual Studio adapts its own icons: images drawn for a light background are inverted in luminance
+        /// on a dark one, keeping their hues.
+        /// </summary>
+        public sealed class ThemedImageConverter : IValueConverter
+        {
+            readonly FireworksFramework.Services.ImageConverter _toWpf = new FireworksFramework.Services.ImageConverter();
+
+            public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
+                _toWpf.Convert(value, targetType, parameter, culture) is BitmapSource source ? ThemedBitmapSource(source) : null;
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
+                throw new NotSupportedException();
+        }
+
+        static BitmapSource ThemedBitmapSource(BitmapSource source)
+        {
+            var background = Color(TreeViewColors.BackgroundColorKey);
+            var wpfBackground = System.Windows.Media.Color.FromArgb(background.A, background.R, background.G, background.B);
+            return ImageThemingUtilities.GetOrCreateThemedBitmapSource(source, wpfBackground, true, Colors.White, SystemParameters.HighContrast, true);
         }
 
         static ResourceDictionary Styles(FrameworkElement root)
@@ -78,13 +106,67 @@ namespace IsWiX.Designer
             menu.Setters.Add(Dynamic(Control.BorderBrushProperty, EnvironmentColors.CommandBarMenuBorderBrushKey));
             styles[typeof(ContextMenu)] = menu;
 
+            // Xceed's property grid (General Information): the grid, its rows and its editors, which are TextBox and
+            // ComboBox subclasses that implicit TextBox and ComboBox styles don't reach.
             var propertyGrid = new Style(typeof(Xceed.Wpf.Toolkit.PropertyGrid.PropertyGrid));
-            propertyGrid.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey));
-            propertyGrid.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.ToolWindowTextBrushKey));
+            propertyGrid.Setters.Add(new EventSetter(FrameworkElement.LoadedEvent, new RoutedEventHandler(OnPropertyGridLoaded)));
+            propertyGrid.Setters.Add(Dynamic(Control.BackgroundProperty, TreeViewColors.BackgroundBrushKey));
+            propertyGrid.Setters.Add(Dynamic(Control.ForegroundProperty, TreeViewColors.BackgroundTextBrushKey));
             propertyGrid.Setters.Add(Dynamic(Control.BorderBrushProperty, EnvironmentColors.ToolWindowBorderBrushKey));
             styles[typeof(Xceed.Wpf.Toolkit.PropertyGrid.PropertyGrid)] = propertyGrid;
+            var propertyItem = new Style(typeof(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem));
+            propertyItem.Setters.Add(Dynamic(Control.BackgroundProperty, TreeViewColors.BackgroundBrushKey));
+            propertyItem.Setters.Add(Dynamic(Control.ForegroundProperty, TreeViewColors.BackgroundTextBrushKey));
+            propertyItem.Setters.Add(Dynamic(Control.BorderBrushProperty, EnvironmentColors.ToolWindowBorderBrushKey));
+            styles[typeof(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem)] = propertyItem;
+            var propertyItems = new Style(typeof(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItemsControl));
+            propertyItems.Setters.Add(Dynamic(Control.BackgroundProperty, TreeViewColors.BackgroundBrushKey));
+            styles[typeof(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItemsControl)] = propertyItems;
+            AddBasedOn(styles, root, typeof(Xceed.Wpf.Toolkit.PropertyGrid.Editors.PropertyGridEditorTextBox), VsResourceKeys.TextBoxStyleKey);
+            AddBasedOn(styles, root, typeof(Xceed.Wpf.Toolkit.PropertyGrid.Editors.PropertyGridEditorComboBox), VsResourceKeys.ComboBoxStyleKey);
 
             return styles;
+        }
+
+        // Parts of Xceed's property grid template paint a fixed white (the area below the rows) that no style setter
+        // reaches; once the template exists, those parts are given the theme's background instead.
+        static void OnPropertyGridLoaded(object sender, RoutedEventArgs e)
+        {
+            var fixedParts = new System.Collections.Generic.List<string>();
+            foreach (var element in Descendants((DependencyObject)sender))
+            {
+                var background = element switch
+                {
+                    Control control => Control.BackgroundProperty,
+                    Border => Border.BackgroundProperty,
+                    Panel => Panel.BackgroundProperty,
+                    _ => null,
+                };
+                if (background != null && element.GetValue(background) is SolidColorBrush brush &&
+                    (brush.Color == Colors.White || brush.Color == SystemColors.WindowColor))
+                {
+                    ((FrameworkElement)element).SetResourceReference(background, TreeViewColors.BackgroundBrushKey);
+                    fixedParts.Add(element.GetType().Name);
+                }
+            }
+
+            if (fixedParts.Count > 0)
+            {
+                ActivityLog.TryLogInformation("IsWiX Designer", "Themed the property grid's white parts: " + string.Join(", ", fixedParts.Distinct()));
+            }
+        }
+
+        static System.Collections.Generic.IEnumerable<DependencyObject> Descendants(DependencyObject parent)
+        {
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                yield return child;
+                foreach (var descendant in Descendants(child))
+                {
+                    yield return descendant;
+                }
+            }
         }
 
         static void AddBasedOn(ResourceDictionary styles, FrameworkElement root, Type type, object vsStyleKey)
@@ -190,12 +272,27 @@ namespace IsWiX.Designer
                     tree.BackColor = window;
                     tree.ForeColor = windowText;
                     tree.LineColor = border;
+                    ThemeImages(tree.ImageList, window);
+                    ThemeImages(tree.StateImageList, window);
                     break;
                 case WinForms.ListView list:
                     list.BackColor = window;
                     list.ForeColor = windowText;
+                    ThemeImages(list.SmallImageList, window);
+                    ThemeImages(list.LargeImageList, window);
+                    ThemeImages(list.StateImageList, window);
+                    OwnerDraw(list);
                     break;
-                case WinForms.TextBoxBase or WinForms.ComboBox or WinForms.ListBox:
+                case WinForms.ListBox listBox:
+                    listBox.BackColor = window;
+                    listBox.ForeColor = windowText;
+                    OwnerDraw(listBox);
+                    break;
+                case WinForms.ToolStrip strip:
+                    // Toolbars, including the PropertyGrid's own.
+                    Apply(strip);
+                    break;
+                case WinForms.TextBoxBase or WinForms.ComboBox:
                     control.BackColor = input;
                     control.ForeColor = inputText;
                     break;
@@ -262,11 +359,187 @@ namespace IsWiX.Designer
             foreach (WinForms.ToolStripItem item in strip.Items)
             {
                 item.ForeColor = strip.ForeColor;
+                ThemeImage(item, strip.BackColor);
                 if (item is WinForms.ToolStripDropDownItem { HasDropDownItems: true } dropDown)
                 {
                     Apply(dropDown.DropDown);
                 }
             }
+        }
+
+        // List views and list boxes draw their selection and headers in the system's light colors, whatever their own
+        // colors are, so they're drawn here instead, with the tree view's colors as Solution Explorer uses them.
+        static readonly ConditionalWeakTable<WinForms.Control, object> OwnerDrawn = new ConditionalWeakTable<WinForms.Control, object>();
+
+        static void OwnerDraw(WinForms.ListView list)
+        {
+            if (OwnerDrawn.TryGetValue(list, out _))
+            {
+                list.Invalidate();
+                return;
+            }
+
+            OwnerDrawn.Add(list, new object());
+            list.OwnerDraw = true;
+            list.DrawColumnHeader += (s, e) =>
+            {
+                using (var back = new Drawing.SolidBrush(Color(HeaderColors.DefaultColorKey)))
+                using (var line = new Drawing.Pen(Color(EnvironmentColors.ToolWindowBorderColorKey)))
+                {
+                    e.Graphics.FillRectangle(back, e.Bounds);
+                    e.Graphics.DrawLine(line, e.Bounds.Right - 1, e.Bounds.Top, e.Bounds.Right - 1, e.Bounds.Bottom);
+                    e.Graphics.DrawLine(line, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+                }
+
+                var text = new Drawing.Rectangle(e.Bounds.X + 4, e.Bounds.Y, e.Bounds.Width - 8, e.Bounds.Height);
+                WinForms.TextRenderer.DrawText(e.Graphics, e.Header?.Text, list.Font, text, Color(HeaderColors.DefaultTextColorKey), TextFlags(e.Header?.TextAlign ?? WinForms.HorizontalAlignment.Left));
+            };
+            list.DrawItem += (s, e) =>
+            {
+                // Details views draw per column, in DrawSubItem.
+                if (list.View != WinForms.View.Details)
+                {
+                    DrawListItem(list, e.Graphics, e.Item, e.Bounds, 0, e.Item.Text);
+                }
+            };
+            list.DrawSubItem += (s, e) =>
+            {
+                // The first column's bounds are the whole row.
+                var bounds = e.ColumnIndex == 0 && list.Columns.Count > 0
+                    ? new Drawing.Rectangle(e.Bounds.X, e.Bounds.Y, list.Columns[0].Width, e.Bounds.Height)
+                    : e.Bounds;
+                DrawListItem(list, e.Graphics, e.Item!, bounds, e.ColumnIndex, e.SubItem?.Text ?? string.Empty);
+            };
+            list.GotFocus += (s, e) => list.Invalidate();
+            list.LostFocus += (s, e) => list.Invalidate();
+        }
+
+        static void DrawListItem(WinForms.ListView list, Drawing.Graphics graphics, WinForms.ListViewItem item, Drawing.Rectangle bounds, int column, string text)
+        {
+            var (back, fore) = ItemColors(item.Selected, list.Focused, list.BackColor, list.ForeColor);
+            using (var brush = new Drawing.SolidBrush(back))
+            {
+                graphics.FillRectangle(brush, bounds);
+            }
+
+            var x = bounds.Left + 2;
+            if (column == 0)
+            {
+                x = DrawListImage(graphics, list.StateImageList, item.StateImageIndex, null, x, bounds);
+                x = DrawListImage(graphics, list.View == WinForms.View.LargeIcon ? list.LargeImageList : list.SmallImageList, item.ImageIndex, item.ImageKey, x, bounds);
+            }
+
+            var textBounds = new Drawing.Rectangle(x, bounds.Y, Math.Max(0, bounds.Right - x - 2), bounds.Height);
+            var align = column > 0 && column < list.Columns.Count ? list.Columns[column].TextAlign : WinForms.HorizontalAlignment.Left;
+            WinForms.TextRenderer.DrawText(graphics, text, item.Font ?? list.Font, textBounds, fore, TextFlags(align));
+        }
+
+        static int DrawListImage(Drawing.Graphics graphics, WinForms.ImageList? images, int index, string? key, int x, Drawing.Rectangle bounds)
+        {
+            if (images is null)
+            {
+                return x;
+            }
+
+            if (index < 0 && !string.IsNullOrEmpty(key) && images.Images.ContainsKey(key))
+            {
+                index = images.Images.IndexOfKey(key);
+            }
+
+            if (index < 0 || index >= images.Images.Count)
+            {
+                return x;
+            }
+
+            images.Draw(graphics, x, bounds.Y + (bounds.Height - images.ImageSize.Height) / 2, index);
+            return x + images.ImageSize.Width + 3;
+        }
+
+        static void OwnerDraw(WinForms.ListBox listBox)
+        {
+            if (OwnerDrawn.TryGetValue(listBox, out _))
+            {
+                listBox.Invalidate();
+                return;
+            }
+
+            OwnerDrawn.Add(listBox, new object());
+            listBox.DrawMode = WinForms.DrawMode.OwnerDrawFixed;
+            listBox.ItemHeight = listBox.Font.Height + 4;
+            listBox.DrawItem += (s, e) =>
+            {
+                if (e.Index < 0 || e.Index >= listBox.Items.Count)
+                {
+                    return;
+                }
+
+                var selected = (e.State & WinForms.DrawItemState.Selected) != 0;
+                var (back, fore) = ItemColors(selected, listBox.Focused, listBox.BackColor, listBox.ForeColor);
+                using (var brush = new Drawing.SolidBrush(back))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+
+                var text = new Drawing.Rectangle(e.Bounds.X + 3, e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
+                WinForms.TextRenderer.DrawText(e.Graphics, listBox.GetItemText(listBox.Items[e.Index]), listBox.Font, text, fore, TextFlags(WinForms.HorizontalAlignment.Left));
+            };
+            listBox.GotFocus += (s, e) => listBox.Invalidate();
+            listBox.LostFocus += (s, e) => listBox.Invalidate();
+        }
+
+        // Selected items as Solution Explorer draws them: the active colors with focus, the inactive ones without.
+        static (Drawing.Color Back, Drawing.Color Fore) ItemColors(bool selected, bool focused, Drawing.Color back, Drawing.Color fore) =>
+            !selected
+                ? (back, fore)
+                : focused
+                    ? (Color(TreeViewColors.SelectedItemActiveColorKey), Color(TreeViewColors.SelectedItemActiveTextColorKey))
+                    : (Color(TreeViewColors.SelectedItemInactiveColorKey), Color(TreeViewColors.SelectedItemInactiveTextColorKey));
+
+        static WinForms.TextFormatFlags TextFlags(WinForms.HorizontalAlignment align) =>
+            WinForms.TextFormatFlags.VerticalCenter | WinForms.TextFormatFlags.EndEllipsis | WinForms.TextFormatFlags.NoPrefix |
+            WinForms.TextFormatFlags.SingleLine |
+            (align == WinForms.HorizontalAlignment.Right ? WinForms.TextFormatFlags.Right
+                : align == WinForms.HorizontalAlignment.Center ? WinForms.TextFormatFlags.HorizontalCenter
+                : WinForms.TextFormatFlags.Left);
+
+        // The images as the designers made them, so each theme change starts from the originals.
+        static readonly ConditionalWeakTable<WinForms.ImageList, Drawing.Image[]> OriginalLists = new ConditionalWeakTable<WinForms.ImageList, Drawing.Image[]>();
+        static readonly ConditionalWeakTable<WinForms.ToolStripItem, Drawing.Image> OriginalItemImages = new ConditionalWeakTable<WinForms.ToolStripItem, Drawing.Image>();
+
+        // Adapts an image list's icons to the background they're drawn on, keeping their indexes and keys.
+        static void ThemeImages(WinForms.ImageList? list, Drawing.Color background)
+        {
+            if (list is null || list.Images.Count == 0)
+            {
+                return;
+            }
+
+            if (!OriginalLists.TryGetValue(list, out var originals))
+            {
+                originals = Enumerable.Range(0, list.Images.Count).Select(i => list.Images[i]).ToArray();
+                OriginalLists.Add(list, originals);
+            }
+
+            for (var i = 0; i < originals.Length && i < list.Images.Count; i++)
+            {
+                list.Images[i] = ImageThemingUtilities.GetThemedBitmap(new Drawing.Bitmap(originals[i]), background);
+            }
+        }
+
+        static void ThemeImage(WinForms.ToolStripItem item, Drawing.Color background)
+        {
+            if (item.Image is null)
+            {
+                return;
+            }
+
+            if (!OriginalItemImages.TryGetValue(item, out var original))
+            {
+                original = item.Image;
+                OriginalItemImages.Add(item, original);
+            }
+
+            item.Image = ImageThemingUtilities.GetThemedBitmap(new Drawing.Bitmap(original), background);
         }
 
         /// <summary>Themes the scrollbars of a WinForms control's window, which its colors don't reach.</summary>

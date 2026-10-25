@@ -104,7 +104,7 @@ namespace IsWiX.Designer
         void BuildDesignView()
         {
             var image = new FrameworkElementFactory(typeof(Image));
-            image.SetBinding(Image.SourceProperty, new Binding(nameof(IFireworksDesigner.PluginImage)) { Converter = new FireworksFramework.Services.ImageConverter() });
+            image.SetBinding(Image.SourceProperty, new Binding(nameof(IFireworksDesigner.PluginImage)) { Converter = new VsTheme.ThemedImageConverter() });
             image.SetValue(FrameworkElement.WidthProperty, 16.0);
             var name = new FrameworkElementFactory(typeof(TextBlock));
             name.SetBinding(TextBlock.TextProperty, new Binding(nameof(IFireworksDesigner.PluginName)));
@@ -392,8 +392,10 @@ namespace IsWiX.Designer
 
         void OnThemeChanged(ThemeChangedEventArgs e)
         {
-            // The WPF views follow by themselves; the WinForms designers' colors are set, so set them again.
+            // The WPF views follow by themselves; the WinForms designers' colors and all the icons are set, so set them
+            // again.
             ThreadHelper.ThrowIfNotOnUIThread();
+            _designerList.Items.Refresh();
             foreach (var control in _themedWinForms)
             {
                 ThemeWinForms(control);
