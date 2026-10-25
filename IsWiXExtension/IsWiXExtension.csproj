@@ -276,6 +276,10 @@
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.14.2120" NoWarn="NU1604" />
+    <!-- The designer's theming styles Xceed's property grid (General Information). The same version the designers
+         are built against; without a reference of its own the extension only finds it through them, which depends on
+         the build. -->
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IsWiX.png">
