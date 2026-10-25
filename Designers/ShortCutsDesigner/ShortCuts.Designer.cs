@@ -154,7 +154,7 @@
             createNewFolderToolStripMenuItem.Name = "createNewFolderToolStripMenuItem";
             createNewFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             createNewFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
-            createNewFolderToolStripMenuItem.Text = "Create New Folder";
+            createNewFolderToolStripMenuItem.Text = "New Folder";
             createNewFolderToolStripMenuItem.Click += createNewFolderToolStripMenuItem_Click;
             // 
             // renameFolderToolStripMenuItem
@@ -162,7 +162,7 @@
             renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
             renameFolderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
             renameFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
-            renameFolderToolStripMenuItem.Text = "Rename Folder";
+            renameFolderToolStripMenuItem.Text = "Rename";
             renameFolderToolStripMenuItem.Click += renameFolderToolStripMenuItem_Click;
             // 
             // deleteToolStripMenuItem
@@ -170,14 +170,14 @@
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             deleteToolStripMenuItem.Size = new System.Drawing.Size(220, 30);
-            deleteToolStripMenuItem.Text = "Remove From Project";
+            deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // toolStripMenuItemCreateSC
             // 
             toolStripMenuItemCreateSC.Name = "toolStripMenuItemCreateSC";
             toolStripMenuItemCreateSC.Size = new System.Drawing.Size(220, 30);
-            toolStripMenuItemCreateSC.Text = "Create ShortCut";
+            toolStripMenuItemCreateSC.Text = "New Shortcut";
             toolStripMenuItemCreateSC.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator1
@@ -211,14 +211,14 @@
             createNewFolderToolStripMenuItem1.Name = "createNewFolderToolStripMenuItem1";
             createNewFolderToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             createNewFolderToolStripMenuItem1.Size = new System.Drawing.Size(201, 30);
-            createNewFolderToolStripMenuItem1.Text = "Create New Folder";
+            createNewFolderToolStripMenuItem1.Text = "New Folder";
             createNewFolderToolStripMenuItem1.Click += createNewFolderToolStripMenuItem1_Click;
             // 
             // toolStripMenuItemCreateShortCut
             // 
             toolStripMenuItemCreateShortCut.Name = "toolStripMenuItemCreateShortCut";
             toolStripMenuItemCreateShortCut.Size = new System.Drawing.Size(201, 30);
-            toolStripMenuItemCreateShortCut.Text = "Create ShortCut";
+            toolStripMenuItemCreateShortCut.Text = "New Shortcut";
             toolStripMenuItemCreateShortCut.Click += toolStripMenuItemCreateShortCut_Click;
             // 
             // toolStripSeparator2
@@ -245,7 +245,7 @@
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             toolStripMenuItem3.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             toolStripMenuItem3.Size = new System.Drawing.Size(220, 30);
-            toolStripMenuItem3.Text = "Remove From Project";
+            toolStripMenuItem3.Text = "Delete";
             toolStripMenuItem3.Click += toolStripMenuItem3_Click;
             // 
             // shortcut1

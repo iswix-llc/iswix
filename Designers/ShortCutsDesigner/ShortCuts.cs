@@ -86,6 +86,63 @@ namespace ShortCutsDesigner
             toolStripMenuItem3.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
             DesignerImages.Add(iImageLibrary, typeof(ShortCuts).Assembly, "ShortCutsDesigner.Images.", "shortcut");
+            AddToolbar();
+        }
+
+        ToolStripButton _newFolderButton = null!;
+        ToolStripButton _newShortcutButton = null!;
+        ToolStripButton _renameButton = null!;
+        ToolStripButton _deleteButton = null!;
+
+        // The tree's commands as buttons above it too: nothing else shows that right-clicking a folder adds a shortcut.
+        private void AddToolbar()
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            ToolStripButton Button(string text, Action command)
+            {
+                // No tooltip: it would only repeat the button's text.
+                var button = new ToolStripButton(text) { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+                button.Click += (s, e) =>
+                {
+                    // A button doesn't take the focus, so a folder's name can still be being edited (New Folder leaves
+                    // it so); that edit is finished first.
+                    if (tvDestination.SelectedNode is { IsEditing: true } editing)
+                    {
+                        editing.EndEdit(false);
+                    }
+
+                    command();
+                };
+                toolbar.Items.Add(button);
+                return button;
+            }
+
+            _newFolderButton = Button("New Folder", AddNodeToDestinationTreeFragmentStyle);
+            _newShortcutButton = Button("New Shortcut", CreateShortCut);
+            _renameButton = Button("Rename", () =>
+            {
+                tvDestination.LabelEdit = true;
+                tvDestination.SelectedNode.BeginEdit();
+            });
+            _deleteButton = Button("Delete", () =>
+            {
+                RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
+                UpdateToolbar();
+            });
+            splitContainer1.Panel1.Controls.Add(toolbar);
+        }
+
+        // As the tree's menus: shortcut locations (Desktop, Program Menu...) take new folders and shortcuts, the folders
+        // below them can also be renamed and deleted, and shortcuts can only be deleted.
+        private void UpdateToolbar()
+        {
+            var node = tvDestination.SelectedNode;
+            var shortcut = node != null && IsShortcutNode();
+            var folder = node != null && node.Level >= 1 && !shortcut;
+            _newFolderButton.Enabled = folder;
+            _newShortcutButton.Enabled = folder;
+            _renameButton.Enabled = folder && node!.Level >= 2;
+            _deleteButton.Enabled = shortcut || (folder && node!.Level >= 2);
         }
 
         #region IFireworksDesigner Members
@@ -103,6 +160,7 @@ namespace ShortCutsDesigner
             LoadDocument();
             tvDestination.ExpandAll();
             tvDestination.SelectedNode = null;
+            UpdateToolbar();
         }
 
         public Image PluginImage
@@ -652,6 +710,8 @@ namespace ShortCutsDesigner
             {
                 propertyGridShortCut.SelectedObject = null;
             }
+
+            UpdateToolbar();
         }
 
         private void propertyGridShortCut_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
