@@ -31,6 +31,7 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.textBoxTableName = new System.Windows.Forms.TextBox();
+            this.labelError = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -60,7 +61,16 @@
             this.textBoxTableName.Name = "textBoxTableName";
             this.textBoxTableName.Size = new System.Drawing.Size(353, 20);
             this.textBoxTableName.TabIndex = 0;
-            // 
+            this.textBoxTableName.TextChanged += new System.EventHandler(this.textBoxTableName_TextChanged);
+            //
+            // labelError
+            //
+            this.labelError.AutoSize = true;
+            this.labelError.Location = new System.Drawing.Point(11, 40);
+            this.labelError.Name = "labelError";
+            this.labelError.Size = new System.Drawing.Size(0, 13);
+            this.labelError.TabIndex = 3;
+            //
             // FormRenameTable
             // 
             this.AcceptButton = this.buttonOK;
@@ -68,6 +78,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(405, 82);
+            this.Controls.Add(this.labelError);
             this.Controls.Add(this.textBoxTableName);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -77,7 +88,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Table Name";
-            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -88,5 +98,6 @@
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.TextBox textBoxTableName;
+        private System.Windows.Forms.Label labelError;
     }
 }

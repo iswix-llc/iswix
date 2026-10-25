@@ -158,6 +158,9 @@ namespace IsWiX.Designer
                 .Where(d => d.PluginType == PluginType.Designer)
                 .ToList();
             VSColorTheme.ThemeChanged += OnThemeChanged;
+            // The dialogs the designers open look like the designers, and are owned by Visual Studio's window.
+            FireworksFramework.Services.DesignerDialogs.Theme = VsTheme.ThemeDialog;
+            FireworksFramework.Services.DesignerDialogs.OwnerHandle = () => System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
 
             // An existing buffer (the file was open in another editor) has its text already; a new one is loaded by
             // Visual Studio after the editor is created, and says so through IVsTextBufferDataEvents.

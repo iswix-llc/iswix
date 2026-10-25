@@ -20,6 +20,7 @@ namespace CustomTablesDesigner
             InitializeComponent();
             textBoxTableName.Text = _tableName;
             textBoxTableName.SelectAll();
+            ValidateName();
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -37,47 +38,46 @@ namespace CustomTablesDesigner
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string ExistingTables
+        public List<string> ExistingTables
         {
             get
             {
-                return _tableName;
+                return _existingTables;
             }
+        }
+
+        // Says why the name can't be used, under the box, and enables OK only for a name that can be.
+        private void ValidateName()
+        {
+            var name = textBoxTableName.Text;
+            var exists = name != _tableName && _existingTables.Contains(name);
+
+            labelError.Text = exists ? "A table with that name already exists." : string.Empty;
+            labelError.ForeColor = Color.Red;
+            buttonOK.Enabled = name.Length > 0 && !exists;
+        }
+
+        private void textBoxTableName_TextChanged(object sender, EventArgs e)
+        {
+            ValidateName();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if ( textBoxTableName.Text == String.Empty)
+            if (textBoxTableName.Text == _tableName)
             {
-                MessageBox.Show("Please enter a table name.");
+                DialogResult = DialogResult.Cancel;
             }
             else
             {
-                if (textBoxTableName.Text == _tableName)
-                {
-                    DialogResult = DialogResult.Cancel;
-                }
-                else
-                {
-                    if (_existingTables.Contains(textBoxTableName.Text))
-                    {
-                        MessageBox.Show("The specified table already exists.");
-                    }
-                    else
-                    {
-                        TableName = textBoxTableName.Text;
-                        DialogResult = DialogResult.OK;
-                        this.Close();
-                    }
-                }
+                TableName = textBoxTableName.Text;
+                DialogResult = DialogResult.OK;
             }
-
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-            this.Close();
         }
     }
 }

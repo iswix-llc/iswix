@@ -527,7 +527,7 @@ namespace CustomTablesDesigner
             }
             var dialog = new FormTableName( listBoxTables.Text, tables );
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (DesignerDialogs.ShowDialog(dialog) == DialogResult.OK)
             {
                 CustomTableDocument.Rename(_documentManager.Document, _customTableElement, dialog.TableName);
                 LoadData();
@@ -544,7 +544,7 @@ namespace CustomTablesDesigner
             }
             var dialog = new FormTableName(string.Empty, tables);
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (DesignerDialogs.ShowDialog(dialog) == DialogResult.OK)
             { 
                 CustomTableDocument.Create(_documentManager.Document, dialog.TableName);
                 LoadData();
