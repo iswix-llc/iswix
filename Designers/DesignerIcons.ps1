@@ -122,9 +122,20 @@ foreach ($d in $designers) {
 }
 
 # Tree icons, the same tiles at 16 px as PNGs: <Name>.png and <Name>.dark.png, which DesignerImages.Add loads together.
+$computer = @('M4.5 4 L19.5 4 A1.5 1.5 0 0 1 21 5.5 L21 14.5 A1.5 1.5 0 0 1 19.5 16 L4.5 16 A1.5 1.5 0 0 1 3 14.5 L3 5.5 A1.5 1.5 0 0 1 4.5 4 Z', 'M12 16 L12 20', 'M8 20 L16 20')
+$folderClosed = $designers[3].Paths
+# Open: the folder's back, and its front tipped forward.
+$folderOpen = @('M3 17 L3 6 A2 2 0 0 1 5 4 L9 4 L12 7 L17 7 A2 2 0 0 1 19 9 L19 10', 'M3 17 L5.6 11.2 A2 2 0 0 1 7.4 10 L20.5 10 A1 1 0 0 1 21.4 11.4 L18.6 17.8 A2 2 0 0 1 16.8 19 L5 19 A2 2 0 0 1 3 17 Z')
 $treeIcons = @(
     @{ Dir = 'FeaturesDesigner\Images'; Name = 'feature';  Hue = 'purple'; Paths = $designers[1].Small }
     @{ Dir = 'FeaturesDesigner\Images'; Name = 'database'; Hue = 'blue';   Paths = @('M5 6.5 A7 2.5 0 1 0 19 6.5 A7 2.5 0 1 0 5 6.5', 'M5 6.5 L5 17.5 A7 2.5 0 0 0 19 17.5 L19 6.5', 'M5 12 A7 2.5 0 0 0 19 12') }
+    # The destination trees the Files and Folders, Services and Shortcuts designers share: the computer, the special
+    # folders (blue) and the folders below them (amber, as the Files and Folders icon).
+    @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'computer';           Hue = 'gray';  Paths = $computer }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'folder_closed';      Hue = 'amber'; Paths = $folderClosed }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'folder_open';        Hue = 'amber'; Paths = $folderOpen }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'blue_folder_closed'; Hue = 'blue';  Paths = $folderClosed }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'blue_folder_open';   Hue = 'blue';  Paths = $folderOpen }
 )
 
 function Write-Png([byte[]]$pixels, [int]$size, [string]$path) {
