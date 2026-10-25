@@ -40,7 +40,8 @@ namespace FeaturesDesigner
             var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
             foreach (var menuItem in new[] { toolStripMenuItemNewFeature, toolStripMenuItemNewSubFeature, toolStripMenuItemRename, toolStripMenuItemDelete })
             {
-                var button = new ToolStripButton(menuItem.Text) { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = menuItem.Enabled };
+                // No tooltip: it would only repeat the button's text.
+                var button = new ToolStripButton(menuItem.Text) { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = menuItem.Enabled, AutoToolTip = false };
                 button.Click += (s, e) => RunAfterRename(menuItem.PerformClick);
                 menuItem.EnabledChanged += (s, e) => button.Enabled = menuItem.Enabled;
                 toolbar.Items.Add(button);

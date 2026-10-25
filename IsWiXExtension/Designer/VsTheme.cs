@@ -825,6 +825,32 @@ namespace IsWiX.Designer
             public override Drawing.Color MenuItemSelectedGradientEnd => Hover;
             public override Drawing.Color SeparatorDark => Color(EnvironmentColors.CommandBarMenuSeparatorColorKey);
             public override Drawing.Color SeparatorLight => Menu;
+
+            // Toolbar buttons: Visual Studio's toolbar hover color, in place of the system's light blue, for pressed too:
+            // the toolbar's pressed color is its background in dark themes and a strong blue under dark text in light ones.
+            static Drawing.Color ButtonHover => Color(EnvironmentColors.CommandBarMouseOverBackgroundBeginColorKey);
+            static Drawing.Color ButtonDown => ButtonHover;
+
+            public override Drawing.Color ButtonSelectedHighlight => ButtonHover;
+            public override Drawing.Color ButtonSelectedHighlightBorder => ButtonHover;
+            public override Drawing.Color ButtonSelectedGradientBegin => ButtonHover;
+            public override Drawing.Color ButtonSelectedGradientMiddle => ButtonHover;
+            public override Drawing.Color ButtonSelectedGradientEnd => ButtonHover;
+            public override Drawing.Color ButtonSelectedBorder => ButtonHover;
+            public override Drawing.Color ButtonPressedHighlight => ButtonDown;
+            public override Drawing.Color ButtonPressedHighlightBorder => ButtonDown;
+            public override Drawing.Color ButtonPressedGradientBegin => ButtonDown;
+            public override Drawing.Color ButtonPressedGradientMiddle => ButtonDown;
+            public override Drawing.Color ButtonPressedGradientEnd => ButtonDown;
+            public override Drawing.Color ButtonPressedBorder => ButtonDown;
+            public override Drawing.Color ButtonCheckedHighlight => ButtonDown;
+            public override Drawing.Color ButtonCheckedHighlightBorder => ButtonDown;
+            public override Drawing.Color ButtonCheckedGradientBegin => ButtonDown;
+            public override Drawing.Color ButtonCheckedGradientMiddle => ButtonDown;
+            public override Drawing.Color ButtonCheckedGradientEnd => ButtonDown;
+            public override Drawing.Color CheckBackground => ButtonDown;
+            public override Drawing.Color CheckSelectedBackground => ButtonHover;
+            public override Drawing.Color CheckPressedBackground => ButtonDown;
         }
     }
 }
