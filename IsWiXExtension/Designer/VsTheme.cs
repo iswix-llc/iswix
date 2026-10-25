@@ -25,14 +25,30 @@ namespace IsWiX.Designer
     {
         // WPF ----------------------------------------------------------------------------------------------------
 
-        /// <summary>Applies the theme to <paramref name="root"/> and everything inside it.</summary>
+        static readonly ConditionalWeakTable<FrameworkElement, ResourceDictionary> AppliedStyles = new ConditionalWeakTable<FrameworkElement, ResourceDictionary>();
+
+        /// <summary>
+        /// Applies the theme to <paramref name="root"/> and everything inside it. Applying it again replaces the styles
+        /// with new ones, so every theme resource in the tree is looked up afresh: for a tree that missed a theme change.
+        /// </summary>
         public static void Apply(FrameworkElement root)
         {
             root.SetResourceReference(Control.BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
             root.SetResourceReference(TextElement.ForegroundProperty, EnvironmentColors.ToolWindowTextBrushKey);
-            root.Resources.MergedDictionaries.Add(Styles(root));
+            if (AppliedStyles.TryGetValue(root, out var previous))
+            {
+                root.Resources.MergedDictionaries.Remove(previous);
+                AppliedStyles.Remove(root);
+            }
+
+            var styles = Styles(root);
+            root.Resources.MergedDictionaries.Add(styles);
+            AppliedStyles.Add(root, styles);
             ImageThemingUtilities.SetThemeScrollBars(root, true);
         }
+
+        /// <summary>The theme's window background, which tells one theme from another.</summary>
+        public static Drawing.Color Background => Color(TreeViewColors.BackgroundColorKey);
 
         /// <summary>
         /// Gives a designer's icon for the designer list (bound to the designer itself). A designer that embeds a

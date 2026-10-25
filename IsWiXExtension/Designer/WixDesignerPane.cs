@@ -72,6 +72,9 @@ namespace IsWiX.Designer
         bool _writePending;
         bool _reloading;
 
+        // The theme the views were last given (VsTheme.Background then).
+        System.Drawing.Color _themeApplied;
+
         public WixDesignerPane(IServiceProvider serviceProvider, IVsTextLines textLines, string filePath)
             : base(serviceProvider)
         {
@@ -96,6 +99,8 @@ namespace IsWiX.Designer
             DockPanel.SetDock(_tabs, Dock.Bottom);
             _root.Children.Add(_tabs);
             _root.Children.Add(_views);
+            _root.IsVisibleChanged += OnRootVisibleChanged;
+            _themeApplied = VsTheme.Background;
             Content = _root;
         }
 
@@ -396,9 +401,30 @@ namespace IsWiX.Designer
 
         void OnThemeChanged(ThemeChangedEventArgs e)
         {
-            // The WPF views follow by themselves; the WinForms designers' colors and all the icons are set, so set them
-            // again.
             ThreadHelper.ThrowIfNotOnUIThread();
+            ApplyTheme();
+        }
+
+        // A pane can miss a theme change (seen with documents Visual Studio restored at startup: the WPF views kept the
+        // old theme's colors), so one that's shown in colors other than the theme's catches up then.
+        void OnRootVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_root.IsVisible && _themeApplied != VsTheme.Background)
+            {
+                Log("Showing in an earlier theme's colors; applying the current theme");
+                ApplyTheme();
+            }
+        }
+
+        void ApplyTheme()
+        {
+            // The WPF views' theme resources are looked up afresh; the WinForms designers' colors and all the icons are
+            // set, so they're set again.
+            ThreadHelper.ThrowIfNotOnUIThread();
+            _themeApplied = VsTheme.Background;
+            VsTheme.Apply(_designView);
+            VsTheme.ApplyTabStrip(_tabs);
             _designerList.Items.Refresh();
             foreach (var control in _themedWinForms)
             {
