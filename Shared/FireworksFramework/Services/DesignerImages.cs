@@ -35,27 +35,35 @@ namespace FireworksFramework.Services
         /// </remarks>
         public static Image MenuImage(string name)
         {
-            using var stream = MenuResource(name);
-            using var image = Image.FromStream(stream);
-            return new Bitmap(image);
+            var image = Load(typeof(DesignerImages).Assembly, MenuPrefix + name + ".png")
+                ?? throw new InvalidOperationException($"No menu image '{name}' is embedded in {typeof(DesignerImages).Assembly.GetName().Name}.");
+            if (Load(typeof(DesignerImages).Assembly, MenuPrefix + name + ".dark.png") is { } dark)
+            {
+                MenuDarks.Add(image, dark);
+            }
+
+            return image;
         }
+
+        static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Image, Image> MenuDarks =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<Image, Image>();
+
+        /// <summary>
+        /// The drawing for dark backgrounds of an image <see cref="MenuImage"/> gave, for a theme to use there in place
+        /// of adapting the light one; null for any other image.
+        /// </summary>
+        public static Image? DarkMenuImage(Image image) => MenuDarks.TryGetValue(image, out var dark) ? dark : null;
 
         /// <summary>Gets the icon of the component picker dialogs.</summary>
         public static Icon ComponentPickerIcon()
         {
-            using var stream = MenuResource("component_picker");
+            using var stream = typeof(DesignerImages).Assembly.GetManifestResourceStream(MenuPrefix + "component_picker.ico")
+                ?? throw new InvalidOperationException("The component picker icon is not embedded in FireworksFramework.");
             return new Icon(stream);
         }
 
-        // The menu images keep their original formats (GIF, PNG, BMP, ICO), so the name has no extension.
-        private static System.IO.Stream MenuResource(string name)
-        {
-            var assembly = typeof(DesignerImages).Assembly;
-            var prefix = "FireworksFramework.Images.Menus." + name + ".";
-            var resource = Array.Find(assembly.GetManifestResourceNames(), r => r.StartsWith(prefix, StringComparison.Ordinal))
-                ?? throw new InvalidOperationException($"No menu image '{name}' is embedded in {assembly.GetName().Name}.");
-            return assembly.GetManifestResourceStream(resource)!;
-        }
+        // The menu images are drawn by Designers\DesignerIcons.ps1, each with a .dark.png beside it.
+        private const string MenuPrefix = "FireworksFramework.Images.Menus.";
 
         /// <summary>
         /// Adds <c>{resourcePrefix}{name}.png</c> from <paramref name="assembly"/> for each name, keyed by the name.

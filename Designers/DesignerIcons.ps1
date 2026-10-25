@@ -1,7 +1,8 @@
 ﻿# Draws the IsWiX designer icons as tinted tiles: a soft rounded square in the designer's hue with a line glyph in a
 # strong shade of it. Each designer gets <Name>.ico (for light backgrounds, and the standalone app) and <Name>.dark.ico
 # (for Visual Studio's dark themes), each with 16, 20, 24, 32 and 48 pixel images, 32-bit with alpha; tree icons the
-# designers use are written as 16 pixel PNGs the same way (see $treeIcons). Glyphs are drawn
+# designers use are written as 16 pixel PNGs the same way (see $treeIcons), and menu icons as the glyphs alone (see
+# $menuIcons). Glyphs are drawn
 # on a 24-unit grid; 16 and 20 pixels use simpler glyphs where the full ones are too busy.
 #
 # Run from Windows PowerShell 5.1 (it uses WPF):  powershell -STA -File Designers\DesignerIcons.ps1 [-Preview sheet.png]
@@ -19,6 +20,7 @@ $hues = @{
     gray   = '#F1EFE8', '#5F5E5A', '#444441', '#D3D1C7'
     coral  = '#FAECE7', '#993C1D', '#712B13', '#F5C4B3'
     green  = '#EAF3DE', '#3B6D11', '#27500A', '#C0DD97'
+    red    = '#FCEBEB', '#A32D2D', '#791F1F', '#F7C1C1'
 }
 
 # Gear: a ring of eight teeth around a hub, as one path.
@@ -62,10 +64,11 @@ function Render($d, [int]$size, [bool]$dark) {
     $visual = New-Object System.Windows.Media.DrawingVisual
     $dc = $visual.RenderOpen()
     $radius = [Math]::Max(2.5, $size * 0.22)
-    $dc.DrawRoundedRectangle($tile, $null, (New-Object System.Windows.Rect 0, 0, $size, $size), $radius, $radius)
+    # Menu glyphs ($d.NoTile) are drawn alone, larger, as Visual Studio's menu icons are.
+    if (-not $d.NoTile) { $dc.DrawRoundedRectangle($tile, $null, (New-Object System.Windows.Rect 0, 0, $size, $size), $radius, $radius) }
     # The glyph fills about 70% of the tile; thinner lines at larger sizes keep it from looking heavy.
     $small = $size -le 20
-    $scale = $size * $(if ($small) { 0.76 } else { 0.70 }) / 24
+    $scale = $size * $(if ($d.NoTile) { 0.92 } elseif ($small) { 0.76 } else { 0.70 }) / 24
     $offset = ($size - 24 * $scale) / 2
     $stroke = if ($size -le 20) { 2.5 } elseif ($size -le 24) { 2.3 } else { 2.0 }
     $pen = New-Object System.Windows.Media.Pen $ink, $stroke
@@ -133,7 +136,18 @@ function Write-Png([byte[]]$pixels, [int]$size, [string]$path) {
     $bitmap.Dispose()
 }
 
-foreach ($t in $treeIcons) {
+# Menu icons the WinForms designers share (DesignerImages.MenuImage), the glyphs alone in their hues.
+$menuIcons = @(
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'new_folder';   Hue = 'amber'; NoTile = $true; Paths = @('M3 7 A2 2 0 0 1 5 5 L9 5 L11 7 L19 7 A2 2 0 0 1 21 9 L21 17 A2 2 0 0 1 19 19 L5 19 A2 2 0 0 1 3 17 Z', 'M12 10 L12 16', 'M9 13 L15 13') }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'rename';       Hue = 'blue';  NoTile = $true; Paths = @('M4 20 L4.5 16 L15.5 5 L19 8.5 L8 19.5 Z', 'M13.5 7 L17 10.5') }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'delete';       Hue = 'red';   NoTile = $true; Paths = @('M6 6 L18 18', 'M18 6 L6 18') }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'expand_all';   Hue = 'gray';  NoTile = $true; Paths = @('M6 5 L12 11 L18 5', 'M6 13 L12 19 L18 13') }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'collapse_all'; Hue = 'gray';  NoTile = $true; Paths = @('M6 11 L12 5 L18 11', 'M6 19 L12 13 L18 19') }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'refresh';      Hue = 'teal';  NoTile = $true; Paths = @('M19 12 A7 7 0 1 1 15.5 5.94', 'M14.6 2.6 L15.7 6.1 L12.2 7.1') }
+    @{ Dir = '..\Shared\FireworksFramework\Images\Menus'; Name = 'new_shortcut'; Hue = 'coral'; NoTile = $true; Paths = $designers[6].Paths }
+)
+
+foreach ($t in $treeIcons + $menuIcons) {
     $dir = Join-Path $Repo "Designers\$($t.Dir)"
     Write-Png (Render $t 16 $false) 16 (Join-Path $dir "$($t.Name).png")
     Write-Png (Render $t 16 $true) 16 (Join-Path $dir "$($t.Name).dark.png")

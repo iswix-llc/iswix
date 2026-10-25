@@ -494,6 +494,25 @@ namespace IsWiX.Designer
                 Apply(contextMenu);
             }
 
+            // A designer's menus are among its components; each is themed again as it opens, since designers add items
+            // to them (and show them) as they please.
+            if (control.GetType().GetField("components", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.GetValue(control) is System.ComponentModel.IContainer components)
+            {
+                foreach (var menu in components.Components.OfType<WinForms.ContextMenuStrip>())
+                {
+                    Apply(menu);
+                    if (!MenuWatched.TryGetValue(menu, out _))
+                    {
+                        MenuWatched.Add(menu, new object());
+                        menu.Opening += (s, e) =>
+                        {
+                            ThreadHelper.ThrowIfNotOnUIThread();
+                            Apply(menu);
+                        };
+                    }
+                }
+            }
+
             // Designers swap a control's menu for what's selected (a tree's root and its items, say); the one set later
             // is themed when it's set.
             if (!MenuWatched.TryGetValue(control, out _))
@@ -881,7 +900,10 @@ namespace IsWiX.Designer
                 OriginalItemImages.Add(item, original);
             }
 
-            item.Image = ImageThemingUtilities.GetThemedBitmap(new Drawing.Bitmap(original), background);
+            // A menu image drawn for dark backgrounds is used as it is there; others are adapted as Visual Studio does.
+            item.Image = background.GetBrightness() < 0.5f && FireworksFramework.Services.DesignerImages.DarkMenuImage(original) is { } dark
+                ? new Drawing.Bitmap(dark)
+                : ImageThemingUtilities.GetThemedBitmap(new Drawing.Bitmap(original), background);
         }
 
         /// <summary>Themes the scrollbars of a WinForms control's window, which its colors don't reach.</summary>
