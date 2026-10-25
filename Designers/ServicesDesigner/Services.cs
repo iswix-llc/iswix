@@ -20,7 +20,7 @@ namespace ServicesDesigner
 {
     public partial class Services : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
 
         private enum ImageLibrary
         {
@@ -40,10 +40,35 @@ namespace ServicesDesigner
 
         List<ServiceItem> _services = new List<ServiceItem>();
 
-        public Services()
+        public Services(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");
+            renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
+            deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
+            AddToolbar();
+        }
+
+        ToolStripButton _deleteButton = null!;
+
+        // The tree's commands as buttons above it too: nothing else shows that right-clicking it adds a service.
+        private void AddToolbar()
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            // New Service lists the files a service can be made for, here and in the tree's menu.
+            var newButton = new ToolStripDropDownButton("New Service") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false };
+            FillNewServiceMenu(newButton.DropDownItems);
+            newButton.DropDownOpening += (s, e) => FillNewServiceMenu(newButton.DropDownItems);
+            FillNewServiceMenu(createNewFolderToolStripMenuItem1.DropDownItems);
+            cmsComputer.Opening += (s, e) => FillNewServiceMenu(createNewFolderToolStripMenuItem1.DropDownItems);
+            _deleteButton = new ToolStripButton("Delete") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+            _deleteButton.Click += (s, e) => deleteToolStripMenuItem.PerformClick();
+            toolbar.Items.Add(newButton);
+            toolbar.Items.Add(_deleteButton);
+            splitContainer1.Panel1.Controls.Add(toolbar);
         }
 
         #region IFireworksDesigner Members
@@ -145,6 +170,7 @@ namespace ServicesDesigner
 
         private void treeViewServices_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            _deleteButton.Enabled = !e.Node!.Level.Equals(0);
             if (e.Node!.Level.Equals(0))
             {
                 treeViewServices.ContextMenuStrip = cmsComputer;
@@ -161,65 +187,29 @@ namespace ServicesDesigner
             }
         }
 
-        private void createNewFolderToolStripMenuItem1_Click(object sender, EventArgs e)
+        // A service can be made for an .exe that is its component's key file.
+        private void FillNewServiceMenu(ToolStripItemCollection items)
         {
-            ComponentPicker picker = new ComponentPicker(ServiceDocument.GetServiceCandidates(_documentManager.Document));
-            picker.StartPosition = FormStartPosition.CenterParent;
-            DialogResult dr = picker.ShowDialog();
-            if (dr != DialogResult.Cancel)
+            var candidates = _documentManager.Document is null
+                ? new List<ServiceCandidate>()
+                : ServiceDocument.GetServiceCandidates(_documentManager.Document);
+            CandidateMenu.Fill(items, candidates, c => c.DestinationFilePath, CreateService,
+                "No .exe is the key file of its component", byFolder: false);
+        }
+
+        // Named for the file, numbered if a service already has that name.
+        private void CreateService(ServiceCandidate candidate)
+        {
+            bool Taken(string name) => _services.Any(s => string.Equals(s.Install.Name, name, StringComparison.InvariantCultureIgnoreCase));
+            string name = candidate.FileName;
+            for (int index = 1; Taken(name); index++)
             {
-
-                if (!string.IsNullOrEmpty(picker.FileKey) || picker.FileElement != null)
-                {
-                    string prefix = picker.FileName;
-                    int index = 0;
-                    bool added = false;
-                    do
-                    {
-                        index++;
-                        bool exists = false;
-                        foreach (var existingService in _services)
-                        {
-                            string name = string.Format("{0}{1}", prefix, index);
-                            if (string.Equals(existingService.Install.Name, name, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                exists = true;
-                                break;
-                            }
-                        }
-
-
-                        if (exists == false)
-                        {
-                            string name = string.Format("{0}{1}", prefix, index);
-
-                            if (index == 1)
-                            {
-                                foreach (var existingService in _services)
-                                {
-                                    if (string.Equals(existingService.Install.Name, prefix, StringComparison.InvariantCultureIgnoreCase))
-                                    {
-                                        exists = true;
-                                        break;
-                                    }
-                                }
-                                if (exists == false)
-                                {
-                                    name = prefix;
-                                }
-
-                            }
-
-                            ServiceItem service = ServiceDocument.Create(_documentManager.Document, name, picker.FileKey, picker.FileElement);
-                            _services.Add(service);
-                            AddServiceNode(service);
-                            added = true;
-                        }
-                    }
-                    while (added == false);
-
-                }
+                name = candidate.FileName + index;
             }
+
+            ServiceItem service = ServiceDocument.Create(_documentManager.Document, name, candidate.Id, candidate.FileElement);
+            _services.Add(service);
+            AddServiceNode(service);
         }
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -228,6 +218,7 @@ namespace ServicesDesigner
             _services.Remove(service);
             treeViewServices.SelectedNode.Remove();
             treeViewServices.SelectedNode = treeViewServices.Nodes[0];
+            _deleteButton.Enabled = false;
         }
 
         private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)

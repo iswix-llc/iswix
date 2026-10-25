@@ -40,7 +40,7 @@
             this.groupBoxColumnSchema = new System.Windows.Forms.GroupBox();
             this.checkBoxNullable = new System.Windows.Forms.CheckBox();
             this.textBoxLength = new System.Windows.Forms.TextBox();
-            this.comboBoxType = new System.Windows.Forms.ComboBox();
+            this.textBoxType = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.labelLength = new System.Windows.Forms.Label();
             this.labelType = new System.Windows.Forms.Label();
@@ -172,7 +172,7 @@
             // 
             this.groupBoxColumnSchema.Controls.Add(this.checkBoxNullable);
             this.groupBoxColumnSchema.Controls.Add(this.textBoxLength);
-            this.groupBoxColumnSchema.Controls.Add(this.comboBoxType);
+            this.groupBoxColumnSchema.Controls.Add(this.textBoxType);
             this.groupBoxColumnSchema.Controls.Add(this.textBoxName);
             this.groupBoxColumnSchema.Controls.Add(this.labelLength);
             this.groupBoxColumnSchema.Controls.Add(this.labelType);
@@ -189,7 +189,7 @@
             // checkBoxNullable
             // 
             this.checkBoxNullable.AutoSize = true;
-            this.checkBoxNullable.Enabled = false;
+            this.checkBoxNullable.AutoCheck = false;
             this.checkBoxNullable.Location = new System.Drawing.Point(124, 226);
             this.checkBoxNullable.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBoxNullable.Name = "checkBoxNullable";
@@ -200,30 +200,25 @@
             // 
             // textBoxLength
             // 
-            this.textBoxLength.Enabled = false;
+            this.textBoxLength.ReadOnly = true;
             this.textBoxLength.Location = new System.Drawing.Point(67, 158);
             this.textBoxLength.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxLength.Name = "textBoxLength";
             this.textBoxLength.Size = new System.Drawing.Size(148, 26);
             this.textBoxLength.TabIndex = 5;
             // 
-            // comboBoxType
-            // 
-            this.comboBoxType.Enabled = false;
-            this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Items.AddRange(new object[] {
-            "binary",
-            "int",
-            "string"});
-            this.comboBoxType.Location = new System.Drawing.Point(67, 99);
-            this.comboBoxType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(148, 28);
-            this.comboBoxType.TabIndex = 4;
-            // 
+            // textBoxType
+            //
+            this.textBoxType.ReadOnly = true;
+            this.textBoxType.Location = new System.Drawing.Point(67, 99);
+            this.textBoxType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxType.Name = "textBoxType";
+            this.textBoxType.Size = new System.Drawing.Size(148, 26);
+            this.textBoxType.TabIndex = 4;
+            //
             // textBoxName
-            // 
-            this.textBoxName.Enabled = false;
+            //
+            this.textBoxName.ReadOnly = true;
             this.textBoxName.Location = new System.Drawing.Point(67, 42);
             this.textBoxName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxName.Name = "textBoxName";
@@ -444,7 +439,7 @@
         private System.Windows.Forms.GroupBox groupBoxColumnSchema;
         private System.Windows.Forms.CheckBox checkBoxNullable;
         private System.Windows.Forms.TextBox textBoxLength;
-        private System.Windows.Forms.ComboBox comboBoxType;
+        private System.Windows.Forms.TextBox textBoxType;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Label labelLength;
         private System.Windows.Forms.Label labelType;

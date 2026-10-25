@@ -26,8 +26,9 @@ namespace FireworksFramework.ViewModels
 {
     class FireworksViewModel : ObservableObject, IPublishable
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
-        PluginManager _pluginManager = PluginManager.PluginManagerInstance;
+        // This window's document, and the designers created for it.
+        readonly DocumentManager _documentManager = new DocumentManager();
+        readonly IReadOnlyList<IFireworksDesigner> _designers;
 
         string _templateName = string.Empty;
         string _documentExtension = string.Empty;
@@ -97,6 +98,7 @@ namespace FireworksFramework.ViewModels
 
         public FireworksViewModel()
         {
+            _designers = PluginManager.PluginManagerInstance.CreateDesigners(_documentManager);
             Title = GetProductName();
             // Pass object reference to document manager
             _documentManager.Subscribe("mainform", this);
@@ -360,7 +362,7 @@ namespace FireworksFramework.ViewModels
             {
                 List<IFireworksDesigner> activeDesigners = new List<IFireworksDesigner>();
 
-                foreach (var designer in _pluginManager.Designers.Values)
+                foreach (var designer in _designers)
                 {
                     if (designer.PluginType == PluginType.Designer && designer.IsValidContext())
                     {

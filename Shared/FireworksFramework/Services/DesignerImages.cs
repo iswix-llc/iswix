@@ -26,20 +26,77 @@ namespace FireworksFramework.Services
             Add(imageList, typeof(DesignerImages).Assembly, "FireworksFramework.Images.Designers.", Library);
 
         /// <summary>
+        /// Gets one of the menu images the WinForms designers share (<c>Images\Menus</c>): <c>new_folder</c>,
+        /// <c>rename</c>, <c>delete</c>, <c>expand_all</c>, <c>collapse_all</c>, <c>refresh</c> or <c>new_shortcut</c>.
+        /// </summary>
+        /// <remarks>
+        /// Set in code rather than stored in the .resx: images dotnet build writes into a .resx for .NET Framework
+        /// need System.Resources.Extensions and a binding redirect, which Visual Studio can't be given.
+        /// </remarks>
+        public static Image MenuImage(string name)
+        {
+            var image = Load(typeof(DesignerImages).Assembly, MenuPrefix + name + ".png")
+                ?? throw new InvalidOperationException($"No menu image '{name}' is embedded in {typeof(DesignerImages).Assembly.GetName().Name}.");
+            if (Load(typeof(DesignerImages).Assembly, MenuPrefix + name + ".dark.png") is { } dark)
+            {
+                MenuDarks.Add(image, dark);
+            }
+
+            return image;
+        }
+
+        static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Image, Image> MenuDarks =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<Image, Image>();
+
+        /// <summary>
+        /// The drawing for dark backgrounds of an image <see cref="MenuImage"/> gave, for a theme to use there in place
+        /// of adapting the light one; null for any other image.
+        /// </summary>
+        public static Image? DarkMenuImage(Image image) => MenuDarks.TryGetValue(image, out var dark) ? dark : null;
+
+        // The menu images are drawn by Designers\DesignerIcons.ps1, each with a .dark.png beside it.
+        private const string MenuPrefix = "FireworksFramework.Images.Menus.";
+
+        /// <summary>
         /// Adds <c>{resourcePrefix}{name}.png</c> from <paramref name="assembly"/> for each name, keyed by the name.
-        /// The list is switched to 32-bit color so the PNGs keep their transparency.
+        /// The list is switched to 32-bit color so the PNGs keep their transparency. A <c>{name}.dark.png</c> embedded
+        /// beside one is its drawing for dark backgrounds; see <see cref="DarkImages"/>.
         /// </summary>
         public static void Add(ImageList imageList, Assembly assembly, string resourcePrefix, params string[] names)
         {
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             foreach (var name in names)
             {
-                using var stream = assembly.GetManifestResourceStream(resourcePrefix + name + ".png")
-                    ?? throw new InvalidOperationException($"The image '{resourcePrefix}{name}.png' is not embedded in {assembly.GetName().Name}.");
-                using var image = Image.FromStream(stream);
-                // A copy, since the image list reads its images later, after the stream is closed.
-                imageList.Images.Add(name, new Bitmap(image));
+                imageList.Images.Add(name, Load(assembly, resourcePrefix + name + ".png")
+                    ?? throw new InvalidOperationException($"The image '{resourcePrefix}{name}.png' is not embedded in {assembly.GetName().Name}."));
+                if (Load(assembly, resourcePrefix + name + ".dark.png") is { } dark)
+                {
+                    DarkImages(imageList)[name] = dark;
+                }
             }
+        }
+
+        static readonly System.Runtime.CompilerServices.ConditionalWeakTable<ImageList, System.Collections.Generic.Dictionary<string, Image>> Darks =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<ImageList, System.Collections.Generic.Dictionary<string, Image>>();
+
+        /// <summary>
+        /// An image list's images drawn for dark backgrounds, by key: a theme uses them there in place of adapting the
+        /// light ones.
+        /// </summary>
+        public static System.Collections.Generic.IDictionary<string, Image> DarkImages(ImageList imageList) =>
+            Darks.GetValue(imageList, _ => new System.Collections.Generic.Dictionary<string, Image>());
+
+        private static Image? Load(Assembly assembly, string resource)
+        {
+            using var stream = assembly.GetManifestResourceStream(resource);
+            if (stream is null)
+            {
+                return null;
+            }
+
+            using var image = Image.FromStream(stream);
+            // A copy, since the image list reads its images later, after the stream is closed.
+            return new Bitmap(image);
         }
     }
 }

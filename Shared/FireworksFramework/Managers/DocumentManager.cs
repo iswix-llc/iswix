@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Types;
 using IsWiX.WiXModel.Core;
@@ -17,6 +16,10 @@ using CanonicalOrder = IsWiX.WiXModel.CanonicalOrder;
 
 namespace FireworksFramework.Managers
 {
+    /// <summary>
+    /// One open document and its state. Each window (or Visual Studio editor) creates its own and passes it to its
+    /// designers' constructors, so several documents can be open in one process.
+    /// </summary>
     public partial class DocumentManager
     {
         DocumentStates _documentState = DocumentStates.Closed;
@@ -28,14 +31,10 @@ namespace FireworksFramework.Managers
         XNamespace? _previousNamespace;
         string _documentExtension = string.Empty;
         string _templateName = string.Empty;
-        XmlSchemaSet _schemas = new XmlSchemaSet();
         bool _canSave = true;
         Dictionary<string, XNamespace> _namespaces = new Dictionary<string, XNamespace> { [""] = XNamespace.None };
 
         public Dictionary<string, IPublishable> Subscribers { get { return _subscribers; } }
-        private static readonly Lazy<DocumentManager> lazy = new Lazy<DocumentManager>(() => new DocumentManager());
-
-        public static DocumentManager DocumentManagerInstance { get { return lazy.Value; } }
 
         string _documentPath = string.Empty;
         public string DocumentPath { get { return _documentPath; } }
@@ -56,22 +55,6 @@ namespace FireworksFramework.Managers
                 _subscribers.Remove(name);
             }
             Refresh();
-        }
-
-        private DocumentManager()
-        {
-            try
-            {
-                foreach (var file in new DirectoryInfo("Schemas").GetFiles("*.xsd"))
-                {
-                    _schemas.Add(null, file.FullName);
-                }
-                _schemas.CompilationSettings.EnableUpaCheck = true;
-                _schemas.Compile();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         public DocumentStates DocumentState
@@ -154,36 +137,7 @@ namespace FireworksFramework.Managers
                     document = LosslessXml.Load(stream);
                 }
 
-                // WiX v3 sources are not supported. Reject them before replacing the current document.
-                if (document.Root?.Name.Namespace == WixNamespaces.WixV3)
-                {
-                    var fileName = Path.GetFileName(filePath);
-                    throw new NotSupportedException(
-                        $"'{fileName}' is a WiX v3 source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
-                        $"Convert it to WiX v4 or later with 'wix convert \"{fileName}\"', then open the converted file.");
-                }
-
-                // Merge module sources are not supported either. Packages that consume merge modules
-                // (<Merge> and <MergeRef>) are fine; this is only about editing a <Module> itself.
-                if (document.Root?.Elements().FirstOrDefault()?.Name == WixNamespaces.Wxs + "Module")
-                {
-                    throw new NotSupportedException(
-                        $"'{Path.GetFileName(filePath)}' is a merge module source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
-                        "IsWiX edits WiX packages and fragments. Packages can still include merge modules through the Features designer.");
-                }
-
-                // Elements added through the typed model go to IsWiX's canonical position, so a file's layout
-                // depends only on its content, which keeps branches and merges clean.
-                WixOrdering.Set(document, CanonicalOrder.Create());
-
-                _document = document;
-                _savedDocument = new XDocument(_document);
-                _documentPath = filePath;
-                _documentState = DocumentStates.Clean;
-                RefreshNamespaces();
-                EnableChangeWatcher();
-                PublishToSubscriber();
-
+                Open(document, filePath);
             }
             catch (NotSupportedException)
             {
@@ -193,6 +147,60 @@ namespace FireworksFramework.Managers
             {
                 throw new Exception("Load Failed", ex);
             }
+        }
+
+        /// <summary>
+        /// Loads a document from text, such as an editor's in-memory copy of the file, instead of reading the file.
+        /// </summary>
+        /// <param name="text">The XML text.</param>
+        /// <param name="filePath">The file the text belongs to; nothing is read from it.</param>
+        /// <exception cref="System.Xml.XmlException">The text is not well-formed XML.</exception>
+        /// <exception cref="NotSupportedException">The text is a WiX v3 or merge module source.</exception>
+        public void LoadText(string text, string filePath)
+        {
+            // The same lossless parse as Load, so ToText gives back the text unchanged until a designer edits it.
+            Open(LosslessXml.Parse(text), filePath);
+        }
+
+        /// <summary>
+        /// Gets the document's text as it would be saved: unchanged parts exactly as loaded, edits indented like
+        /// their surroundings.
+        /// </summary>
+        public string ToText() => LosslessXml.ToXmlString(_document);
+
+        void Open(XDocument document, string filePath)
+        {
+            // WiX v3 sources are not supported. Reject them before replacing the current document.
+            if (document.Root?.Name.Namespace == WixNamespaces.WixV3)
+            {
+                var fileName = Path.GetFileName(filePath);
+                throw new NotSupportedException(
+                    $"'{fileName}' is a WiX v3 source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
+                    $"Convert it to WiX v4 or later with 'wix convert \"{fileName}\"', then open the converted file.");
+            }
+
+            // Merge module sources are not supported either. Packages that consume merge modules
+            // (<Merge> and <MergeRef>) are fine; this is only about editing a <Module> itself.
+            if (document.Root?.Elements().FirstOrDefault()?.Name == WixNamespaces.Wxs + "Module")
+            {
+                throw new NotSupportedException(
+                    $"'{Path.GetFileName(filePath)}' is a merge module source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
+                    "IsWiX edits WiX packages and fragments. Packages can still include merge modules through the Features designer.");
+            }
+
+            // Elements added through the typed model go to IsWiX's canonical position, so a file's layout
+            // depends only on its content, which keeps branches and merges clean.
+            WixOrdering.Set(document, CanonicalOrder.Create());
+
+            // Stop watching the document being replaced, so a reload doesn't leave it publishing changes.
+            DisableChangeWatcher();
+            _document = document;
+            _savedDocument = new XDocument(_document);
+            _documentPath = filePath;
+            _documentState = DocumentStates.Clean;
+            RefreshNamespaces();
+            EnableChangeWatcher();
+            PublishToSubscriber();
         }
 
         public void DisableChangeWatcher()
@@ -305,11 +313,6 @@ namespace FireworksFramework.Managers
             }
 
             return message;
-        }
-
-        public XmlSchemaSet Schemas
-        {
-            get { return _schemas; }
         }
 
         public bool CanSave

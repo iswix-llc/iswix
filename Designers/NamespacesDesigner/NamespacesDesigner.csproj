@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net8.0-windows</TargetFramework>
+	  <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
 	  <ImplicitUsings>disable</ImplicitUsings>
 	  <Nullable>enable</Nullable>
 	  <UseWPF>true</UseWPF>
@@ -14,16 +14,18 @@
   <ItemGroup>
     <None Remove="License.txt" />
     <None Remove="Namespaces.ico" />
+    <None Remove="Namespaces.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
     <EmbeddedResource Include="Namespaces.ico" />
+    <!-- The designer list's icon in Visual Studio's dark themes. -->
+    <EmbeddedResource Include="Namespaces.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
-    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>

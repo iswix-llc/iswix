@@ -21,14 +21,68 @@ namespace FeaturesDesigner
 {
     public partial class Features : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
 
         bool _refresh = false;
         bool _loadingMergeRefs = false;
-        public Features()
+        public Features(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
+            AddToolbar();
+        }
+
+        // The tree's commands as buttons above it too: with no features the tree is empty, and nothing shows that
+        // right-clicking it adds one.
+        private void AddToolbar()
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            foreach (var menuItem in new[] { toolStripMenuItemNewFeature, toolStripMenuItemNewSubFeature, toolStripMenuItemRename, toolStripMenuItemDelete })
+            {
+                // No tooltip: it would only repeat the button's text.
+                var button = new ToolStripButton(menuItem.Text) { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = menuItem.Enabled, AutoToolTip = false };
+                button.Click += (s, e) => RunAfterRename(menuItem.PerformClick);
+                menuItem.EnabledChanged += (s, e) => button.Enabled = menuItem.Enabled;
+                toolbar.Items.Add(button);
+            }
+
+            splitContainer1.Panel1.Controls.Add(toolbar);
+        }
+
+        // A toolbar button doesn't take the focus, so a feature's name can still be being edited (New Feature leaves it
+        // so) when one is pressed. The edit is finished first, and the command runs after the tree has reloaded for the
+        // new name, which AfterLabelEdit queues.
+        private void RunAfterRename(Action command)
+        {
+            var editing = FindEditing(treeViewFeatures.Nodes);
+            if (editing is null)
+            {
+                command();
+                return;
+            }
+
+            editing.EndEdit(false);
+            BeginInvoke(command);
+        }
+
+        private static TreeNode? FindEditing(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.IsEditing)
+                {
+                    return node;
+                }
+
+                var found = FindEditing(node.Nodes);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
 
         #region IFireworksDesigner Members
@@ -298,6 +352,11 @@ namespace FeaturesDesigner
                 treeViewFeatures.ExpandAll();
 
             }
+            else
+            {
+                // The last feature is gone: nothing left to show properties for.
+                ClearPropertyGrid();
+            }
 
         }
 
@@ -330,17 +389,18 @@ namespace FeaturesDesigner
 
         }
 
+        // With no feature selected (none in the file, or the last one deleted) the property grid is hidden rather than
+        // showing an empty feature's properties.
         private void ClearPropertyGrid()
         {
             feature.Clear();
-            propertyGridFeatureProperties.Enabled = false;
-            propertyGridFeatureProperties.Refresh();
+            propertyGridFeatureProperties.Visible = false;
         }
 
+        // PropertyValueChanged is subscribed once, in InitializeComponent.
         private void UpdatePropertyGrid()
         {
-            propertyGridFeatureProperties.Enabled = true;
-            propertyGridFeatureProperties.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridFeatureProperties_PropertyValueChanged);
+            propertyGridFeatureProperties.Visible = true;
             propertyGridFeatureProperties.Refresh();
         }
 

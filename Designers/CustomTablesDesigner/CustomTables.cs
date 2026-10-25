@@ -27,14 +27,57 @@ namespace CustomTablesDesigner
         Wxs.CustomTable _customTableElement = null!;
         // The Row element behind each grid row.
         Dictionary<DataRow, Wxs.Row> _rowElements = new Dictionary<DataRow, Wxs.Row>();
-        DocumentManager _documentManager;
+        readonly DocumentManager _documentManager;
 
-        public CustomTablesDesigner()
+        public CustomTablesDesigner(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
             DesignerImages.Add(imageListIcons, typeof(CustomTablesDesigner).Assembly, "CustomTablesDesigner.Images.", "PrimaryKey");
             dataGridViewRows.DataSource = _customTable;
-            _documentManager = DocumentManager.DocumentManagerInstance;
+
+            // The column list and schema box are placed in pixels and grow with the font they get at run time (Visual
+            // Studio's, or the system's), while the panels holding them keep their designed size. Once those sizes are
+            // known, and whenever they change, the panels are grown to fit them.
+            Load += (s, e) => FitColumnEditor();
+            groupBoxColumnSchema.SizeChanged += (s, e) => FitColumnEditor();
+            splitContainer1.SizeChanged += (s, e) => FitColumnEditor();
+            splitContainer2.SizeChanged += (s, e) => FitColumnEditor();
+        }
+
+        bool _fitting;
+
+        // Widens the left side to the schema box's right edge and makes the columns area tall enough for the list and
+        // the box, as far as the designer's own size allows. It only ever grows them; the splitters can still be moved.
+        void FitColumnEditor()
+        {
+            if (_fitting)
+            {
+                return;
+            }
+
+            _fitting = true;
+            try
+            {
+                const int margin = 8;
+                var width = groupBoxColumnSchema.Right + margin;
+                var widest = splitContainer1.Width - splitContainer1.SplitterWidth - splitContainer1.Panel2MinSize;
+                if (splitContainer1.SplitterDistance < width && widest > splitContainer1.SplitterDistance)
+                {
+                    splitContainer1.SplitterDistance = Math.Min(width, widest);
+                }
+
+                var height = Math.Max(groupBoxColumnSchema.Bottom, listViewColumns.Bottom) + margin;
+                if (splitContainer2.Panel2.Height < height)
+                {
+                    var distance = splitContainer2.Height - splitContainer2.SplitterWidth - height;
+                    splitContainer2.SplitterDistance = Math.Max(splitContainer2.Panel1MinSize, Math.Min(splitContainer2.SplitterDistance, distance));
+                }
+            }
+            finally
+            {
+                _fitting = false;
+            }
         }
 
         void _customTable_RowChanged(object sender, DataRowChangeEventArgs e)
@@ -119,17 +162,12 @@ namespace CustomTablesDesigner
             _customTable.Columns.Clear();
             listViewColumns.Items.Clear();
             
+            // The column schema fields only show the selected column; they are read-only rather than disabled, so
+            // they stay readable in Visual Studio's dark theme.
             textBoxName.Text = "";
-            textBoxName.Enabled = false;
-
-            comboBoxType.Text = "";
-            comboBoxType.Enabled = false;
-
+            textBoxType.Text = "";
             textBoxLength.Text = "";
-            textBoxLength.Enabled = false;
-
             checkBoxNullable.Checked = false;
-            checkBoxNullable.Enabled = false;
             if (listBoxTables.SelectedItems.Count > 0)
             {
 
@@ -401,16 +439,9 @@ namespace CustomTablesDesigner
                 var column = FindColumn(listViewColumns.SelectedItems[0].Text);
 
                 textBoxName.Text = column.Id;
-                //textBoxName.Enabled = true;
-
-                comboBoxType.Text = column.GetAttributeValue("Type") ?? string.Empty;
-                //comboBoxType.Enabled = true;
-
+                textBoxType.Text = column.GetAttributeValue("Type") ?? string.Empty;
                 textBoxLength.Text = column.GetAttributeValue("Width") ?? string.Empty;
-                //textBoxLength.Enabled = true;
-
                 checkBoxNullable.Checked = IsYes(column.Nullable);
-                //checkBoxNullable.Enabled = true;
 
             }
         }

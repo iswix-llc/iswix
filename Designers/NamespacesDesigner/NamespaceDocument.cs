@@ -18,7 +18,12 @@ namespace NamespacesDesigner
         static readonly SortedDictionary<string, string> WixExtensions = new SortedDictionary<string, string>(
             WixNamespaces.ExtensionPrefixes.ToDictionary(e => e.Value, e => e.Key.NamespaceName));
 
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
+
+        public NamespaceDocument(DocumentManager documentManager)
+        {
+            _documentManager = documentManager;
+        }
 
         // The designer is only offered for an open WiX document, which has a root.
         XElement Root => _documentManager.Document.Root!;

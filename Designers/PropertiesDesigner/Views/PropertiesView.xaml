@@ -6,11 +6,15 @@
              xmlns:viewmmodels="clr-namespace:PropertiesDesigner.ViewModels"
              xmlns:local="clr-namespace:PropertiesDesigner.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <viewmmodels:PropertiesViewModel x:Name="viewModel"/>
-    </UserControl.DataContext>
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=viewmmodels:PropertiesViewModel}">
     <DockPanel>
+        <!-- The grid's commands as buttons too: with no properties the grid is empty, and nothing shows that
+             right-clicking it adds one. -->
+        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+            <Button Content="New Property" Click="NewProperty_Click" />
+            <Button Content="Delete" IsEnabled="{Binding EnableRemove}" Click="Delete_Click" />
+        </ToolBar>
         <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" SelectionChanged="DataGridDependencies_SelectionChanged" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn MinWidth="40">
@@ -60,8 +64,8 @@
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Click="MenuItem_Click" />
-                    <MenuItem Header="Remove" IsEnabled="{Binding EnableRemove}"  Click="MenuItem_Click_1" />
+                    <MenuItem Header="New Property" Click="NewProperty_Click" />
+                    <MenuItem Header="Delete" IsEnabled="{Binding EnableRemove}" Click="Delete_Click" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

@@ -19,30 +19,27 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # The SDK comes from global.json; IsWiX runs on .NET 8.
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
           dotnet-version: 8.0.x
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@v3
 
+      # The standalone app and the designers' .NET 8 builds. The extension builds what it hosts itself.
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
-
-      # The VSIX packs the app from IsWiXExtension\IsWiX, which FolderProfile publishes to.
-      - name: Publish IsWiX into the extension
-        run: dotnet publish IsWiX/IsWiX.csproj -c Release -p:PublishProfile=FolderProfile
 
       - name: Build the extension
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal
 
       - name: Upload the VSIX
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: IsWiX-vsix
           path: IsWiXExtension/bin/Release/IsWiX.vsix

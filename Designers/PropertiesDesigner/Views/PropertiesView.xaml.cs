@@ -16,9 +16,15 @@ namespace PropertiesDesigner.Views
     /// </summary>
     public partial class PropertiesView : UserControl, IFireworksDesigner
     {
+        readonly DocumentManager _documentManager;
+        readonly ViewModels.PropertiesViewModel viewModel;
 
-        public PropertiesView()
+        public PropertiesView(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
+            // Created here rather than in the XAML, which can't pass it the document.
+            viewModel = new ViewModels.PropertiesViewModel(documentManager);
+            DataContext = viewModel;
             InitializeComponent();
         }
 
@@ -51,7 +57,7 @@ namespace PropertiesDesigner.Views
         }
         public bool IsValidContext()
         {
-            return ViewModels.PropertiesViewModel.IsValidDocument(DocumentManager.DocumentManagerInstance.Document);
+            return ViewModels.PropertiesViewModel.IsValidDocument(_documentManager.Document);
         }
 
         public void LoadData()
@@ -61,22 +67,15 @@ namespace PropertiesDesigner.Views
 
         private void DataGridDependencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dataGridDependencies.SelectedItems == null)
-            {
-                viewModel.EnableRemove = false;
-            }
-            else
-            {
-                viewModel.EnableRemove = true;
-            }
+            viewModel.EnableRemove = dataGridDependencies.SelectedItem != null;
         }
 
-        private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void NewProperty_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             viewModel.Add();
         }
 
-        private void MenuItem_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        private void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             viewModel.Remove(dataGridDependencies.SelectedItem as PropertyModel);
         }

@@ -28,11 +28,15 @@ namespace NamespacesDesigner.Views
     /// </summary>
     public partial class NamespacesView : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
+        readonly ViewModels.NamespacesViewModel viewModel;
 
-
-        public NamespacesView()
+        public NamespacesView(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
+            // Created here rather than in the XAML, which can't pass it the document.
+            viewModel = new ViewModels.NamespacesViewModel(documentManager);
+            DataContext = viewModel;
             InitializeComponent();
         }
 

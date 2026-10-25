@@ -193,6 +193,7 @@
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -205,13 +206,14 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer2.Size = new System.Drawing.Size(340, 218);
-            this.splitContainer2.SplitterDistance = 113;
+            this.splitContainer2.SplitterDistance = 68;
             this.splitContainer2.TabIndex = 0;
             // 
             // splitContainer3
             // 
             this.splitContainer3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer3.Location = new System.Drawing.Point(0, 0);
             this.splitContainer3.Name = "splitContainer3";
             this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -223,8 +225,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.textBox1);
-            this.splitContainer3.Size = new System.Drawing.Size(340, 101);
-            this.splitContainer3.SplitterDistance = 72;
+            this.splitContainer3.Size = new System.Drawing.Size(340, 146);
+            this.splitContainer3.SplitterDistance = 102;
             this.splitContainer3.TabIndex = 0;
             // 
             // treeViewMerges
@@ -260,7 +262,7 @@
             // propertyGridFeatureProperties
             // 
             this.propertyGridFeatureProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGridFeatureProperties.Enabled = false;
+            this.propertyGridFeatureProperties.Visible = false;
             this.propertyGridFeatureProperties.Location = new System.Drawing.Point(0, 0);
             this.propertyGridFeatureProperties.Name = "propertyGridFeatureProperties";
             this.propertyGridFeatureProperties.SelectedObject = this.feature;

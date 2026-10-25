@@ -49,14 +49,15 @@ namespace FilesAndFoldersDesigner
         const string SourceDirDefine = "SourceDir";
         const string ComponentRulesDefine = "ComponentRules";
 
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
         XDocument _document;
         Wxs.Wix _wix;
         Wxs.ComponentGroup? _componentGroup;
         string _fileName;
 
-        public ComponentGroupDocument()
+        public ComponentGroupDocument(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             _document = _documentManager.Document;
             _wix = Wxs.WixDocument.FromXml(_document).Root;
             _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
@@ -293,7 +294,7 @@ namespace FilesAndFoldersDesigner
             string[] parts = directoryMeta.Subdirectory.Split('\\');
             parts[parts.Length - 1] = newName;
 
-            string newSubDirectory = string.Join('\\', parts);
+            string newSubDirectory = string.Join(@"\", parts);
 
             if (DirectoryExists(directory, newSubDirectory))
             {

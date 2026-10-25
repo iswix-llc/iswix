@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -25,19 +27,17 @@ namespace IsWiX
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(IsWiXPackage.PackageGuidString)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideUIContextRule(_uiContextSupportedFiles,
-        name: "Supported Files",
-        expression: "WiX",
-        termNames: new[] { "WiX" },
-        termValues: new[] { "HierSingleSelectionName:.wxs$" })]
+    // The .wxs editor: Design and XML tabs over one document. Its priority makes it the default for .wxs; Open With
+    // still offers the XML editor (and Set as Default switches back).
+    [ProvideEditorFactory(typeof(Designer.WixDesignerEditorFactory), 110, TrustLevel = __VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
+    [ProvideEditorExtension(typeof(Designer.WixDesignerEditorFactory), ".wxs", 0x40, NameResourceID = 110)]
+    [ProvideEditorLogicalView(typeof(Designer.WixDesignerEditorFactory), VSConstants.LOGVIEWID.Designer_string)]
     public sealed class IsWiXPackage : AsyncPackage
     {
         /// <summary>
         /// IsWiXPackage GUID string.
         /// </summary>
         public const string PackageGuidString = "6037b2ce-4508-478c-a49e-c361ca5cba63";
-        private const string _uiContextSupportedFiles = "3c38820f-08cb-401b-8607-60aefa212b46"; // Must match guid in VsCommandTable.vsct
 
         #region Package Members
 
@@ -53,7 +53,7 @@ namespace IsWiX
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await CommandLaunchIsWiX.InitializeAsync(this);
+            RegisterEditorFactory(new Designer.WixDesignerEditorFactory(this));
         }
 
         #endregion

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net8.0-windows</TargetFramework>
+	  <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
 	  <ImplicitUsings>disable</ImplicitUsings>
 	  <Nullable>enable</Nullable>
 	  <UseWPF>true</UseWPF>
@@ -14,17 +14,19 @@
   <ItemGroup>
     <None Remove="License.txt" />
     <None Remove="ShortCuts.ico" />
+    <None Remove="ShortCuts.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
     <EmbeddedResource Include="Images\*.png" />
     <EmbeddedResource Include="ShortCuts.ico" />
+    <!-- The designer list's icon in Visual Studio's dark themes. -->
+    <EmbeddedResource Include="ShortCuts.dark.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
-    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="5.0.2" />
   </ItemGroup>
 	<ItemGroup>
 		<!-- FireworksFramework also brings IsWiX.WiXModel, so every designer uses the same version. -->

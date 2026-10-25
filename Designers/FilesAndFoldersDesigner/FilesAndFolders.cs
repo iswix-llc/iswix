@@ -17,7 +17,7 @@ namespace Designers.FilesAndFolders
 
     public partial class FilesAndFolders : UserControl, IFireworksDesigner
     {
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
         // Set by LoadData, before the designer is shown.
         ComponentGroupDocument _isWiXComponentGroup = null!;
         string rootPath = string.Empty;
@@ -62,9 +62,23 @@ namespace Designers.FilesAndFolders
             }
         }
 
-        public FilesAndFolders()
+        public FilesAndFolders(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            createNewFolderToolStripMenuItem.Image = DesignerImages.MenuImage("new_folder");
+            renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
+            deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
+            expandAllToolStripMenuItem1.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem.Image = DesignerImages.MenuImage("collapse_all");
+            createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");
+            expandAllToolStripMenuItem.Image = DesignerImages.MenuImage("expand_all");
+            refreshSourceFilesToolStripMenuItem.Image = DesignerImages.MenuImage("refresh");
+            refreshToolStripMenuItem.Image = DesignerImages.MenuImage("refresh");
+            removeFileFromProjectToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
+            expandAllToolStripMenuItem2.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem1.Image = DesignerImages.MenuImage("collapse_all");
             DesignerImages.AddLibrary(ilImageLibrary);
 
             // The column sorters always exist (the column click handlers use them) but sort only in release builds.
@@ -98,7 +112,7 @@ namespace Designers.FilesAndFolders
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
-            _isWiXComponentGroup = new ComponentGroupDocument();
+            _isWiXComponentGroup = new ComponentGroupDocument(_documentManager);
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
@@ -174,7 +188,7 @@ namespace Designers.FilesAndFolders
             {
                 string subPathAgg = string.Empty;
                 TreeNode? lastNode = null;
-                foreach (string subPath in dir.Split(pathSeparator))
+                foreach (string subPath in dir.Split(pathSeparator[0]))
                 {
                     subPathAgg += subPath + pathSeparator;
                     TreeNode[] nodes = subTreeNode.Nodes.Find(subPathAgg, true);
@@ -581,14 +595,16 @@ namespace Designers.FilesAndFolders
 
         private void tvDestination_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // Files go in a folder, not on Destination Computer itself. Drops are refused there rather than the list
+            // being disabled, which would draw it in the light system colors in Visual Studio's dark theme.
             if (e.Node!.Level.Equals(0))
             {
                 lvDestination.Items.Clear();
-                lvDestination.Enabled = false;
+                lvDestination.AllowDrop = false;
             }
             else
             {
-                lvDestination.Enabled = true;
+                lvDestination.AllowDrop = true;
                 DisplayDestinationItemsFromSelectedNode(e.Node);
             }
         }
@@ -1009,8 +1025,8 @@ namespace Designers.FilesAndFolders
             _isWiXComponentGroup.SortComponents();
             if (HoverNode != null)
             {
-                HoverNode.BackColor = Color.White;
-                HoverNode.ForeColor = Color.Black;
+                HoverNode.BackColor = Color.Empty;
+                HoverNode.ForeColor = Color.Empty;
             }
          //   _documentManager.EnableChangeWatcher();
             Cursor = Cursors.Arrow;
@@ -1082,8 +1098,8 @@ namespace Designers.FilesAndFolders
                 }
                 else if (HoverNode != node)
                 {
-                    HoverNode.BackColor = Color.White;
-                    HoverNode.ForeColor = Color.Black;
+                    HoverNode.BackColor = Color.Empty;
+                    HoverNode.ForeColor = Color.Empty;
                     node.BackColor = Color.SteelBlue;
                     node.ForeColor = Color.White;
                     HoverNode = node;

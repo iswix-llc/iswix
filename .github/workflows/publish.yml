@@ -25,20 +25,20 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out main
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 1
 
       # The SDK comes from global.json; IsWiX runs on .NET 8.
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
           dotnet-version: 8.0.x
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@v3
 
       # The version lives in Directory.Build.props (app and designers), the VSIX manifest (the Marketplace version)
       # and the extension's AssemblyInfo.cs; all three move together.
@@ -76,10 +76,6 @@ jobs:
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
 
-      # The VSIX packs the app from IsWiXExtension\IsWiX, which FolderProfile publishes to.
-      - name: Publish IsWiX into the extension
-        run: dotnet publish IsWiX/IsWiX.csproj -c Release -p:PublishProfile=FolderProfile
-
       - name: Sign in to Azure (federated identity)
         uses: azure/login@v3
         with:
@@ -87,35 +83,28 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # The sign CLI signs both the assemblies and the VSIX (a package, which signtool-based signing can't do),
-      # with the same Artifact Signing account and profile as IsWiX.WiXModel.
-      - name: Install the sign CLI
-        run: dotnet tool install --global sign --version 0.9.1-beta.26475.3
-
-      # Only IsWiX's own assemblies; third-party ones (Xceed, DiffPlex, WixToolset.Dtf) keep their publishers'
-      # signatures, and IsWiX.WiXModel is signed when it is published to NuGet.
-      - name: Sign IsWiX's assemblies (Artifact Signing)
-        shell: pwsh
-        run: |
-          $files = 'IsWiX.exe', 'IsWiX.dll', 'FireworksFramework.dll',
-            'CustomTablesDesigner.dll', 'FeaturesDesigner.dll', 'FilesAndFoldersDesigner.dll', 'GeneralInformationDesigner.dll',
-            'NamespacesDesigner.dll', 'PropertiesDesigner.dll', 'ServicesDesigner.dll', 'ShortCutsDesigner.dll'
-          sign code artifact-signing @files `
-            --base-directory "$env:GITHUB_WORKSPACE\IsWiXExtension\IsWiX" `
-            --artifact-signing-endpoint https://eus.codesigning.azure.net/ `
-            --artifact-signing-account ISWIX-LLC `
-            --artifact-signing-certificate-profile IsWiX `
-            --azure-credential-type azure-cli `
-            --verbosity warning
-          if ($LASTEXITCODE -ne 0) { throw 'Signing the assemblies failed.' }
-
       - name: Build the extension
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal
+
+      # The sign CLI signs the VSIX package and, inside it, the files the file list names: IsWiX's own (the
+      # extension's IsWiX.dll and the framework and designers it hosts). It signs everything inside otherwise, so
+      # third-party DLLs (Xceed, DiffPlex, GlobalParams) would carry IsWiX's signature in place of their publishers'
+      # (or none).
+      # Same Artifact Signing account and profile as IsWiX.WiXModel, which is signed when it is published.
+      - name: Install the sign CLI
+        run: dotnet tool install --global sign --version 0.9.1-beta.26475.3
 
       - name: Sign the VSIX (Artifact Signing)
         shell: pwsh
         run: |
+          $fileList = Join-Path $env:RUNNER_TEMP 'sign-files.txt'
+          @(
+            'IsWiX.dll'
+            'FireworksFramework.dll'
+            '*Designer.dll'
+          ) | Set-Content -Path $fileList -Encoding utf8
           sign code artifact-signing IsWiXExtension/bin/Release/IsWiX.vsix `
+            --file-list $fileList `
             --artifact-signing-endpoint https://eus.codesigning.azure.net/ `
             --artifact-signing-account ISWIX-LLC `
             --artifact-signing-certificate-profile IsWiX `

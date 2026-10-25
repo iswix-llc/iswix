@@ -5,4 +5,16 @@
          extension's AssemblyInfo.cs too. -->
     <Version>6.0.7</Version>
   </PropertyGroup>
+
+  <!-- FireworksFramework and the designers also build for .NET Framework 4.8, the runtime Visual Studio
+       loads extensions in. Keep the C# version .NET 8 uses, and generate the attributes and types that
+       C# features need (nullable annotations, init, ranges) where .NET Framework lacks them. -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <LangVersion>12.0</LangVersion>
+    <!-- Name a form's resources after the namespace in its .cs file, as .NET 8 builds do. -->
+    <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="PolySharp" Version="1.15.0" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+  </ItemGroup>
 </Project>

@@ -15,7 +15,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IsWiX</RootNamespace>
     <AssemblyName>IsWiX</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>annotations</Nullable>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -45,92 +47,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandLaunchIsWiX.cs" />
+    <Compile Include="Designer\WixDesignerEditorFactory.cs" />
+    <Compile Include="Designer\WixDesignerPane.cs" />
+    <Compile Include="Designer\CodeWindowHost.cs" />
+    <Compile Include="Designer\VsTheme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsWiXExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GlobalParams.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\CustomTablesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\DiffPlex.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\FireworksFramework.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\GeneralInformationDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.WiXModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.WiXModel.Core.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\NamespacesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\FeaturesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\FilesAndFoldersDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\PropertiesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\ServicesDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\ShortCutsDesigner.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\WixToolset.Dtf.WindowsInstaller.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.Themes.Aero.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.Themes.Metro.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.AvalonDock.Themes.VS2010.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\Xceed.Wpf.Toolkit.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -161,14 +86,6 @@
     <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\WiXToolSetStandardBASolutionTemplate.vstemplate" />
     <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\IsWiX.ico" />
     <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="IsWiX\IsWiX.deps.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="IsWiX\IsWiX.runtimeconfig.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\Bundle.wxs" />
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\EULA.rtf" />
     <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\IsWiXBundle.wixproj" />
@@ -216,12 +133,67 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The in-Visual Studio designer (preview) hosts the designers' .NET Framework builds;
+         PluginManager finds them next to FireworksFramework, as in the app. -->
+    <ProjectReference Include="..\Shared\FireworksFramework\FireworksFramework.csproj">
+      <Name>FireworksFramework</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\CustomTablesDesigner\CustomTablesDesigner.csproj">
+      <Name>CustomTablesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\FeaturesDesigner\FeaturesDesigner.csproj">
+      <Name>FeaturesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\FilesAndFoldersDesigner\FilesAndFoldersDesigner.csproj">
+      <Name>FilesAndFoldersDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\GeneralInformationDesigner\GeneralInformationDesigner.csproj">
+      <Name>GeneralInformationDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\NamespacesDesigner\NamespacesDesigner.csproj">
+      <Name>NamespacesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj">
+      <Name>PropertiesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj">
+      <Name>ServicesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\ShortCutsDesigner\ShortCutsDesigner.csproj">
+      <Name>ShortCutsDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+
+    <EmbeddedResource Include="VSPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime" NoWarn="NU1604">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.14.2120" NoWarn="NU1604" />
+    <!-- The designer's theming styles Xceed's property grid (General Information). The same version the designers
+         are built against; without a reference of its own the extension only finds it through them, which depends on
+         the build. -->
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IsWiX.png">
@@ -232,10 +204,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\CommandLaunchIsWiX.png" />
-    <VSCTCompile Include="IsWiXExtension.vsct">
-      <ResourceName>Menus.ctmenu</ResourceName>
-    </VSCTCompile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

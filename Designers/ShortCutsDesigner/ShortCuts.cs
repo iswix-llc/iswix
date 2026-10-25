@@ -19,7 +19,7 @@ namespace ShortCutsDesigner
     public partial class ShortCuts : UserControl, IFireworksDesigner
     {
         List<Wxs.Shortcut> _shortcuts = new List<Wxs.Shortcut>();
-        DocumentManager _documentManager = DocumentManager.DocumentManagerInstance;
+        readonly DocumentManager _documentManager;
         string _oldPath = string.Empty;
         private enum ImageLibrary
         {
@@ -67,11 +67,101 @@ namespace ShortCutsDesigner
             WindowsFolder,
             WindowsVolume
         }
-        public ShortCuts()
+        public ShortCuts(DocumentManager documentManager)
         {
+            _documentManager = documentManager;
             InitializeComponent();
+            // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
+            expandAllToolStripMenuItem2.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem1.Image = DesignerImages.MenuImage("collapse_all");
+            createNewFolderToolStripMenuItem.Image = DesignerImages.MenuImage("new_folder");
+            renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
+            deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
+            toolStripMenuItemCreateSC.Image = DesignerImages.MenuImage("new_shortcut");
+            expandAllToolStripMenuItem1.Image = DesignerImages.MenuImage("expand_all");
+            collapseAllToolStripMenuItem.Image = DesignerImages.MenuImage("collapse_all");
+            createNewFolderToolStripMenuItem1.Image = DesignerImages.MenuImage("new_folder");
+            toolStripMenuItemCreateShortCut.Image = DesignerImages.MenuImage("new_shortcut");
+            expandAllToolStripMenuItem.Image = DesignerImages.MenuImage("expand_all");
+            toolStripMenuItem3.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
             DesignerImages.Add(iImageLibrary, typeof(ShortCuts).Assembly, "ShortCutsDesigner.Images.", "shortcut");
+            AddToolbar();
+        }
+
+        ToolStripButton _newFolderButton = null!;
+        ToolStripDropDownButton _newShortcutButton = null!;
+        ToolStripButton _renameButton = null!;
+        ToolStripButton _deleteButton = null!;
+
+        // The tree's commands as buttons above it too: nothing else shows that right-clicking a folder adds a shortcut.
+        private void AddToolbar()
+        {
+            var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
+            ToolStripButton Button(string text, Action command)
+            {
+                // No tooltip: it would only repeat the button's text.
+                var button = new ToolStripButton(text) { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+                button.Click += (s, e) =>
+                {
+                    // A button doesn't take the focus, so a folder's name can still be being edited (New Folder leaves
+                    // it so); that edit is finished first.
+                    if (tvDestination.SelectedNode is { IsEditing: true } editing)
+                    {
+                        editing.EndEdit(false);
+                    }
+
+                    command();
+                };
+                toolbar.Items.Add(button);
+                return button;
+            }
+
+            _newFolderButton = Button("New Folder", AddNodeToDestinationTreeFragmentStyle);
+
+            // New Shortcut lists the files a shortcut can be made for, by folder, here and in the tree's menus.
+            _newShortcutButton = new ToolStripDropDownButton("New Shortcut") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+            FillNewShortcutMenu(_newShortcutButton.DropDownItems);
+            _newShortcutButton.DropDownOpening += (s, e) =>
+            {
+                if (tvDestination.SelectedNode is { IsEditing: true } editing)
+                {
+                    editing.EndEdit(false);
+                }
+
+                FillNewShortcutMenu(_newShortcutButton.DropDownItems);
+            };
+            toolbar.Items.Add(_newShortcutButton);
+            foreach (var (menu, item) in new[] { (cmsDestinationTreeDefault, toolStripMenuItemCreateSC), (cmsMergeRedirectFolder, toolStripMenuItemCreateShortCut) })
+            {
+                FillNewShortcutMenu(item.DropDownItems);
+                menu.Opening += (s, e) => FillNewShortcutMenu(item.DropDownItems);
+            }
+
+            _renameButton = Button("Rename", () =>
+            {
+                tvDestination.LabelEdit = true;
+                tvDestination.SelectedNode.BeginEdit();
+            });
+            _deleteButton = Button("Delete", () =>
+            {
+                RemoveDirectoryFromDocumentFragmentStyle(tvDestination.SelectedNode);
+                UpdateToolbar();
+            });
+            splitContainer1.Panel1.Controls.Add(toolbar);
+        }
+
+        // As the tree's menus: shortcut locations (Desktop, Program Menu...) take new folders and shortcuts, the folders
+        // below them can also be renamed and deleted, and shortcuts can only be deleted.
+        private void UpdateToolbar()
+        {
+            var node = tvDestination.SelectedNode;
+            var shortcut = node != null && IsShortcutNode();
+            var folder = node != null && node.Level >= 1 && !shortcut;
+            _newFolderButton.Enabled = folder;
+            _newShortcutButton.Enabled = folder;
+            _renameButton.Enabled = folder && node!.Level >= 2;
+            _deleteButton.Enabled = shortcut || (folder && node!.Level >= 2);
         }
 
         #region IFireworksDesigner Members
@@ -89,6 +179,7 @@ namespace ShortCutsDesigner
             LoadDocument();
             tvDestination.ExpandAll();
             tvDestination.SelectedNode = null;
+            UpdateToolbar();
         }
 
         public Image PluginImage
@@ -171,7 +262,7 @@ namespace ShortCutsDesigner
         private TreeNode GetOrCreateTreeNode(TreeNode directoryNode, string path)
         {
             TreeNode searchNode = directoryNode;
-            foreach (var part in path.Split("\\"))
+            foreach (var part in path.Split('\\'))
             {
                 bool found = false;
                 foreach (TreeNode subNode in searchNode.Nodes)
@@ -416,10 +507,10 @@ namespace ShortCutsDesigner
             if (count < 2)
             {
                 string old = _oldPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
-                string oldDirectory = old.Split("\\").First();
+                string oldDirectory = old.Split('\\').First();
                 string oldSubDirectory = old.Substring(oldDirectory.Length + 1, old.Length - oldDirectory.Length - 1);
                 string after = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace($"[", "").Replace("]", "");
-                string afterDirectory = after.Split("\\").First();
+                string afterDirectory = after.Split('\\').First();
                 string afterSubDirectory = after.Substring(afterDirectory.Length + 1, after.Length - afterDirectory.Length - 1);
 
                 foreach (Wxs.Shortcut shortcut in _shortcuts)
@@ -520,81 +611,32 @@ namespace ShortCutsDesigner
             tvDestination.SelectedNode.Collapse();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        // A shortcut can be made for any file but a .dll or .pdb.
+        private void FillNewShortcutMenu(ToolStripItemCollection items)
         {
-            CreateShortCut();
+            var candidates = _documentManager.Document is null
+                ? new List<ShortCutCandidate>()
+                : ShortcutDocument.GetShortCutCandidates(_documentManager.Document);
+            CandidateMenu.Fill(items, candidates, c => c.DestinationFilePath, CreateShortCut,
+                "No files to make a shortcut for", byFolder: true);
         }
 
-        private void toolStripMenuItemCreateShortCut_Click(object sender, EventArgs e)
+        // In the selected folder, named for the file, numbered if a shortcut in the folder already has that name.
+        private void CreateShortCut(ShortCutCandidate candidate)
         {
-            CreateShortCut();
-        }
+            List<string> parts = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "").Split('\\').ToList();
+            string scDirectory = parts[0];
+            string scSubdirectory = string.Join("\\", parts.Skip(1));
 
-        private void CreateShortCut()
-        {
-            ComponentPicker picker = new ComponentPicker(ShortcutDocument.GetShortCutCandidates(_documentManager.Document));
-            picker.StartPosition = FormStartPosition.CenterParent;
-            DialogResult dr = picker.ShowDialog();
-            if (dr != DialogResult.Cancel)
+            string name = candidate.FileName;
+            for (int index = 1; _shortcuts.Any(s => IsInFolderWithName(s, scDirectory, scSubdirectory, name)); index++)
             {
-                if (picker.FileElement != null)
-                {
-                    string scDirectory = string.Empty;
-                    string scSubdirectory = string.Empty;
-
-                    string fullPath = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "").Replace("[", "").Replace("]", "");
-                    List<string> parts = fullPath.Split("\\").ToList();
-                    scDirectory = parts[0];
-                    parts.RemoveAt(0);
-                    scSubdirectory = string.Join("\\", parts.ToArray());
-
-                    string prefix = picker.FileName;
-                    int index = 0;
-                    bool added = false;
-                    do
-                    {
-                        index++;
-                        bool exists = false;
-                        foreach (var shortcut in _shortcuts)
-                        {
-                            string name = string.Format("{0}{1}", prefix, index);
-                            if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, name))
-                            {
-                                exists = true;
-                                break;
-                            }
-                        }
-
-                        if (exists == false)
-                        {
-                            string name = string.Format("{0}{1}", prefix, index);
-
-                            if (index == 1)
-                            {
-                                foreach (var shortcut in _shortcuts)
-                                {
-                                    if (IsInFolderWithName(shortcut, scDirectory, scSubdirectory, prefix))
-                                    {
-                                        exists = true;
-                                        break;
-                                    }
-                                }
-                                if (exists == false)
-                                {
-                                    name = prefix;
-                                }
-
-                            }
-
-                            Wxs.Shortcut shortCut = ShortcutDocument.Create(name, scDirectory, scSubdirectory, picker.FileElement);
-                            _shortcuts.Add(shortCut);
-                            AddShortcutNode(shortCut);
-                            added = true;
-                        }
-                    }
-                    while (added == false);
-                }
+                name = candidate.FileName + index;
             }
+
+            Wxs.Shortcut shortCut = ShortcutDocument.Create(name, scDirectory, scSubdirectory, candidate.FileElement);
+            _shortcuts.Add(shortCut);
+            AddShortcutNode(shortCut);
         }
 
 
@@ -638,6 +680,8 @@ namespace ShortCutsDesigner
             {
                 propertyGridShortCut.SelectedObject = null;
             }
+
+            UpdateToolbar();
         }
 
         private void propertyGridShortCut_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
