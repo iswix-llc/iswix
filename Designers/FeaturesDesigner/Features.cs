@@ -41,12 +41,47 @@ namespace FeaturesDesigner
             foreach (var menuItem in new[] { toolStripMenuItemNewFeature, toolStripMenuItemNewSubFeature, toolStripMenuItemRename, toolStripMenuItemDelete })
             {
                 var button = new ToolStripButton(menuItem.Text) { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = menuItem.Enabled };
-                button.Click += (s, e) => menuItem.PerformClick();
+                button.Click += (s, e) => RunAfterRename(menuItem.PerformClick);
                 menuItem.EnabledChanged += (s, e) => button.Enabled = menuItem.Enabled;
                 toolbar.Items.Add(button);
             }
 
             splitContainer1.Panel1.Controls.Add(toolbar);
+        }
+
+        // A toolbar button doesn't take the focus, so a feature's name can still be being edited (New Feature leaves it
+        // so) when one is pressed. The edit is finished first, and the command runs after the tree has reloaded for the
+        // new name, which AfterLabelEdit queues.
+        private void RunAfterRename(Action command)
+        {
+            var editing = FindEditing(treeViewFeatures.Nodes);
+            if (editing is null)
+            {
+                command();
+                return;
+            }
+
+            editing.EndEdit(false);
+            BeginInvoke(command);
+        }
+
+        private static TreeNode? FindEditing(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.IsEditing)
+                {
+                    return node;
+                }
+
+                var found = FindEditing(node.Nodes);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
 
         #region IFireworksDesigner Members

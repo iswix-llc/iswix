@@ -331,10 +331,12 @@ namespace IsWiX.Designer
                     tree.LineColor = border;
                     ThemeImages(tree.ImageList, window);
                     ThemeImages(tree.StateImageList, window);
+                    ThemeLabelEdit(tree, input, inputText);
                     break;
                 case WinForms.ListView list:
                     list.BackColor = window;
                     list.ForeColor = windowText;
+                    ThemeLabelEdit(list, input, inputText);
                     ThemeImages(list.SmallImageList, window);
                     ThemeImages(list.LargeImageList, window);
                     ThemeImages(list.StateImageList, window);
@@ -422,6 +424,83 @@ namespace IsWiX.Designer
                     Apply(dropDown.DropDown);
                 }
             }
+        }
+
+        // The box a tree's or list's item is renamed in is a native edit control that asks the tree or list for its
+        // colors (WM_CTLCOLOREDIT); unanswered, it's the system's white. It's answered here with a text box's colors.
+        static readonly ConditionalWeakTable<WinForms.Control, LabelEditColors> LabelEdits = new ConditionalWeakTable<WinForms.Control, LabelEditColors>();
+
+        static void ThemeLabelEdit(WinForms.Control control, Drawing.Color back, Drawing.Color fore)
+        {
+            if (!LabelEdits.TryGetValue(control, out var colors))
+            {
+                colors = new LabelEditColors();
+                LabelEdits.Add(control, colors);
+                if (control.IsHandleCreated)
+                {
+                    colors.AssignHandle(control.Handle);
+                }
+
+                control.HandleCreated += (s, e) => colors.AssignHandle(control.Handle);
+            }
+
+            colors.Set(back, fore);
+        }
+
+        sealed class LabelEditColors : WinForms.NativeWindow
+        {
+            const int WM_CTLCOLOREDIT = 0x0133;
+            Drawing.Color _back;
+            Drawing.Color _fore;
+            IntPtr _brush;
+
+            public void Set(Drawing.Color back, Drawing.Color fore)
+            {
+                _back = back;
+                _fore = fore;
+                FreeBrush();
+            }
+
+            protected override void WndProc(ref WinForms.Message m)
+            {
+                if (m.Msg == WM_CTLCOLOREDIT)
+                {
+                    SetTextColor(m.WParam, Drawing.ColorTranslator.ToWin32(_fore));
+                    SetBkColor(m.WParam, Drawing.ColorTranslator.ToWin32(_back));
+                    if (_brush == IntPtr.Zero)
+                    {
+                        _brush = CreateSolidBrush(Drawing.ColorTranslator.ToWin32(_back));
+                    }
+
+                    m.Result = _brush;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+
+            // The control's window was destroyed (it gets a new one, and this is assigned to it, on HandleCreated).
+            protected override void OnHandleChange()
+            {
+                if (Handle == IntPtr.Zero)
+                {
+                    FreeBrush();
+                }
+            }
+
+            void FreeBrush()
+            {
+                if (_brush != IntPtr.Zero)
+                {
+                    DeleteObject(_brush);
+                    _brush = IntPtr.Zero;
+                }
+            }
+
+            [System.Runtime.InteropServices.DllImport("gdi32.dll")] static extern int SetTextColor(IntPtr hdc, int color);
+            [System.Runtime.InteropServices.DllImport("gdi32.dll")] static extern int SetBkColor(IntPtr hdc, int color);
+            [System.Runtime.InteropServices.DllImport("gdi32.dll")] static extern IntPtr CreateSolidBrush(int color);
+            [System.Runtime.InteropServices.DllImport("gdi32.dll")] static extern bool DeleteObject(IntPtr gdiObject);
         }
 
         // List views and list boxes draw their selection and headers in the system's light colors, whatever their own
