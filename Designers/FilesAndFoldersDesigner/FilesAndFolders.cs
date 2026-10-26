@@ -240,6 +240,10 @@ namespace Designers.FilesAndFolders
             MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        // Marks a folder whose subfolders haven't been listed yet. It gives the folder an expand arrow; the subfolders
+        // are listed when it's expanded, rather than scanning every subfolder up front.
+        static readonly object UnlistedPlaceholder = new object();
+
         private void PopulateSourceTree(string startingLocation, TreeNode currentNode, PopulateMode populateMode)
         {
             currentNode.Nodes.Clear();
@@ -254,7 +258,7 @@ namespace Designers.FilesAndFolders
 
                     if (populateMode == PopulateMode.OneLevel)
                     {
-                        PopulateSourceTree(diSourceDir.FullName, childNode, PopulateMode.NoMore);
+                        childNode.Nodes.Add(new TreeNode { Tag = UnlistedPlaceholder });
                     }
                     else if (populateMode == PopulateMode.Recursive)
                     {

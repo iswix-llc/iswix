@@ -9,7 +9,6 @@ namespace FilesAndFoldersDesigner.Enums
     public enum PopulateMode
     {
         OneLevel,
-        Recursive,
-        NoMore
+        Recursive
     }
 }
