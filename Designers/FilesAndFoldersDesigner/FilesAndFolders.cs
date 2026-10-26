@@ -8,14 +8,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static FireworksFramework.Types.Enums;
 
 namespace Designers.FilesAndFolders
 {
 
-    public partial class FilesAndFolders : UserControl, IFireworksDesigner
+    public partial class FilesAndFolders : UserControl, IFireworksDesigner, ISelectionLinked
     {
         readonly DocumentManager _documentManager;
         // Set by LoadData, before the designer is shown.
@@ -88,7 +90,150 @@ namespace Designers.FilesAndFolders
             lvSourceFiles.ListViewItemSorter = lvColumnSorter;
             lvDestination.ListViewItemSorter = lvDestinationColumnSorter;
 #endif
+            LinkSelection();
         }
+
+        #region ISelectionLinked Members
+
+        // The destination side maps to the XML: a folder is its components (the ones with its Directory and Subdirectory)
+        // and a file in it is a File element. The source side shows the disk, which the XML knows nothing of.
+        bool _fileSelected;
+
+        public event EventHandler? SelectedElementChanged;
+
+        string? SelectedFolderPath => tvDestination.SelectedNode is { Level: > 0 } node ? node.FullPath.Replace(@"Destination Computer\", "") : null;
+
+        public XElement? SelectedElement
+        {
+            get
+            {
+                if (_isWiXComponentGroup is null || tvDestination.SelectedNode is not { } node)
+                {
+                    return null;
+                }
+
+                // Destination Computer is the component group; a folder is its components, or those below it.
+                if (node.Level == 0)
+                {
+                    return _isWiXComponentGroup.ComponentGroupElement;
+                }
+
+                var path = SelectedFolderPath!;
+                if (_fileSelected && lvDestination.SelectedItems.Count > 0 &&
+                    _isWiXComponentGroup.FindFileElement(path, lvDestination.SelectedItems[0].SubItems[2].Text) is { } file)
+                {
+                    return file;
+                }
+
+                return _isWiXComponentGroup.FindFolderElement(path);
+            }
+        }
+
+        public string? SelectedAttribute => null;
+
+        // From the XML rather than the trees, which are only filled once the designer has been shown: the component group
+        // named after the file, and anything in it.
+        public bool Handles(XElement element, string? attribute)
+        {
+            if (string.IsNullOrEmpty(_documentManager.DocumentPath))
+            {
+                return false;
+            }
+
+            // Shortcuts and services are in the components too, but they have designers of their own, which should
+            // take the caret: the window keeps the designer showing if it claims the element.
+            if (element.AncestorsAndSelf().Any(e => e.Name == IsWiX.WiXModel.Shortcut.ElementName ||
+                e.Name == IsWiX.WiXModel.ServiceInstall.ElementName || e.Name == IsWiX.WiXModel.ServiceControl.ElementName))
+            {
+                return false;
+            }
+
+            return element.AncestorsAndSelf().Any(e =>
+                (e.Name == IsWiX.WiXModel.Component.ElementName && ComponentGroupDocument.IsInComponentGroup(e, _documentManager.DocumentPath)) ||
+                (e.Name == IsWiX.WiXModel.ComponentGroup.ElementName &&
+                    string.Equals((string?)e.Attribute("Id"), Path.GetFileNameWithoutExtension(_documentManager.DocumentPath), StringComparison.OrdinalIgnoreCase)));
+        }
+
+        public void SelectElement(XElement element, string? attribute)
+        {
+            var component = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == IsWiX.WiXModel.Component.ElementName);
+            if (component is null)
+            {
+                // The component group itself.
+                if (tvDestination.Nodes.Count > 0)
+                {
+                    tvDestination.SelectedNode = tvDestination.Nodes[0];
+                }
+
+                return;
+            }
+
+            var path = Path.Combine((string?)component.Attribute("Directory") ?? string.Empty, (string?)component.Attribute("Subdirectory") ?? string.Empty);
+            var node = tvDestination.Nodes.Count > 0 ? tvDestination.Nodes[0].Nodes.Find(path + @"\", true).FirstOrDefault() : null;
+            if (node is null)
+            {
+                return;
+            }
+
+            // Selecting the node lists the folder's files.
+            tvDestination.SelectedNode = node;
+            var file = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == IsWiX.WiXModel.File.ElementName);
+            var source = (string?)file?.Attribute("Source");
+            var item = source is null ? null : lvDestination.Items.Cast<ListViewItem>().FirstOrDefault(i => i.SubItems[2].Text == source);
+            if (item != null)
+            {
+                item.Selected = true;
+                item.EnsureVisible();
+            }
+            else
+            {
+                lvDestination.SelectedItems.Clear();
+            }
+
+            // Set last: selecting above raised the designer's own events, which set this as a user's choice would.
+            _fileSelected = item != null;
+        }
+
+        private void ShowSelectionInXml(bool file)
+        {
+            _fileSelected = file;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        // Whoever selected it, the user or the designer filling the tree. The window ignores this while it reloads the
+        // designers for a change made in the XML, so typing there doesn't move the XML's selection.
+        private void LinkSelection()
+        {
+            // So the selection still shows when the XML editor has the focus.
+            tvDestination.HideSelection = false;
+            lvDestination.HideSelection = false;
+            // Run after the designer's own handler, which lists the folder's files.
+            tvDestination.AfterSelect += (s, e) => ShowSelectionInXml(false);
+            // Clicking the node that is already selected selects nothing.
+            tvDestination.NodeMouseClick += (s, e) =>
+            {
+                if (e.Node == tvDestination.SelectedNode)
+                {
+                    ShowSelectionInXml(false);
+                }
+            };
+            lvDestination.SelectedIndexChanged += (s, e) =>
+            {
+                if (lvDestination.SelectedItems.Count > 0)
+                {
+                    ShowSelectionInXml(true);
+                }
+            };
+            lvDestination.Click += (s, e) =>
+            {
+                if (lvDestination.SelectedItems.Count > 0)
+                {
+                    ShowSelectionInXml(true);
+                }
+            };
+        }
+
+        #endregion
 
         private void PopulateSource()
         {

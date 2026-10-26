@@ -17,10 +17,33 @@ namespace IsWiX.Designer
             public int[] Path = Array.Empty<int>();
             public int Start;
             public int End;
+            // Where the start tag ends and the end tag starts; the same as End for an element with no end tag.
+            public int OpenEnd;
+            public int CloseStart;
+            public bool HasChildren;
+            public List<AttributeSpan> Attributes = new List<AttributeSpan>();
         }
 
-        /// <summary>Gets the path of the innermost element whose tags contain <paramref name="offset"/>, or null if none does.</summary>
-        public static int[]? PathAt(string text, int offset)
+        // An attribute from the start of its name to the end of its closing quote.
+        sealed class AttributeSpan
+        {
+            public string Name = string.Empty;
+            public int Start;
+            public int End;
+        }
+
+        /// <summary>Where an offset is: an element, and the attribute of it if the offset is in one.</summary>
+        public sealed class Location
+        {
+            public int[] Path = Array.Empty<int>();
+            public string? Attribute;
+        }
+
+        /// <summary>
+        /// Gets the innermost element that <paramref name="offset"/> is in, or null if there is none. An offset between
+        /// the tags of an element that has child elements is in none of them: it is just space around the children.
+        /// </summary>
+        public static Location? LocationAt(string text, int offset)
         {
             Span? found = null;
             foreach (var span in Scan(text))
@@ -32,17 +55,43 @@ namespace IsWiX.Designer
                 }
             }
 
-            return found?.Path;
+            if (found == null || (found.HasChildren && offset > found.OpenEnd && offset < found.CloseStart))
+            {
+                return null;
+            }
+
+            var location = new Location { Path = found.Path };
+            foreach (var attribute in found.Attributes)
+            {
+                if (attribute.Start <= offset && offset <= attribute.End)
+                {
+                    location.Attribute = attribute.Name;
+                }
+            }
+
+            return location;
         }
 
-        /// <summary>Gets the offset of the '&lt;' that starts the element at <paramref name="path"/>, or null if there is none.</summary>
-        public static int? OffsetOf(string text, int[] path)
+        /// <summary>
+        /// Gets the text of <paramref name="attribute"/> (its name, value and quotes) in the element at
+        /// <paramref name="path"/>, or the element's start tag if it has no such attribute or none is asked for, as
+        /// the start and end offsets. It is null if there is no such element.
+        /// </summary>
+        public static int[]? RangeOf(string text, int[] path, string? attribute = null)
         {
             foreach (var span in Scan(text))
             {
                 if (span.Path.Length == path.Length && PathEquals(span.Path, path))
                 {
-                    return span.Start;
+                    foreach (var candidate in span.Attributes)
+                    {
+                        if (candidate.Name == attribute)
+                        {
+                            return new[] { candidate.Start, candidate.End };
+                        }
+                    }
+
+                    return new[] { span.Start, span.OpenEnd };
                 }
             }
 
@@ -83,12 +132,31 @@ namespace IsWiX.Designer
                         var start = lineStarts[info.LineNumber - 1] + info.LinePosition - 2;
                         var index = counts.Pop();
                         counts.Push(index + 1);
-                        var parent = open.Count > 0 ? open.Peek().Path : null;
-                        var span = new Span { Start = start, Path = Append(parent, index, open.Count == 0 && spans.Count == 0) };
-                        spans.Add(span);
-                        if (reader.IsEmptyElement)
+                        var parent = open.Count > 0 ? open.Peek() : null;
+                        if (parent != null)
                         {
-                            span.End = TagEnd(text, start);
+                            parent.HasChildren = true;
+                        }
+
+                        var span = new Span { Start = start, Path = Append(parent?.Path, index, open.Count == 0 && spans.Count == 0) };
+                        span.OpenEnd = TagEnd(text, start);
+                        spans.Add(span);
+                        var isEmpty = reader.IsEmptyElement;
+                        if (reader.MoveToFirstAttribute())
+                        {
+                            do
+                            {
+                                // The reader is at the attribute's name.
+                                var attributeStart = lineStarts[info.LineNumber - 1] + info.LinePosition - 1;
+                                span.Attributes.Add(new AttributeSpan { Name = reader.Name, Start = attributeStart, End = ValueEnd(text, attributeStart) });
+                            }
+                            while (reader.MoveToNextAttribute());
+                            reader.MoveToElement();
+                        }
+
+                        if (isEmpty)
+                        {
+                            span.End = span.CloseStart = span.OpenEnd;
                         }
                         else
                         {
@@ -100,7 +168,9 @@ namespace IsWiX.Designer
                     {
                         // The reader is at the name, two past the "</".
                         var at = lineStarts[info.LineNumber - 1] + info.LinePosition - 3;
-                        open.Pop().End = TagEnd(text, at);
+                        var closed = open.Pop();
+                        closed.CloseStart = at;
+                        closed.End = TagEnd(text, at);
                         counts.Pop();
                     }
                 }
@@ -120,6 +190,19 @@ namespace IsWiX.Designer
             parent?.CopyTo(path, 0);
             path[path.Length - 1] = index;
             return path;
+        }
+
+        // The offset just past the closing quote of the attribute whose name starts at from.
+        static int ValueEnd(string text, int from)
+        {
+            var open = text.IndexOfAny(new[] { '"', '\'' }, from);
+            if (open < 0)
+            {
+                return text.Length;
+            }
+
+            var close = text.IndexOf(text[open], open + 1);
+            return close < 0 ? text.Length : close + 1;
         }
 
         // The offset just past the '>' that closes the tag starting at from: not one inside a quoted attribute value.

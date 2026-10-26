@@ -19,7 +19,7 @@ using Wxs = IsWiX.WiXModel;
 
 namespace FeaturesDesigner
 {
-    public partial class Features : UserControl, IFireworksDesigner
+    public partial class Features : UserControl, IFireworksDesigner, ISelectionLinked
     {
         readonly DocumentManager _documentManager;
 
@@ -31,7 +31,105 @@ namespace FeaturesDesigner
             InitializeComponent();
             DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
             AddToolbar();
+
+            // So the selected feature still shows when the XML editor has the focus.
+            treeViewFeatures.HideSelection = false;
+            treeViewFeatures.AfterSelect += (s, e) =>
+            {
+                // Whoever selected it, the user or the designer filling the tree. The window ignores this while it reloads
+                // the designers for a change made in the XML, so typing there doesn't move the XML's selection.
+                _attribute = null;
+                SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+            };
+            // Clicking the node that is already selected, such as the one the designer selects first, selects nothing.
+            treeViewFeatures.NodeMouseClick += (s, e) =>
+            {
+                if (e.Node == treeViewFeatures.SelectedNode)
+                {
+                    _attribute = null;
+                    SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+                }
+            };
+            propertyGridFeatureProperties.SelectedGridItemChanged += (s, e) =>
+            {
+                if (propertyGridFeatureProperties.ContainsFocus && e.NewSelection?.GridItemType == GridItemType.Property)
+                {
+                    _attribute = e.NewSelection.PropertyDescriptor?.Name;
+                    SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+                }
+            };
         }
+
+        #region ISelectionLinked Members
+
+        // The feature's attribute chosen in the property grid, whose items are named for the attributes.
+        string? _attribute;
+
+        public event EventHandler? SelectedElementChanged;
+
+        public XElement? SelectedElement => (treeViewFeatures.SelectedNode?.Tag as Wxs.Feature)?.Xml;
+
+        public string? SelectedAttribute => _attribute;
+
+        // From the XML rather than the tree, which is only filled once the designer has been shown. Anything in a
+        // feature, such as a reference to a component group, counts as the feature.
+        public bool Handles(XElement element, string? attribute) => element.AncestorsAndSelf().Any(e => e.Name == Wxs.Feature.ElementName);
+
+        public void SelectElement(XElement element, string? attribute)
+        {
+            var node = element.AncestorsAndSelf().Select(e => FindNode(treeViewFeatures.Nodes, e)).FirstOrDefault(n => n != null);
+            if (node is null)
+            {
+                return;
+            }
+
+            _attribute = attribute;
+            treeViewFeatures.SelectedNode = node;
+            if (attribute != null && propertyGridFeatureProperties.SelectedGridItem is { } selected)
+            {
+                var root = selected;
+                while (root.Parent != null)
+                {
+                    root = root.Parent;
+                }
+
+                var item = AllItems(root).FirstOrDefault(i => i.GridItemType == GridItemType.Property && i.PropertyDescriptor?.Name == attribute);
+                item?.Select();
+            }
+        }
+
+        private static IEnumerable<GridItem> AllItems(GridItem item)
+        {
+            yield return item;
+            foreach (GridItem child in item.GridItems)
+            {
+                foreach (var descendant in AllItems(child))
+                {
+                    yield return descendant;
+                }
+            }
+        }
+
+        private static TreeNode? FindNode(TreeNodeCollection nodes, XElement element)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is Wxs.Feature tagged && tagged.Xml == element)
+                {
+                    return node;
+                }
+
+                var found = FindNode(node.Nodes, element);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
 
         // The tree's commands as buttons above it too: with no features the tree is empty, and nothing shows that
         // right-clicking it adds one.
@@ -181,11 +279,20 @@ namespace FeaturesDesigner
             {
                 _refresh = true;
                 treeViewFeatures.SelectedNode = node;
+                ShowSelectionInXml();
                 if (beginEdit)
                 {
                     node.BeginEdit();
                 }
             }
+        }
+
+        // For a command that selects a feature in code (a new one, say), which the XML editor then shows as it does
+        // for a click.
+        private void ShowSelectionInXml()
+        {
+            _attribute = null;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private static TreeNode? FindNode(TreeNodeCollection nodes, Wxs.Feature feature)
@@ -350,7 +457,7 @@ namespace FeaturesDesigner
                 treeViewFeatures.Select();
                 treeViewFeatures.SelectedNode = treeViewFeatures.Nodes[0];
                 treeViewFeatures.ExpandAll();
-
+                ShowSelectionInXml();
             }
             else
             {

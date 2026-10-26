@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml.Linq;
 using static FireworksFramework.Types.Enums;
 
@@ -70,6 +71,7 @@ namespace PropertiesDesigner.Views
         private void DataGridDependencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             viewModel.EnableRemove = dataGridDependencies.SelectedItem != null;
+            ClearLinkedCell();
             SelectedElementChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -77,23 +79,77 @@ namespace PropertiesDesigner.Views
 
         public XElement? SelectedElement => (dataGridDependencies.SelectedItem as PropertyModel)?.Element.Xml;
 
+        // The attribute is the header of the column of the cell last used, which is named for it.
+        string? _attribute;
+
+        public string? SelectedAttribute => _attribute;
+
+        // The cell shaded to show the attribute the XML editor's caret is in.
+        DataGridCell? _linkedCell;
+
+        void DataGrid_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            ClearLinkedCell();
+            _attribute = e.OriginalSource is System.Windows.DependencyObject source ? CellOf(source)?.Column.Header as string : null;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        static DataGridCell? CellOf(System.Windows.DependencyObject? element)
+        {
+            while (element != null && element is not DataGridCell)
+            {
+                element = System.Windows.Media.VisualTreeHelper.GetParent(element);
+            }
+
+            return element as DataGridCell;
+        }
+
+        void ClearLinkedCell()
+        {
+            _linkedCell?.ClearValue(DataGridCell.BackgroundProperty);
+            _linkedCell = null;
+        }
+
         PropertyModel? ModelFor(XElement element) =>
             viewModel.Properties.FirstOrDefault(p => element.AncestorsAndSelf().Contains(p.Element.Xml));
 
         // From the XML rather than the rows, which are only loaded once the designer has been shown.
-        public bool Handles(XElement element)
+        public bool Handles(XElement element, string? attribute)
         {
             var container = element.Document?.Root?.Elements().FirstOrDefault();
             return element.AncestorsAndSelf().Any(e => e.Name == IsWiX.WiXModel.Property.ElementName && e.Parent == container);
         }
 
-        public void SelectElement(XElement element)
+        public void SelectElement(XElement element, string? attribute)
         {
+            ClearLinkedCell();
             var model = ModelFor(element);
-            if (model != null && !ReferenceEquals(dataGridDependencies.SelectedItem, model))
+            if (model is null)
+            {
+                return;
+            }
+
+            if (!ReferenceEquals(dataGridDependencies.SelectedItem, model))
             {
                 dataGridDependencies.SelectedItem = model;
+            }
+
+            var column = attribute is null ? null : dataGridDependencies.Columns.FirstOrDefault(c => c.Header as string == attribute);
+            _attribute = column is null ? null : attribute;
+            if (column is null)
+            {
                 dataGridDependencies.ScrollIntoView(model);
+                return;
+            }
+
+            dataGridDependencies.ScrollIntoView(model, column);
+            dataGridDependencies.UpdateLayout();
+            if (CellOf(column.GetCellContent(model)) is { } cell)
+            {
+                var shade = new System.Windows.Media.SolidColorBrush(System.Windows.SystemColors.HighlightColor) { Opacity = 0.4 };
+                shade.Freeze();
+                cell.Background = shade;
+                _linkedCell = cell;
             }
         }
 

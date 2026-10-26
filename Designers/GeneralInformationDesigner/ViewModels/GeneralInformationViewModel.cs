@@ -31,6 +31,12 @@ namespace GeneralInformationDesigner.ViewModels
             _documentManager = documentManager;
         }
 
+        /// <summary>Gets the &lt;Package&gt; element the designer edits, once loaded.</summary>
+        public XElement? PackageXml => _package?.Xml;
+
+        /// <summary>Gets the &lt;SummaryInformation&gt; element, or null while the package has none.</summary>
+        public XElement? SummaryInformationXml => _summaryInformation?.Xml;
+
         Visibility _summaryInformation4PropertyGridVisible = Visibility.Hidden;
         Visibility _package4PropertyGridVisible = Visibility.Hidden;
         public Package4Model Package4 { get { return _package4; } set { _package4 = value; RaisePropertyChangedEvent("Package4"); } }

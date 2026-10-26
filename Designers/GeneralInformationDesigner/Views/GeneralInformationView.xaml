@@ -16,7 +16,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-        <xctk:PropertyGrid Grid.Column="0" Grid.Row="0" x:Name="propertyGridPackage4" SelectedObject="{Binding Package4}" Visibility="{Binding Package4PropertyGridVisible}" ShowSortOptions="False" IsCategorized="False" ShowSearchBox="false" Height="500"/>
-        <xctk:PropertyGrid Grid.Column="3" Grid.Row="0" x:Name="propertyGridSummaryInformation" SelectedObject="{Binding SummaryInformation4, Mode=TwoWay}" Visibility="{Binding SummaryInformation4PropertyGridVisible}" ShowSortOptions="False" IsCategorized="False" ShowSearchBox="false" Height="500"></xctk:PropertyGrid>
+        <!-- The border marks the grid whose element the XML editor's caret is in. -->
+        <Border Grid.Column="0" x:Name="borderPackage4" BorderThickness="2" BorderBrush="Transparent" VerticalAlignment="Top">
+            <xctk:PropertyGrid x:Name="propertyGridPackage4" SelectedObject="{Binding Package4}" Visibility="{Binding Package4PropertyGridVisible}" ShowSortOptions="False" IsCategorized="False" ShowSearchBox="false" Height="500" GotKeyboardFocus="PropertyGrid_GotKeyboardFocus" SelectedPropertyItemChanged="PropertyGrid_SelectedPropertyItemChanged"/>
+        </Border>
+        <Border Grid.Column="2" x:Name="borderSummaryInformation" BorderThickness="2" BorderBrush="Transparent" VerticalAlignment="Top">
+            <xctk:PropertyGrid x:Name="propertyGridSummaryInformation" SelectedObject="{Binding SummaryInformation4, Mode=TwoWay}" Visibility="{Binding SummaryInformation4PropertyGridVisible}" ShowSortOptions="False" IsCategorized="False" ShowSearchBox="false" Height="500" GotKeyboardFocus="PropertyGrid_GotKeyboardFocus" SelectedPropertyItemChanged="PropertyGrid_SelectedPropertyItemChanged"></xctk:PropertyGrid>
+        </Border>
     </Grid>
 </UserControl>

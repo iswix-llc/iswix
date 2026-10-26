@@ -15,10 +15,11 @@ using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using FireworksFramework.Services;
 using static FireworksFramework.Types.Enums;
+using Wxs = IsWiX.WiXModel;
 
 namespace ServicesDesigner
 {
-    public partial class Services : UserControl, IFireworksDesigner
+    public partial class Services : UserControl, IFireworksDesigner, ISelectionLinked
     {
         readonly DocumentManager _documentManager;
 
@@ -50,7 +51,100 @@ namespace ServicesDesigner
             deleteToolStripMenuItem.Image = DesignerImages.MenuImage("delete");
             DesignerImages.AddLibrary(iImageLibrary);
             AddToolbar();
+
+            // So the selected service still shows when the XML editor has the focus.
+            treeViewServices.HideSelection = false;
+            treeViewServices.AfterSelect += (s, e) =>
+            {
+                // Whoever selected it, the user or the designer filling the tree. The window ignores this while it reloads
+                // the designers for a change made in the XML, so typing there doesn't move the XML's selection.
+                ShowSelectionInXml(null);
+            };
+            // Clicking the node that is already selected, such as the one the designer selects first, selects nothing.
+            treeViewServices.NodeMouseClick += (s, e) =>
+            {
+                if (e.Node == treeViewServices.SelectedNode)
+                {
+                    ShowSelectionInXml(null);
+                }
+            };
+            propertyGridServiceInstall.SelectedGridItemChanged += (s, e) =>
+            {
+                if (propertyGridServiceInstall.ContainsFocus && e.NewSelection?.GridItemType == GridItemType.Property)
+                {
+                    ShowSelectionInXml(e.NewSelection.PropertyDescriptor?.Name);
+                }
+            };
         }
+
+        #region ISelectionLinked Members
+
+        // The grid item the user chose, which is named for an attribute of the ServiceInstall, or of the ServiceControl
+        // for the four that say what happens to the service.
+        string? _property;
+
+        static readonly string[] ControlProperties = { "Start", "Stop", "Remove", "Wait" };
+
+        public event EventHandler? SelectedElementChanged;
+
+        ServiceItem? SelectedService => treeViewServices.SelectedNode?.Tag as ServiceItem;
+
+        public XElement? SelectedElement =>
+            SelectedService is { } service ? (_property != null && ControlProperties.Contains(_property) && service.Control != null ? service.Control.Xml : service.Install.Xml) : null;
+
+        // The grid calls the install's Start "Startup", as Start is the control's.
+        // A control's attribute has no place in the XML until the service has a ServiceControl.
+        public string? SelectedAttribute =>
+            _property == "Startup" ? "Start" : _property != null && ControlProperties.Contains(_property) && SelectedService?.Control == null ? null : _property;
+
+        // From the XML rather than the tree, which is only filled once the designer has been shown.
+        public bool Handles(XElement element, string? attribute) =>
+            element.AncestorsAndSelf().Any(e => e.Name == Wxs.ServiceInstall.ElementName || e.Name == Wxs.ServiceControl.ElementName);
+
+        public void SelectElement(XElement element, string? attribute)
+        {
+            var node = treeViewServices.Nodes[0].Nodes.Cast<TreeNode>().FirstOrDefault(n =>
+                n.Tag is ServiceItem s && element.AncestorsAndSelf().Any(e => e == s.Install.Xml || (s.Control != null && e == s.Control.Xml)));
+            if (node is null)
+            {
+                return;
+            }
+
+            var isControl = element.AncestorsAndSelf().Any(e => e.Name == Wxs.ServiceControl.ElementName);
+            _property = attribute == null ? null : !isControl && attribute == "Start" ? "Startup" : attribute;
+            treeViewServices.SelectedNode = node;
+            if (_property != null && propertyGridServiceInstall.SelectedGridItem is { } selected)
+            {
+                var root = selected;
+                while (root.Parent != null)
+                {
+                    root = root.Parent;
+                }
+
+                AllItems(root).FirstOrDefault(i => i.GridItemType == GridItemType.Property && i.PropertyDescriptor?.Name == _property)?.Select();
+            }
+        }
+
+        // For a selection made by the user, or by a command that selects in code.
+        private void ShowSelectionInXml(string? property)
+        {
+            _property = property;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private static IEnumerable<GridItem> AllItems(GridItem item)
+        {
+            yield return item;
+            foreach (GridItem child in item.GridItems)
+            {
+                foreach (var descendant in AllItems(child))
+                {
+                    yield return descendant;
+                }
+            }
+        }
+
+        #endregion
 
         ToolStripButton _deleteButton = null!;
 
@@ -210,6 +304,10 @@ namespace ServicesDesigner
             ServiceItem service = ServiceDocument.Create(_documentManager.Document, name, candidate.Id, candidate.FileElement);
             _services.Add(service);
             AddServiceNode(service);
+
+            // The new service, not the first one that AddServiceNode selects.
+            treeViewServices.SelectedNode = treeViewServices.Nodes[0].Nodes.Cast<TreeNode>().First(n => n.Tag == service);
+            ShowSelectionInXml(null);
         }
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {

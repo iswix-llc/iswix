@@ -69,6 +69,7 @@ namespace IsWiX.Designer
         IWpfTextView? _wpfView;
         // Set while one side's selection is being moved to follow the other's, so that doesn't move it back.
         bool _syncing;
+        bool _initialSelectionPending = true;
         IVsCodeWindow? _codeWindow;
         CodeWindowHost? _codeWindowHost;
         IConnectionPoint? _dataEventsPoint;
@@ -151,6 +152,11 @@ namespace IsWiX.Designer
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 ShowSelectedDesigner();
+                // Choosing a designer shows what it has selected in the XML too. A reload keeps the XML where it is.
+                if (!_reloading && !_syncing)
+                {
+                    ShowCurrentDesignerSelection();
+                }
             };
 
             var grid = new Grid();
@@ -233,6 +239,7 @@ namespace IsWiX.Designer
             }
 
             ReloadDesigners();
+            QueueInitialSelection();
             return true;
         }
 
@@ -253,8 +260,38 @@ namespace IsWiX.Designer
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 HookTextView();
+                QueueInitialSelection();
             };
             _xmlView.Child = _codeWindowHost;
+        }
+
+        // When the designers have loaded the file and the editor is up, whatever the designer showing has selected (the
+        // first feature, say) is shown in the XML, once. Each can come first, so both ask; the editor is laid out first.
+        void QueueInitialSelection()
+        {
+            if (_initialSelectionPending)
+            {
+                ThreadHelper.JoinableTaskFactory.StartOnIdle(ShowInitialSelection).FileAndForget("iswix/designer/initialselection");
+            }
+        }
+
+        void ShowInitialSelection()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_initialSelectionPending && _buffer != null && _designerList.SelectedItem != null && HookTextView() != null)
+            {
+                _initialSelectionPending = false;
+                ShowCurrentDesignerSelection();
+            }
+        }
+
+        void ShowCurrentDesignerSelection()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_designerList.SelectedItem is ISelectionLinked designer)
+            {
+                ShowDesignerSelection(designer, false);
+            }
         }
 
         IWpfTextView? HookTextView()
@@ -280,26 +317,47 @@ namespace IsWiX.Designer
         void OnDesignerSelectionChanged(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (_syncing || _reloading || !ReferenceEquals(sender, _designerList.SelectedItem) || ((ISelectionLinked)sender).SelectedElement is not { } element)
+            ShowDesignerSelection(sender, false);
+        }
+
+        void ShowDesignerSelection(object sender, bool waited)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var linked = sender as ISelectionLinked;
+            if (_syncing || _reloading || !ReferenceEquals(sender, _designerList.SelectedItem) || linked?.SelectedElement is not { } element)
             {
                 return;
             }
 
+            // Selecting in a designer can touch the document, and the text it is written to waits for idle time: wait for
+            // that, as the element's place in the text isn't known until it is there.
+            if (_writePending && !waited)
+            {
+                ThreadHelper.JoinableTaskFactory.StartOnIdle(() => ShowDesignerSelection(sender, true)).FileAndForget("iswix/designer/showselection");
+                return;
+            }
+
+            var attribute = linked.SelectedAttribute;
+
             var path = PathOf(element);
             if (path is null || _buffer is null || _reloadTimer.IsEnabled || _writePending || HookTextView() is not { } view)
             {
+                Log($"Did not show the designer's selection: path {(path is null ? "none" : "found")}, text {(_buffer is null ? "none" : "found")}, reload {(_reloadTimer.IsEnabled ? "pending" : "idle")}, write {(_writePending ? "pending" : "idle")}");
                 return;
             }
 
             try
             {
                 var snapshot = _buffer.CurrentSnapshot;
-                if (XmlPositions.OffsetOf(snapshot.GetText(), path) is { } offset)
+                if (XmlPositions.RangeOf(snapshot.GetText(), path, attribute) is { } range)
                 {
-                    var point = new SnapshotPoint(snapshot, offset);
+                    // Selected rather than just the caret, which the editor doesn't show while the designer has focus.
+                    var span = new SnapshotSpan(snapshot, range[0], range[1] - range[0]);
                     _syncing = true;
-                    view.Caret.MoveTo(point);
-                    view.ViewScroller.EnsureSpanVisible(point.GetContainingLine().Extent, EnsureSpanVisibleOptions.ShowStart);
+                    view.Selection.Select(span, false);
+                    view.Caret.MoveTo(span.End);
+                    view.ViewScroller.EnsureSpanVisible(span, EnsureSpanVisibleOptions.ShowStart);
+                    Log($"Selected {span.Length} characters at {span.Start} for the designer's selection");
                 }
             }
             catch (XmlException)
@@ -332,8 +390,8 @@ namespace IsWiX.Designer
 
             try
             {
-                var path = XmlPositions.PathAt(_buffer.CurrentSnapshot.GetText(), _wpfView.Caret.Position.BufferPosition.Position);
-                var element = path is null ? null : ElementAt(path);
+                var location = XmlPositions.LocationAt(_buffer.CurrentSnapshot.GetText(), _wpfView.Caret.Position.BufferPosition.Position);
+                var element = location is null ? null : ElementAt(location.Path);
                 if (element is null)
                 {
                     return;
@@ -341,9 +399,9 @@ namespace IsWiX.Designer
 
                 // The designer showing if it has an item for the element, else the first one that does.
                 var designer = _designerList.SelectedItem as ISelectionLinked;
-                if (designer?.Handles(element) != true)
+                if (designer?.Handles(element, location!.Attribute) != true)
                 {
-                    designer = _designerList.Items.OfType<ISelectionLinked>().FirstOrDefault(d => d.Handles(element));
+                    designer = _designerList.Items.OfType<ISelectionLinked>().FirstOrDefault(d => d.Handles(element, location!.Attribute));
                 }
 
                 if (designer is null)
@@ -357,7 +415,7 @@ namespace IsWiX.Designer
                     _designerList.SelectedItem = designer;
                 }
 
-                designer.SelectElement(element);
+                designer.SelectElement(element, location!.Attribute);
             }
             catch (XmlException)
             {

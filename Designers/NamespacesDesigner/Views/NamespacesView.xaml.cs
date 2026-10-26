@@ -19,6 +19,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
+using NamespacesDesigner.Models;
 using static FireworksFramework.Types.Enums;
 
 namespace NamespacesDesigner.Views
@@ -26,7 +28,7 @@ namespace NamespacesDesigner.Views
     /// <summary>
     /// Interaction logic for NamespacesView.xaml
     /// </summary>
-    public partial class NamespacesView : UserControl, IFireworksDesigner
+    public partial class NamespacesView : UserControl, IFireworksDesigner, ISelectionLinked
     {
         readonly DocumentManager _documentManager;
         readonly ViewModels.NamespacesViewModel viewModel;
@@ -78,5 +80,43 @@ namespace NamespacesDesigner.Views
         {
             viewModel.LoadData();
         }
+
+        // The namespaces are all attributes of the root element (xmlns:prefix), so the XML shows that element's tag
+        // whatever is selected, or if nothing is, and even when it declares none.
+        const string DeclarationPrefix = "xmlns:";
+
+        public event EventHandler? SelectedElementChanged;
+
+        public XElement? SelectedElement => _documentManager.Document.Root;
+
+        public string? SelectedAttribute => null;
+
+        // The caret is in the root's tag. From the document rather than the rows, which are only loaded once the
+        // designer has been shown.
+        public bool Handles(XElement element, string? attribute) => element == element.Document?.Root;
+
+        public void SelectElement(XElement element, string? attribute)
+        {
+            // On a namespace declaration, its row; elsewhere in the tag, the designer is just shown.
+            if (!Handles(element, attribute) || attribute is null || !attribute.StartsWith(DeclarationPrefix, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            var prefix = attribute.Substring(DeclarationPrefix.Length);
+            var model = viewModel.Namespaces.FirstOrDefault(n => n.Selected && n.Prefix == prefix);
+            if (model != null)
+            {
+                dataGridDependencies.SelectedItem = model;
+                dataGridDependencies.ScrollIntoView(model);
+            }
+        }
+
+        void RaiseSelectedElementChanged() => SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+
+        private void DataGridDependencies_SelectionChanged(object sender, SelectionChangedEventArgs e) => RaiseSelectedElementChanged();
+
+        // Ticking a namespace declares it, which puts the XML's declaration where the selection should be.
+        private void DataGridDependencies_Click(object sender, RoutedEventArgs e) => RaiseSelectedElementChanged();
     }
 }

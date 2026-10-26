@@ -173,6 +173,37 @@ namespace FilesAndFoldersDesigner
                 .ToList();
         }
 
+        /// <summary>Gets the component group's element, or null while the document has none.</summary>
+        public XElement? ComponentGroupElement => _componentGroup?.Xml;
+
+        /// <summary>
+        /// Gets the first component of the folder, or if it has none of its own (it is only on the way to a folder that
+        /// has), the first component below it. Null if there is none.
+        /// </summary>
+        public XElement? FindFolderElement(string path)
+        {
+            DirectoryMeta directoryMeta = new DirectoryMeta(path);
+            var inDirectory = Components.Where(c => c.Directory == directoryMeta.Directory).ToList();
+            var component = inDirectory.FirstOrDefault(c => Subdirectory(c) == directoryMeta.Subdirectory) ??
+                inDirectory.FirstOrDefault(c => directoryMeta.Subdirectory.Length == 0 || Subdirectory(c).StartsWith(directoryMeta.Subdirectory + Path.DirectorySeparatorChar, StringComparison.Ordinal));
+            return component?.Xml;
+        }
+
+        /// <summary>Gets the File element in the folder whose Source is <paramref name="source"/>, or null if there is none.</summary>
+        public XElement? FindFileElement(string path, string source)
+        {
+            DirectoryMeta directoryMeta = new DirectoryMeta(path);
+            return Components
+                .Where(c => c.Directory == directoryMeta.Directory && Subdirectory(c) == directoryMeta.Subdirectory)
+                .SelectMany(c => c.Xml.Descendants(Wxs.File.ElementName))
+                .FirstOrDefault(f => (string?)f.Attribute("Source") == source);
+        }
+
+        /// <summary>Gets whether <paramref name="component"/> is one of the component group's.</summary>
+        public static bool IsInComponentGroup(XElement component, string documentPath) =>
+            component.Parent is { } parent && parent.Name == Wxs.ComponentGroup.ElementName &&
+            string.Equals((string?)parent.Attribute("Id"), Path.GetFileNameWithoutExtension(documentPath), StringComparison.OrdinalIgnoreCase);
+
         public void DeleteFiles(List<FileMeta> files)
         {
             foreach (var file in files)

@@ -20,7 +20,7 @@ using Wxs = IsWiX.WiXModel;
 
 namespace CustomTablesDesigner
 {
-    public partial class CustomTablesDesigner : UserControl, IFireworksDesigner
+    public partial class CustomTablesDesigner : UserControl, IFireworksDesigner, ISelectionLinked
     {
         DataTable _customTable = new DataTable();
         // Set when a table is selected; the column and rename commands need one.
@@ -44,6 +44,8 @@ namespace CustomTablesDesigner
             splitContainer1.SizeChanged += (s, e) => FitColumnEditor();
             splitContainer2.SizeChanged += (s, e) => FitColumnEditor();
 
+            LinkSelection();
+
             AddToolbar(splitContainer2.Panel1, toolStripMenuItemTableCreate, toolStripMenuItemRenameTable, toolStripMenuItemTableDrop);
             AddToolbar(splitContainer1.Panel2, toolStripMenuItemRowAdd, toolStripMenuItemRowRemove);
 
@@ -65,6 +67,209 @@ namespace CustomTablesDesigner
                 }
             }
         }
+
+        #region ISelectionLinked Members
+
+        // What the selection is on, by what the user last used: a table, one of its columns (and an attribute of it, if
+        // chosen in the property grid, whose items are named for them), or a row (and a cell of it).
+        enum SelectionLevel
+        {
+            Table,
+            Column,
+            Row,
+        }
+
+        SelectionLevel _level;
+        string? _property;
+        bool _showingTable;
+
+        public event EventHandler? SelectedElementChanged;
+
+        // The row of the grid's current cell and the Data element behind the cell, if it has one.
+        (Wxs.Row Row, Wxs.Data? Data)? CurrentRow()
+        {
+            if (dataGridViewRows.CurrentRow?.DataBoundItem is DataRowView view && _rowElements.TryGetValue(view.Row, out var row))
+            {
+                var column = dataGridViewRows.CurrentCell?.OwningColumn?.Name;
+                return (row, row.DataElements.FirstOrDefault(d => d.Column == column));
+            }
+
+            return null;
+        }
+
+        public XElement? SelectedElement
+        {
+            get
+            {
+                if (listBoxTables.SelectedItem is null || _customTableElement is null)
+                {
+                    return null;
+                }
+
+                switch (_level)
+                {
+                    case SelectionLevel.Column when SelectedColumnId is string id:
+                        return FindColumn(id).Xml;
+                    case SelectionLevel.Row when CurrentRow() is { } current:
+                        return current.Data?.Xml ?? current.Row.Xml;
+                    default:
+                        return _customTableElement.Xml;
+                }
+            }
+        }
+
+        public string? SelectedAttribute
+        {
+            get
+            {
+                switch (_level)
+                {
+                    case SelectionLevel.Column:
+                        return _property;
+                    case SelectionLevel.Row when CurrentRow() is { Data: { } data }:
+                        // A cell's value is the attribute, unless an older source wrote it as the element's text.
+                        return data.Xml.Attribute("Value") != null ? "Value" : null;
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        // From the XML rather than the lists, which are only filled once the designer has been shown. Anything in a
+        // table, a column or a row, counts as the table.
+        public bool Handles(XElement element, string? attribute) => element.AncestorsAndSelf().Any(e => e.Name == Wxs.CustomTable.ElementName);
+
+        public void SelectElement(XElement element, string? attribute)
+        {
+            var table = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.CustomTable.ElementName);
+            if ((string?)table?.Attribute("Id") is not string tableId)
+            {
+                return;
+            }
+
+            if (!Equals(listBoxTables.SelectedItem, tableId))
+            {
+                listBoxTables.SelectedItem = tableId;
+            }
+
+            if (listBoxTables.SelectedItem is null)
+            {
+                return;
+            }
+
+            var level = SelectionLevel.Table;
+            string? property = null;
+            var columnElement = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.Column.ElementName);
+            var rowElement = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.Row.ElementName);
+            if (columnElement != null)
+            {
+                var item = listViewColumns.Items.Cast<ListViewItem>().FirstOrDefault(i => i.Text == (string?)columnElement.Attribute("Id"));
+                if (item != null)
+                {
+                    item.Selected = true;
+                    item.EnsureVisible();
+                    level = SelectionLevel.Column;
+                    property = attribute;
+                    if (attribute != null && propertyGridColumn.SelectedGridItem is { } selected)
+                    {
+                        var root = selected;
+                        while (root.Parent != null)
+                        {
+                            root = root.Parent;
+                        }
+
+                        AllItems(root).FirstOrDefault(i => i.GridItemType == GridItemType.Property && i.PropertyDescriptor?.Name == attribute)?.Select();
+                    }
+                }
+            }
+            else if (rowElement != null)
+            {
+                var dataRow = _rowElements.FirstOrDefault(r => r.Value.Xml == rowElement).Key;
+                var gridRow = dataRow is null ? null : dataGridViewRows.Rows.Cast<DataGridViewRow>().FirstOrDefault(r => (r.DataBoundItem as DataRowView)?.Row == dataRow);
+                if (gridRow != null)
+                {
+                    var column = element.Name == Wxs.Data.ElementName ? (string?)element.Attribute("Column") : null;
+                    var cell = column != null && dataGridViewRows.Columns.Contains(column) ? gridRow.Cells[column] : gridRow.Cells[0];
+                    dataGridViewRows.ClearSelection();
+                    gridRow.Selected = true;
+                    dataGridViewRows.CurrentCell = cell;
+                    dataGridViewRows.FirstDisplayedScrollingRowIndex = Math.Max(0, Math.Min(gridRow.Index, dataGridViewRows.Rows.Count - 1));
+                    level = SelectionLevel.Row;
+                }
+            }
+
+            // Set last: selecting above raised the designer's own events, which set these as a user's choice would.
+            _level = level;
+            _property = property;
+        }
+
+        private static IEnumerable<GridItem> AllItems(GridItem item)
+        {
+            yield return item;
+            foreach (GridItem child in item.GridItems)
+            {
+                foreach (var descendant in AllItems(child))
+                {
+                    yield return descendant;
+                }
+            }
+        }
+
+        private void ShowSelectionInXml(SelectionLevel level, string? property = null)
+        {
+            _level = level;
+            _property = property;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        // Whoever selected it, the user or the designer showing a table. The window ignores this while it reloads the
+        // designers for a change made in the XML, so typing there doesn't move the XML's selection.
+        private void LinkSelection()
+        {
+            // Run after the designer's own handlers, which show the table the list selects.
+            listBoxTables.SelectedIndexChanged += (s, e) => ShowSelectionInXml(SelectionLevel.Table);
+            listBoxTables.Click += (s, e) => ShowSelectionInXml(SelectionLevel.Table);
+            // So the selected column still shows when the XML editor has the focus.
+            listViewColumns.HideSelection = false;
+            listViewColumns.SelectedIndexChanged += (s, e) =>
+            {
+                if (SelectedColumnId != null)
+                {
+                    ShowSelectionInXml(SelectionLevel.Column);
+                }
+            };
+            listViewColumns.Click += (s, e) =>
+            {
+                if (SelectedColumnId != null)
+                {
+                    ShowSelectionInXml(SelectionLevel.Column);
+                }
+            };
+            propertyGridColumn.SelectedGridItemChanged += (s, e) =>
+            {
+                if (propertyGridColumn.ContainsFocus && e.NewSelection?.GridItemType == GridItemType.Property && SelectedColumnId != null)
+                {
+                    ShowSelectionInXml(SelectionLevel.Column, e.NewSelection.PropertyDescriptor?.Name);
+                }
+            };
+            // Not while a table is being shown: the grid then selects its first cell, which nobody chose.
+            dataGridViewRows.CurrentCellChanged += (s, e) =>
+            {
+                if (!_showingTable && dataGridViewRows.CurrentCell != null)
+                {
+                    ShowSelectionInXml(SelectionLevel.Row);
+                }
+            };
+            dataGridViewRows.CellClick += (s, e) =>
+            {
+                if (e.RowIndex >= 0)
+                {
+                    ShowSelectionInXml(SelectionLevel.Row);
+                }
+            };
+        }
+
+        #endregion
 
         // The tables', columns' and rows' commands as buttons above them too: nothing else shows that right-clicking
         // adds one. The buttons run the menu items and are enabled as they are.
@@ -198,6 +403,19 @@ namespace CustomTablesDesigner
         // Shows the selected table: its columns, with the column named (else the first) selected and its schema in the
         // property grid, and its rows in the grid.
         private void ShowTable(string? selectColumn)
+        {
+            _showingTable = true;
+            try
+            {
+                ShowTableCore(selectColumn);
+            }
+            finally
+            {
+                _showingTable = false;
+            }
+        }
+
+        private void ShowTableCore(string? selectColumn)
         {
             this.dataGridViewRows.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRows_CellValueChanged);
 
@@ -548,6 +766,8 @@ namespace CustomTablesDesigner
             { 
                 CustomTableDocument.Create(_documentManager.Document, dialog.TableName);
                 LoadData();
+                // The new table, not the first one that LoadData selects.
+                listBoxTables.SelectedItem = dialog.TableName;
             }
         }
     }

@@ -15,7 +15,7 @@
             <Button Content="New Property" Click="NewProperty_Click" />
             <Button Content="Delete" IsEnabled="{Binding EnableRemove}" Click="Delete_Click" />
         </ToolBar>
-        <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" SelectionChanged="DataGridDependencies_SelectionChanged" >
+        <DataGrid ItemsSource="{Binding Properties, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" IsReadOnly="True" AutoGenerateColumns="False"  x:Name="dataGridDependencies" SelectionChanged="DataGridDependencies_SelectionChanged" GotKeyboardFocus="DataGrid_GotKeyboardFocus" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn MinWidth="40">
                 </DataGridTemplateColumn>

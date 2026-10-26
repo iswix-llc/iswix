@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
 using FireworksFramework.Services;
@@ -16,7 +17,7 @@ using Wxs = IsWiX.WiXModel;
 
 namespace ShortCutsDesigner
 {
-    public partial class ShortCuts : UserControl, IFireworksDesigner
+    public partial class ShortCuts : UserControl, IFireworksDesigner, ISelectionLinked
     {
         List<Wxs.Shortcut> _shortcuts = new List<Wxs.Shortcut>();
         readonly DocumentManager _documentManager;
@@ -87,7 +88,108 @@ namespace ShortCutsDesigner
             DesignerImages.AddLibrary(iImageLibrary);
             DesignerImages.Add(iImageLibrary, typeof(ShortCuts).Assembly, "ShortCutsDesigner.Images.", "shortcut");
             AddToolbar();
+
+            // So the selected shortcut still shows when the XML editor has the focus.
+            tvDestination.HideSelection = false;
+            tvDestination.AfterSelect += (s, e) =>
+            {
+                // Whoever selected it, the user or the designer filling the tree. The window ignores this while it reloads
+                // the designers for a change made in the XML, so typing there doesn't move the XML's selection.
+                ShowSelectionInXml(null);
+            };
+            // Clicking the node that is already selected selects nothing.
+            tvDestination.NodeMouseClick += (s, e) =>
+            {
+                if (e.Node == tvDestination.SelectedNode)
+                {
+                    ShowSelectionInXml(null);
+                }
+            };
+            propertyGridShortCut.SelectedGridItemChanged += (s, e) =>
+            {
+                if (propertyGridShortCut.ContainsFocus && e.NewSelection?.GridItemType == GridItemType.Property)
+                {
+                    ShowSelectionInXml(e.NewSelection.PropertyDescriptor?.Name);
+                }
+            };
         }
+
+        #region ISelectionLinked Members
+
+        // The attribute the user chose in the property grid, whose items are named for them.
+        string? _attribute;
+
+        public event EventHandler? SelectedElementChanged;
+
+        // Only a shortcut is an element; the folders around it are made from its Directory and Subdirectory.
+        public XElement? SelectedElement => (tvDestination.SelectedNode?.Tag as Wxs.Shortcut)?.Xml;
+
+        public string? SelectedAttribute => _attribute;
+
+        // From the XML rather than the tree, which is only filled once the designer has been shown.
+        public bool Handles(XElement element, string? attribute) => element.AncestorsAndSelf().Any(e => e.Name == Wxs.Shortcut.ElementName);
+
+        public void SelectElement(XElement element, string? attribute)
+        {
+            var node = FindShortcutNode(tvDestination.Nodes, element);
+            if (node is null)
+            {
+                return;
+            }
+
+            _attribute = attribute;
+            tvDestination.SelectedNode = node;
+            if (attribute != null && propertyGridShortCut.SelectedGridItem is { } selected)
+            {
+                var root = selected;
+                while (root.Parent != null)
+                {
+                    root = root.Parent;
+                }
+
+                AllItems(root).FirstOrDefault(i => i.GridItemType == GridItemType.Property && i.PropertyDescriptor?.Name == attribute)?.Select();
+            }
+        }
+
+        // For a selection made by the user, or by a command that selects in code.
+        private void ShowSelectionInXml(string? attribute)
+        {
+            _attribute = attribute;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private static TreeNode? FindShortcutNode(TreeNodeCollection nodes, XElement element)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is Wxs.Shortcut shortcut && element.AncestorsAndSelf().Any(e => e == shortcut.Xml))
+                {
+                    return node;
+                }
+
+                var found = FindShortcutNode(node.Nodes, element);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<GridItem> AllItems(GridItem item)
+        {
+            yield return item;
+            foreach (GridItem child in item.GridItems)
+            {
+                foreach (var descendant in AllItems(child))
+                {
+                    yield return descendant;
+                }
+            }
+        }
+
+        #endregion
 
         ToolStripButton _newFolderButton = null!;
         ToolStripDropDownButton _newShortcutButton = null!;
@@ -637,6 +739,7 @@ namespace ShortCutsDesigner
             Wxs.Shortcut shortCut = ShortcutDocument.Create(name, scDirectory, scSubdirectory, candidate.FileElement);
             _shortcuts.Add(shortCut);
             AddShortcutNode(shortCut);
+            ShowSelectionInXml(null);
         }
 
 
