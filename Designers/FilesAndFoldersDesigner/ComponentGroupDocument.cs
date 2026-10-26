@@ -202,6 +202,9 @@ namespace FilesAndFoldersDesigner
             // The files already in the group, looked up by folder and source. Looking each new file up with FindFiles
             // scans every component in the group, once per file, so a large drop was slow.
             var existing = ExistingFileKeys();
+            // Only a folder with an empty component can be pruned, so only those are checked, rather than every
+            // component in the group for every file.
+            var emptyFolders = EmptyFolderKeys();
             foreach (var file in files)
             {
                 DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
@@ -210,6 +213,7 @@ namespace FilesAndFoldersDesigner
                 if (file.Source == ".")
                 {
                     GetOrCreateDirectoryComponent(file.Destination);
+                    emptyFolders.Add(FolderKey(file));
                 }
                 else if (!existing.Contains(FileKey(file)))
                 {
@@ -236,9 +240,38 @@ namespace FilesAndFoldersDesigner
                     }
                     existing.Add(FileKey(file));
                 }
-                PruneDirectory(file.Destination);
+                if (emptyFolders.Contains(FolderKey(file)))
+                {
+                    PruneDirectory(file.Destination);
+                }
             }
         }
+
+        // The folders that have an empty component (a CreateFolder alone), as FolderKey. Adding a file can only make
+        // a new one with a "." entry, which AddFiles adds to the set itself.
+        HashSet<string> EmptyFolderKeys()
+        {
+            var keys = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var component in Components)
+            {
+                if (component.Directory is string directory &&
+                    component.Xml.Descendants(Wxs.CreateFolder.ElementName).Any() &&
+                    component.Xml.Elements().Count() == 1)
+                {
+                    keys.Add(FolderKey(directory, Subdirectory(component)));
+                }
+            }
+            return keys;
+        }
+
+        // A file's folder, as FolderKey, which PruneDirectory works on.
+        static string FolderKey(FileMeta file)
+        {
+            DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
+            return FolderKey(directoryMeta.Directory, directoryMeta.Subdirectory);
+        }
+
+        static string FolderKey(string directory, string subdirectory) => directory + "\n" + subdirectory;
 
         // Every file in the group, as FileKey, for AddFiles to check against.
         HashSet<string> ExistingFileKeys()

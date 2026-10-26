@@ -917,12 +917,9 @@ namespace Designers.FilesAndFolders
                         }
                         else
                         {
-                            // Refresh the directory structure incase of delayed load or changes since loading
-                            sourceFolder.Nodes.Clear();
-                            PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
                             List<FileMeta> files = new List<FileMeta>();
                             string directoryPath = dropNode.FullPath;
-                            GetFilesRecursive(sourceFolder, ref files, directoryPath, string.Empty);
+                            GetFilesRecursive(new DirectoryInfo(sourceFolder.FullPath), ref files, directoryPath, string.Empty);
                             _isWiXComponentGroup.AddFiles(files);
                             _isWiXComponentGroup.PruneDirectory(directoryPath);
                             LoadDocument();
@@ -946,12 +943,9 @@ namespace Designers.FilesAndFolders
                     }
                     else
                     {
-                        // Refresh the directory structure incase of delayed load or changes since loading
-                        sourceFolder.Nodes.Clear();
-                        PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
                         List<FileMeta> files = new List<FileMeta>();
                         string directoryPath = tvDestination.SelectedNode.FullPath;
-                        GetFilesRecursive(sourceFolder, ref files, directoryPath, string.Empty);
+                        GetFilesRecursive(new DirectoryInfo(sourceFolder.FullPath), ref files, directoryPath, string.Empty);
                         _isWiXComponentGroup.AddFiles(files);
                         _isWiXComponentGroup.PruneDirectory(directoryPath);
                         LoadDocument();
@@ -1024,12 +1018,9 @@ namespace Designers.FilesAndFolders
                     }
                     else
                     {
-                        // Refresh the directory structure incase of delayed load or changes since loading
-                        sourceFolder.Nodes.Clear();
-                        PopulateSourceTree(sourceFolder.FullPath, sourceFolder, PopulateMode.Recursive);
                         List<FileMeta> files = new List<FileMeta>();
                         string directoryPath = dropNode.FullPath;
-                        GetFilesRecursive(sourceFolder, ref files, directoryPath, string.Empty);
+                        GetFilesRecursive(new DirectoryInfo(sourceFolder.FullPath), ref files, directoryPath, string.Empty);
                         _isWiXComponentGroup.AddFiles(files);
                         _isWiXComponentGroup.PruneDirectory(directoryPath);
                         LoadDocument();
@@ -1050,17 +1041,16 @@ namespace Designers.FilesAndFolders
             Cursor = Cursors.Arrow;
         }
 
-        private void GetFilesRecursive(TreeNode sourceFolder, ref List<FileMeta> files, string destinationDirectoryPath, string parent)
+        // Walks the folder on disk, as the source tree lists it, adding its files and its subfolders' files.
+        private void GetFilesRecursive(DirectoryInfo sourceFolder, ref List<FileMeta> files, string destinationDirectoryPath, string parent)
         {
-            parent = Path.Combine(parent, sourceFolder.Text);
-            string rootPath = _isWiXComponentGroup.GetRootPath();
-            var directoryInfo = new DirectoryInfo(sourceFolder.FullPath);
-            var fileInfos = GetFilteredFiles(directoryInfo, FileExcludePattern, FileFilterPattern);
+            parent = Path.Combine(parent, sourceFolder.Name);
+            var fileInfos = GetFilteredFiles(sourceFolder, FileExcludePattern, FileFilterPattern);
+            var subFolders = GetSubDirectories(sourceFolder);
             if (files.Count == 0)
             {
-                if (sourceFolder.Nodes.Count == 0)
+                if (subFolders.Length == 0)
                 {
-                    string subDirectory = (directoryInfo.FullName.Replace(rootPath + "\\", ""));
                     FileMeta fileMeta = new FileMeta();
                     fileMeta.Source = ".";
                     fileMeta.Destination = Path.Combine(destinationDirectoryPath, parent);
@@ -1069,15 +1059,29 @@ namespace Designers.FilesAndFolders
             }
             foreach (var fileInfo in fileInfos)
             {
-                string subDirectory = ((fileInfo.DirectoryName ?? string.Empty).Replace(rootPath + "\\", ""));
                 FileMeta fileMeta = new FileMeta();
                 fileMeta.Source = fileInfo.FullName;
                 fileMeta.Destination = Path.Combine(destinationDirectoryPath, parent);
                 files.Add(fileMeta);
             }
-            foreach (TreeNode subNode in sourceFolder.Nodes)
+            foreach (var subFolder in subFolders)
             {
-                GetFilesRecursive(subNode, ref files, destinationDirectoryPath, parent);
+                GetFilesRecursive(subFolder, ref files, destinationDirectoryPath, parent);
+            }
+        }
+
+        // The subfolders in the order the source tree lists them; none if the folder can't be read, as the tree skips it.
+        private static DirectoryInfo[] GetSubDirectories(DirectoryInfo folder)
+        {
+            try
+            {
+                var directories = folder.GetDirectories();
+                Array.Sort(directories, (d1, d2) => string.Compare(d1.Name, d2.Name));
+                return directories;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Array.Empty<DirectoryInfo>();
             }
         }
 
