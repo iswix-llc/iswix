@@ -358,42 +358,6 @@ namespace IsWiX.Designer
             return style;
         }
 
-        /// <summary>
-        /// A strip of tabs, drawn like Visual Studio's own tabs, for <paramref name="tabs"/>: just the headers, since
-        /// the views they switch between are kept alive outside the tab control.
-        /// </summary>
-        public static void ApplyTabStrip(TabControl tabs)
-        {
-            var panel = new FrameworkElementFactory(typeof(TabPanel));
-            panel.SetValue(Panel.IsItemsHostProperty, true);
-            var strip = new FrameworkElementFactory(typeof(Border));
-            strip.SetResourceReference(Border.BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
-            strip.SetResourceReference(Border.BorderBrushProperty, EnvironmentColors.ToolWindowBorderBrushKey);
-            strip.SetValue(Border.BorderThicknessProperty, new Thickness(0, 1, 0, 0));
-            strip.AppendChild(panel);
-            tabs.Template = new ControlTemplate(typeof(TabControl)) { VisualTree = strip };
-
-            var header = new FrameworkElementFactory(typeof(ContentPresenter));
-            header.SetValue(ContentPresenter.ContentSourceProperty, "Header");
-            header.SetValue(FrameworkElement.MarginProperty, new Thickness(10, 3, 10, 4));
-            var border = new FrameworkElementFactory(typeof(Border));
-            border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Control.BackgroundProperty));
-            border.AppendChild(header);
-            var item = new Style(typeof(TabItem));
-            item.Setters.Add(new Setter(Control.TemplateProperty, new ControlTemplate(typeof(TabItem)) { VisualTree = border }));
-            item.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Transparent));
-            item.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.ToolWindowTabTextBrushKey));
-            var hover = new Trigger { Property = UIElement.IsMouseOverProperty, Value = true };
-            hover.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.ToolWindowTabMouseOverBackgroundBeginBrushKey));
-            hover.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.ToolWindowTabMouseOverTextBrushKey));
-            item.Triggers.Add(hover);
-            var selected = new Trigger { Property = TabItem.IsSelectedProperty, Value = true };
-            selected.Setters.Add(Dynamic(Control.BackgroundProperty, EnvironmentColors.ToolWindowTabSelectedTabBrushKey));
-            selected.Setters.Add(Dynamic(Control.ForegroundProperty, EnvironmentColors.ToolWindowTabSelectedTextBrushKey));
-            item.Triggers.Add(selected);
-            tabs.Resources[typeof(TabItem)] = item;
-        }
-
         // WinForms -----------------------------------------------------------------------------------------------
 
         static Drawing.Color Color(ThemeResourceKey key) => VSColorTheme.GetThemedColor(key);

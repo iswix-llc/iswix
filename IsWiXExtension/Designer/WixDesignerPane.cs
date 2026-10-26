@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using static FireworksFramework.Types.Enums;
 using IServiceProvider = System.IServiceProvider;
@@ -28,10 +29,10 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 namespace IsWiX.Designer
 {
     /// <summary>
-    /// The .wxs document window: a Design view with IsWiX's designers and an XML view with Visual Studio's XML editor,
-    /// switched by tabs at the bottom, both over Visual Studio's text buffer for the file. A designer edit is written to
+    /// The .wxs document window: a Design view with IsWiX's designers above an XML view with Visual Studio's XML editor,
+    /// split by a draggable bar, both over Visual Studio's text buffer for the file. A designer edit is written to
     /// the buffer as one edit covering only the text that changed; text edits (typing, undo, a merge) reach the designers
-    /// when the Design view is shown, or right away if it already is.
+    /// once they pause.
     /// </summary>
     internal sealed class WixDesignerPane : WindowPane, IOleCommandTarget, IPublishable, IVsTextBufferDataEvents
     {
@@ -47,28 +48,31 @@ namespace IsWiX.Designer
         readonly object _editTag = new object();
         readonly DispatcherTimer _reloadTimer;
 
-        // The tabs are only a strip; both views stay alive in _views and the strip shows one, so the XML editor's
-        // window isn't destroyed and recreated on every switch.
-        readonly DockPanel _root = new DockPanel { LastChildFill = true };
-        readonly TabControl _tabs = new TabControl();
-        readonly TabItem _designTab = new TabItem { Header = "Design" };
-        readonly TabItem _xmlTab = new TabItem { Header = "XML" };
-        readonly Grid _views = new Grid();
+        // Both views are always shown, the Design view above the XML view, with a splitter between them to resize.
+        readonly Grid _root = new Grid();
+        readonly GridSplitter _splitter = new GridSplitter { Height = 5, HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Center, ResizeDirection = GridResizeDirection.Rows };
         readonly DockPanel _designView = new DockPanel { LastChildFill = true };
-        readonly Border _xmlView = new Border { Visibility = Visibility.Collapsed };
+        readonly Border _xmlView = new Border();
         readonly TextBlock _status = new TextBlock { Margin = new Thickness(6, 3, 6, 3), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
         readonly ListView _designerList = new ListView { SelectionMode = SelectionMode.Single };
         readonly Grid _designerHost = new Grid();
         readonly Dictionary<IFireworksDesigner, WindowsFormsHost> _winFormsHosts = new Dictionary<IFireworksDesigner, WindowsFormsHost>();
         readonly HashSet<System.Windows.Forms.Control> _themedWinForms = new HashSet<System.Windows.Forms.Control>();
 
+        // How long the caret must rest before the designer follows it.
+        static readonly TimeSpan CaretDelay = TimeSpan.FromMilliseconds(150);
+
+        readonly DispatcherTimer _caretTimer;
+
         IReadOnlyList<IFireworksDesigner> _designers = Array.Empty<IFireworksDesigner>();
         ITextBuffer? _buffer;
+        IWpfTextView? _wpfView;
+        // Set while one side's selection is being moved to follow the other's, so that doesn't move it back.
+        bool _syncing;
         IVsCodeWindow? _codeWindow;
         CodeWindowHost? _codeWindowHost;
         IConnectionPoint? _dataEventsPoint;
         uint _dataEventsCookie;
-        bool _designStale = true;
         bool _writePending;
         bool _reloading;
 
@@ -89,22 +93,41 @@ namespace IsWiX.Designer
                 ReloadDesigners();
             };
 
+            _caretTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = CaretDelay };
+            _caretTimer.Tick += (s, e) =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                _caretTimer.Stop();
+                SelectDesignerItemAtCaret();
+            };
+
             BuildDesignView();
-            _views.Children.Add(_designView);
-            _views.Children.Add(_xmlView);
-            _tabs.Items.Add(_designTab);
-            _tabs.Items.Add(_xmlTab);
-            _tabs.SelectionChanged += OnTabChanged;
-            VsTheme.ApplyTabStrip(_tabs);
-            DockPanel.SetDock(_tabs, Dock.Bottom);
-            _root.Children.Add(_tabs);
-            _root.Children.Add(_views);
+            _root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star), MinHeight = 80 });
+            _root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            _root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star), MinHeight = 80 });
+            Grid.SetRow(_splitter, 1);
+            Grid.SetRow(_xmlView, 2);
+            _splitter.SetResourceReference(Control.BackgroundProperty, EnvironmentColors.ToolWindowBorderBrushKey);
+            _root.Children.Add(_designView);
+            _root.Children.Add(_splitter);
+            _root.Children.Add(_xmlView);
             _root.IsVisibleChanged += OnRootVisibleChanged;
             _themeApplied = VsTheme.Background;
             Content = _root;
         }
 
-        bool DesignShowing => ReferenceEquals(_tabs.SelectedItem, _designTab);
+        // The XML editor's window is a window of its own, so WPF doesn't track focus in it: ask Windows.
+        // The text view is WPF inside that window, so its own focus is asked too.
+        bool XmlFocused =>
+            _wpfView?.HasAggregateFocus == true ||
+            (_codeWindowHost is { Handle: var host } && host != IntPtr.Zero && IsChild(host, GetFocus()));
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr GetFocus();
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        static extern bool IsChild(IntPtr parent, IntPtr window);
 
         // The standalone app's layout: the designers that apply to the document on the left, the chosen one on the right.
         void BuildDesignView()
@@ -157,6 +180,11 @@ namespace IsWiX.Designer
             _designers = PluginManager.PluginManagerInstance.CreateDesigners(_documentManager)
                 .Where(d => d.PluginType == PluginType.Designer)
                 .ToList();
+            foreach (var linked in _designers.OfType<ISelectionLinked>())
+            {
+                linked.SelectedElementChanged += OnDesignerSelectionChanged;
+            }
+
             VSColorTheme.ThemeChanged += OnThemeChanged;
             // The dialogs the designers open look like the designers, and are owned by Visual Studio's window.
             FireworksFramework.Services.DesignerDialogs.Theme = VsTheme.ThemeDialog;
@@ -204,9 +232,7 @@ namespace IsWiX.Designer
                 _xmlView.Child = new TextBlock { Margin = new Thickness(6), TextWrapping = TextWrapping.Wrap, Text = "The XML editor failed to open: " + ex.Message };
             }
 
-            // Open on the Design view when a designer applies to the file, else on the XML.
             ReloadDesigners();
-            _tabs.SelectedItem = _designerList.Items.Count > 0 ? _designTab : _xmlTab;
             return true;
         }
 
@@ -222,7 +248,153 @@ namespace IsWiX.Designer
             ErrorHandler.ThrowOnFailure(((IVsCodeWindowEx)_codeWindow).Initialize(behavior, VSUSERCONTEXTATTRIBUTEUSAGE.VSUC_Usage_Filter, string.Empty, string.Empty, 0, new INITVIEW[1]));
             ErrorHandler.ThrowOnFailure(_codeWindow.SetBuffer(_textLines));
             _codeWindowHost = new CodeWindowHost(_codeWindow);
+            // The text view exists once the host's window has been made.
+            _codeWindowHost.Loaded += (s, e) =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                HookTextView();
+            };
             _xmlView.Child = _codeWindowHost;
+        }
+
+        IWpfTextView? HookTextView()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_wpfView is null && TextView is { } view)
+            {
+                var componentModel = (IComponentModel)GetService(typeof(SComponentModel));
+                _wpfView = componentModel.GetService<IVsEditorAdaptersFactoryService>().GetWpfTextView(view);
+                if (_wpfView != null)
+                {
+                    _wpfView.Caret.PositionChanged += OnCaretMoved;
+                }
+            }
+
+            return _wpfView;
+        }
+
+        // Linking the selections: choosing something in a designer puts the editor's caret at its element, and moving
+        // the caret in the editor selects the item for the element it is in. Elements are named by their path in the
+        // document (see XmlPositions), and the editor's text and the designers' document are the same text while no
+        // change is waiting to reach either.
+        void OnDesignerSelectionChanged(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_syncing || _reloading || !ReferenceEquals(sender, _designerList.SelectedItem) || ((ISelectionLinked)sender).SelectedElement is not { } element)
+            {
+                return;
+            }
+
+            var path = PathOf(element);
+            if (path is null || _buffer is null || _reloadTimer.IsEnabled || _writePending || HookTextView() is not { } view)
+            {
+                return;
+            }
+
+            try
+            {
+                var snapshot = _buffer.CurrentSnapshot;
+                if (XmlPositions.OffsetOf(snapshot.GetText(), path) is { } offset)
+                {
+                    var point = new SnapshotPoint(snapshot, offset);
+                    _syncing = true;
+                    view.Caret.MoveTo(point);
+                    view.ViewScroller.EnsureSpanVisible(point.GetContainingLine().Extent, EnsureSpanVisibleOptions.ShowStart);
+                }
+            }
+            catch (XmlException)
+            {
+                // Not well-formed: the designers are read-only until it is, and show the last good version.
+            }
+            finally
+            {
+                _syncing = false;
+            }
+        }
+
+        void OnCaretMoved(object sender, CaretPositionChangedEventArgs e)
+        {
+            // Whether the editor has focus is checked when the caret has rested: on a click the caret can move first.
+            if (!_syncing)
+            {
+                _caretTimer.Stop();
+                _caretTimer.Start();
+            }
+        }
+
+        void SelectDesignerItemAtCaret()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_buffer is null || _wpfView is null || _reloadTimer.IsEnabled || _writePending || !XmlFocused)
+            {
+                return;
+            }
+
+            try
+            {
+                var path = XmlPositions.PathAt(_buffer.CurrentSnapshot.GetText(), _wpfView.Caret.Position.BufferPosition.Position);
+                var element = path is null ? null : ElementAt(path);
+                if (element is null)
+                {
+                    return;
+                }
+
+                // The designer showing if it has an item for the element, else the first one that does.
+                var designer = _designerList.SelectedItem as ISelectionLinked;
+                if (designer?.Handles(element) != true)
+                {
+                    designer = _designerList.Items.OfType<ISelectionLinked>().FirstOrDefault(d => d.Handles(element));
+                }
+
+                if (designer is null)
+                {
+                    return;
+                }
+
+                _syncing = true;
+                if (!ReferenceEquals(designer, _designerList.SelectedItem))
+                {
+                    _designerList.SelectedItem = designer;
+                }
+
+                designer.SelectElement(element);
+            }
+            catch (XmlException)
+            {
+                // Not well-formed: there is no element to find until it is.
+            }
+            finally
+            {
+                _syncing = false;
+            }
+        }
+
+        int[]? PathOf(XElement element)
+        {
+            if (!ReferenceEquals(element.Document, _documentManager.Document))
+            {
+                return null;
+            }
+
+            var path = new List<int>();
+            for (var current = element; current.Parent != null; current = current.Parent)
+            {
+                var self = current;
+                path.Insert(0, self.Parent!.Elements().TakeWhile(sibling => !ReferenceEquals(sibling, self)).Count());
+            }
+
+            return path.ToArray();
+        }
+
+        XElement? ElementAt(int[] path)
+        {
+            var element = _documentManager.Document?.Root;
+            foreach (var index in path)
+            {
+                element = element?.Elements().ElementAtOrDefault(index);
+            }
+
+            return element;
         }
 
         IVsTextView? TextView
@@ -268,36 +440,8 @@ namespace IsWiX.Designer
 
         void MarkDesignStale()
         {
-            _designStale = true;
-            if (DesignShowing)
-            {
-                _reloadTimer.Stop();
-                _reloadTimer.Start();
-            }
-        }
-
-        void OnTabChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            if (!ReferenceEquals(e.OriginalSource, _tabs))
-            {
-                return;
-            }
-
-            _designView.Visibility = DesignShowing ? Visibility.Visible : Visibility.Collapsed;
-            _xmlView.Visibility = DesignShowing ? Visibility.Collapsed : Visibility.Visible;
-            if (DesignShowing)
-            {
-                if (_designStale)
-                {
-                    ReloadDesigners();
-                }
-            }
-            else
-            {
-                // Put the caret in the editor, as switching to a code view does, once the view is laid out.
-                ThreadHelper.JoinableTaskFactory.StartOnIdle(() => TextView?.SendExplicitFocus()).FileAndForget("iswix/designer/focusxml");
-            }
+            _reloadTimer.Stop();
+            _reloadTimer.Start();
         }
 
         void ReloadDesigners()
@@ -312,7 +456,6 @@ namespace IsWiX.Designer
             try
             {
                 _documentManager.LoadText(_buffer.CurrentSnapshot.GetText(), _filePath);
-                _designStale = false;
                 ShowStatus(null);
                 _designerHost.IsEnabled = true;
 
@@ -329,7 +472,7 @@ namespace IsWiX.Designer
 
                 if (applicable.Count == 0)
                 {
-                    ShowStatus("None of IsWiX's designers applies to this file; edit it on the XML tab.");
+                    ShowStatus("None of IsWiX's designers applies to this file; edit it in the XML below.");
                 }
 
                 Log("Loaded the designers from the buffer");
@@ -338,7 +481,7 @@ namespace IsWiX.Designer
             {
                 // Mid-edit text is often not well-formed; keep showing the last good version until it is again.
                 Log("The buffer is not well-formed XML: " + ex.Message);
-                ShowStatus($"The XML has an error at line {ex.LineNumber}; the designers show the last version that loaded, read-only, until it's fixed on the XML tab. {ex.Message}");
+                ShowStatus($"The XML has an error at line {ex.LineNumber}; the designers show the last version that loaded, read-only, until it's fixed in the XML below. {ex.Message}");
                 _designerHost.IsEnabled = false;
             }
             catch (NotSupportedException ex)
@@ -448,7 +591,6 @@ namespace IsWiX.Designer
             ThreadHelper.ThrowIfNotOnUIThread();
             _themeApplied = VsTheme.Background;
             VsTheme.Apply(_designView);
-            VsTheme.ApplyTabStrip(_tabs);
             _designerList.Items.Refresh();
             foreach (var control in _themedWinForms)
             {
@@ -546,7 +688,7 @@ namespace IsWiX.Designer
         int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (!DesignShowing)
+            if (XmlFocused)
             {
                 return TextView is IOleCommandTarget target
                     ? target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText)
@@ -566,7 +708,7 @@ namespace IsWiX.Designer
         int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (!DesignShowing)
+            if (XmlFocused)
             {
                 return TextView is IOleCommandTarget target
                     ? target.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut)
@@ -621,6 +763,17 @@ namespace IsWiX.Designer
             if (disposing)
             {
                 _reloadTimer.Stop();
+                _caretTimer.Stop();
+                if (_wpfView != null)
+                {
+                    _wpfView.Caret.PositionChanged -= OnCaretMoved;
+                }
+
+                foreach (var linked in _designers.OfType<ISelectionLinked>())
+                {
+                    linked.SelectedElementChanged -= OnDesignerSelectionChanged;
+                }
+
                 VSColorTheme.ThemeChanged -= OnThemeChanged;
                 _documentManager.UnSubscribe("vsdesigner");
                 if (_buffer != null)
