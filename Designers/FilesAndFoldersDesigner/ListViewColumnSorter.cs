@@ -41,14 +41,14 @@ namespace Designers.FilesAndFolders
             {
                 return 0;
             }
-            try
+            // TryParse rather than Parse in a try: a failed parse throws, and a sort makes a lot of them, mostly on names.
+            if (DateTime.TryParse(listViewItemX.SubItems[ColumnToSort].Text, out var dateTimeX) &&
+                DateTime.TryParse(listViewItemY.SubItems[ColumnToSort].Text, out var dateTimeY))
             {
-                // casting x and y as DateTime to see if we need to compare as DateTime
-                var dateTimeX = DateTime.Parse(listViewItemX.SubItems[ColumnToSort].Text);
-                var dateTimeY = DateTime.Parse(listViewItemY.SubItems[ColumnToSort].Text);
+                // both are dates, so compare as DateTime
                 result = DateTime.Compare(dateTimeX, dateTimeY);
             }
-            catch
+            else
             {
                 var stringX = listViewItemX.SubItems[ColumnToSort].Text;
                 var stringY = listViewItemY.SubItems[ColumnToSort].Text;

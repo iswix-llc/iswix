@@ -97,7 +97,16 @@ namespace Designers.FilesAndFolders
             var tnStart = tvSourceFiles.Nodes.Add(SourceStart);
             FileFilterPattern = textBoxIncludeFilter.Text;
             FileExcludePattern = textBoxExcludeFilter.Text;
-            PopulateSourceTree(SourceStart, tnStart, PopulateMode.OneLevel);
+            // Batched, so the tree is drawn once rather than after each node is added.
+            tvSourceFiles.BeginUpdate();
+            try
+            {
+                PopulateSourceTree(SourceStart, tnStart, PopulateMode.OneLevel);
+            }
+            finally
+            {
+                tvSourceFiles.EndUpdate();
+            }
             tnStart.Expand();
             tvSourceFiles.SelectedNode = tnStart;
             DisplaySourceListItemsForSelectedNode(tvSourceFiles.SelectedNode);
@@ -285,8 +294,7 @@ namespace Designers.FilesAndFolders
             var fileInfos = GetFilteredFiles(directoryInfo, FileExcludePattern, FileFilterPattern);
 
             lvSourceFiles.Items.Clear();
-            //if (fileInfos == null) return;
-            List<ListViewItem> listItems = GetItemListFromSelectedDirectory(directoryPath);
+            List<ListViewItem> listItems = CreateItemList(fileInfos);
             if (listItems == null) return;
             // wrap in the Begin/End and AddRange to improve performance of adding directories
             // with a large number of files
@@ -318,17 +326,6 @@ namespace Designers.FilesAndFolders
             }
             return includedFiles.ToArray();
         }
-        private List<ListViewItem> GetItemListFromSelectedDirectory(string directoryPath)
-        {
-            var directoryInfo = new DirectoryInfo(directoryPath);
-            // get values for exclude and filter pattern from parent control
-            var fileInfos = GetFilteredFiles(directoryInfo, FileExcludePattern, FileFilterPattern);
-
-
-            List<ListViewItem> listItems = CreateItemList(fileInfos);
-            return listItems;
-        }
-
         private static FileInfo[] GetFiles(DirectoryInfo directoryInfo)
         {
             try
@@ -344,7 +341,6 @@ namespace Designers.FilesAndFolders
         private List<ListViewItem> CreateItemList(FileInfo[] fileInfos)
         {
             var listItems = new List<ListViewItem>();
-            imageListFileIcons.Images.Clear();
 
             foreach (var info in fileInfos)
             {
@@ -373,16 +369,25 @@ namespace Designers.FilesAndFolders
         {
             if (files != null)
             {
-                var updatedFileList = new List<FileInfo>(files);
-                var patterns = fileExclusionPattern.Split(Seperator.ToCharArray());
-                foreach (var pattern in patterns)
+                // one pass over the files, each checked against the patterns, rather than removing from a list per match
+                var patterns = new List<string>();
+                foreach (var pattern in fileExclusionPattern.Split(Seperator.ToCharArray()))
                 {
-                    if (String.IsNullOrEmpty(pattern)) continue;
-                    foreach (var file in files)
+                    if (!String.IsNullOrEmpty(pattern)) patterns.Add(pattern);
+                }
+                var updatedFileList = new List<FileInfo>(files.Length);
+                foreach (var file in files)
+                {
+                    bool excluded = false;
+                    foreach (var pattern in patterns)
                     {
-                        if (FileNameContainsPattern(file.Name, pattern) && updatedFileList.Contains(file))
-                            updatedFileList.Remove(file);
+                        if (FileNameContainsPattern(file.Name, pattern))
+                        {
+                            excluded = true;
+                            break;
+                        }
                     }
+                    if (!excluded) updatedFileList.Add(file);
                 }
                 return updatedFileList.ToArray();
             }
@@ -504,7 +509,16 @@ namespace Designers.FilesAndFolders
 
         private void tvSourceFiles_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            PopulateSourceTree(e.Node!.FullPath, e.Node, PopulateMode.OneLevel);
+            // Batched, so the children are drawn once rather than after each node is added.
+            tvSourceFiles.BeginUpdate();
+            try
+            {
+                PopulateSourceTree(e.Node!.FullPath, e.Node, PopulateMode.OneLevel);
+            }
+            finally
+            {
+                tvSourceFiles.EndUpdate();
+            }
         }
 
         #region IFireworksDesigner Members
