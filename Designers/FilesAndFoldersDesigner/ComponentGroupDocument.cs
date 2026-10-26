@@ -199,6 +199,9 @@ namespace FilesAndFoldersDesigner
                 EnsureDefine(SourceDirDefine, ".");
             }
 
+            // The files already in the group, looked up by folder and source. Looking each new file up with FindFiles
+            // scans every component in the group, once per file, so a large drop was slow.
+            var existing = ExistingFileKeys();
             foreach (var file in files)
             {
                 DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
@@ -208,7 +211,7 @@ namespace FilesAndFoldersDesigner
                 {
                     GetOrCreateDirectoryComponent(file.Destination);
                 }
-                else if (!FindFiles(file).Any())
+                else if (!existing.Contains(FileKey(file)))
                 {
                     EnsureComponentGroup();
                     if (IsProgramExecutable(file.Source))
@@ -231,10 +234,41 @@ namespace FilesAndFoldersDesigner
                         }
                         directoryComponent.Add(new Wxs.File { Source = file.Source });
                     }
+                    existing.Add(FileKey(file));
                 }
                 PruneDirectory(file.Destination);
             }
         }
+
+        // Every file in the group, as FileKey, for AddFiles to check against.
+        HashSet<string> ExistingFileKeys()
+        {
+            var keys = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var component in Components)
+            {
+                if (component.Directory is not string directory)
+                {
+                    continue;
+                }
+                foreach (var file in component.Files)
+                {
+                    if (file.Source is string source)
+                    {
+                        keys.Add(FileKey(directory, Subdirectory(component), source));
+                    }
+                }
+            }
+            return keys;
+        }
+
+        // A file's folder and source, which are what make it the same file as one already in the group.
+        static string FileKey(FileMeta file)
+        {
+            DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
+            return FileKey(directoryMeta.Directory, directoryMeta.Subdirectory, file.Source);
+        }
+
+        static string FileKey(string directory, string subdirectory, string source) => directory + "\n" + subdirectory + "\n" + source;
 
         IEnumerable<Wxs.File> FindFiles(FileMeta file)
         {
