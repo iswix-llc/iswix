@@ -423,6 +423,7 @@ namespace FeaturesDesigner
             {
                 // The last feature is gone: nothing left to show properties for.
                 ClearPropertyGrid();
+                PopulateComponentGroups();
             }
 
         }

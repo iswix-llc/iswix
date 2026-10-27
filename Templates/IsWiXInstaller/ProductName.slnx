@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ProductNamePackage/ProductNamePackage.wixproj" />
+  <!--#if (bundle) -->
+  <Project Path="ProductNameBundle/ProductNameBundle.wixproj" />
+  <!--#endif -->
+</Solution>

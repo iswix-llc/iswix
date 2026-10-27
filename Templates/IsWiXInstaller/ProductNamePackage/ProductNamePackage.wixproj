@@ -1,5 +1,9 @@
-﻿<Project Sdk="WixToolset.Sdk/6.0.2">
- <PropertyGroup>
+﻿<Project Sdk="WixToolset.Sdk/7.0.1">
+  <PropertyGroup>
+    <!--#if (AcceptEula) -->
+    <AcceptEula>wix7</AcceptEula>
+    <!--#endif -->
+    <ProductVersion>3.7</ProductVersion>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(TF_BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, try to get it from TFBuild Environments (V.Next Builds)-->
@@ -11,7 +15,7 @@
     <AppxTimestampUrl Condition=" '$(AppxTimestampUrl)' == '' "></AppxTimestampUrl>
     <MsixCertificateThumbprint Condition=" '$(MsixCertificateThumbprint)' == '' "></MsixCertificateThumbprint>
     <MsixTimestampUrl Condition=" '$(MsixTimestampUrl)' == '' "></MsixTimestampUrl>
-    <OutputName>$globalsafeprojectname$-$(MSIProductVersion)</OutputName>
+    <OutputName>ProductName-$(MSIProductVersion)</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -34,7 +38,7 @@
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
     <WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
   </PropertyGroup>
- 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM64' ">
 		<DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
 		<WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
 	</PropertyGroup>
@@ -42,15 +46,19 @@
 		<DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
 		<WixVariables>WixUIBannerBmp=Resources\Banner.jpg;WixUIDialogBmp=Resources\Dialog.jpg;WixUILicenseRtf=Resources\EULA.rtf</WixVariables>
 	</PropertyGroup>
+  <!--#if (packageUI) -->
   <ItemGroup>
     <Content Include="Resources\Banner.jpg" />
     <Content Include="Resources\Dialog.jpg" />
     <Content Include="Resources\Icon.ico" />
     <Content Include="Resources\EULA.rtf" />
   </ItemGroup>
+  <!--#endif -->
   <ItemGroup>
-    <PackageReference Include="WixToolset.Iis.wixext" Version="6.0.2" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="6.0.2" />
+    <PackageReference Include="WixToolset.Iis.wixext" Version="7.0.1" />
+    <!--#if (packageUI) -->
+    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.1" />
+    <!--#endif -->
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="7.0.1" />
   </ItemGroup>
 </Project>
