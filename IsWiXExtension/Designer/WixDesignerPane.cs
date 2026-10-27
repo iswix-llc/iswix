@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Managers;
+using FireworksFramework.Services;
 using FireworksFramework.Types;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -213,6 +214,8 @@ namespace IsWiX.Designer
             // The dialogs the designers open look like the designers, and are owned by Visual Studio's window.
             FireworksFramework.Services.DesignerDialogs.Theme = VsTheme.ThemeDialog;
             FireworksFramework.Services.DesignerDialogs.OwnerHandle = () => System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+            // A designer can take the user to the file that defines something its element refers to.
+            FireworksFramework.Services.DesignerNavigation.GoToDefinition = DefinitionNavigator.GoTo;
 
             // An existing buffer (the file was open in another editor) has its text already; a new one is loaded by
             // Visual Studio after the editor is created, and says so through IVsTextBufferDataEvents.
@@ -296,11 +299,85 @@ namespace IsWiX.Designer
         void ShowInitialSelection()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (_initialSelectionPending && _buffer != null && _designerList.SelectedItem != null && HookTextView() != null)
+            if (_initialSelectionPending && _buffer != null && HookTextView() != null)
             {
                 _initialSelectionPending = false;
-                ShowCurrentDesignerSelection();
+                if (_pendingDefinition != null)
+                {
+                    // The file was opened to show a definition: that is the selection, not the designer's first.
+                    ShowPendingDefinition();
+                }
+                else if (_designerList.SelectedItem != null)
+                {
+                    ShowCurrentDesignerSelection();
+                }
             }
+        }
+
+        // Go to Definition: the window is asked to select an element (a component group, say) by its name and Id. A file
+        // that was only just opened isn't ready for it, so it waits for the first selection.
+        (string Element, string Id)? _pendingDefinition;
+
+        /// <summary>Selects the element with the given name and Id in the XML, and in the designers, and takes the focus there.</summary>
+        internal void ShowDefinition(string elementName, string id)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            _pendingDefinition = (elementName, id);
+            if (_initialSelectionPending)
+            {
+                QueueInitialSelection();
+            }
+            else
+            {
+                ShowPendingDefinition();
+            }
+        }
+
+        void ShowPendingDefinition()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_pendingDefinition is not { } target || _buffer is null || HookTextView() is not { } view)
+            {
+                return;
+            }
+
+            _pendingDefinition = null;
+            var snapshot = _buffer.CurrentSnapshot;
+            XmlPositions.Found? found;
+            try
+            {
+                found = XmlPositions.FindElement(snapshot.GetText(), target.Element, "Id", target.Id);
+            }
+            catch (XmlException)
+            {
+                found = null;
+            }
+
+            if (found is null)
+            {
+                Log($"Did not find the {target.Element} '{target.Id}' to show");
+                return;
+            }
+
+            var span = new SnapshotSpan(snapshot, found.Start, found.End - found.Start);
+            _syncing = true;
+            try
+            {
+                view.Selection.Select(span, false);
+                view.Caret.MoveTo(span.End);
+                view.ViewScroller.EnsureSpanVisible(span, EnsureSpanVisibleOptions.AlwaysCenter);
+            }
+            finally
+            {
+                _syncing = false;
+            }
+
+            if (ElementAt(found.Path) is { } element)
+            {
+                SelectInDesigners(element, null);
+            }
+
+            TextView?.SendExplicitFocus();
         }
 
         void ShowCurrentDesignerSelection()
@@ -430,29 +507,39 @@ namespace IsWiX.Designer
                     return;
                 }
 
-                // The designer showing if it has an item for the element, else the first one that does.
-                var designer = _designerList.SelectedItem as ISelectionLinked;
-                if (designer?.Handles(element, location!.Attribute) != true)
-                {
-                    designer = _designerList.Items.OfType<ISelectionLinked>().FirstOrDefault(d => d.Handles(element, location!.Attribute));
-                }
+                SelectInDesigners(element, location!.Attribute);
+            }
+            catch (XmlException)
+            {
+                // Not well-formed: there is no element to find until it is.
+            }
+        }
 
-                if (designer is null)
-                {
-                    return;
-                }
+        // Selects the element in the designer showing if it has an item for it, else in the first that does, switching to
+        // it. The XML's selection isn't touched.
+        void SelectInDesigners(XElement element, string? attribute)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var designer = _designerList.SelectedItem as ISelectionLinked;
+            if (designer?.Handles(element, attribute) != true)
+            {
+                designer = _designerList.Items.OfType<ISelectionLinked>().FirstOrDefault(d => d.Handles(element, attribute));
+            }
 
-                _syncing = true;
+            if (designer is null)
+            {
+                return;
+            }
+
+            _syncing = true;
+            try
+            {
                 if (!ReferenceEquals(designer, _designerList.SelectedItem))
                 {
                     _designerList.SelectedItem = designer;
                 }
 
-                designer.SelectElement(element, location!.Attribute);
-            }
-            catch (XmlException)
-            {
-                // Not well-formed: there is no element to find until it is.
+                designer.SelectElement(element, attribute);
             }
             finally
             {
@@ -747,6 +834,63 @@ namespace IsWiX.Designer
         static bool IsRedo(Guid group, uint id) =>
             group == VSConstants.GUID_VSStandardCommandSet97 && (id == (uint)VSConstants.VSStd97CmdID.Redo || id == (uint)VSConstants.VSStd97CmdID.MultiLevelRedo);
 
+        static bool IsGoToDefinition(Guid group, uint id) =>
+            group == VSConstants.GUID_VSStandardCommandSet97 && id == (uint)VSConstants.VSStd97CmdID.GotoDefn;
+
+        // The Id of the component group the caret's element refers to, if it is in a ComponentGroupRef.
+        bool TryGetComponentGroupRefAtCaret(out string id)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            id = string.Empty;
+            if (_buffer is null || _wpfView is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var location = XmlPositions.LocationAt(_buffer.CurrentSnapshot.GetText(), _wpfView.Caret.Position.BufferPosition.Position);
+                if (location is { ElementName: "ComponentGroupRef", Id: { Length: > 0 } found })
+                {
+                    id = found;
+                    return true;
+                }
+            }
+            catch (XmlException)
+            {
+                // Not well-formed: no reference can be told from it.
+            }
+
+            return false;
+        }
+
+        // Opens the file that defines the component group, which may be this one, with it selected there.
+        void GoToComponentGroup(string id)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            string? file = null;
+            try
+            {
+                file = ProjectComponentGroups.FindDefinition(_filePath, XDocument.Parse(_buffer!.CurrentSnapshot.GetText()), id);
+            }
+            catch (XmlException)
+            {
+                // Not well-formed: this file's own groups can't be read, but the others' can.
+                file = ProjectComponentGroups.FindInOtherFiles(_filePath).FirstOrDefault(g => g.Id == id)?.FilePath;
+            }
+
+            if (file is null || !DefinitionNavigator.GoTo(file, "ComponentGroup", id))
+            {
+                VsShellUtilities.ShowMessageBox(
+                    this,
+                    file is null ? $"The component group '{id}' isn't defined in any .wxs file of this project." : $"Couldn't open {file}.",
+                    "Go to Definition",
+                    OLEMSGICON.OLEMSGICON_INFO,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            }
+        }
+
         IOleUndoManager? UndoManager
         {
             get
@@ -761,6 +905,13 @@ namespace IsWiX.Designer
             ThreadHelper.ThrowIfNotOnUIThread();
             if (XmlFocused)
             {
+                // Go to Definition is on a reference to a component group; the editor has nothing for it in XML.
+                if (cCmds == 1 && IsGoToDefinition(pguidCmdGroup, prgCmds[0].cmdID) && TryGetComponentGroupRefAtCaret(out _))
+                {
+                    prgCmds[0].cmdf = (uint)(OLECMDF.OLECMDF_SUPPORTED | OLECMDF.OLECMDF_ENABLED);
+                    return VSConstants.S_OK;
+                }
+
                 return TextView is IOleCommandTarget target
                     ? target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText)
                     : (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
@@ -781,6 +932,12 @@ namespace IsWiX.Designer
             ThreadHelper.ThrowIfNotOnUIThread();
             if (XmlFocused)
             {
+                if (IsGoToDefinition(pguidCmdGroup, nCmdID) && TryGetComponentGroupRefAtCaret(out var componentGroupId))
+                {
+                    GoToComponentGroup(componentGroupId);
+                    return VSConstants.S_OK;
+                }
+
                 return TextView is IOleCommandTarget target
                     ? target.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut)
                     : (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
