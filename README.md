@@ -22,3 +22,11 @@ The version lives in `Directory.Build.props`; the release workflow also writes i
 The publish workflow needs the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID`
 repository secrets, and an Azure federated credential for this repository's `main` branch with the
 Artifact Signing Certificate Profile Signer role on the `ISWIX-LLC` account.
+
+## Diagnosing the designer window
+
+Set the environment variable `ISWIX_TRACE` to `1` before starting Visual Studio and the extension writes what the .wxs
+editor and its designers are doing to an **IsWiX** pane of the Output window: when a designer's selection and the XML
+caret are linked, why one was not followed, the commands (such as Go to Definition) the editor was asked to run, and the
+component groups found in the project. It is off, and costs nothing, otherwise. Visual Studio's activity log
+(`devenv /log`) also records the editor's main events.

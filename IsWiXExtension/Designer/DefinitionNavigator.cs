@@ -24,21 +24,25 @@ namespace IsWiX.Designer
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!File.Exists(path))
             {
+                Tracing.Write("GoTo", () => $"{path} does not exist");
                 return false;
             }
 
             try
             {
+                Tracing.Write("GoTo", () => $"Opening {path} for {elementName} '{id}'");
                 VsShellUtilities.OpenDocument(ServiceProvider.GlobalProvider, path, VSConstants.LOGVIEWID_Primary, out _, out _, out var frame);
                 frame.Show();
 
                 // The IsWiX editor selects it in its XML and its designers; a file opened some other way is a text editor.
                 if (ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out var docView)) && docView is WixDesignerPane pane)
                 {
+                    Tracing.Write("GoTo", () => "Opened in the IsWiX editor");
                     pane.ShowDefinition(elementName, id);
                 }
                 else
                 {
+                    Tracing.Write("GoTo", () => $"Opened in another editor ({docView?.GetType().Name ?? "no view"}): selecting in its text");
                     SelectInTextView(path, frame, elementName, id);
                 }
 
@@ -46,6 +50,7 @@ namespace IsWiX.Designer
             }
             catch (Exception ex) when (ex is COMException || ex is InvalidOperationException || ex is IOException)
             {
+                Tracing.Write("GoTo", () => $"Could not open {path}: {ex.Message}");
                 return false;
             }
         }

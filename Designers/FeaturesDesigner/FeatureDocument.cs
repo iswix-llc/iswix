@@ -8,8 +8,8 @@ using Wxs = IsWiX.WiXModel;
 
 namespace FeaturesDesigner
 {
-    // The features of a package or fragment and the merge modules they reference, read and written through the
-    // typed model. Top-level features are in Id order (IsWiX's canonical order); sub-features keep theirs.
+    // The features of a package or fragment, read and written through the typed model. Top-level features are in Id
+    // order (IsWiX's canonical order); sub-features keep theirs.
     internal static class FeatureDocument
     {
         /// <summary>Gets whether the document is one this designer edits: a WiX package or fragment.</summary>
@@ -95,29 +95,5 @@ namespace FeaturesDesigner
 
         public static void Delete(Wxs.Feature feature) => feature.RemoveFromParent();
 
-        public static List<Wxs.Merge> Merges(XDocument document) =>
-            document.Descendants(Wxs.Merge.ElementName).Select(e => (Wxs.Merge)WixElement.Wrap(e)).ToList();
-
-        // The merge as written, without its namespace, for the list of merge modules.
-        public static string Describe(Wxs.Merge merge) =>
-            "<Merge " + string.Join(" ", merge.Xml.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => $"{a.Name.LocalName}=\"{a.Value}\"")) + " />";
-
-        public static bool References(Wxs.Feature feature, string? mergeId) => feature.MergeRefs.Any(r => r.Id == mergeId);
-
-        // Checking a merge module adds a MergeRef; unchecking removes just that one, so the others keep their attributes.
-        public static void SetReference(Wxs.Feature feature, string? mergeId, bool referenced)
-        {
-            if (referenced && !References(feature, mergeId))
-            {
-                feature.Add(new Wxs.MergeRef { Id = mergeId });
-            }
-            else if (!referenced)
-            {
-                foreach (var mergeRef in feature.MergeRefs.Where(r => r.Id == mergeId).ToList())
-                {
-                    mergeRef.RemoveFromParent();
-                }
-            }
-        }
     }
 }

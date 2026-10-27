@@ -24,12 +24,11 @@ namespace FeaturesDesigner
         readonly DocumentManager _documentManager;
 
         bool _refresh = false;
-        bool _loadingMergeRefs = false;
         public Features(DocumentManager documentManager)
         {
             _documentManager = documentManager;
             InitializeComponent();
-            DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
+            DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature");
             AddToolbar();
             AddComponentGroupList();
 
@@ -53,31 +52,6 @@ namespace FeaturesDesigner
                     SelectedElementChanged?.Invoke(this, EventArgs.Empty);
                 }
             };
-            // The merge modules the selected feature can reference: choosing one shows its Merge element, and checking
-            // one shows the MergeRef that makes (unchecking, the feature that lost it).
-            treeViewMerges.HideSelection = false;
-            treeViewMerges.NodeMouseClick += (s, e) =>
-            {
-                if (e.Node.Tag is Wxs.Merge merge)
-                {
-                    _attribute = null;
-                    _other = merge.Xml;
-                    SelectedElementChanged?.Invoke(this, EventArgs.Empty);
-                }
-            };
-            treeViewMerges.AfterCheck += (s, e) =>
-            {
-                // Run after the designer's own handler, which adds or removes the reference. Only the user's check: not
-                // the boxes ticked to show the feature's references.
-                if (_loadingMergeRefs || e.Action == TreeViewAction.Unknown || e.Node?.Tag is not Wxs.Merge merge || treeViewFeatures.SelectedNode?.Tag is not Wxs.Feature feature)
-                {
-                    return;
-                }
-
-                _attribute = null;
-                _other = e.Node.Checked ? feature.MergeRefs.FirstOrDefault(r => r.Id == merge.Id)?.Xml : null;
-                SelectedElementChanged?.Invoke(this, EventArgs.Empty);
-            };
             propertyGridFeatureProperties.SelectedGridItemChanged += (s, e) =>
             {
                 if (propertyGridFeatureProperties.ContainsFocus && e.NewSelection?.GridItemType == GridItemType.Property)
@@ -95,7 +69,7 @@ namespace FeaturesDesigner
 
         public event EventHandler? SelectedElementChanged;
 
-        // What the user chose in the merge modules, a Merge or the MergeRef that refers to one, instead of the feature.
+        // What the user chose in the component groups, the ComponentGroupRef that makes one, instead of the feature.
         XElement? _other;
 
         public XElement? SelectedElement => _other ?? (treeViewFeatures.SelectedNode?.Tag as Wxs.Feature)?.Xml;
@@ -103,27 +77,12 @@ namespace FeaturesDesigner
         public string? SelectedAttribute => _attribute;
 
         // From the XML rather than the tree, which is only filled once the designer has been shown. Anything in a
-        // feature, such as a reference to a component group, counts as the feature. A merge module is a feature's to
-        // reference.
+        // feature, such as a reference to a component group, counts as the feature.
         public bool Handles(XElement element, string? attribute) =>
-            element.AncestorsAndSelf().Any(e => e.Name == Wxs.Feature.ElementName || e.Name == Wxs.Merge.ElementName);
+            element.AncestorsAndSelf().Any(e => e.Name == Wxs.Feature.ElementName);
 
         public void SelectElement(XElement element, string? attribute)
         {
-            var merge = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.Merge.ElementName);
-            if (merge != null)
-            {
-                var mergeNode = treeViewMerges.Nodes.Cast<TreeNode>().FirstOrDefault(n => n.Tag is Wxs.Merge tagged && tagged.Xml == merge);
-                if (mergeNode != null)
-                {
-                    treeViewMerges.SelectedNode = mergeNode;
-                    _attribute = null;
-                    _other = merge;
-                }
-
-                return;
-            }
-
             var node = element.AncestorsAndSelf().Select(e => FindNode(treeViewFeatures.Nodes, e)).FirstOrDefault(n => n != null);
             if (node is null)
             {
@@ -132,11 +91,12 @@ namespace FeaturesDesigner
 
             _attribute = attribute;
             treeViewFeatures.SelectedNode = node;
-            _other = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.MergeRef.ElementName || e.Name == Wxs.ComponentGroupRef.ElementName);
-            if (_other?.Name == Wxs.ComponentGroupRef.ElementName)
+            _other = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.ComponentGroupRef.ElementName);
+            if (_other != null)
             {
                 SelectGroupNode((string?)_other.Attribute("Id"));
             }
+
             if (attribute != null && propertyGridFeatureProperties.SelectedGridItem is { } selected)
             {
                 var root = selected;
@@ -300,7 +260,6 @@ namespace FeaturesDesigner
                 LoadDataRecurse(treeNode, feature);
 
             }
-            UpdateMergeModules();
             if (treeViewFeatures.Nodes.Count > 0)
             {
                 _refresh = true;
@@ -369,36 +328,6 @@ namespace FeaturesDesigner
             return null;
         }
 
-        private void UpdateMergeModules()
-        {
-
-            if (treeViewFeatures.Nodes.Count > 0)
-            {
-                treeViewMerges.Enabled = true;
-            }
-            else
-            {
-                treeViewMerges.Enabled = false;
-            }
-
-            treeViewMerges.Nodes.Clear();
-            var merges = FeatureDocument.Merges(_documentManager.Document);
-            foreach (var merge in merges)
-            {
-                TreeNode mergeNode = treeViewMerges.Nodes.Add(merge.Id, FeatureDocument.Describe(merge), 1);
-                mergeNode.Tag = merge;
-            }
-            if(merges.Count>0)
-            {
-                textBox1.Text = "The above merge modules were found in this WXS file.\r\nPlease select which files should be referenced by the selected feature.";
-            }
-            else
-            {
-                textBox1.Text = "No merge modules were found in this WXS file.";
-            }
-
-
-        }
         private void treeViewFeatures_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (_refresh)
@@ -407,19 +336,6 @@ namespace FeaturesDesigner
                 feature.Read(iswixFeature);
 
                 UpdatePropertyGrid();
-                UpdateMergeModules();
-
-                // Checking nodes to show the feature's references must not write them back.
-                _loadingMergeRefs = true;
-                foreach (var mergeRef in iswixFeature.MergeRefs)
-                {
-                    var nodes = treeViewMerges.Nodes.Find(mergeRef.Id ?? string.Empty, true);
-                    foreach (var node in nodes)
-                    {
-                        node.Checked = true;
-                    }
-                }
-                _loadingMergeRefs = false;
                 toolStripMenuItemNewSubFeature.Enabled = true;
                 toolStripMenuItemRename.Enabled = true;
                 toolStripMenuItemDelete.Enabled = true;
@@ -433,17 +349,6 @@ namespace FeaturesDesigner
         {
             feature.Write(e.ChangedItem?.Label ?? string.Empty);
         }
-        private void treeViewMerges_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-            if (treeViewFeatures.SelectedNode != null && !_loadingMergeRefs)
-            {
-                Wxs.Feature feature = (Wxs.Feature)treeViewFeatures.SelectedNode.Tag;
-                Wxs.Merge merge = (Wxs.Merge)e.Node!.Tag;
-                propertyGridFeatureProperties.Refresh();
-                FeatureDocument.SetReference(feature, merge.Id, e.Node.Checked);
-            }
-        }
-
         private void treeViewFeatures_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             // A null label means the edit was cancelled.

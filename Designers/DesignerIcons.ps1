@@ -128,7 +128,6 @@ $folderClosed = $designers[3].Paths
 $folderOpen = @('M3 17 L3 6 A2 2 0 0 1 5 4 L9 4 L12 7 L17 7 A2 2 0 0 1 19 9 L19 10', 'M3 17 L5.6 11.2 A2 2 0 0 1 7.4 10 L20.5 10 A1 1 0 0 1 21.4 11.4 L18.6 17.8 A2 2 0 0 1 16.8 19 L5 19 A2 2 0 0 1 3 17 Z')
 $treeIcons = @(
     @{ Dir = 'FeaturesDesigner\Images'; Name = 'feature';  Hue = 'purple'; Paths = $designers[1].Small }
-    @{ Dir = 'FeaturesDesigner\Images'; Name = 'database'; Hue = 'blue';   Paths = @('M5 6.5 A7 2.5 0 1 0 19 6.5 A7 2.5 0 1 0 5 6.5', 'M5 6.5 L5 17.5 A7 2.5 0 0 0 19 17.5 L19 6.5', 'M5 12 A7 2.5 0 0 0 19 12') }
     # The destination trees the Files and Folders, Services and Shortcuts designers share: the computer, the special
     # folders (blue) and the folders below them (amber, as the Files and Folders icon).
     @{ Dir = '..\Shared\FireworksFramework\Images\Designers'; Name = 'computer';           Hue = 'gray';  Paths = $computer }

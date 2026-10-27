@@ -45,9 +45,6 @@
             this.toolStripMenuItemMoveRight = new System.Windows.Forms.ToolStripMenuItem();
             this.imageLibrary = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.treeViewMerges = new System.Windows.Forms.TreeView();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.propertyGridFeatureProperties = new System.Windows.Forms.PropertyGrid();
             this.feature = new FeaturesDesigner.Feature(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -59,10 +56,6 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -202,62 +195,11 @@
             // 
             this.splitContainer2.Panel1.Controls.Add(this.propertyGridFeatureProperties);
             // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
+            // splitContainer2.Panel2 holds the component groups, which Features.ComponentGroups.cs puts there.
+            //
             this.splitContainer2.Size = new System.Drawing.Size(340, 218);
             this.splitContainer2.SplitterDistance = 68;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Name = "splitContainer3";
-            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.treeViewMerges);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.textBox1);
-            this.splitContainer3.Size = new System.Drawing.Size(340, 146);
-            this.splitContainer3.SplitterDistance = 102;
-            this.splitContainer3.TabIndex = 0;
-            // 
-            // treeViewMerges
-            // 
-            this.treeViewMerges.CausesValidation = false;
-            this.treeViewMerges.CheckBoxes = true;
-            this.treeViewMerges.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewMerges.Enabled = false;
-            this.treeViewMerges.ImageKey = "database.png";
-            this.treeViewMerges.ImageList = this.imageLibrary;
-            this.treeViewMerges.Location = new System.Drawing.Point(0, 0);
-            this.treeViewMerges.Name = "treeViewMerges";
-            this.treeViewMerges.SelectedImageKey = "database.png";
-            this.treeViewMerges.ShowLines = false;
-            this.treeViewMerges.ShowPlusMinus = false;
-            this.treeViewMerges.ShowRootLines = false;
-            this.treeViewMerges.Size = new System.Drawing.Size(338, 70);
-            this.treeViewMerges.TabIndex = 1;
-            this.treeViewMerges.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewMerges_AfterCheck);
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(338, 23);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "\t";
             // 
             // propertyGridFeatureProperties
             // 
@@ -298,11 +240,6 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            this.splitContainer3.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -326,8 +263,5 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMoveRight;
         private System.Windows.Forms.ImageList imageLibrary;
         private Feature feature;
-        private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.TreeView treeViewMerges;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }

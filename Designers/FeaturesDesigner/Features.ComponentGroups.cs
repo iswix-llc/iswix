@@ -25,7 +25,6 @@ namespace FeaturesDesigner
         List<ComponentGroupInfo> _otherGroups = new List<ComponentGroupInfo>();
         int _scanVersion;
         bool _loadingGroupRefs;
-        bool _groupSplitSet;
 
         private void AddComponentGroupList()
         {
@@ -46,25 +45,10 @@ namespace FeaturesDesigner
             _groupMenu.Opening += (s, e) => _goToDefinitionItem.Enabled = treeViewComponentGroups.SelectedNode?.Tag is ComponentGroupInfo;
             treeViewComponentGroups.ContextMenuStrip = _groupMenu;
 
-            // The merge modules' list makes room for this one beside it, each with a label to tell them apart.
+            // The list fills the lower part of the right-hand side, under the feature's properties, with a label above it.
             var groupsLabel = new Label { Text = "Component Groups", Dock = DockStyle.Top, Height = 20, TextAlign = ContentAlignment.MiddleLeft };
-            var mergesLabel = new Label { Text = "Merge Modules", Dock = DockStyle.Top, Height = 20, TextAlign = ContentAlignment.MiddleLeft };
-            var split = new SplitContainer { Dock = DockStyle.Fill, Orientation = Orientation.Vertical };
-            splitContainer3.Panel1.Controls.Remove(treeViewMerges);
-            split.Panel1.Controls.Add(treeViewComponentGroups);
-            split.Panel1.Controls.Add(groupsLabel);
-            split.Panel2.Controls.Add(treeViewMerges);
-            split.Panel2.Controls.Add(mergesLabel);
-            splitContainer3.Panel1.Controls.Add(split);
-            split.SizeChanged += (s, e) =>
-            {
-                // Half each, once the container has the size it will be shown at; the splitter can be moved after.
-                if (!_groupSplitSet && split.Width > 120)
-                {
-                    _groupSplitSet = true;
-                    split.SplitterDistance = split.Width / 2;
-                }
-            };
+            splitContainer2.Panel2.Controls.Add(treeViewComponentGroups);
+            splitContainer2.Panel2.Controls.Add(groupsLabel);
 
             treeViewFeatures.AfterSelect += (s, e) => PopulateComponentGroups();
             treeViewComponentGroups.AfterCheck += treeViewComponentGroups_AfterCheck;
@@ -91,6 +75,7 @@ namespace FeaturesDesigner
             var path = _documentManager.DocumentPath;
             _currentGroups = ProjectComponentGroups.FindInDocument(_documentManager.Document, path);
             _otherGroups = new List<ComponentGroupInfo>();
+            DesignerTrace.Write("Features", () => $"Component groups: {_currentGroups.Count} in this file ({string.Join(", ", _currentGroups.Select(g => g.Id))}); scanning the project from {(string.IsNullOrEmpty(path) ? "(unsaved file)" : ProjectComponentGroups.ProjectRoot(path))}");
             PopulateComponentGroups();
 
             if (string.IsNullOrEmpty(path))
@@ -113,6 +98,7 @@ namespace FeaturesDesigner
                         if (version == _scanVersion && !IsDisposed)
                         {
                             _otherGroups = task.Result;
+                            DesignerTrace.Write("Features", () => $"Component groups: {_otherGroups.Count} in {_otherGroups.Select(g => g.FilePath).Distinct().Count()} other files ({string.Join(", ", _otherGroups.Select(g => g.Id))})");
                             PopulateComponentGroups();
                         }
                     }));
@@ -184,6 +170,7 @@ namespace FeaturesDesigner
                 return;
             }
 
+            DesignerTrace.Write("Features", () => $"{(e.Node.Checked ? "Referencing" : "Dropping the reference to")} component group '{group.Id}' in feature '{feature.Id}'");
             Wxs.ComponentGroupRef? reference = null;
             if (e.Node.Checked)
             {
@@ -240,6 +227,7 @@ namespace FeaturesDesigner
                 return;
             }
 
+            DesignerTrace.Write("Features", () => $"Go to Definition of '{group.Id}': defined in {group.FilePath ?? "no file"}; the host {(DesignerNavigation.GoToDefinition is null ? "cannot" : "can")} open files");
             if (group.FilePath == null)
             {
                 MessageBox.Show($"The component group '{group.Id}' isn't defined in any .wxs file of this project.", "Go to Definition", MessageBoxButtons.OK, MessageBoxIcon.Information);

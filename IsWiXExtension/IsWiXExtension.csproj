@@ -52,6 +52,8 @@
     <Compile Include="Designer\CodeWindowHost.cs" />
     <Compile Include="Designer\XmlPositions.cs" />
     <Compile Include="Designer\DefinitionNavigator.cs" />
+    <Compile Include="Designer\GoToDefinitionFilter.cs" />
+    <Compile Include="Designer\Tracing.cs" />
     <Compile Include="Designer\VsTheme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsWiXExtensionPackage.cs" />

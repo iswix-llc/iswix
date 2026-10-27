@@ -216,6 +216,12 @@ namespace IsWiX.Designer
             FireworksFramework.Services.DesignerDialogs.OwnerHandle = () => System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
             // A designer can take the user to the file that defines something its element refers to.
             FireworksFramework.Services.DesignerNavigation.GoToDefinition = DefinitionNavigator.GoTo;
+            // The designers' lines go to the same trace as the window's, when it is on.
+            if (Tracing.Enabled)
+            {
+                FireworksFramework.Services.DesignerTrace.Sink = (category, message) => Tracing.Write(category, message);
+                Tracing.Write("Pane", () => $"Opened {_filePath}");
+            }
 
             // An existing buffer (the file was open in another editor) has its text already; a new one is loaded by
             // Visual Studio after the editor is created, and says so through IVsTextBufferDataEvents.
@@ -323,6 +329,7 @@ namespace IsWiX.Designer
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             _pendingDefinition = (elementName, id);
+            Tracing.Write("GoTo", () => $"Asked to show {elementName} '{id}' in {_filePath}: {(_initialSelectionPending ? "the editor is not ready, waiting" : "showing now")}");
             if (_initialSelectionPending)
             {
                 QueueInitialSelection();
@@ -338,6 +345,7 @@ namespace IsWiX.Designer
             ThreadHelper.ThrowIfNotOnUIThread();
             if (_pendingDefinition is not { } target || _buffer is null || HookTextView() is not { } view)
             {
+                Tracing.Write("GoTo", () => _pendingDefinition is null ? "Nothing to show" : "Not ready to show the definition yet: it stays pending");
                 return;
             }
 
@@ -360,6 +368,7 @@ namespace IsWiX.Designer
             }
 
             var span = new SnapshotSpan(snapshot, found.Start, found.End - found.Start);
+            Tracing.Write("GoTo", () => $"Showing {target.Element} '{target.Id}' at {span.Start}, {span.Length} characters");
             _syncing = true;
             try
             {
@@ -399,11 +408,73 @@ namespace IsWiX.Designer
                 if (_wpfView != null)
                 {
                     _wpfView.Caret.PositionChanged += OnCaretMoved;
+                    _wpfView.VisualElement.PreviewMouseRightButtonDown += OnEditorRightClick;
+                    _wpfView.VisualElement.PreviewMouseLeftButtonDown += OnEditorOtherInput;
+                    _wpfView.VisualElement.PreviewKeyDown += OnEditorOtherInput;
+
+                    // In front of the XML editor's handlers on the view: its context menu's commands go to the view.
+                    _viewFilter = new GoToDefinitionFilter(this);
+                    if (ErrorHandler.Succeeded(view.AddCommandFilter(_viewFilter, out var next)))
+                    {
+                        _viewFilter.Next = next;
+                        _filteredView = view;
+                    }
                 }
             }
 
             return _wpfView;
         }
+
+        GoToDefinitionFilter? _viewFilter;
+        IVsTextView? _filteredView;
+
+        /// <summary>Gets whether the command is Go to Definition and the caret (or the last right-click) is on a component group reference.</summary>
+        internal bool CanGoToDefinition(Guid group, uint id)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            return IsGoToDefinition(group, id) && TryGetComponentGroupRefAtCaret(out _);
+        }
+
+        /// <summary>Runs Go to Definition if the command is that and it is on a component group reference.</summary>
+        internal bool TryGoToDefinition(Guid group, uint id)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (!IsGoToDefinition(group, id) || !TryGetComponentGroupRefAtCaret(out var componentGroupId))
+            {
+                return false;
+            }
+
+            // Used up: the next one is from wherever the caret or the next right-click is.
+            _rightClickOffset = null;
+            GoToComponentGroup(componentGroupId);
+            return true;
+        }
+
+        // Where in the text the last right-click was, until the caret or the keyboard is used again: the editor's context
+        // menu acts on what was clicked, and a right-click doesn't always move the caret there.
+        int? _rightClickOffset;
+
+        void OnEditorRightClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _rightClickOffset = null;
+            if (_wpfView is not { } view)
+            {
+                return;
+            }
+
+            var point = e.GetPosition(view.VisualElement);
+            var line = view.TextViewLines.GetTextViewLineContainingYCoordinate(point.Y + view.ViewportTop);
+            if (line is null)
+            {
+                return;
+            }
+
+            // Past the end of a line is its end.
+            _rightClickOffset = (line.GetBufferPositionFromXCoordinate(point.X + view.ViewportLeft) ?? line.End).Position;
+            Tracing.Write("Command", () => $"Right-click in the editor at offset {_rightClickOffset}, the caret at {view.Caret.Position.BufferPosition.Position}");
+        }
+
+        void OnEditorOtherInput(object sender, EventArgs e) => _rightClickOffset = null;
 
         // Linking the selections: choosing something in a designer puts the editor's caret at its element, and moving
         // the caret in the editor selects the item for the element it is in. Elements are named by their path in the
@@ -412,6 +483,7 @@ namespace IsWiX.Designer
         void OnDesignerSelectionChanged(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            Tracing.Write("Link", () => $"{sender.GetType().Name} raised a selection: {(_syncing ? "ignored, a selection is being moved" : _reloading ? "ignored, the designers are reloading" : "queued")}");
             if (_syncing || _reloading)
             {
                 return;
@@ -430,13 +502,18 @@ namespace IsWiX.Designer
             var linked = sender as ISelectionLinked;
             if (_syncing || _reloading || !ReferenceEquals(sender, _designerList.SelectedItem) || linked?.SelectedElement is not { } element)
             {
+                Tracing.Write("Link", () => $"{sender.GetType().Name}'s selection not shown: " +
+                    (_syncing ? "a selection is being moved" : _reloading ? "the designers are reloading" : !ReferenceEquals(sender, _designerList.SelectedItem) ? "it is not the designer showing" : "it has no element selected"));
                 return;
             }
+
+            Tracing.Write("Link", () => $"Showing {sender.GetType().Name}'s selection: <{element.Name.LocalName}> attribute {linked.SelectedAttribute ?? "(none)"}");
 
             // Selecting in a designer can touch the document, and the text it is written to waits for idle time: wait for
             // that, as the element's place in the text isn't known until it is there.
             if (_writePending && !waited)
             {
+                Tracing.Write("Link", () => "A write to the text is pending: waiting for idle time to show the selection");
                 ThreadHelper.JoinableTaskFactory.StartOnIdle(() => ShowDesignerSelection(sender, true)).FileAndForget("iswix/designer/showselection");
                 return;
             }
@@ -460,6 +537,7 @@ namespace IsWiX.Designer
                     if (!view.Selection.IsEmpty && view.Selection.StreamSelectionSpan.SnapshotSpan == span)
                     {
                         // Already showing it: selecting and scrolling again would only repaint the editor.
+                        Tracing.Write("Link", () => "The XML already shows it");
                         return;
                     }
 
@@ -485,6 +563,8 @@ namespace IsWiX.Designer
             // Whether the editor has focus is checked when the caret has rested: on a click the caret can move first.
             if (!_syncing)
             {
+                // The caret is where the user is working now; a right-click's position was from before.
+                _rightClickOffset = null;
                 _caretTimer.Stop();
                 _caretTimer.Start();
             }
@@ -495,13 +575,17 @@ namespace IsWiX.Designer
             ThreadHelper.ThrowIfNotOnUIThread();
             if (_buffer is null || _wpfView is null || _reloadTimer.IsEnabled || _writePending || !XmlFocused)
             {
+                Tracing.Write("Caret", () => "The caret rested but the designers were not updated: " +
+                    (_buffer is null || _wpfView is null ? "the editor is not ready" : _reloadTimer.IsEnabled ? "a reload is pending" : _writePending ? "a write to the text is pending" : "the XML editor does not have the focus"));
                 return;
             }
 
             try
             {
-                var location = XmlPositions.LocationAt(_buffer.CurrentSnapshot.GetText(), _wpfView.Caret.Position.BufferPosition.Position);
+                var offset = _wpfView.Caret.Position.BufferPosition.Position;
+                var location = XmlPositions.LocationAt(_buffer.CurrentSnapshot.GetText(), offset);
                 var element = location is null ? null : ElementAt(location.Path);
+                Tracing.Write("Caret", () => $"Caret at {offset}: " + (location is null ? "in no element" : $"<{location.ElementName}> path {string.Join("/", location.Path)} attribute {location.Attribute ?? "(none)"}, document element {(element is null ? "not found" : "found")}"));
                 if (element is null)
                 {
                     return;
@@ -528,9 +612,11 @@ namespace IsWiX.Designer
 
             if (designer is null)
             {
+                Tracing.Write("Caret", () => $"No designer has an item for <{element.Name.LocalName}> attribute {attribute ?? "(none)"}");
                 return;
             }
 
+            Tracing.Write("Caret", () => $"Selecting <{element.Name.LocalName}> in {designer.GetType().Name}{(ReferenceEquals(designer, _designerList.SelectedItem) ? string.Empty : ", switching to it")}");
             _syncing = true;
             try
             {
@@ -565,7 +651,12 @@ namespace IsWiX.Designer
         }
 
         // Visual Studio's activity log (devenv /log) records what the designer does, for diagnosing the preview.
-        static void Log(string message) => ActivityLog.TryLogInformation("IsWiX Designer", message);
+        // These also go to the trace, when it is on.
+        static void Log(string message)
+        {
+            ActivityLog.TryLogInformation("IsWiX Designer", message);
+            Tracing.Write("Pane", message);
+        }
 
         void IVsTextBufferDataEvents.OnFileChanged(uint grfChange, uint dwFileAttrs)
         {
@@ -849,7 +940,10 @@ namespace IsWiX.Designer
 
             try
             {
-                var location = XmlPositions.LocationAt(_buffer.CurrentSnapshot.GetText(), _wpfView.Caret.Position.BufferPosition.Position);
+                // Where the user right-clicked, if that is what opened the menu this was chosen from; else the caret.
+                var offset = _rightClickOffset ?? _wpfView.Caret.Position.BufferPosition.Position;
+                var location = XmlPositions.LocationAt(_buffer.CurrentSnapshot.GetText(), offset);
+                Log($"Go to Definition at offset {offset} ({(_rightClickOffset.HasValue ? "right-click" : "caret")}): {(location is null ? "no element" : location.ElementName)}");
                 if (location is { ElementName: "ComponentGroupRef", Id: { Length: > 0 } found })
                 {
                     id = found;
@@ -879,6 +973,7 @@ namespace IsWiX.Designer
                 file = ProjectComponentGroups.FindInOtherFiles(_filePath).FirstOrDefault(g => g.Id == id)?.FilePath;
             }
 
+            Tracing.Write("GoTo", () => $"Component group '{id}' is defined in {file ?? "no file of the project"} (project folder {ProjectComponentGroups.ProjectRoot(_filePath)})");
             if (file is null || !DefinitionNavigator.GoTo(file, "ComponentGroup", id))
             {
                 VsShellUtilities.ShowMessageBox(
@@ -903,10 +998,15 @@ namespace IsWiX.Designer
         int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            if (cCmds == 1 && IsGoToDefinition(pguidCmdGroup, prgCmds[0].cmdID))
+            {
+                Tracing.Write("Command", () => $"Go to Definition queried; the XML editor {(XmlFocused ? "has" : "does not have")} the focus");
+            }
+
             if (XmlFocused)
             {
                 // Go to Definition is on a reference to a component group; the editor has nothing for it in XML.
-                if (cCmds == 1 && IsGoToDefinition(pguidCmdGroup, prgCmds[0].cmdID) && TryGetComponentGroupRefAtCaret(out _))
+                if (cCmds == 1 && CanGoToDefinition(pguidCmdGroup, prgCmds[0].cmdID))
                 {
                     prgCmds[0].cmdf = (uint)(OLECMDF.OLECMDF_SUPPORTED | OLECMDF.OLECMDF_ENABLED);
                     return VSConstants.S_OK;
@@ -930,11 +1030,15 @@ namespace IsWiX.Designer
         int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            if (IsGoToDefinition(pguidCmdGroup, nCmdID))
+            {
+                Tracing.Write("Command", () => $"Go to Definition run; the XML editor {(XmlFocused ? "has" : "does not have")} the focus");
+            }
+
             if (XmlFocused)
             {
-                if (IsGoToDefinition(pguidCmdGroup, nCmdID) && TryGetComponentGroupRefAtCaret(out var componentGroupId))
+                if (TryGoToDefinition(pguidCmdGroup, nCmdID))
                 {
-                    GoToComponentGroup(componentGroupId);
                     return VSConstants.S_OK;
                 }
 
@@ -996,6 +1100,15 @@ namespace IsWiX.Designer
                 if (_wpfView != null)
                 {
                     _wpfView.Caret.PositionChanged -= OnCaretMoved;
+                    _wpfView.VisualElement.PreviewMouseRightButtonDown -= OnEditorRightClick;
+                    _wpfView.VisualElement.PreviewMouseLeftButtonDown -= OnEditorOtherInput;
+                    _wpfView.VisualElement.PreviewKeyDown -= OnEditorOtherInput;
+                }
+
+                if (_filteredView != null && _viewFilter != null)
+                {
+                    _filteredView.RemoveCommandFilter(_viewFilter);
+                    _filteredView = null;
                 }
 
                 foreach (var linked in _designers.OfType<ISelectionLinked>())

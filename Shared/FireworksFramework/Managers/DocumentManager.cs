@@ -180,12 +180,12 @@ namespace FireworksFramework.Managers
             }
 
             // Merge module sources are not supported either. Packages that consume merge modules
-            // (<Merge> and <MergeRef>) are fine; this is only about editing a <Module> itself.
+            // (<Merge> and <MergeRef>) are fine, as XML; this is only about editing a <Module> itself.
             if (document.Root?.Elements().FirstOrDefault()?.Name == WixNamespaces.Wxs + "Module")
             {
                 throw new NotSupportedException(
                     $"'{Path.GetFileName(filePath)}' is a merge module source file, which IsWiX no longer supports.{Environment.NewLine}{Environment.NewLine}" +
-                    "IsWiX edits WiX packages and fragments. Packages can still include merge modules through the Features designer.");
+                    "IsWiX edits WiX packages and fragments. Packages can still include merge modules by editing their XML.");
             }
 
             // Elements added through the typed model go to IsWiX's canonical position, so a file's layout
