@@ -23,6 +23,7 @@ namespace IsWiX.Designer
             public int OpenEnd;
             public int CloseStart;
             public bool HasChildren;
+            public string Name = string.Empty;
             public List<AttributeSpan> Attributes = new List<AttributeSpan>();
         }
 
@@ -30,6 +31,7 @@ namespace IsWiX.Designer
         sealed class AttributeSpan
         {
             public string Name = string.Empty;
+            public string Value = string.Empty;
             public int Start;
             public int End;
         }
@@ -39,6 +41,41 @@ namespace IsWiX.Designer
         {
             public int[] Path = Array.Empty<int>();
             public string? Attribute;
+
+            /// <summary>The element's name without its namespace or prefix.</summary>
+            public string ElementName = string.Empty;
+
+            /// <summary>The element's Id attribute, if it has one.</summary>
+            public string? Id;
+        }
+
+        /// <summary>
+        /// Gets the start of the first element with the given name (without its prefix) whose attribute has the given
+        /// value, as the element's path and the offsets of its start tag; null if there is none.
+        /// </summary>
+        public static Found? FindElement(string text, string elementName, string attribute, string value)
+        {
+            foreach (var span in Scan(text))
+            {
+                if (span.Name == elementName && span.Attributes.Any(a => a.Name == attribute && a.Value == value))
+                {
+                    return new Found { Path = span.Path, Start = span.Start, End = span.OpenEnd };
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>An element found by <see cref="FindElement"/>.</summary>
+        public sealed class Found
+        {
+            public int[] Path = Array.Empty<int>();
+
+            /// <summary>The offset of the '&lt;' of the start tag.</summary>
+            public int Start;
+
+            /// <summary>The offset after the '&gt;' of the start tag.</summary>
+            public int End;
         }
 
         /// <summary>
@@ -62,7 +99,7 @@ namespace IsWiX.Designer
                 return null;
             }
 
-            var location = new Location { Path = found.Path };
+            var location = new Location { Path = found.Path, ElementName = found.Name, Id = found.Attributes.FirstOrDefault(a => a.Name == "Id")?.Value };
             foreach (var attribute in found.Attributes)
             {
                 if (attribute.Start <= offset && offset <= attribute.End)
@@ -165,7 +202,7 @@ namespace IsWiX.Designer
                             parent.HasChildren = true;
                         }
 
-                        var span = new Span { Start = start, Path = Append(parent?.Path, index, open.Count == 0 && spans.Count == 0) };
+                        var span = new Span { Start = start, Name = reader.LocalName, Path = Append(parent?.Path, index, open.Count == 0 && spans.Count == 0) };
                         span.OpenEnd = TagEnd(text, start);
                         spans.Add(span);
                         var isEmpty = reader.IsEmptyElement;
@@ -175,7 +212,7 @@ namespace IsWiX.Designer
                             {
                                 // The reader is at the attribute's name.
                                 var attributeStart = lineStarts[info.LineNumber - 1] + info.LinePosition - 1;
-                                span.Attributes.Add(new AttributeSpan { Name = reader.Name, Start = attributeStart, End = ValueEnd(text, attributeStart) });
+                                span.Attributes.Add(new AttributeSpan { Name = reader.Name, Value = reader.Value, Start = attributeStart, End = ValueEnd(text, attributeStart) });
                             }
                             while (reader.MoveToNextAttribute());
                             reader.MoveToElement();

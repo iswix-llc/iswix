@@ -12,6 +12,7 @@
        Visual Studio's, so its files are compiled into the tests rather than referenced. -->
   <ItemGroup>
     <Compile Include="..\..\IsWiXExtension\Designer\XmlPositions.cs" Link="XmlPositions.cs" />
+    <Compile Include="..\..\Shared\FireworksFramework\Services\ProjectComponentGroups.cs" Link="ProjectComponentGroups.cs" />
   </ItemGroup>
 
   <ItemGroup>

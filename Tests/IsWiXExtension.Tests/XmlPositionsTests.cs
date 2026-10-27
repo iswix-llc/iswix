@@ -249,6 +249,109 @@ public class XmlPositionsTests
         }
     }
 
+    public class ElementNameTests
+    {
+        [Fact]
+        public void The_location_has_the_name_of_the_element_and_its_id()
+        {
+            var location = LocationAt("<Wix><Package><Feature Id=\"F\"><ComponentGroupRef Id=\"Files|\" /></Feature></Package></Wix>")!;
+
+            Assert.Equal("ComponentGroupRef", location.ElementName);
+            Assert.Equal("Files", location.Id);
+        }
+
+        [Fact]
+        public void An_element_with_no_id_has_none()
+        {
+            var location = LocationAt("<Wix><Pack|age Name=\"x\" /></Wix>")!;
+
+            Assert.Equal("Package", location.ElementName);
+            Assert.Null(location.Id);
+        }
+
+        [Fact]
+        public void The_name_is_without_its_prefix()
+        {
+            var location = LocationAt("<Wix xmlns:ui=\"urn:b\"><ui:Dialog Id=\"D|\" /></Wix>")!;
+
+            Assert.Equal("Dialog", location.ElementName);
+        }
+
+        [Fact]
+        public void The_id_is_found_wherever_it_is_among_the_attributes_and_whatever_the_caret_is_on()
+        {
+            var location = LocationAt("<Wix><ComponentGroupRef Primary=\"yes\" Id=\"Late\" Pri|mary2=\"x\" /></Wix>")!;
+
+            Assert.Equal("Late", location.Id);
+        }
+    }
+
+    public class FindElementTests
+    {
+        const string Text =
+            "<Wix>\n" +
+            "  <Fragment>\n" +
+            "    <ComponentGroup Id=\"One\">\n" +
+            "      <ComponentRef Id=\"One\" />\n" +
+            "    </ComponentGroup>\n" +
+            "    <ComponentGroup Id=\"Two\" Directory=\"D\" />\n" +
+            "  </Fragment>\n" +
+            "</Wix>\n";
+
+        [Fact]
+        public void An_element_is_found_by_its_name_and_id()
+        {
+            var found = XmlPositions.FindElement(Text, "ComponentGroup", "Id", "Two")!;
+
+            Assert.Equal("<ComponentGroup Id=\"Two\" Directory=\"D\" />", Text.Substring(found.Start, found.End - found.Start));
+            Assert.Equal(new[] { 0, 1 }, found.Path);
+        }
+
+        [Fact]
+        public void An_element_of_another_name_with_the_same_id_is_not_it()
+        {
+            var found = XmlPositions.FindElement(Text, "ComponentGroup", "Id", "One")!;
+
+            Assert.StartsWith("<ComponentGroup Id=\"One\">", Text.Substring(found.Start));
+            Assert.Equal(new[] { 0, 0 }, found.Path);
+        }
+
+        [Fact]
+        public void The_start_tag_of_an_element_with_children_stops_before_them()
+        {
+            var found = XmlPositions.FindElement(Text, "ComponentGroup", "Id", "One")!;
+
+            Assert.Equal("<ComponentGroup Id=\"One\">", Text.Substring(found.Start, found.End - found.Start));
+        }
+
+        [Theory]
+        [InlineData("ComponentGroup", "Id", "Three")]
+        [InlineData("Component", "Id", "One")]
+        [InlineData("ComponentGroup", "Name", "One")]
+        public void Nothing_that_does_not_match_is_found(string name, string attribute, string value)
+        {
+            Assert.Null(XmlPositions.FindElement(Text, name, attribute, value));
+        }
+
+        [Fact]
+        public void A_prefixed_element_is_found_by_its_name_alone()
+        {
+            const string text = "<Wix xmlns:x=\"urn:x\"><x:Thing Id=\"T\" /></Wix>";
+
+            var found = XmlPositions.FindElement(text, "Thing", "Id", "T")!;
+
+            Assert.Equal(new[] { 0 }, found.Path);
+        }
+
+        [Fact]
+        public void A_value_with_an_entity_is_matched_as_the_parser_reads_it()
+        {
+            const string text = "<Wix><A Id=\"a&amp;b\" /></Wix>";
+
+            Assert.NotNull(XmlPositions.FindElement(text, "A", "Id", "a&b"));
+        }
+    }
+
     public class RangeOfTests
     {
         [Fact]
