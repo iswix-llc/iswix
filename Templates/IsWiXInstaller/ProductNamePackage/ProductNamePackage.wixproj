@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/7.0.1">
+﻿<Project Sdk="WixToolset.Sdk/WIXVERSION">
   <PropertyGroup>
     <!--#if (AcceptEula) -->
     <AcceptEula>wix7</AcceptEula>
@@ -55,10 +55,10 @@
   </ItemGroup>
   <!--#endif -->
   <ItemGroup>
-    <PackageReference Include="WixToolset.Iis.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.Iis.wixext" Version="WIXVERSION" />
     <!--#if (packageUI) -->
-    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="WIXVERSION" />
     <!--#endif -->
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="WIXVERSION" />
   </ItemGroup>
 </Project>
