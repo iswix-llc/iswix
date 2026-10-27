@@ -64,6 +64,12 @@ namespace IsWiX.Designer
 
         readonly DispatcherTimer _caretTimer;
 
+        // How long a designer's selection must rest before the XML shows it.
+        static readonly TimeSpan SelectionDelay = TimeSpan.FromMilliseconds(60);
+
+        readonly DispatcherTimer _selectionTimer;
+        object? _selectionSender;
+
         IReadOnlyList<IFireworksDesigner> _designers = Array.Empty<IFireworksDesigner>();
         ITextBuffer? _buffer;
         IWpfTextView? _wpfView;
@@ -92,6 +98,18 @@ namespace IsWiX.Designer
                 ThreadHelper.ThrowIfNotOnUIThread();
                 _reloadTimer.Stop();
                 ReloadDesigners();
+            };
+
+            _selectionTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = SelectionDelay };
+            _selectionTimer.Tick += (s, e) =>
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                _selectionTimer.Stop();
+                if (_selectionSender is { } sender)
+                {
+                    _selectionSender = null;
+                    ShowDesignerSelection(sender, false);
+                }
             };
 
             _caretTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = CaretDelay };
@@ -317,7 +335,16 @@ namespace IsWiX.Designer
         void OnDesignerSelectionChanged(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            ShowDesignerSelection(sender, false);
+            if (_syncing || _reloading)
+            {
+                return;
+            }
+
+            // A designer raises this for each item as a list selects many (select all), and each is a scan of the text
+            // and a move of the XML selection: only where the selection settles is shown.
+            _selectionSender = sender;
+            _selectionTimer.Stop();
+            _selectionTimer.Start();
         }
 
         void ShowDesignerSelection(object sender, bool waited)
@@ -353,6 +380,12 @@ namespace IsWiX.Designer
                 {
                     // Selected rather than just the caret, which the editor doesn't show while the designer has focus.
                     var span = new SnapshotSpan(snapshot, range[0], range[1] - range[0]);
+                    if (!view.Selection.IsEmpty && view.Selection.StreamSelectionSpan.SnapshotSpan == span)
+                    {
+                        // Already showing it: selecting and scrolling again would only repaint the editor.
+                        return;
+                    }
+
                     _syncing = true;
                     view.Selection.Select(span, false);
                     view.Caret.MoveTo(span.End);
@@ -802,6 +835,7 @@ namespace IsWiX.Designer
             {
                 _reloadTimer.Stop();
                 _caretTimer.Stop();
+                _selectionTimer.Stop();
                 if (_wpfView != null)
                 {
                     _wpfView.Caret.PositionChanged -= OnCaretMoved;
