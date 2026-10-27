@@ -429,31 +429,11 @@ namespace IsWiX.Designer
 
         int[]? PathOf(XElement element)
         {
-            if (!ReferenceEquals(element.Document, _documentManager.Document))
-            {
-                return null;
-            }
-
-            var path = new List<int>();
-            for (var current = element; current.Parent != null; current = current.Parent)
-            {
-                var self = current;
-                path.Insert(0, self.Parent!.Elements().TakeWhile(sibling => !ReferenceEquals(sibling, self)).Count());
-            }
-
-            return path.ToArray();
+            // An element of another document, a stale one say, has no place in this one's text.
+            return ReferenceEquals(element.Document, _documentManager.Document) ? XmlPositions.PathOf(element) : null;
         }
 
-        XElement? ElementAt(int[] path)
-        {
-            var element = _documentManager.Document?.Root;
-            foreach (var index in path)
-            {
-                element = element?.Elements().ElementAtOrDefault(index);
-            }
-
-            return element;
-        }
+        XElement? ElementAt(int[] path) => _documentManager.Document is { } document ? XmlPositions.ElementAt(document, path) : null;
 
         IVsTextView? TextView
         {

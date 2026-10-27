@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamespacesDesigner", "Desig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeaturesDesigner", "Designers\FeaturesDesigner\FeaturesDesigner.csproj", "{FFBC9A16-7136-3DBE-0037-66C9CC38DE89}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1D3B6E52-7C0A-4F6B-9E21-5A8C4B7D0F13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsWiXExtension.Tests", "Tests\IsWiXExtension.Tests\IsWiXExtension.Tests.csproj", "{6E9A2C41-3B58-4D07-8F1A-C2D5E7B90A64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,10 @@ Global
 		{FFBC9A16-7136-3DBE-0037-66C9CC38DE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFBC9A16-7136-3DBE-0037-66C9CC38DE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFBC9A16-7136-3DBE-0037-66C9CC38DE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E9A2C41-3B58-4D07-8F1A-C2D5E7B90A64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E9A2C41-3B58-4D07-8F1A-C2D5E7B90A64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E9A2C41-3B58-4D07-8F1A-C2D5E7B90A64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E9A2C41-3B58-4D07-8F1A-C2D5E7B90A64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +95,7 @@ Global
 		{DB9516EA-70B8-E918-D38D-6272B44A0A0E} = {B864A755-B934-4093-A746-0D473CED4F3E}
 		{641230F3-6F40-F77C-B886-13657133DE87} = {B864A755-B934-4093-A746-0D473CED4F3E}
 		{FFBC9A16-7136-3DBE-0037-66C9CC38DE89} = {B864A755-B934-4093-A746-0D473CED4F3E}
+		{6E9A2C41-3B58-4D07-8F1A-C2D5E7B90A64} = {1D3B6E52-7C0A-4F6B-9E21-5A8C4B7D0F13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EEFD51C6-503D-4457-9008-9B77AB42949A}

@@ -35,6 +35,9 @@ jobs:
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
 
+      - name: Test
+        run: dotnet test IsWiX.sln -c Release --no-build
+
       - name: Build the extension
         run: msbuild IsWiXExtension.sln -restore -p:Configuration=Release "-p:Platform=Any CPU" -v:minimal
 

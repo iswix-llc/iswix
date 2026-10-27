@@ -76,6 +76,10 @@ jobs:
       - name: Build IsWiX
         run: dotnet build IsWiX.sln -c Release
 
+      # Before signing in, signing or pushing anything: a failing test stops the release.
+      - name: Test
+        run: dotnet test IsWiX.sln -c Release --no-build
+
       - name: Sign in to Azure (federated identity)
         uses: azure/login@v3
         with:

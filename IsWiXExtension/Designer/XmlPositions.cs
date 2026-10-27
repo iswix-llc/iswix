@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IsWiX.Designer
 {
@@ -96,6 +98,31 @@ namespace IsWiX.Designer
             }
 
             return null;
+        }
+
+        /// <summary>Gets the path of <paramref name="element"/> in its document.</summary>
+        public static int[] PathOf(XElement element)
+        {
+            var path = new List<int>();
+            for (var current = element; current.Parent != null; current = current.Parent)
+            {
+                var self = current;
+                path.Insert(0, self.Parent!.Elements().TakeWhile(sibling => !ReferenceEquals(sibling, self)).Count());
+            }
+
+            return path.ToArray();
+        }
+
+        /// <summary>Gets the element at <paramref name="path"/> in <paramref name="document"/>, or null if there is none.</summary>
+        public static XElement? ElementAt(XDocument document, int[] path)
+        {
+            var element = document.Root;
+            foreach (var index in path)
+            {
+                element = element?.Elements().ElementAtOrDefault(index);
+            }
+
+            return element;
         }
 
         static bool PathEquals(int[] a, int[] b)
