@@ -1,15 +1,16 @@
-﻿<Project Sdk="WixToolset.Sdk/6.0.2">
+﻿<Project Sdk="WixToolset.Sdk/7.0.1">
   <PropertyGroup>
+    <!--#if (AcceptEula) -->
+    <AcceptEula>wix7</AcceptEula>
+    <!--#endif -->
     <ProductVersion>3.8</ProductVersion>
-    <OutputName>TestApp</OutputName>
-    <OutputType>Bundle</OutputType>
     <!-- If MSIProductVersion not passed in, try to get it from TFBuild Environments (XAML Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(TF_BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, try to get it from TFBuild Environments (V.Next Builds)-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">$([System.Text.RegularExpressions.Regex]::Match($(BUILD_BUILDNUMBER), "\d+.\d+.\d+.\d+"))</MSIProductVersion>
     <!-- If MSIProductVersion still not known, default to lowerbound 0.0.1 for developer builds.-->
     <MSIProductVersion Condition=" '$(MSIProductVersion)' == '' ">0.0.1</MSIProductVersion>
-    <OutputName>$globalsafeprojectname$-$(MSIProductVersion)</OutputName>
+    <OutputName>ProductName-$(MSIProductVersion)</OutputName>
     <OutputType>Bundle</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -25,8 +26,8 @@
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Bal.wixext" Version="6.0.2" />
-    <PackageReference Include="WixToolset.Netfx.wixext" Version="6.0.2" />
+    <PackageReference Include="WixToolset.Bal.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.Netfx.wixext" Version="7.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -34,11 +35,18 @@
   <ItemGroup>
     <Content Include="Resources\EULA.rtf" />
     <Content Include="Resources\Icon.png" />
+    <!--#if (internalUI) -->
+    <Content Include="Resources\iuipreq.thm" />
+    <Content Include="Resources\iuipreq.wxl" />
+    <Content Include="Resources\splash.bmp" />
+    <!--#else -->
     <Content Include="Resources\RtfTheme.xml" />
+    <Content Include="Resources\RtfTheme.wxl" />
+    <!--#endif -->
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\$globalsafeprojectname$Package\$globalsafeprojectname$Package.wixproj">
-      <Name>$globalsafeprojectname$Package</Name>
+    <ProjectReference Include="..\ProductNamePackage\ProductNamePackage.wixproj">
+      <Name>ProductNamePackage</Name>
       <Project>{298d4875-b9ce-4cdc-be4a-c3573226727e}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>

@@ -3,6 +3,6 @@
 	<!-- SourceDir instructs IsWiX the location of the directory that contains files for this wix library -->
 	<?define SourceDir="..\Deploy"?>
 	<Fragment>
-		  <ComponentGroup Id="$globalsafeprojectname$Files" />
+		  <ComponentGroup Id="ProductNameFiles" />
 	</Fragment>
 </Wix>

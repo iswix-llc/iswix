@@ -59,70 +59,12 @@
     <Compile Include="IsWiXExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GlobalParams.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="MS-PL.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\Icon.png" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\IsWixBundleProject.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\splash.bmp" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\WiXToolSetInternalUIBootstrapperSolutionTemplate.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Banner.jpg" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Dialog.jpg" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\IsWiXCompleteProjectTemplate.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Banner.jpg" />
-    <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Dialog.jpg" />
-    <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\IsWixProject.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\Icon.ico" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\Icon.png" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\IsWixBundleProject.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\RtfTheme.xml" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\WiXToolSetStandardBASolutionTemplate.vstemplate" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\IsWiX.ico" />
-    <Content Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\IsWixProject.vstemplate" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\Bundle.wxs" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\IsWiXBundle.wixproj" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\iuipreq.thm" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\BundleProjectTemplate\iuipreq.wxl" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Files.wxs" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\IISMeta.wxs" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\IsWiXPackageProject.wixproj" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\Product.wxs" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\UI-CustomDialog.wxs" />
-    <None Include="ProjectSource\WiXToolSetInternalUISolutionTemplate\PackageProjectTemplate\UI.wxs" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Files.wxs" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\IISMeta.wxs" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\IsWiXSetupProject.wixproj" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\Product.wxs" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\UI-CustomDialog.wxs" />
-    <None Include="ProjectSource\WiXToolSetMSISolutionTemplate\SetupProjectTemplate\UI.wxs" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\Bundle.wxs" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\EULA.rtf" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\IsWiXBundle.wixproj" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\BundleProjectTemplate\RtfTheme.wxl" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\Files.wxs" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\IISMeta.wxs" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\IsWiXPackageProject.wixproj" />
-    <None Include="ProjectSource\WiXToolSetStandardBASolutionTemplate\PackageProjectTemplate\Product.wxs" />
-    <Content Include="ProjectTemplates\WiXToolSetInternalUISolutionTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\WiXToolSetStandardBASolutionTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
+    <Content Include="IsWiXTemplates.pkgdef">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="source.extension.vsixmanifest">
@@ -204,13 +146,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\WiXToolSetMSISolutionTemplate.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- The IsWiX project templates ship in the extension as a dotnet new template pack. Visual Studio finds it through
+       IsWiXTemplates.pkgdef and lists its templates in the New Project dialog. -->
+  <Target Name="PackTemplates" BeforeTargets="GetVsixSourceItems">
+    <PropertyGroup>
+      <TemplatePackDir>$(MSBuildProjectDirectory)\obj\templates</TemplatePackDir>
+    </PropertyGroup>
+    <RemoveDir Directories="$(TemplatePackDir)" />
+    <Exec Command="dotnet pack &quot;$(MSBuildProjectDirectory)\..\Templates\IsWiX.Templates.csproj&quot; -c Release -o &quot;$(TemplatePackDir)&quot; --nologo -v:q" />
+    <ItemGroup>
+      <VSIXSourceItem Include="$(TemplatePackDir)\*.nupkg" VSIXSubPath="ProjectTemplates\" />
+    </ItemGroup>
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -218,15 +168,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PreBuildEvent>IF NOT EXIST "$(ProjectDir)ProjectTemplates" MKDIR "$(ProjectDir)ProjectTemplates"
-CD "$(ProjectDir)ProjectSource\WiXToolSetMSISolutionTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\WiXToolSetMSISolutionTemplate.zip' -Force
-
-CD "$(ProjectDir)ProjectSource\WiXToolSetInternalUISolutionTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\WiXToolSetInternalUISolutionTemplate.zip' -Force
-
-CD "$(ProjectDir)ProjectSource\WiXToolSetStandardBASolutionTemplate"
-powershell Compress-Archive -Path * -DestinationPath '$(ProjectDir)ProjectTemplates\WiXToolSetStandardBASolutionTemplate.zip' -Force</PreBuildEvent>
-  </PropertyGroup>
 </Project>

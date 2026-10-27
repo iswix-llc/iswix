@@ -127,6 +127,10 @@ namespace FeaturesDesigner
             {
                 treeViewComponentGroups.Nodes.Clear();
                 treeViewComponentGroups.Enabled = feature != null;
+                if (feature == null)
+                {
+                    return;
+                }
 
                 var groups = _currentGroups.OrderBy(g => g.Id, StringComparer.OrdinalIgnoreCase)
                     .Concat(_otherGroups.OrderBy(g => Path.GetFileName(g.FilePath), StringComparer.OrdinalIgnoreCase).ThenBy(g => g.Id, StringComparer.OrdinalIgnoreCase));

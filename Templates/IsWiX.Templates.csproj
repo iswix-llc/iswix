@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The IsWiX project templates as a dotnet new template pack (dotnet pack Templates, then dotnet new install the .nupkg).
+       Visual Studio lists installed dotnet new templates in its New Project dialog and asks for their options on its
+       Additional information page, before the project is created. -->
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageId>IsWiX.Templates</PackageId>
+    <Title>IsWiX Templates</Title>
+    <Description>Project templates for IsWiX: a Windows installer package (.msi) and, optionally, an EXE bootstrapper bundle.</Description>
+    <PackageTags>wix;installer;msi;bootstrapper;dotnet-new;templates</PackageTags>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="IsWiXInstaller\**\*" Exclude="IsWiXInstaller\**\bin\**;IsWiXInstaller\**\obj\**" PackagePath="content\IsWiXInstaller\" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+</Project>

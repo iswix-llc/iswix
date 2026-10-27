@@ -92,7 +92,7 @@ jobs:
 
       # The sign CLI signs the VSIX package and, inside it, the files the file list names: IsWiX's own (the
       # extension's IsWiX.dll and the framework and designers it hosts). It signs everything inside otherwise, so
-      # third-party DLLs (Xceed, DiffPlex, GlobalParams) would carry IsWiX's signature in place of their publishers'
+      # third-party DLLs (Xceed, DiffPlex) would carry IsWiX's signature in place of their publishers'
       # (or none).
       # Same Artifact Signing account and profile as IsWiX.WiXModel, which is signed when it is published.
       - name: Install the sign CLI

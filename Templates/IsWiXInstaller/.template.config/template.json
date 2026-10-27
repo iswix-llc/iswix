@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "IsWiX",
+  "classifications": [ "WiX", "IsWiX", "Installer" ],
+  "identity": "IsWiX.Installer",
+  "name": "IsWiX Installer (WiX v4)",
+  "shortName": "iswix-installer",
+  "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
+  "tags": {
+    "language": "WiX",
+    "type": "project"
+  },
+  "sourceName": "ProductName",
+  "preferNameDirectory": true,
+  "icon": "icon.ico",
+  "symbols": {
+    "Bootstrapper": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "Whether to also create an EXE bootstrapper (.exe) that installs the .msi, and which bootstrapper application it uses.",
+      "displayName": "EXE bootstrapper",
+      "defaultValue": "none",
+      "choices": [
+        { "choice": "none", "description": "No bootstrapper: just the Windows installer package (.msi)", "displayName": "None (MSI only)" },
+        { "choice": "standard", "description": "Standard Bootstrapper Application: the bootstrapper shows the user interface", "displayName": "Standard Bootstrapper Application" },
+        { "choice": "internalui", "description": "WixInternalUIBootstrapperApplication: the .msi shows the user interface", "displayName": "WixInternalUIBootstrapperApplication" }
+      ]
+    },
+    "AcceptEula": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
+      "description": "WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, <AcceptEula>wix7</AcceptEula> is added to the projects; otherwise the build stops with WIX7015 until you accept."
+    },
+    "bundle": {
+      "type": "computed",
+      "value": "(Bootstrapper != \"none\")"
+    },
+    "internalUI": {
+      "type": "computed",
+      "value": "(Bootstrapper == \"internalui\")"
+    },
+    "packageUI": {
+      "type": "computed",
+      "value": "(Bootstrapper != \"standard\")"
+    },
+    "upgradeCode": {
+      "type": "generated",
+      "generator": "guid",
+      "parameters": { "defaultFormat": "D" },
+      "replaces": "00000000-0000-0000-0000-000000000003"
+    },
+    "iisCode": {
+      "type": "generated",
+      "generator": "guid",
+      "parameters": { "defaultFormat": "D" },
+      "replaces": "00000000-0000-0000-0000-000000000004"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
+        { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/UI.wxs", "ProductNamePackage/UI-CustomDialog.wxs", "ProductNamePackage/Resources/**" ] },
+        { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
+        { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    { "path": "ProductName.slnx" }
+  ],
+  "SpecialCustomOperations": {
+    "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
+    "**/*.wixproj": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
+    "**/*.slnx": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] }
+  }
+}
