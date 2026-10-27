@@ -121,8 +121,27 @@ namespace ShortCutsDesigner
 
         public event EventHandler? SelectedElementChanged;
 
-        // Only a shortcut is an element; the folders around it are made from its Directory and Subdirectory.
-        public XElement? SelectedElement => (tvDestination.SelectedNode?.Tag as Wxs.Shortcut)?.Xml;
+        // Only a shortcut is an element; the folders around it are made from its Directory and Subdirectory. A folder
+        // shows its first shortcut, so renaming or deleting one still has somewhere to point.
+        public XElement? SelectedElement => tvDestination.SelectedNode is { } node && node.Level > 0 ? FirstShortcut(node)?.Xml : null;
+
+        private static Wxs.Shortcut? FirstShortcut(TreeNode node)
+        {
+            if (node.Tag is Wxs.Shortcut shortcut)
+            {
+                return shortcut;
+            }
+
+            foreach (TreeNode child in node.Nodes)
+            {
+                if (FirstShortcut(child) is { } found)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
 
         public string? SelectedAttribute => _attribute;
 
@@ -192,7 +211,7 @@ namespace ShortCutsDesigner
         #endregion
 
         ToolStripButton _newFolderButton = null!;
-        ToolStripDropDownButton _newShortcutButton = null!;
+        ToolStripButton _newShortcutButton = null!;
         ToolStripButton _renameButton = null!;
         ToolStripButton _deleteButton = null!;
 
@@ -221,23 +240,24 @@ namespace ShortCutsDesigner
 
             _newFolderButton = Button("New Folder", AddNodeToDestinationTreeFragmentStyle);
 
-            // New Shortcut lists the files a shortcut can be made for, by folder, here and in the tree's menus.
-            _newShortcutButton = new ToolStripDropDownButton("New Shortcut") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
-            FillNewShortcutMenu(_newShortcutButton.DropDownItems);
-            _newShortcutButton.DropDownOpening += (s, e) =>
+            // New Shortcut asks which file to make a shortcut for, from a tree of where they are installed, here and in
+            // the tree's menus.
+            _newShortcutButton = new ToolStripButton("New Shortcut...") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
+            _newShortcutButton.Click += (s, e) =>
             {
                 if (tvDestination.SelectedNode is { IsEditing: true } editing)
                 {
                     editing.EndEdit(false);
                 }
 
-                FillNewShortcutMenu(_newShortcutButton.DropDownItems);
+                NewShortcut();
             };
             toolbar.Items.Add(_newShortcutButton);
-            foreach (var (menu, item) in new[] { (cmsDestinationTreeDefault, toolStripMenuItemCreateSC), (cmsMergeRedirectFolder, toolStripMenuItemCreateShortCut) })
+            foreach (var item in new[] { toolStripMenuItemCreateSC, toolStripMenuItemCreateShortCut })
             {
-                FillNewShortcutMenu(item.DropDownItems);
-                menu.Opening += (s, e) => FillNewShortcutMenu(item.DropDownItems);
+                item.DropDownItems.Clear();
+                item.Text = "New Shortcut...";
+                item.Click += (s, e) => NewShortcut();
             }
 
             _renameButton = Button("Rename", () =>
@@ -593,7 +613,11 @@ namespace ShortCutsDesigner
                 tvDestination.SelectedNode.BeginEdit();
                 e.CancelEdit = true;
             }
-
+            else
+            {
+                // The folder's shortcuts are in its new place in the XML.
+                BeginInvoke(new Action(() => ShowSelectionInXml(null)));
+            }
         }
 
         private bool CanRenameFragmentStyle(string previousName, string? newName)
@@ -714,13 +738,16 @@ namespace ShortCutsDesigner
         }
 
         // A shortcut can be made for any file but a .dll or .pdb.
-        private void FillNewShortcutMenu(ToolStripItemCollection items)
+        private void NewShortcut()
         {
             var candidates = _documentManager.Document is null
                 ? new List<ShortCutCandidate>()
                 : ShortcutDocument.GetShortCutCandidates(_documentManager.Document);
-            CandidateMenu.Fill(items, candidates, c => c.DestinationFilePath, CreateShortCut,
-                "No files to make a shortcut for", byFolder: true);
+            if (CandidatePicker.Pick(candidates, c => c.DestinationFilePath, "New Shortcut", "Choose the file to make a shortcut for:",
+                "No files to make a shortcut for", PluginImage) is { } candidate)
+            {
+                CreateShortCut(candidate);
+            }
         }
 
         // In the selected folder, named for the file, numbered if a shortcut in the folder already has that name.

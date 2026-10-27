@@ -89,8 +89,11 @@ namespace ServicesDesigner
 
         ServiceItem? SelectedService => treeViewServices.SelectedNode?.Tag as ServiceItem;
 
+        // Destination Computer, which is selected when the last service is deleted, is the fragment the services are in.
         public XElement? SelectedElement =>
-            SelectedService is { } service ? (_property != null && ControlProperties.Contains(_property) && service.Control != null ? service.Control.Xml : service.Install.Xml) : null;
+            SelectedService is { } service
+                ? (_property != null && ControlProperties.Contains(_property) && service.Control != null ? service.Control.Xml : service.Install.Xml)
+                : treeViewServices.SelectedNode is { Level: 0 } ? _documentManager.Document?.Root?.Elements().FirstOrDefault(e => e.Name == Wxs.Fragment.ElementName) : null;
 
         // The grid calls the install's Start "Startup", as Start is the control's.
         // A control's attribute has no place in the XML until the service has a ServiceControl.
@@ -152,12 +155,13 @@ namespace ServicesDesigner
         private void AddToolbar()
         {
             var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Dock = DockStyle.Top };
-            // New Service lists the files a service can be made for, here and in the tree's menu.
-            var newButton = new ToolStripDropDownButton("New Service") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false };
-            FillNewServiceMenu(newButton.DropDownItems);
-            newButton.DropDownOpening += (s, e) => FillNewServiceMenu(newButton.DropDownItems);
-            FillNewServiceMenu(createNewFolderToolStripMenuItem1.DropDownItems);
-            cmsComputer.Opening += (s, e) => FillNewServiceMenu(createNewFolderToolStripMenuItem1.DropDownItems);
+            // New Service asks which file to make a service for, from a tree of where they are installed, here and in
+            // the tree's menu.
+            var newButton = new ToolStripButton("New Service...") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false };
+            newButton.Click += (s, e) => NewService();
+            createNewFolderToolStripMenuItem1.DropDownItems.Clear();
+            createNewFolderToolStripMenuItem1.Text = "New Service...";
+            createNewFolderToolStripMenuItem1.Click += (s, e) => NewService();
             _deleteButton = new ToolStripButton("Delete") { DisplayStyle = ToolStripItemDisplayStyle.Text, AutoToolTip = false, Enabled = false };
             _deleteButton.Click += (s, e) => deleteToolStripMenuItem.PerformClick();
             toolbar.Items.Add(newButton);
@@ -282,13 +286,16 @@ namespace ServicesDesigner
         }
 
         // A service can be made for an .exe that is its component's key file.
-        private void FillNewServiceMenu(ToolStripItemCollection items)
+        private void NewService()
         {
             var candidates = _documentManager.Document is null
                 ? new List<ServiceCandidate>()
                 : ServiceDocument.GetServiceCandidates(_documentManager.Document);
-            CandidateMenu.Fill(items, candidates, c => c.DestinationFilePath, CreateService,
-                "No .exe is the key file of its component", byFolder: false);
+            if (CandidatePicker.Pick(candidates, c => c.DestinationFilePath, "New Service", "Choose the file to make a service for:",
+                "No .exe is the key file of its component", PluginImage) is { } candidate)
+            {
+                CreateService(candidate);
+            }
         }
 
         // Named for the file, numbered if a service already has that name.
