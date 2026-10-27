@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/7.0.1">
+﻿<Project Sdk="WixToolset.Sdk/WIXVERSION">
   <PropertyGroup>
     <!--#if (AcceptEula) -->
     <AcceptEula>wix7</AcceptEula>
@@ -26,8 +26,8 @@
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Bal.wixext" Version="7.0.1" />
-    <PackageReference Include="WixToolset.Netfx.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.Bal.wixext" Version="WIXVERSION" />
+    <PackageReference Include="WixToolset.Netfx.wixext" Version="WIXVERSION" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />

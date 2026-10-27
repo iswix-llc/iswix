@@ -3,7 +3,7 @@
   "author": "IsWiX",
   "classifications": [ "WiX", "IsWiX", "Installer" ],
   "identity": "IsWiX.Installer",
-  "name": "IsWiX Installer (WiX v4)",
+  "name": "IsWiX Installer (WiX v5 or v7)",
   "shortName": "iswix-installer",
   "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
   "tags": {
@@ -31,7 +31,20 @@
       "datatype": "bool",
       "defaultValue": "false",
       "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
-      "description": "WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, <AcceptEula>wix7</AcceptEula> is added to the projects; otherwise the build stops with WIX7015 until you accept."
+      "description": "WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the projects use WiX 7.0.1 and get <AcceptEula>wix7</AcceptEula>; if you don't, they use WiX 5.0.2, which doesn't require it."
+    },
+    "wixVersion": {
+      "type": "generated",
+      "generator": "switch",
+      "parameters": {
+        "evaluator": "C++",
+        "datatype": "string",
+        "cases": [
+          { "condition": "(AcceptEula)", "value": "7.0.1" },
+          { "condition": "(!AcceptEula)", "value": "5.0.2" }
+        ]
+      },
+      "replaces": "WIXVERSION"
     },
     "bundle": {
       "type": "computed",
