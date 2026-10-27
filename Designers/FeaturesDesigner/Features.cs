@@ -31,6 +31,7 @@ namespace FeaturesDesigner
             InitializeComponent();
             DesignerImages.Add(imageLibrary, typeof(Features).Assembly, "FeaturesDesigner.Images.", "feature", "database");
             AddToolbar();
+            AddComponentGroupList();
 
             // So the selected feature still shows when the XML editor has the focus.
             treeViewFeatures.HideSelection = false;
@@ -131,7 +132,11 @@ namespace FeaturesDesigner
 
             _attribute = attribute;
             treeViewFeatures.SelectedNode = node;
-            _other = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.MergeRef.ElementName);
+            _other = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.MergeRef.ElementName || e.Name == Wxs.ComponentGroupRef.ElementName);
+            if (_other?.Name == Wxs.ComponentGroupRef.ElementName)
+            {
+                SelectGroupNode((string?)_other.Attribute("Id"));
+            }
             if (attribute != null && propertyGridFeatureProperties.SelectedGridItem is { } selected)
             {
                 var root = selected;
@@ -302,8 +307,10 @@ namespace FeaturesDesigner
                 treeViewFeatures.Select();
                 treeViewFeatures.SelectedNode = treeViewFeatures.Nodes[0];
                 treeViewFeatures.ExpandAll();
-                
+
             }
+
+            ReloadComponentGroups();
         }
 
         private void LoadDataRecurse(TreeNode parentNode, Wxs.Feature parent)
