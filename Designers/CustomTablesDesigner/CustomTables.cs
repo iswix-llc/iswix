@@ -514,6 +514,9 @@ namespace CustomTablesDesigner
             }
             _customTable.AcceptChanges();
             SaveTable();
+
+            // The row next to the one removed is current, if there is one; else the XML shows the table.
+            ShowSelectionInXml(dataGridViewRows.CurrentRow != null ? SelectionLevel.Row : SelectionLevel.Table);
         }
 
         private void dataGridViewRows_SelectionChanged(object sender, EventArgs e)
@@ -566,6 +569,16 @@ namespace CustomTablesDesigner
             }
             _customTable.AcceptChanges();
             SaveTable();
+
+            // The new row, selected so the XML shows it.
+            if (dataGridViewRows.Rows.Count > 0)
+            {
+                dataGridViewRows.ClearSelection();
+                var newRow = dataGridViewRows.Rows[dataGridViewRows.Rows.Count - 1];
+                newRow.Selected = true;
+                dataGridViewRows.CurrentCell = newRow.Cells[0];
+                ShowSelectionInXml(SelectionLevel.Row);
+            }
         }
 
         private void toolStripMenuItemTableDrop_Click(object sender, EventArgs e)
@@ -749,6 +762,8 @@ namespace CustomTablesDesigner
             {
                 CustomTableDocument.Rename(_documentManager.Document, _customTableElement, dialog.TableName);
                 LoadData();
+                // The renamed table, not the first one that LoadData selects.
+                listBoxTables.SelectedItem = dialog.TableName;
             }
         }
 

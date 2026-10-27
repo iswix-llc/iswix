@@ -199,6 +199,18 @@ namespace FilesAndFoldersDesigner
                 .FirstOrDefault(f => (string?)f.Attribute("Source") == source);
         }
 
+        /// <summary>
+        /// Gets the first File element, in any folder, for the file on disk at <paramref name="fullPath"/>: the one whose
+        /// Source is that path under the source directory. Null if no folder has it.
+        /// </summary>
+        public XElement? FindFileElementBySourcePath(string fullPath)
+        {
+            var source = fullPath.Replace(GetRootPath(), SourceDirVar);
+            return Components
+                .SelectMany(c => c.Xml.Descendants(Wxs.File.ElementName))
+                .FirstOrDefault(f => string.Equals((string?)f.Attribute("Source"), source, StringComparison.OrdinalIgnoreCase));
+        }
+
         /// <summary>Gets whether <paramref name="component"/> is one of the component group's.</summary>
         public static bool IsInComponentGroup(XElement component, string documentPath) =>
             component.Parent is { } parent && parent.Name == Wxs.ComponentGroup.ElementName &&

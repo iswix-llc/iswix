@@ -39,6 +39,7 @@ namespace FeaturesDesigner
                 // Whoever selected it, the user or the designer filling the tree. The window ignores this while it reloads
                 // the designers for a change made in the XML, so typing there doesn't move the XML's selection.
                 _attribute = null;
+                _other = null;
                 SelectedElementChanged?.Invoke(this, EventArgs.Empty);
             };
             // Clicking the node that is already selected, such as the one the designer selects first, selects nothing.
@@ -47,8 +48,34 @@ namespace FeaturesDesigner
                 if (e.Node == treeViewFeatures.SelectedNode)
                 {
                     _attribute = null;
+                    _other = null;
                     SelectedElementChanged?.Invoke(this, EventArgs.Empty);
                 }
+            };
+            // The merge modules the selected feature can reference: choosing one shows its Merge element, and checking
+            // one shows the MergeRef that makes (unchecking, the feature that lost it).
+            treeViewMerges.HideSelection = false;
+            treeViewMerges.NodeMouseClick += (s, e) =>
+            {
+                if (e.Node.Tag is Wxs.Merge merge)
+                {
+                    _attribute = null;
+                    _other = merge.Xml;
+                    SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+                }
+            };
+            treeViewMerges.AfterCheck += (s, e) =>
+            {
+                // Run after the designer's own handler, which adds or removes the reference. Only the user's check: not
+                // the boxes ticked to show the feature's references.
+                if (_loadingMergeRefs || e.Action == TreeViewAction.Unknown || e.Node?.Tag is not Wxs.Merge merge || treeViewFeatures.SelectedNode?.Tag is not Wxs.Feature feature)
+                {
+                    return;
+                }
+
+                _attribute = null;
+                _other = e.Node.Checked ? feature.MergeRefs.FirstOrDefault(r => r.Id == merge.Id)?.Xml : null;
+                SelectedElementChanged?.Invoke(this, EventArgs.Empty);
             };
             propertyGridFeatureProperties.SelectedGridItemChanged += (s, e) =>
             {
@@ -67,16 +94,35 @@ namespace FeaturesDesigner
 
         public event EventHandler? SelectedElementChanged;
 
-        public XElement? SelectedElement => (treeViewFeatures.SelectedNode?.Tag as Wxs.Feature)?.Xml;
+        // What the user chose in the merge modules, a Merge or the MergeRef that refers to one, instead of the feature.
+        XElement? _other;
+
+        public XElement? SelectedElement => _other ?? (treeViewFeatures.SelectedNode?.Tag as Wxs.Feature)?.Xml;
 
         public string? SelectedAttribute => _attribute;
 
         // From the XML rather than the tree, which is only filled once the designer has been shown. Anything in a
-        // feature, such as a reference to a component group, counts as the feature.
-        public bool Handles(XElement element, string? attribute) => element.AncestorsAndSelf().Any(e => e.Name == Wxs.Feature.ElementName);
+        // feature, such as a reference to a component group, counts as the feature. A merge module is a feature's to
+        // reference.
+        public bool Handles(XElement element, string? attribute) =>
+            element.AncestorsAndSelf().Any(e => e.Name == Wxs.Feature.ElementName || e.Name == Wxs.Merge.ElementName);
 
         public void SelectElement(XElement element, string? attribute)
         {
+            var merge = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.Merge.ElementName);
+            if (merge != null)
+            {
+                var mergeNode = treeViewMerges.Nodes.Cast<TreeNode>().FirstOrDefault(n => n.Tag is Wxs.Merge tagged && tagged.Xml == merge);
+                if (mergeNode != null)
+                {
+                    treeViewMerges.SelectedNode = mergeNode;
+                    _attribute = null;
+                    _other = merge;
+                }
+
+                return;
+            }
+
             var node = element.AncestorsAndSelf().Select(e => FindNode(treeViewFeatures.Nodes, e)).FirstOrDefault(n => n != null);
             if (node is null)
             {
@@ -85,6 +131,7 @@ namespace FeaturesDesigner
 
             _attribute = attribute;
             treeViewFeatures.SelectedNode = node;
+            _other = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == Wxs.MergeRef.ElementName);
             if (attribute != null && propertyGridFeatureProperties.SelectedGridItem is { } selected)
             {
                 var root = selected;
@@ -292,6 +339,7 @@ namespace FeaturesDesigner
         private void ShowSelectionInXml()
         {
             _attribute = null;
+            _other = null;
             SelectedElementChanged?.Invoke(this, EventArgs.Empty);
         }
 

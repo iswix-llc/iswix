@@ -119,6 +119,11 @@ namespace Designers.FilesAndFolders
                 }
 
                 var path = SelectedFolderPath!;
+                if (_sourceSelected && lvSourceFiles.SelectedItems.Count > 0)
+                {
+                    return _isWiXComponentGroup.FindFileElementBySourcePath(lvSourceFiles.SelectedItems[0].SubItems[4].Text);
+                }
+
                 if (_fileSelected && lvDestination.SelectedItems.Count > 0 &&
                     _isWiXComponentGroup.FindFileElement(path, lvDestination.SelectedItems[0].SubItems[2].Text) is { } file)
                 {
@@ -192,12 +197,46 @@ namespace Designers.FilesAndFolders
 
             // Set last: selecting above raised the designer's own events, which set this as a user's choice would.
             _fileSelected = item != null;
+            _sourceSelected = false;
         }
 
         private void ShowSelectionInXml(bool file)
         {
             _fileSelected = file;
+            _sourceSelected = false;
             SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        // A file chosen on the source side is shown as the File element that uses it, if a folder has one.
+        bool _sourceSelected;
+
+        private void ShowSourceSelectionInXml()
+        {
+            _sourceSelected = true;
+            SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        // The files a drop added, which are shown in the XML, in their folder, once the drop has refreshed the trees.
+        List<FileMeta>? _added;
+
+        private void AddFilesToDocument(List<FileMeta> files)
+        {
+            _isWiXComponentGroup.AddFiles(files);
+            // AddFiles leaves each file's Source as the XML has it and its Destination as the folder's path.
+            (_added ??= new List<FileMeta>()).AddRange(files);
+        }
+
+        private void ShowAddedFiles()
+        {
+            var added = _added;
+            _added = null;
+            var first = added?.FirstOrDefault(f => f.Source != ".");
+            var element = first != null ? _isWiXComponentGroup.FindFileElement(first.Destination, first.Source) : null;
+            if (element != null)
+            {
+                SelectElement(element, null);
+                SelectedElementChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         // Whoever selected it, the user or the designer filling the tree. The window ignores this while it reloads the
@@ -229,6 +268,23 @@ namespace Designers.FilesAndFolders
                 if (lvDestination.SelectedItems.Count > 0)
                 {
                     ShowSelectionInXml(true);
+                }
+            };
+            // A file on the source side is shown where the XML uses it. The source folders are on disk, with no XML.
+            lvSourceFiles.HideSelection = false;
+            tvSourceFiles.HideSelection = false;
+            lvSourceFiles.SelectedIndexChanged += (s, e) =>
+            {
+                if (lvSourceFiles.SelectedItems.Count > 0)
+                {
+                    ShowSourceSelectionInXml();
+                }
+            };
+            lvSourceFiles.Click += (s, e) =>
+            {
+                if (lvSourceFiles.SelectedItems.Count > 0)
+                {
+                    ShowSourceSelectionInXml();
                 }
             };
         }
@@ -1042,7 +1098,7 @@ namespace Designers.FilesAndFolders
                     fileMeta.Destination = destinationPath;
                     files.Add(fileMeta);
                 }
-                _isWiXComponentGroup.AddFiles(files);
+                AddFilesToDocument(files);
                 DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
             }
 
@@ -1065,7 +1121,7 @@ namespace Designers.FilesAndFolders
                             List<FileMeta> files = new List<FileMeta>();
                             string directoryPath = dropNode.FullPath;
                             GetFilesRecursive(new DirectoryInfo(sourceFolder.FullPath), ref files, directoryPath, string.Empty);
-                            _isWiXComponentGroup.AddFiles(files);
+                            AddFilesToDocument(files);
                             _isWiXComponentGroup.PruneDirectory(directoryPath);
                             LoadDocument();
                         }
@@ -1091,7 +1147,7 @@ namespace Designers.FilesAndFolders
                         List<FileMeta> files = new List<FileMeta>();
                         string directoryPath = tvDestination.SelectedNode.FullPath;
                         GetFilesRecursive(new DirectoryInfo(sourceFolder.FullPath), ref files, directoryPath, string.Empty);
-                        _isWiXComponentGroup.AddFiles(files);
+                        AddFilesToDocument(files);
                         _isWiXComponentGroup.PruneDirectory(directoryPath);
                         LoadDocument();
                     }
@@ -1103,6 +1159,7 @@ namespace Designers.FilesAndFolders
 
             }
             _isWiXComponentGroup.SortComponents();
+            ShowAddedFiles();
             //_documentManager.EnableChangeWatcher();
         }
 
@@ -1140,7 +1197,7 @@ namespace Designers.FilesAndFolders
                         fileMeta.Destination = dropNode.FullPath;
                         fileMetas.Add(fileMeta);
                     }
-                    _isWiXComponentGroup.AddFiles(fileMetas);
+                    AddFilesToDocument(fileMetas);
                     LoadDocument();
                     DisplayDestinationItemsFromSelectedNode(tvDestination.SelectedNode);
                 }
@@ -1166,7 +1223,7 @@ namespace Designers.FilesAndFolders
                         List<FileMeta> files = new List<FileMeta>();
                         string directoryPath = dropNode.FullPath;
                         GetFilesRecursive(new DirectoryInfo(sourceFolder.FullPath), ref files, directoryPath, string.Empty);
-                        _isWiXComponentGroup.AddFiles(files);
+                        AddFilesToDocument(files);
                         _isWiXComponentGroup.PruneDirectory(directoryPath);
                         LoadDocument();
                     }
@@ -1177,6 +1234,7 @@ namespace Designers.FilesAndFolders
                 }
             }
             _isWiXComponentGroup.SortComponents();
+            ShowAddedFiles();
             if (HoverNode != null)
             {
                 HoverNode.BackColor = Color.Empty;
@@ -1307,6 +1365,8 @@ namespace Designers.FilesAndFolders
                 {
                     item.Remove();
                 }
+                // Nothing in the folder is selected now, so the XML shows the folder.
+                ShowSelectionInXml(false);
             }
         }
 
@@ -1333,6 +1393,8 @@ namespace Designers.FilesAndFolders
                     {
                         item.Remove();
                     }
+                    // Nothing in the folder is selected now, so the XML shows the folder.
+                    ShowSelectionInXml(false);
                 }
             }
             else if (e.KeyCode == Keys.A && e.Control)
@@ -1488,6 +1550,11 @@ namespace Designers.FilesAndFolders
             }
             _isWiXComponentGroup.SortComponents();
             //_documentManager.EnableChangeWatcher();
+            if (!e.CancelEdit)
+            {
+                // The node takes its new name after this, and the folder's component its new path with it.
+                BeginInvoke(new Action(() => ShowSelectionInXml(false)));
+            }
         }
 
         private void renameFolderToolStripMenuItem_Click(object sender, EventArgs e)
