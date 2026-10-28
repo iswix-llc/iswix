@@ -1,9 +1,5 @@
-<!--#if (packageUI) -->
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-<!--#else -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-<!--#endif -->
-  <!--
+  <!-- 
   MSIProductVersion is defined in ProductName.wixproj as 0.0.1 for local desktop builds.  
   You should pass in the MSBuild Property 'MSIProductVersion' to override it during an automated build.
   See http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859%28v=vs.85%29.aspx for information on allowable values.
@@ -15,22 +11,27 @@
     <MediaTemplate EmbedCab="yes" />
     <!-- Major Upgrade Rule to disallow downgrades -->
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <!-- Uncomment below two lines to require .NET 4.8 or later to install -->
+    <!-- <PropertyRef Id="WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" />  -->
+    <!-- <Launch Condition="Installed OR WIX_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" Message="[ProductName] requires .NET Framework 4.8 or later." /> -->
     <!--#if (packageUI) -->
     <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
-	<UI Id="UI">
-		<ui:WixUI Id="WixUI_FeatureTree" />
-		<UIRef Id="WixUI_ErrorProgressText" />
-	</UI>
     <!--#endif -->
-	<Property Id="DISABLEADVTSHORTCUTS" Value="1"></Property>
-	<StandardDirectory Id="ProgramFiles6432Folder">
+    <Property Id="DISABLEADVTSHORTCUTS" Value="1"></Property>
+    <!--#if (packageUI) -->
+    <UIRef Id="UI"/>
+    <!--#endif -->
+    <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CompanyFolder" Name="My Company">
         <Directory Id="INSTALLLOCATION" Name="ProductName">
         </Directory>
       </Directory>
     </StandardDirectory>
     <Feature Id="ProductName" Title="ProductName" Description="Installs all the files needed for ProductName" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentGroupRef Id="ProductNameFiles"/>
+      <!-- Uncomment the below line to pull in IIS Metadata.  Otherwise delete if not needed -->
+      <!--<ComponentGroupRef Id="webSite" />-->
     </Feature>
     <EnsureTable Id="FeatureComponents"/>
   </Package>
