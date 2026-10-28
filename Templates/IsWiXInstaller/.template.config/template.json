@@ -73,6 +73,7 @@
   },
   "sources": [
     {
+      "exclude": [ "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
       "modifiers": [
         { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
         { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/UI.wxs", "ProductNamePackage/UI-CustomDialog.wxs", "ProductNamePackage/Resources/**" ] },
@@ -82,7 +83,8 @@
     }
   ],
   "primaryOutputs": [
-    { "path": "ProductName.slnx" }
+    { "path": "ProductNamePackage/ProductNamePackage.wixproj" },
+    { "path": "ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle)" }
   ],
   "SpecialCustomOperations": {
     "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
