@@ -8,8 +8,10 @@
   "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
   "tags": {
     "language": "WiX",
-    "type": "project"
+    "type": "solution",
+    "editorTreatAs": "solution"
   },
+  "guids": [ "298D4875-B9CE-4CDC-BE4A-C3573226727E", "6F1D2A9C-4B7E-4E3A-9C55-8A2B1D0E7F34" ],
   "sourceName": "ProductName",
   "preferNameDirectory": true,
   "icon": "icon.ico",
@@ -46,6 +48,10 @@
       },
       "replaces": "WIXVERSION"
     },
+    "HostIdentifier": {
+      "type": "bind",
+      "binding": "HostIdentifier"
+    },
     "bundle": {
       "type": "computed",
       "value": "(Bootstrapper != \"none\")"
@@ -78,17 +84,19 @@
         { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
         { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
         { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
-        { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] }
+        { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] },
+        { "condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")", "rename": { "Installer.sln": "ProductName.sln" } }
       ]
     }
   ],
   "primaryOutputs": [
+    { "path": "Installer.sln" },
     { "path": "ProductNamePackage/ProductNamePackage.wixproj" },
     { "path": "ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle)" }
   ],
   "SpecialCustomOperations": {
     "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
     "**/*.wixproj": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
-    "**/*.slnx": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] }
+    "**/*.sln": { "operations": [ { "type": "conditional", "configuration": { "if": [ "#if" ], "else": [ "#else" ], "elseif": [ "#elseif" ], "endif": [ "#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] }
   }
 }

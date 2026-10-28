@@ -25,6 +25,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM64' ">
+    <DefineConstants>Debug;MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM64' ">
+    <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Bal.wixext" Version="WIXVERSION" />
     <PackageReference Include="WixToolset.Netfx.wixext" Version="WIXVERSION" />
