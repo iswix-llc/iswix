@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 	<Metadata>
-		<Identity Id="IsWiX.c21dbeec-f962-4a75-b3d6-89b67b4e48b2" Version="7.0.3.0" Language="en-US" Publisher="IsWiX LLC" />
+		<Identity Id="IsWiX.c21dbeec-f962-4a75-b3d6-89b67b4e48b2" Version="7.0.4.0" Language="en-US" Publisher="IsWiX LLC" />
 		<DisplayName>IsWiX for Visual Studio</DisplayName>
 		<Description xml:space="preserve">Industrial Strength Windows Installer XML ( IsWiX ) makes authoring Windows Installer XML (WiX) Windows Installers (.MSI) a breeze. It includes Visual Studio project templates and graphical designers to aid you in authoring 95% of your source code. From there you can author additional code using standard WiX programming techniques.</Description>
 		<MoreInfo>https://github.com/iswix-llc/iswix</MoreInfo>
