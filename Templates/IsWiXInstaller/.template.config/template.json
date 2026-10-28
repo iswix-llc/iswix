@@ -76,7 +76,7 @@
       "exclude": [ "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
       "modifiers": [
         { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
-        { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/UI.wxs", "ProductNamePackage/UI-CustomDialog.wxs", "ProductNamePackage/Resources/**" ] },
+        { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
         { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
         { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] }
       ]
