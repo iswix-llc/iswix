@@ -3,7 +3,7 @@
     <!-- IsWiX's version. The app and designers take it from here; the release workflow
          (.github/workflows/publish.yml) bumps it and writes it into the VSIX manifest and the
          extension's AssemblyInfo.cs too. -->
-    <Version>7.0.1</Version>
+    <Version>7.0.2</Version>
   </PropertyGroup>
 
   <!-- FireworksFramework and the designers also build for .NET Framework 4.8, the runtime Visual Studio
