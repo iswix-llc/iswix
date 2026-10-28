@@ -8,8 +8,7 @@
   "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
   "tags": {
     "language": "WiX",
-    "type": "solution",
-    "editorTreatAs": "solution"
+    "type": "project"
   },
   "guids": [ "298D4875-B9CE-4CDC-BE4A-C3573226727E", "6F1D2A9C-4B7E-4E3A-9C55-8A2B1D0E7F34" ],
   "sourceName": "ProductName",
@@ -52,6 +51,16 @@
       "type": "bind",
       "binding": "HostIdentifier"
     },
+    "createSolutionDirectory": {
+      "type": "bind",
+      "binding": "context:CreateSolutionDirectory",
+      "datatype": "bool",
+      "defaultValue": "false"
+    },
+    "vsOwnSolutionDirectory": {
+      "type": "computed",
+      "value": "(HostIdentifier == \"vs\" && createSolutionDirectory)"
+    },
     "bundle": {
       "type": "computed",
       "value": "(Bootstrapper != \"none\")"
@@ -79,20 +88,34 @@
   },
   "sources": [
     {
+      "condition": "(!vsOwnSolutionDirectory)",
       "exclude": [ "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
       "modifiers": [
         { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
         { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
         { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
         { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] },
+        { "condition": "(HostIdentifier == \"vs\")", "exclude": [ "Installer.sln" ] },
         { "condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")", "rename": { "Installer.sln": "ProductName.sln" } }
+      ]
+    },
+    {
+      "condition": "(vsOwnSolutionDirectory)",
+      "target": "../",
+      "exclude": [ "Installer.sln", "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
+      "modifiers": [
+        { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
+        { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
+        { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
+        { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] }
       ]
     }
   ],
   "primaryOutputs": [
-    { "path": "Installer.sln" },
-    { "path": "ProductNamePackage/ProductNamePackage.wixproj" },
-    { "path": "ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle)" }
+    { "path": "ProductNamePackage/ProductNamePackage.wixproj", "condition": "(!vsOwnSolutionDirectory)" },
+    { "path": "ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle && !vsOwnSolutionDirectory)" },
+    { "path": "../ProductNamePackage/ProductNamePackage.wixproj", "condition": "(vsOwnSolutionDirectory)" },
+    { "path": "../ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle && vsOwnSolutionDirectory)" }
   ],
   "SpecialCustomOperations": {
     "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
