@@ -229,6 +229,49 @@ namespace FireworksFramework.Services
             Read(document).Select(id => new ComponentGroupInfo(id, documentPath)).ToList();
 
         /// <summary>
+        /// Gets the files that have a ComponentGroupRef to the component group: the file being edited first (from
+        /// <paramref name="document"/>, as it is in memory), then the project's others, from disk. This reads files, so a
+        /// caller that shouldn't wait for it runs it away from the user interface.
+        /// </summary>
+        public static List<string> FindReferences(string documentPath, XDocument document, string id)
+        {
+            var files = new List<string>();
+            if (document.Descendants().Any(e => e.Name.LocalName == "ComponentGroupRef" && (string?)e.Attribute("Id") == id))
+            {
+                files.Add(documentPath);
+            }
+
+            var own = Path.GetFullPath(documentPath);
+            foreach (var file in ProjectFiles(documentPath))
+            {
+                if (string.Equals(Path.GetFullPath(file), own, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    var settings = new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, XmlResolver = null, IgnoreComments = true };
+                    using var reader = XmlReader.Create(file, settings);
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "ComponentGroupRef" && reader.GetAttribute("Id") == id)
+                        {
+                            files.Add(file);
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex) when (ex is XmlException || ex is IOException || ex is UnauthorizedAccessException)
+                {
+                    // A file half-edited, or one that can't be read, is not counted.
+                }
+            }
+
+            return files;
+        }
+
+        /// <summary>
         /// Gets the file that defines the component group, the file being edited first (from <paramref name="document"/>,
         /// as it is in memory), or null if no file of the project does.
         /// </summary>

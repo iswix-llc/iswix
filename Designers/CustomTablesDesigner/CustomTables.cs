@@ -293,9 +293,23 @@ namespace CustomTablesDesigner
 
         // Widens the left side to the schema box's right edge and makes the columns area tall enough for the list and
         // the box, as far as the designer's own size allows. It only ever grows them; the splitters can still be moved.
+        // With no table selected there are no columns or rows to show: their panes are collapsed, not left empty.
+        void ShowPanesForSelection()
+        {
+            var hasTable = listBoxTables.SelectedItems.Count > 0;
+            var changed = splitContainer2.Panel2Collapsed == hasTable;
+            splitContainer2.Panel2Collapsed = !hasTable;
+            splitContainer1.Panel2Collapsed = !hasTable;
+            if (changed && hasTable)
+            {
+                // Back at their sizes, which have to be fitted again.
+                FitColumnEditor();
+            }
+        }
+
         void FitColumnEditor()
         {
-            if (_fitting)
+            if (_fitting || splitContainer1.Panel2Collapsed || splitContainer2.Panel2Collapsed)
             {
                 return;
             }
@@ -366,6 +380,9 @@ namespace CustomTablesDesigner
                 MessageBox.Show("Malformed XML Detected (Get Table Names)" + ex.Message);
                 listBoxTables.Items.Clear();
             }
+
+            // A document with no tables raises no selection change to do this.
+            ShowPanesForSelection();
         }
 
         public Image PluginImage
@@ -496,6 +513,7 @@ namespace CustomTablesDesigner
             }
 
             UpdateColumnCommands();
+            ShowPanesForSelection();
             this.dataGridViewRows.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRows_CellValueChanged);
         }
 

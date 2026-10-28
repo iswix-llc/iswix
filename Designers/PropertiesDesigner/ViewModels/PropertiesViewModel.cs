@@ -136,15 +136,14 @@ namespace PropertiesDesigner.ViewModels
             Properties.Add(CreateModel(property));
         }
 
-        public void Remove(PropertyModel? selectedItem)
+        // All the properties given: a selection of several is removed whole, not just its first.
+        public void Remove(IEnumerable<PropertyModel> selectedItems)
         {
-            if (selectedItem == null)
+            foreach (var selectedItem in selectedItems.ToList())
             {
-                return;
+                selectedItem.Element.RemoveFromParent();
+                Properties.Remove(selectedItem);
             }
-
-            selectedItem.Element.RemoveFromParent();
-            Properties.Remove(selectedItem);
         }
 
         private PropertyModel CreateModel(Wxs.Property property)

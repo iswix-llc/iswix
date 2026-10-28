@@ -74,10 +74,13 @@ namespace FilesAndFoldersDesigner
             .SelectMany(e => e.Elements(Wxs.ComponentGroup.ElementName))
             .Select(e => (Wxs.ComponentGroup)WixElement.Wrap(e));
 
-        Wxs.ComponentGroup? DefaultOrFirstGroup() => FindGroup(_fileName) ?? AllGroups.FirstOrDefault();
+        // A file's name is matched ignoring case (a file system does), a group's Id not (WiX's Ids are case-sensitive).
+        Wxs.ComponentGroup? DefaultOrFirstGroup() => FindGroup(_fileName)
+            ?? AllGroups.FirstOrDefault(g => string.Equals(g.Id, _fileName, StringComparison.OrdinalIgnoreCase))
+            ?? AllGroups.FirstOrDefault();
 
         Wxs.ComponentGroup? FindGroup(string id) => AllGroups
-            .FirstOrDefault(g => string.Equals(g.Id, id, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(g => string.Equals(g.Id, id, StringComparison.Ordinal));
 
         /// <summary>Gets whether the file has a component group to show.</summary>
         public bool HasGroup => _componentGroup != null;
@@ -91,7 +94,7 @@ namespace FilesAndFoldersDesigner
             var ids = new List<string>();
             foreach (var id in AllGroups.Select(g => g.Id))
             {
-                if (!string.IsNullOrEmpty(id) && !ids.Contains(id!, StringComparer.OrdinalIgnoreCase))
+                if (!string.IsNullOrEmpty(id) && !ids.Contains(id!, StringComparer.Ordinal))
                 {
                     ids.Add(id!);
                 }
@@ -157,8 +160,11 @@ namespace FilesAndFoldersDesigner
 
         // The components the designer shows: those with a File or a CreateFolder. A component with neither has nothing to
         // show a folder for.
-        IEnumerable<Wxs.Component> ShownComponents => Components.Where(c =>
-            c.Xml.Descendants(Wxs.File.ElementName).Any() || c.Xml.Descendants(Wxs.CreateFolder.ElementName).Any());
+        IEnumerable<Wxs.Component> ShownComponents => Components.Where(c => IsShown(c.Xml));
+
+        /// <summary>Gets whether the designer shows <paramref name="component"/>: it has a File or a CreateFolder.</summary>
+        public static bool IsShown(XElement component) =>
+            component.Descendants(Wxs.File.ElementName).Any() || component.Descendants(Wxs.CreateFolder.ElementName).Any();
 
         static string Subdirectory(Wxs.Component component) => component.Subdirectory ?? string.Empty;
 
@@ -179,7 +185,7 @@ namespace FilesAndFoldersDesigner
         }
 
         // A folder's own component: it has no files of its own (a CreateFolder) or holds the folder's non-PE files.
-        public Wxs.Component GetOrCreateDirectoryComponent(string directoryPath, bool peFile = true)
+        public Wxs.Component GetOrCreateDirectoryComponent(string directoryPath, bool peFile = true, bool canonical = true)
         {
             EnsureComponentGroup();
 
@@ -200,19 +206,42 @@ namespace FilesAndFoldersDesigner
 
             if (directoryComponent == null)
             {
-                directoryComponent = new Wxs.Component
+                directoryComponent = NewDirectoryComponent(directoryMeta);
+                if (canonical)
                 {
-                    Id = DirectoryComponentId(directoryMeta.Directory, directoryMeta.Subdirectory),
-                    Directory = directoryMeta.Directory,
-                    Subdirectory = string.IsNullOrEmpty(directoryMeta.Subdirectory) ? null : directoryMeta.Subdirectory,
-                    Guid = Guid.NewGuid().ToString(),
-                    KeyPath = true,
-                };
-                directoryComponent.Add(new Wxs.CreateFolder());
-                // Added through the model, so it lands at its canonical position.
-                _componentGroup.Add(directoryComponent);
+                    // Added through the model, so it lands at its canonical position.
+                    _componentGroup.Add(directoryComponent);
+                }
+                else
+                {
+                    // Appended, for a caller that puts the group in canonical order itself, once, after adding many.
+                    _componentGroup.Xml.Add(directoryComponent.Xml);
+                }
             }
             return directoryComponent;
+        }
+
+        // A folder's own component, with a CreateFolder, not yet in the group.
+        Wxs.Component NewDirectoryComponent(DirectoryMeta directoryMeta)
+        {
+            var component = new Wxs.Component
+            {
+                Id = DirectoryComponentId(directoryMeta.Directory, directoryMeta.Subdirectory),
+                Directory = directoryMeta.Directory,
+                Subdirectory = string.IsNullOrEmpty(directoryMeta.Subdirectory) ? null : directoryMeta.Subdirectory,
+                Guid = Guid.NewGuid().ToString(),
+                KeyPath = true,
+            };
+            component.Add(new Wxs.CreateFolder());
+            return component;
+        }
+
+        // A new folder component added at the end of the group, for a caller that puts the group in canonical order itself.
+        Wxs.Component AppendNewDirectoryComponent(DirectoryMeta directoryMeta)
+        {
+            var component = NewDirectoryComponent(directoryMeta);
+            _componentGroup!.Xml.Add(component.Xml);
+            return component;
         }
 
         // The group files and folders go into: the one shown.
@@ -225,6 +254,9 @@ namespace FilesAndFoldersDesigner
                 throw new InvalidOperationException("The file has no component group.");
             }
         }
+
+        /// <summary>Gets whether the file says where its sources are (a SourceDir define), rather than leaving it to the default.</summary>
+        public bool HasSourceDir => Defines.Find(SourceDirDefine) != null;
 
         public string GetRootPath()
         {
@@ -301,6 +333,7 @@ namespace FilesAndFoldersDesigner
 
         public void DeleteFiles(List<FileMeta> files)
         {
+            using var batch = _documentManager.Batch();
             foreach (var file in files)
             {
                 foreach (var fileElement in FindFiles(file).ToList())
@@ -318,6 +351,7 @@ namespace FilesAndFoldersDesigner
 
         public void AddFiles(List<FileMeta> files)
         {
+            using var batch = _documentManager.Batch();
             string rootDir = GetRootPath();
             if (files.Count > 0)
             {
@@ -331,46 +365,102 @@ namespace FilesAndFoldersDesigner
             // Only a folder with an empty component can be pruned, so only those are checked, rather than every
             // component in the group for every file.
             var emptyFolders = EmptyFolderKeys();
+
+            // Adding through the model puts each element at its canonical position, which means finding that position among
+            // the element's siblings: for thousands of files that is most of the time. So the elements are appended, and the
+            // group is put in canonical order once at the end. A folder's component for non-PE files is found in a table
+            // rather than by scanning every component for each file.
+            var directoryComponents = new Dictionary<string, Wxs.Component>(StringComparer.Ordinal);
+            foreach (var component in Components)
+            {
+                if (component.Directory is string directory && IsKeyPath(component.KeyPath))
+                {
+                    var key = FolderKey(directory, Subdirectory(component));
+                    if (!directoryComponents.ContainsKey(key))
+                    {
+                        directoryComponents[key] = component;
+                    }
+                }
+            }
+
+            var oneToOne = GetComponentRules() == ComponentRules.OneToOne;
+            var withoutCreateFolder = new HashSet<Wxs.Component>();
             foreach (var file in files)
             {
                 DirectoryMeta directoryMeta = new DirectoryMeta(file.Destination);
                 file.Destination = Path.Combine(directoryMeta.Directory, directoryMeta.Subdirectory);
                 file.Source = file.Source.Replace(rootDir, SourceDirVar);
+                var folderKey = FolderKey(directoryMeta.Directory, directoryMeta.Subdirectory);
                 if (file.Source == ".")
                 {
-                    GetOrCreateDirectoryComponent(file.Destination);
-                    emptyFolders.Add(FolderKey(file));
+                    if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
+                    {
+                        // The folder at the top of a directory takes whatever component is there already (as it did), which
+                        // is a search; there is one such folder in a drop.
+                        var created = GetOrCreateDirectoryComponent(file.Destination, canonical: false);
+                        if (IsKeyPath(created.KeyPath))
+                        {
+                            if (!directoryComponents.ContainsKey(folderKey))
+                            {
+                                directoryComponents[folderKey] = created;
+                            }
+                        }
+                    }
+                    else if (!directoryComponents.ContainsKey(folderKey))
+                    {
+                        directoryComponents[folderKey] = AppendNewDirectoryComponent(directoryMeta);
+                    }
+                    emptyFolders.Add(folderKey);
                 }
                 else if (!existing.Contains(FileKey(file)))
                 {
                     EnsureComponentGroup();
-                    if (IsProgramExecutable(file.Source))
+                    if (IsProgramExecutable(file.Source, oneToOne))
                     {
-                        // Its own component, built before it is added so it lands at its canonical position.
+                        // Its own component.
                         var component = new Wxs.Component
                         {
                             Directory = directoryMeta.Directory,
                             Subdirectory = string.IsNullOrEmpty(directoryMeta.Subdirectory) ? null : directoryMeta.Subdirectory,
                         };
                         component.Add(new Wxs.File { Source = file.Source, KeyPath = true });
-                        _componentGroup.Add(component);
+                        _componentGroup.Xml.Add(component.Xml);
                     }
                     else
                     {
-                        var directoryComponent = GetOrCreateDirectoryComponent(file.Destination, false);
-                        foreach (var createFolder in directoryComponent.Children.OfType<Wxs.CreateFolder>().ToList())
+                        if (!directoryComponents.TryGetValue(folderKey, out var directoryComponent))
                         {
-                            createFolder.RemoveFromParent();
+                            directoryComponent = AppendNewDirectoryComponent(directoryMeta);
+                            directoryComponents[folderKey] = directoryComponent;
                         }
-                        directoryComponent.Add(new Wxs.File { Source = file.Source });
+
+                        // The folder has a file now, so its CreateFolder is not needed (once is enough).
+                        if (withoutCreateFolder.Add(directoryComponent))
+                        {
+                            foreach (var createFolder in directoryComponent.Children.OfType<Wxs.CreateFolder>().ToList())
+                            {
+                                createFolder.RemoveFromParent();
+                            }
+                        }
+
+                        directoryComponent.Xml.Add(new Wxs.File { Source = file.Source }.Xml);
                     }
                     existing.Add(FileKey(file));
                 }
-                if (emptyFolders.Contains(FolderKey(file)))
+
+                // Once the folder's empty component is gone, the rest of its files have nothing to prune.
+                if (emptyFolders.Contains(folderKey) && PruneDirectoryComponent(file.Destination) is { } pruned)
                 {
-                    PruneDirectory(file.Destination);
+                    emptyFolders.Remove(folderKey);
+                    // It is not in the group now, so files are not to be added to it: the table forgets it.
+                    if (directoryComponents.TryGetValue(folderKey, out var known) && known.Xml == pruned.Xml)
+                    {
+                        directoryComponents.Remove(folderKey);
+                    }
                 }
             }
+
+            SortComponents();
         }
 
         // The folders that have an empty component (a CreateFolder alone), as FolderKey. Adding a file can only make
@@ -438,7 +528,9 @@ namespace FilesAndFoldersDesigner
                 .Where(f => f.Source == file.Source);
         }
 
-        private bool IsProgramExecutable(string fileName)
+        // A file of its own component: a program, or any file while the rules say one to one. The rules are the caller's to
+        // read, once: reading them goes through the document's defines, which is slow to repeat for each of many files.
+        private static bool IsProgramExecutable(string fileName, bool oneToOne)
         {
             string name = fileName.ToLower();
             return
@@ -447,7 +539,7 @@ namespace FilesAndFoldersDesigner
                 name.EndsWith(".ocx") ||
                 name.EndsWith(".chm") ||
                 name.EndsWith(".hlp") ||
-                GetComponentRules() == ComponentRules.OneToOne;
+                oneToOne;
         }
 
         // A folder's component is "owd" + the hash of its group's Id and its path. A group's Id is unique in the project, so the
@@ -467,6 +559,7 @@ namespace FilesAndFoldersDesigner
 
         public void DeleteDirectory(string directoryPath, string parentPath)
         {
+            using var batch = _documentManager.Batch();
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             var components = string.IsNullOrEmpty(directoryMeta.Subdirectory)
                 ? Components.Where(c => c.Directory == directoryMeta.Directory)
@@ -486,6 +579,7 @@ namespace FilesAndFoldersDesigner
         // path unless it was given another Id by hand.
         public bool RenameDirectory(string directoryPath, string newName)
         {
+            using var batch = _documentManager.Batch();
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             string directory = directoryMeta.Directory;
             string oldSubDirectory = directoryMeta.Subdirectory;
@@ -515,19 +609,26 @@ namespace FilesAndFoldersDesigner
 
         // Folder components are "owd" + the hash of their group's Id and path (see DirectoryComponentId), or in earlier IsWiX versions of their path alone;
         // renames in earlier IsWiX versions wrote "owc".
-        bool IsGeneratedId(string? id, string directory, string subdirectory)
-        {
-            var path = Path.Combine(directory, subdirectory);
-            string hash = GetSHA256Hash(path);
-            return id == "owd" + hash || id == "owc" + hash || id == GroupScopedId(path);
-        }
+// Any Id of that form is one the designer made, for this group or another (a group renamed in the XML, a component
+        // moved here), so it follows the folder's rename.
+        static readonly System.Text.RegularExpressions.Regex GeneratedIdPattern = new System.Text.RegularExpressions.Regex("^ow[cd][0-9A-F]{64}$");
+
+        static bool IsGeneratedId(string? id, string directory, string subdirectory) =>
+            id != null && GeneratedIdPattern.IsMatch(id);
 
         private bool DirectoryExists(string directory, string subdirectory) =>
             Components.Any(c => c.Directory == directory && IsInFolder(c, subdirectory));
 
         // A folder's empty (CreateFolder only) component is no longer needed once the folder has something else.
-        public void PruneDirectory(string directoryPath)
+        public void PruneDirectory(string directoryPath) => TryPruneDirectory(directoryPath);
+
+        // True if the folder had an empty component that was removed.
+        bool TryPruneDirectory(string directoryPath) => PruneDirectoryComponent(directoryPath) != null;
+
+        // The folder's empty component, removed, or null if it had none to remove.
+        Wxs.Component? PruneDirectoryComponent(string directoryPath)
         {
+            using var batch = _documentManager.Batch();
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
             int componentCount = Components.Count(c => c.Directory == directoryMeta.Directory && Subdirectory(c).StartsWith(directoryMeta.Subdirectory));
 
@@ -538,8 +639,14 @@ namespace FilesAndFoldersDesigner
                     Subdirectory(c) == directoryMeta.Subdirectory &&
                     c.Xml.Descendants(Wxs.CreateFolder.ElementName).Any() &&
                     c.Xml.Elements().Count() == 1);
-                component?.RemoveFromParent();
+                if (component != null)
+                {
+                    component.RemoveFromParent();
+                    return component;
+                }
             }
+
+            return null;
         }
 
         // A folder left with nothing gets its empty component back, so the folder stays.
@@ -556,6 +663,7 @@ namespace FilesAndFoldersDesigner
         // Puts components, and the files in each, back in canonical order after edits changed what they sort by.
         public void SortComponents()
         {
+            using var batch = _documentManager.Batch();
             var ordering = WixOrdering.Get(_document);
             if (ordering == null || _componentGroup == null)
             {

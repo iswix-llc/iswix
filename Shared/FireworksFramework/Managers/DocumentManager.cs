@@ -247,7 +247,51 @@ namespace FireworksFramework.Managers
 
         void DocumentChanged(object? sender, XObjectChangeEventArgs e)
         {
+            if (_batchDepth > 0)
+            {
+                _changedInBatch = true;
+                return;
+            }
+
             CompareDocuments();
+        }
+
+        int _batchDepth;
+        bool _changedInBatch;
+
+        /// <summary>
+        /// Holds back the work a change to the document sets off (comparing it with the saved one, and telling the
+        /// subscribers) until the returned scope is disposed, which does it once. An edit that changes many nodes, such as
+        /// removing a folder's hundreds of components, would otherwise do it for each node, which takes time that grows
+        /// with the square of the document's size. Scopes nest.
+        /// </summary>
+        public IDisposable Batch()
+        {
+            _batchDepth++;
+            return new BatchScope(this);
+        }
+
+        sealed class BatchScope : IDisposable
+        {
+            DocumentManager? _owner;
+
+            public BatchScope(DocumentManager owner)
+            {
+                _owner = owner;
+            }
+
+            public void Dispose()
+            {
+                if (_owner is { } owner)
+                {
+                    _owner = null;
+                    if (--owner._batchDepth == 0 && owner._changedInBatch)
+                    {
+                        owner._changedInBatch = false;
+                        owner.CompareDocuments();
+                    }
+                }
+            }
         }
 
         private void CompareDocuments()

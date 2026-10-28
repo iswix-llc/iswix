@@ -155,7 +155,7 @@ namespace Designers.FilesAndFolders
             }
 
             return element.AncestorsAndSelf().Any(e =>
-                (e.Name == IsWiX.WiXModel.Component.ElementName && ComponentGroupDocument.IsInComponentGroup(e)) ||
+                (e.Name == IsWiX.WiXModel.Component.ElementName && ComponentGroupDocument.IsInComponentGroup(e) && ComponentGroupDocument.IsShown(e)) ||
                 e.Name == IsWiX.WiXModel.ComponentGroup.ElementName);
         }
 
@@ -164,7 +164,7 @@ namespace Designers.FilesAndFolders
             // A component of another of the file's groups, or such a group itself: show that group first.
             var group = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == IsWiX.WiXModel.ComponentGroup.ElementName);
             var groupId = (string?)group?.Attribute("Id");
-            if (!string.IsNullOrEmpty(groupId) && !string.Equals(groupId, _isWiXComponentGroup.GroupId, StringComparison.OrdinalIgnoreCase))
+            if (_isWiXComponentGroup is not null && !string.IsNullOrEmpty(groupId) && !string.Equals(groupId, _isWiXComponentGroup.GroupId, StringComparison.Ordinal))
             {
                 ShowGroup(groupId!);
             }
@@ -301,7 +301,7 @@ namespace Designers.FilesAndFolders
 
         private void PopulateSource()
         {
-            Cursor = Cursors.WaitCursor;
+            using var wait = Waiting();
             tvSourceFiles.Nodes.Clear();
             var tnStart = tvSourceFiles.Nodes.Add(SourceStart);
             FileFilterPattern = textBoxIncludeFilter.Text;
@@ -319,7 +319,6 @@ namespace Designers.FilesAndFolders
             tnStart.Expand();
             tvSourceFiles.SelectedNode = tnStart;
             DisplaySourceListItemsForSelectedNode(tvSourceFiles.SelectedNode);
-            Cursor = Cursors.Default;
         }
 
         public void LoadData()
@@ -330,6 +329,7 @@ namespace Designers.FilesAndFolders
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
+            using var wait = Waiting();
             _isWiXComponentGroup = new ComponentGroupDocument(_documentManager, _selectedGroupId);
             _selectedGroupId = _isWiXComponentGroup.GroupId;
             RefreshGroupList();
@@ -354,7 +354,9 @@ namespace Designers.FilesAndFolders
                     rootPath = System.IO.Path.Combine(documentInfo.DirectoryName ?? string.Empty, rootPath);
                 }
 
-                if (!Directory.Exists(rootPath))
+                // The folder a file names is made if it is missing; the default one is not, so looking at a file leaves no folder
+                // behind. The tree lists nothing for a folder that is not there until files are added.
+                if (_isWiXComponentGroup.HasSourceDir && !Directory.Exists(rootPath))
                 {
                     Directory.CreateDirectory(rootPath);
                 }
@@ -374,10 +376,18 @@ namespace Designers.FilesAndFolders
 
         private void LoadDocument()
         {
-            Cursor = Cursors.WaitCursor;
+            using var wait = Waiting();
             List<string> dirs = _isWiXComponentGroup.GetDirectories();
             AddDirectoryNodesToDestination(dirs);
-            tvDestination.ExpandAll();
+            tvDestination.BeginUpdate();
+            try
+            {
+                tvDestination.ExpandAll();
+            }
+            finally
+            {
+                tvDestination.EndUpdate();
+            }
             bool found = false;
             foreach (TreeNode node in tvDestination.Nodes[0].Nodes)
             {
@@ -393,7 +403,6 @@ namespace Designers.FilesAndFolders
                 tvDestination.SelectedNode = tvDestination.Nodes[0];
             }
 
-            Cursor = Cursors.Default;
         }
 
 
@@ -404,17 +413,26 @@ namespace Designers.FilesAndFolders
             subTreeNode.ImageIndex = (int)ImageLibrary.Computer;
             subTreeNode.SelectedImageIndex = (int)ImageLibrary.Computer;
 
+            // A folder's node is looked up by its path, in a table, rather than searched for in the whole tree for each part
+            // of each folder (there is a folder for every component, so for a drop of thousands of files that is quadratic).
+            // The tree is drawn once, when it is complete, rather than as each node is added.
+            var nodesByPath = new Dictionary<string, TreeNode>(StringComparer.OrdinalIgnoreCase);
             string pathSeparator = @"\";
-            foreach (var dir in dirs)
+            tvDestination.BeginUpdate();
+            try
             {
-                string subPathAgg = string.Empty;
-                TreeNode? lastNode = null;
-                foreach (string subPath in dir.Split(pathSeparator[0]))
+                foreach (var dir in dirs.Distinct())
                 {
-                    subPathAgg += subPath + pathSeparator;
-                    TreeNode[] nodes = subTreeNode.Nodes.Find(subPathAgg, true);
-                    if (nodes.Length == 0)
-                        if (lastNode == null)
+                    string subPathAgg = string.Empty;
+                    TreeNode? lastNode = null;
+                    foreach (string subPath in dir.Split(pathSeparator[0]))
+                    {
+                        subPathAgg += subPath + pathSeparator;
+                        if (nodesByPath.TryGetValue(subPathAgg, out var existing))
+                        {
+                            lastNode = existing;
+                        }
+                        else if (lastNode == null)
                         {
                             lastNode = subTreeNode.Nodes.Add(subPathAgg, "[" + subPath + "]");
                             if (IdIsWithinSystemFolderPropertyEnum(subPath))
@@ -422,16 +440,19 @@ namespace Designers.FilesAndFolders
                                 lastNode.ImageIndex = (int)ImageLibrary.BlueFolderClosed;
                                 lastNode.SelectedImageIndex = (int)ImageLibrary.BlueFolderOpen;
                             }
+                            nodesByPath[subPathAgg] = lastNode;
                         }
                         else
                         {
                             lastNode = lastNode.Nodes.Add(subPathAgg, subPath);
+                            nodesByPath[subPathAgg] = lastNode;
                         }
-                    else
-                    {
-                        lastNode = nodes[0];
                     }
                 }
+            }
+            finally
+            {
+                tvDestination.EndUpdate();
             }
         }
 
@@ -460,6 +481,11 @@ namespace Designers.FilesAndFolders
         {
             currentNode.Nodes.Clear();
             var diSourceFiles = new DirectoryInfo(startingLocation);
+            if (!diSourceFiles.Exists)
+            {
+                return;
+            }
+
             try
             {
                 var directoryList = diSourceFiles.GetDirectories();
@@ -500,12 +526,18 @@ namespace Designers.FilesAndFolders
         private void DisplaySourceListItemsForSelectedNode(TreeNode treeNode)
         {
             if (treeNode == null) return;
+            using var wait = Waiting();
             AddListItemsFromDirectory(treeNode.FullPath);
         }
 
         private void AddListItemsFromDirectory(string directoryPath)
         {
             var directoryInfo = new DirectoryInfo(directoryPath);
+            if (!directoryInfo.Exists)
+            {
+                lvSourceFiles.Items.Clear();
+                return;
+            }
             //get values for exclude and filter pattern from parent control
             var fileInfos = GetFilteredFiles(directoryInfo, FileExcludePattern, FileFilterPattern);
 
@@ -725,6 +757,7 @@ namespace Designers.FilesAndFolders
 
         private void tvSourceFiles_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
+            using var wait = Waiting();
             // Batched, so the children are drawn once rather than after each node is added.
             tvSourceFiles.BeginUpdate();
             try
@@ -815,6 +848,7 @@ namespace Designers.FilesAndFolders
 
         private void SetComponentRulesXPI()
         {
+            using var wait = Waiting();
             ComponentRules componentRules = ComponentRules.OneToMany;
             if (rbOneToOne.Checked)
             {
@@ -1091,6 +1125,7 @@ namespace Designers.FilesAndFolders
 
         private void lvDestination_DragDrop(object sender, DragEventArgs e)
         {
+            using var wait = Waiting();
             //_documentManager.DisableChangeWatcher();
             if (e.Data!.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
             {
@@ -1190,7 +1225,7 @@ namespace Designers.FilesAndFolders
 
         private void tvDestination_DragDrop(object sender, DragEventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
+            using var wait = Waiting();
            // _documentManager.DisableChangeWatcher();
 
             if (e.Data!.GetDataPresent(ListViewItemCollectionFormatIdentifier, false))
@@ -1252,7 +1287,6 @@ namespace Designers.FilesAndFolders
                 HoverNode.ForeColor = Color.Empty;
             }
          //   _documentManager.EnableChangeWatcher();
-            Cursor = Cursors.Arrow;
         }
 
         // Walks the folder on disk, as the source tree lists it, adding its files and its subfolders' files.
@@ -1361,6 +1395,7 @@ namespace Designers.FilesAndFolders
             {
                 var result = ThemedMessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (DialogResult.OK != result) return;
+                using var wait = Waiting();
                 List<FileMeta> files = new List<FileMeta>();
                 string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
                 if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
@@ -1372,9 +1407,18 @@ namespace Designers.FilesAndFolders
                     files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
                 }
                 _isWiXComponentGroup.DeleteFiles(files);
-                foreach (ListViewItem item in lvDestination.SelectedItems)
+                // Batched, so the list is drawn once rather than after each item is removed.
+                lvDestination.BeginUpdate();
+                try
                 {
-                    item.Remove();
+                    foreach (ListViewItem item in lvDestination.SelectedItems)
+                    {
+                        item.Remove();
+                    }
+                }
+                finally
+                {
+                    lvDestination.EndUpdate();
                 }
                 // Nothing in the folder is selected now, so the XML shows the folder.
                 ShowSelectionInXml(false);
@@ -1389,6 +1433,7 @@ namespace Designers.FilesAndFolders
                 {
                     var result = ThemedMessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                     if (DialogResult.OK != result) return;
+                using var wait = Waiting();
                     List<FileMeta> files = new List<FileMeta>();
                     string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
                     if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
@@ -1400,9 +1445,18 @@ namespace Designers.FilesAndFolders
                         files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
                     }
                     _isWiXComponentGroup.DeleteFiles(files);
-                    foreach (ListViewItem item in lvDestination.SelectedItems)
+                    // Batched, so the list is drawn once rather than after each item is removed.
+                    lvDestination.BeginUpdate();
+                    try
                     {
-                        item.Remove();
+                        foreach (ListViewItem item in lvDestination.SelectedItems)
+                        {
+                            item.Remove();
+                        }
+                    }
+                    finally
+                    {
+                        lvDestination.EndUpdate();
                     }
                     // Nothing in the folder is selected now, so the XML shows the folder.
                     ShowSelectionInXml(false);
@@ -1461,6 +1515,7 @@ namespace Designers.FilesAndFolders
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            using var wait = Waiting();
             _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
             tvDestination.SelectedNode.Remove();
         }
@@ -1488,6 +1543,7 @@ namespace Designers.FilesAndFolders
                     {
                         return;
                     }
+                    using var wait = Waiting();
                     _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
                     tvDestination.SelectedNode.Remove();
                 }
@@ -1550,6 +1606,7 @@ namespace Designers.FilesAndFolders
 
         private void tvDestination_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
+            using var wait = Waiting();
            // _documentManager.DisableChangeWatcher();
             if (e.Label == null)
             {

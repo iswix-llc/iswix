@@ -89,7 +89,7 @@ namespace Designers.FilesAndFolders
                 {
                     var item = new GroupItem(id, null);
                     comboBoxComponentGroups.Items.Add(item);
-                    if (_isWiXComponentGroup.HasGroup && string.Equals(id, _isWiXComponentGroup.GroupId, StringComparison.OrdinalIgnoreCase))
+                    if (_isWiXComponentGroup.HasGroup && string.Equals(id, _isWiXComponentGroup.GroupId, StringComparison.Ordinal))
                     {
                         shown = item;
                     }
@@ -97,7 +97,7 @@ namespace Designers.FilesAndFolders
 
                 // The project's other files' groups, after this file's, with the file named. A group the file has too is its own.
                 foreach (var group in _otherGroups
-                    .Where(g => g.FilePath != null && !own.Contains(g.Id, StringComparer.OrdinalIgnoreCase))
+                    .Where(g => g.FilePath != null && !own.Contains(g.Id, StringComparer.Ordinal))
                     .OrderBy(g => Path.GetFileName(g.FilePath), StringComparer.OrdinalIgnoreCase)
                     .ThenBy(g => g.Id, StringComparer.OrdinalIgnoreCase))
                 {
@@ -187,6 +187,7 @@ namespace Designers.FilesAndFolders
         // Switches to another of the file's groups: its folders and files replace the current ones.
         private void ShowGroup(string? id)
         {
+            using var wait = Waiting();
             _isWiXComponentGroup = new ComponentGroupDocument(_documentManager, id);
             _selectedGroupId = _isWiXComponentGroup.GroupId;
             RefreshGroupList();
@@ -201,11 +202,32 @@ namespace Designers.FilesAndFolders
             var message = count == 0
                 ? $"Delete the component group '{id}'?"
                 : $"Delete the component group '{id}' and its {count} component{(count == 1 ? "" : "s")}?";
+
+            // References to it, here or in the project's other files, are left as they are and stop resolving.
+            Cursor = Cursors.WaitCursor;
+            List<string> referencedBy;
+            try
+            {
+                referencedBy = ProjectComponentGroups.FindReferences(_documentManager.DocumentPath, _documentManager.Document, id);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+
+            if (referencedBy.Count > 0)
+            {
+                var names = string.Join(", ", referencedBy.Select(Path.GetFileName).Distinct().Take(5));
+                var more = referencedBy.Count > 5 ? ", ..." : string.Empty;
+                message += $"\r\n\r\nIt is referenced in {names}{more}. Those references are not removed, and will not resolve.";
+            }
+
             if (ThemedMessageBox.Show(message, "Delete Component Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
                 return;
             }
 
+            using var wait = Waiting();
             _isWiXComponentGroup.DeleteGroup();
             ShowGroup(null);
         }
@@ -270,6 +292,7 @@ namespace Designers.FilesAndFolders
                 MaximizeBox = false,
                 MinimizeBox = false,
                 ShowInTaskbar = false,
+                AutoScaleDimensions = new SizeF(96F, 96F),
                 AutoScaleMode = AutoScaleMode.Dpi,
                 ClientSize = new Size(420, 140),
             };
@@ -289,6 +312,10 @@ namespace Designers.FilesAndFolders
                 if (!GroupIdPattern.IsMatch(id))
                 {
                     CallMessageBox("An Id starts with a letter or underscore and has only letters, digits, underscores and periods.", "New Component Group");
+                }
+                else if (newFile.Checked && id.EndsWith(".", StringComparison.Ordinal))
+                {
+                    CallMessageBox("The name of a file can't end with a period: leave it off the Id, or untick the new file.", "New Component Group");
                 }
                 else if (newFile.Checked && File.Exists(NewGroupFilePath(id)))
                 {

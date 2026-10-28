@@ -411,10 +411,11 @@ namespace IsWiX.Designer
                     control.ForeColor = inputText;
                     break;
                 case WinForms.ComboBox comboBox:
-                    // A drop-down list in the system style ignores its colors; the flat style draws them, in the list too.
-                    comboBox.FlatStyle = WinForms.FlatStyle.Flat;
                     comboBox.BackColor = input;
                     comboBox.ForeColor = inputText;
+                    // A drop-down list ignores its colors once visual styles are on (white, as in the system theme), and the
+                    // flat style only colors part of it: so it is drawn here, as the list boxes are.
+                    OwnerDraw(comboBox);
                     break;
                 case WinForms.Button button:
                     button.FlatStyle = WinForms.FlatStyle.Flat;
@@ -846,6 +847,37 @@ namespace IsWiX.Designer
             };
             listBox.GotFocus += (s, e) => listBox.Invalidate();
             listBox.LostFocus += (s, e) => listBox.Invalidate();
+        }
+
+        static void OwnerDraw(WinForms.ComboBox comboBox)
+        {
+            if (OwnerDrawn.TryGetValue(comboBox, out _))
+            {
+                comboBox.Invalidate();
+                return;
+            }
+
+            OwnerDrawn.Add(comboBox, new object());
+            comboBox.DrawMode = WinForms.DrawMode.OwnerDrawFixed;
+            comboBox.DrawItem += (s, e) =>
+            {
+                if (e.Index < 0 || e.Index >= comboBox.Items.Count)
+                {
+                    return;
+                }
+
+                // The text in the box itself, as against an item of the list that drops down.
+                var inBox = (e.State & WinForms.DrawItemState.ComboBoxEdit) != 0;
+                var selected = !inBox && (e.State & WinForms.DrawItemState.Selected) != 0;
+                var (back, fore) = ItemColors(selected, true, comboBox.BackColor, comboBox.ForeColor);
+                using (var brush = new Drawing.SolidBrush(back))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+
+                var text = new Drawing.Rectangle(e.Bounds.X + 3, e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
+                WinForms.TextRenderer.DrawText(e.Graphics, comboBox.GetItemText(comboBox.Items[e.Index]), comboBox.Font, text, fore, TextFlags(WinForms.HorizontalAlignment.Left));
+            };
         }
 
         // Selected items as Solution Explorer draws them: the active colors with focus, the inactive ones without.
