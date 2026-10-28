@@ -16,6 +16,7 @@ namespace FeaturesDesigner
     public partial class Features
     {
         TreeView treeViewComponentGroups = null!;
+        Label labelComponentGroups = null!;
         ContextMenuStrip _groupMenu = null!;
         ToolStripMenuItem _goToDefinitionItem = null!;
 
@@ -46,9 +47,9 @@ namespace FeaturesDesigner
             treeViewComponentGroups.ContextMenuStrip = _groupMenu;
 
             // The list fills the lower part of the right-hand side, under the feature's properties, with a label above it.
-            var groupsLabel = new Label { Text = "Component Groups", Dock = DockStyle.Top, Height = 20, TextAlign = ContentAlignment.MiddleLeft };
+            labelComponentGroups = new Label { Text = "Component Groups", Dock = DockStyle.Top, Height = 20, TextAlign = ContentAlignment.MiddleLeft };
             splitContainer2.Panel2.Controls.Add(treeViewComponentGroups);
-            splitContainer2.Panel2.Controls.Add(groupsLabel);
+            splitContainer2.Panel2.Controls.Add(labelComponentGroups);
 
             treeViewFeatures.AfterSelect += (s, e) => PopulateComponentGroups();
             treeViewComponentGroups.AfterCheck += treeViewComponentGroups_AfterCheck;
@@ -126,7 +127,12 @@ namespace FeaturesDesigner
             try
             {
                 treeViewComponentGroups.Nodes.Clear();
+                // With no feature selected there is nothing to list, and nothing to show: not even the empty box.
                 treeViewComponentGroups.Enabled = feature != null;
+                treeViewComponentGroups.Visible = feature != null;
+                labelComponentGroups.Visible = feature != null;
+                // The pane they are in goes too, with its splitter, so no blank area is left.
+                splitContainer2.Panel2Collapsed = feature == null;
                 if (feature == null)
                 {
                     return;

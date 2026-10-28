@@ -160,7 +160,7 @@ namespace PropertiesDesigner.Views
 
         private void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            viewModel.Remove(dataGridDependencies.SelectedItem as PropertyModel);
+            viewModel.Remove(dataGridDependencies.SelectedItems.OfType<PropertyModel>());
         }
 
     }
