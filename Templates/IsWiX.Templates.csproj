@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="IsWiXInstaller\**\*" Exclude="IsWiXInstaller\**\bin\**;IsWiXInstaller\**\obj\**" PackagePath="content\IsWiXInstaller\" />
+    <Content Include="IsWiXInstaller\**\*" Exclude="IsWiXInstaller\**\bin\**;IsWiXInstaller\**\obj\**;IsWiXInstaller\**\.vs\**;IsWiXInstaller\**\*.user" PackagePath="content\IsWiXInstaller\" />
     <Compile Remove="**\*" />
   </ItemGroup>
 
