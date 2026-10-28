@@ -333,6 +333,7 @@ namespace Designers.FilesAndFolders
             _isWiXComponentGroup = new ComponentGroupDocument(_documentManager, _selectedGroupId);
             _selectedGroupId = _isWiXComponentGroup.GroupId;
             RefreshGroupList();
+            ScanOtherGroups();
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 

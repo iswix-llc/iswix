@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -55,9 +58,18 @@ namespace Designers.FilesAndFolders
 
             comboBoxComponentGroups.SelectedIndexChanged += (s, e) =>
             {
-                if (!_loadingGroupList && comboBoxComponentGroups.SelectedItem is string id)
+                if (_loadingGroupList || comboBoxComponentGroups.SelectedItem is not GroupItem item)
                 {
-                    ShowGroup(id);
+                    return;
+                }
+
+                if (item.FilePath == null)
+                {
+                    ShowGroup(item.Id);
+                }
+                else
+                {
+                    GoToGroupInOtherFile(item);
                 }
             };
             buttonNewComponentGroup.Click += (s, e) => NewComponentGroup();
@@ -71,13 +83,29 @@ namespace Designers.FilesAndFolders
             try
             {
                 comboBoxComponentGroups.Items.Clear();
-                foreach (var id in _isWiXComponentGroup.GetGroupIds())
+                GroupItem? shown = null;
+                var own = _isWiXComponentGroup.GetGroupIds();
+                foreach (var id in own)
                 {
-                    comboBoxComponentGroups.Items.Add(id);
+                    var item = new GroupItem(id, null);
+                    comboBoxComponentGroups.Items.Add(item);
+                    if (_isWiXComponentGroup.HasGroup && string.Equals(id, _isWiXComponentGroup.GroupId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        shown = item;
+                    }
                 }
 
-                comboBoxComponentGroups.SelectedItem = _isWiXComponentGroup.HasGroup ? _isWiXComponentGroup.GroupId : null;
-                comboBoxComponentGroups.Enabled = _isWiXComponentGroup.HasGroup;
+                // The project's other files' groups, after this file's, with the file named. A group the file has too is its own.
+                foreach (var group in _otherGroups
+                    .Where(g => g.FilePath != null && !own.Contains(g.Id, StringComparer.OrdinalIgnoreCase))
+                    .OrderBy(g => Path.GetFileName(g.FilePath), StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(g => g.Id, StringComparer.OrdinalIgnoreCase))
+                {
+                    comboBoxComponentGroups.Items.Add(new GroupItem(group.Id, group.FilePath));
+                }
+
+                comboBoxComponentGroups.SelectedItem = shown;
+                comboBoxComponentGroups.Enabled = comboBoxComponentGroups.Items.Count > 0;
                 buttonDeleteComponentGroup.Enabled = _isWiXComponentGroup.HasGroup;
                 labelNoComponentGroups.Visible = !_isWiXComponentGroup.HasGroup;
                 // The include and exclude filters and the component rules are for a group's files.
@@ -88,6 +116,72 @@ namespace Designers.FilesAndFolders
             {
                 _loadingGroupList = false;
             }
+        }
+
+        // An entry of the list: a group of this file (FilePath null), or of another file of the project, shown with the
+        // file's name after it.
+        sealed class GroupItem
+        {
+            public GroupItem(string id, string? filePath)
+            {
+                Id = id;
+                FilePath = filePath;
+            }
+
+            public string Id { get; }
+            public string? FilePath { get; }
+
+            public override string ToString() => FilePath == null ? Id : $"{Id} ({Path.GetFileName(FilePath)})";
+        }
+
+        // The other files' groups, read from disk away from the user interface and put in the list when they are in.
+        List<ComponentGroupInfo> _otherGroups = new List<ComponentGroupInfo>();
+        int _scanVersion;
+
+        private void ScanOtherGroups()
+        {
+            var path = _documentManager.DocumentPath;
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            var version = ++_scanVersion;
+            Task.Run(() => ProjectComponentGroups.FindInOtherFiles(path)).ContinueWith(task =>
+            {
+                if (task.IsFaulted || task.IsCanceled || version != _scanVersion || IsDisposed || !IsHandleCreated)
+                {
+                    return;
+                }
+
+                try
+                {
+                    BeginInvoke(new Action(() =>
+                    {
+                        if (version == _scanVersion && !IsDisposed)
+                        {
+                            _otherGroups = task.Result;
+                            RefreshGroupList();
+                        }
+                    }));
+                }
+                catch (InvalidOperationException)
+                {
+                    // The designer was closed in the meantime.
+                }
+            });
+        }
+
+        // Another file's group: that file is opened with the group selected, and the list goes back to this file's own.
+        private void GoToGroupInOtherFile(GroupItem item)
+        {
+            var opened = item.FilePath != null && DesignerNavigation.GoToDefinition is { } goTo && goTo(item.FilePath, "ComponentGroup", item.Id);
+            if (!opened)
+            {
+                CallMessageBox($"Couldn't open {item.FilePath}.", "Component Group");
+            }
+
+            RefreshGroupList();
         }
 
         // Switches to another of the file's groups: its folders and files replace the current ones.
