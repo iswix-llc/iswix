@@ -68,6 +68,7 @@ namespace Designers.FilesAndFolders
         {
             _documentManager = documentManager;
             InitializeComponent();
+            AddComponentGroupSelector();
             // Images come from FireworksFramework rather than the .resx, so the designer also runs on .NET Framework.
             createNewFolderToolStripMenuItem.Image = DesignerImages.MenuImage("new_folder");
             renameFolderToolStripMenuItem.Image = DesignerImages.MenuImage("rename");
@@ -136,8 +137,8 @@ namespace Designers.FilesAndFolders
 
         public string? SelectedAttribute => null;
 
-        // From the XML rather than the trees, which are only filled once the designer has been shown: the component group
-        // named after the file, and anything in it.
+        // From the XML rather than the trees, which are only filled once the designer has been shown:
+        // any component group of the file, and anything in it.
         public bool Handles(XElement element, string? attribute)
         {
             if (string.IsNullOrEmpty(_documentManager.DocumentPath))
@@ -154,13 +155,20 @@ namespace Designers.FilesAndFolders
             }
 
             return element.AncestorsAndSelf().Any(e =>
-                (e.Name == IsWiX.WiXModel.Component.ElementName && ComponentGroupDocument.IsInComponentGroup(e, _documentManager.DocumentPath)) ||
-                (e.Name == IsWiX.WiXModel.ComponentGroup.ElementName &&
-                    string.Equals((string?)e.Attribute("Id"), Path.GetFileNameWithoutExtension(_documentManager.DocumentPath), StringComparison.OrdinalIgnoreCase)));
+                (e.Name == IsWiX.WiXModel.Component.ElementName && ComponentGroupDocument.IsInComponentGroup(e)) ||
+                e.Name == IsWiX.WiXModel.ComponentGroup.ElementName);
         }
 
         public void SelectElement(XElement element, string? attribute)
         {
+            // A component of another of the file's groups, or such a group itself: show that group first.
+            var group = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == IsWiX.WiXModel.ComponentGroup.ElementName);
+            var groupId = (string?)group?.Attribute("Id");
+            if (!string.IsNullOrEmpty(groupId) && !string.Equals(groupId, _isWiXComponentGroup.GroupId, StringComparison.OrdinalIgnoreCase))
+            {
+                ShowGroup(groupId!);
+            }
+
             var component = element.AncestorsAndSelf().FirstOrDefault(e => e.Name == IsWiX.WiXModel.Component.ElementName);
             if (component is null)
             {
@@ -322,7 +330,9 @@ namespace Designers.FilesAndFolders
                 CallMessageBox("Please save your file before using Files and Folders.", "File Save Warning");
                 return;
             }
-            _isWiXComponentGroup = new ComponentGroupDocument(_documentManager);
+            _isWiXComponentGroup = new ComponentGroupDocument(_documentManager, _selectedGroupId);
+            _selectedGroupId = _isWiXComponentGroup.GroupId;
+            RefreshGroupList();
             rootPath = _isWiXComponentGroup.GetRootPath();
             tvSourceFiles.Nodes.Clear();  //Clear before loading
 
@@ -351,7 +361,7 @@ namespace Designers.FilesAndFolders
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show(string.Format("An error occurred trying to use '{0}' as the SourceDir.  Defaulting to document directory.", rootPath));
+                ThemedMessageBox.Show(string.Format("An error occurred trying to use '{0}' as the SourceDir.  Defaulting to document directory.", rootPath), "Source Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
 
@@ -438,7 +448,7 @@ namespace Designers.FilesAndFolders
 
         private static void CallMessageBox(string message, string caption)
         {
-            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            ThemedMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         // Marks a folder whose subfolders haven't been listed yet. It gives the folder an expand arrow; the subfolders
@@ -1348,7 +1358,7 @@ namespace Designers.FilesAndFolders
         {
             if (lvDestination.SelectedItems.Count > 0)
             {
-                var result = MessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                var result = ThemedMessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (DialogResult.OK != result) return;
                 List<FileMeta> files = new List<FileMeta>();
                 string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
@@ -1376,7 +1386,7 @@ namespace Designers.FilesAndFolders
             {
                 if (lvDestination.SelectedItems.Count > 0)
                 {
-                    var result = MessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    var result = ThemedMessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                     if (DialogResult.OK != result) return;
                     List<FileMeta> files = new List<FileMeta>();
                     string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
@@ -1472,7 +1482,7 @@ namespace Designers.FilesAndFolders
                 else
                 {
                     var message = string.Format("Do you really want to delete the {0} folder?", tvDestination.SelectedNode.Text);
-                    var result = MessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    var result = ThemedMessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                     if (DialogResult.OK != result)
                     {
                         return;

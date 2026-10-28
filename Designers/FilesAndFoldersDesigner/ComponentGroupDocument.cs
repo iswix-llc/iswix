@@ -47,32 +47,118 @@ namespace FilesAndFoldersDesigner
     {
         const string SourceDirVar = "$(var.SourceDir)";
         const string SourceDirDefine = "SourceDir";
+        // The folder the source files are under, relative to the .wxs file, when the file doesn't say.
+        public const string DefaultSourceDir = @"..\deploy";
         const string ComponentRulesDefine = "ComponentRules";
 
         readonly DocumentManager _documentManager;
         XDocument _document;
         Wxs.Wix _wix;
         Wxs.ComponentGroup? _componentGroup;
-        string _fileName;
+        readonly string _fileName;
 
-        public ComponentGroupDocument(DocumentManager documentManager)
+        // The group shown is the one with <paramref name="groupId"/>; failing that, the one named after the file (the
+        // default), then the first the file has. None, while the file has no component group.
+        public ComponentGroupDocument(DocumentManager documentManager, string? groupId = null)
         {
             _documentManager = documentManager;
             _document = _documentManager.Document;
             _wix = Wxs.WixDocument.FromXml(_document).Root;
             _fileName = Path.GetFileNameWithoutExtension(_documentManager.DocumentPath);
-            _componentGroup = _wix.Fragments.SelectMany(f => f.ComponentGroups)
-                .FirstOrDefault(g => string.Equals(g.Id, _fileName, StringComparison.OrdinalIgnoreCase));
+            _componentGroup = (groupId == null ? null : FindGroup(groupId)) ?? DefaultOrFirstGroup();
         }
 
-        /// <summary>Gets whether the document is one this designer edits: a WiX fragment.</summary>
+        // The file's component groups: those of its fragments and, in a package file, of the package itself.
+        IEnumerable<Wxs.ComponentGroup> AllGroups => _wix.Xml.Elements()
+            .Where(e => e.Name == Wxs.Fragment.ElementName || e.Name == Wxs.Package.ElementName)
+            .SelectMany(e => e.Elements(Wxs.ComponentGroup.ElementName))
+            .Select(e => (Wxs.ComponentGroup)WixElement.Wrap(e));
+
+        Wxs.ComponentGroup? DefaultOrFirstGroup() => FindGroup(_fileName) ?? AllGroups.FirstOrDefault();
+
+        Wxs.ComponentGroup? FindGroup(string id) => AllGroups
+            .FirstOrDefault(g => string.Equals(g.Id, id, StringComparison.OrdinalIgnoreCase));
+
+        /// <summary>Gets whether the file has a component group to show.</summary>
+        public bool HasGroup => _componentGroup != null;
+
+        /// <summary>Gets the Id of the component group shown; empty while the file has none.</summary>
+        public string GroupId => _componentGroup?.Id ?? string.Empty;
+
+        /// <summary>Gets the Ids of the component groups the file has, in the file's order.</summary>
+        public List<string> GetGroupIds()
+        {
+            var ids = new List<string>();
+            foreach (var id in AllGroups.Select(g => g.Id))
+            {
+                if (!string.IsNullOrEmpty(id) && !ids.Contains(id!, StringComparer.OrdinalIgnoreCase))
+                {
+                    ids.Add(id!);
+                }
+            }
+
+            return ids;
+        }
+
+        /// <summary>
+        /// Adds an empty component group with <paramref name="id"/>, in a fragment of its own, and shows it. False if the
+        /// file has one already.
+        /// </summary>
+        public bool CreateGroup(string id)
+        {
+            if (FindGroup(id) != null)
+            {
+                return false;
+            }
+
+            // The files' sources are relative to SourceDir, so the file defines it.
+            EnsureDefine(SourceDirDefine, DefaultSourceDir);
+            var fragment = _wix.Add(new Wxs.Fragment());
+            _componentGroup = fragment.Add(new Wxs.ComponentGroup { Id = id });
+            return true;
+        }
+
+        /// <summary>Gets whether there is a group shown to delete.</summary>
+        public bool CanDeleteGroup => HasGroup;
+
+        /// <summary>Gets the number of components in the group shown.</summary>
+        public int ComponentCount => Components.Count();
+
+        /// <summary>
+        /// Removes the group shown, with its components, and the fragment it was in if nothing else is. Another group
+        /// is shown afterwards: the one named after the file, else the first.
+        /// </summary>
+        public void DeleteGroup()
+        {
+            if (_componentGroup == null)
+            {
+                return;
+            }
+
+            var fragment = _componentGroup.Xml.Parent;
+            _componentGroup.RemoveFromParent();
+            if (fragment != null && fragment.Name == Wxs.Fragment.ElementName && !fragment.HasElements)
+            {
+                WixElement.Wrap(fragment).RemoveFromParent();
+            }
+
+            _componentGroup = DefaultOrFirstGroup();
+        }
+
+        /// <summary>Gets whether the document is one this designer edits: a WiX fragment or package.</summary>
         public static bool IsValidDocument(XDocument document)
         {
             var root = document?.Root;
-            return root?.Name == Wxs.Wix.ElementName && root.Elements().FirstOrDefault()?.Name == Wxs.Fragment.ElementName;
+            var first = root?.Elements().FirstOrDefault()?.Name;
+            return root?.Name == Wxs.Wix.ElementName && (first == Wxs.Fragment.ElementName || first == Wxs.Package.ElementName);
         }
 
         IEnumerable<Wxs.Component> Components => _componentGroup?.Components ?? Enumerable.Empty<Wxs.Component>();
+
+        // The components the designer shows: those with a File or a CreateFolder. A component with neither has nothing to
+        // show a folder for.
+        IEnumerable<Wxs.Component> ShownComponents => Components.Where(c =>
+            c.Xml.Descendants(Wxs.File.ElementName).Any() || c.Xml.Descendants(Wxs.CreateFolder.ElementName).Any());
 
         static string Subdirectory(Wxs.Component component) => component.Subdirectory ?? string.Empty;
 
@@ -83,7 +169,7 @@ namespace FilesAndFoldersDesigner
             var newFolderName = "New Folder";
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
 
-            int count = Components.Count(c => c.Directory == directoryMeta.Directory &&
+            int count = ShownComponents.Count(c => c.Directory == directoryMeta.Directory &&
                 Subdirectory(c).StartsWith(Path.Combine(directoryMeta.Subdirectory, newFolderName)));
             if (count > 0)
             {
@@ -129,22 +215,20 @@ namespace FilesAndFoldersDesigner
             return directoryComponent;
         }
 
-        // A file's fragment and component group are created when the first file or folder is added.
+        // The group files and folders go into: the one shown.
         [MemberNotNull(nameof(_componentGroup))]
         void EnsureComponentGroup()
         {
-            if (_componentGroup != null)
+            // Files and folders are only added to a group the file has: the user creates one first.
+            if (_componentGroup == null)
             {
-                return;
+                throw new InvalidOperationException("The file has no component group.");
             }
-
-            var fragment = _wix.Fragments.FirstOrDefault() ?? _wix.Add(new Wxs.Fragment());
-            _componentGroup = fragment.Add(new Wxs.ComponentGroup { Id = _fileName });
         }
 
         public string GetRootPath()
         {
-            string sourceDir = GetDefine(SourceDirDefine) ?? ".";
+            string sourceDir = GetDefine(SourceDirDefine) ?? DefaultSourceDir;
             return new DirectoryInfo(Path.Combine(new FileInfo(_documentManager.DocumentPath).DirectoryName ?? string.Empty, sourceDir)).FullName;
         }
 
@@ -155,7 +239,7 @@ namespace FilesAndFoldersDesigner
 
         public List<string> GetDirectories()
         {
-            List<string> dirs = Components.Select(c => Path.Combine(c.Directory ?? string.Empty, Subdirectory(c))).ToList();
+            List<string> dirs = ShownComponents.Select(c => Path.Combine(c.Directory ?? string.Empty, Subdirectory(c))).ToList();
             dirs.Sort();
             return dirs;
         }
@@ -183,7 +267,7 @@ namespace FilesAndFoldersDesigner
         public XElement? FindFolderElement(string path)
         {
             DirectoryMeta directoryMeta = new DirectoryMeta(path);
-            var inDirectory = Components.Where(c => c.Directory == directoryMeta.Directory).ToList();
+            var inDirectory = ShownComponents.Where(c => c.Directory == directoryMeta.Directory).ToList();
             var component = inDirectory.FirstOrDefault(c => Subdirectory(c) == directoryMeta.Subdirectory) ??
                 inDirectory.FirstOrDefault(c => directoryMeta.Subdirectory.Length == 0 || Subdirectory(c).StartsWith(directoryMeta.Subdirectory + Path.DirectorySeparatorChar, StringComparison.Ordinal));
             return component?.Xml;
@@ -211,10 +295,9 @@ namespace FilesAndFoldersDesigner
                 .FirstOrDefault(f => string.Equals((string?)f.Attribute("Source"), source, StringComparison.OrdinalIgnoreCase));
         }
 
-        /// <summary>Gets whether <paramref name="component"/> is one of the component group's.</summary>
-        public static bool IsInComponentGroup(XElement component, string documentPath) =>
-            component.Parent is { } parent && parent.Name == Wxs.ComponentGroup.ElementName &&
-            string.Equals((string?)parent.Attribute("Id"), Path.GetFileNameWithoutExtension(documentPath), StringComparison.OrdinalIgnoreCase);
+        /// <summary>Gets whether <paramref name="component"/> is in a component group (any of the file's: the designer can show each).</summary>
+        public static bool IsInComponentGroup(XElement component) =>
+            component.Parent is { } parent && parent.Name == Wxs.ComponentGroup.ElementName;
 
         public void DeleteFiles(List<FileMeta> files)
         {
@@ -239,7 +322,7 @@ namespace FilesAndFoldersDesigner
             if (files.Count > 0)
             {
                 // Sources are written relative to $(var.SourceDir), so it must be defined.
-                EnsureDefine(SourceDirDefine, ".");
+                EnsureDefine(SourceDirDefine, DefaultSourceDir);
             }
 
             // The files already in the group, looked up by folder and source. Looking each new file up with FindFiles
@@ -367,7 +450,13 @@ namespace FilesAndFoldersDesigner
                 GetComponentRules() == ComponentRules.OneToOne;
         }
 
-        static string DirectoryComponentId(string directory, string subdirectory) => "owd" + GetSHA256Hash(Path.Combine(directory, subdirectory ?? string.Empty));
+        // A folder's component is "owd" + the hash of its group's Id and its path. A group's Id is unique in the project, so the
+        // same folder gets a different Id in each group, whether the groups are in one file or in several.
+        string DirectoryComponentId(string directory, string subdirectory) =>
+            GroupScopedId(Path.Combine(directory, subdirectory ?? string.Empty));
+
+        string GroupScopedId(string path) => "owd" + GetSHA256Hash(GroupId + "\\" + path);
+
 
         static string GetSHA256Hash(string input)
         {
@@ -424,11 +513,13 @@ namespace FilesAndFoldersDesigner
             return true;
         }
 
-        // Folder components are "owd" + the hash of their path; renames in earlier IsWiX versions wrote "owc".
-        static bool IsGeneratedId(string? id, string directory, string subdirectory)
+        // Folder components are "owd" + the hash of their group's Id and path (see DirectoryComponentId), or in earlier IsWiX versions of their path alone;
+        // renames in earlier IsWiX versions wrote "owc".
+        bool IsGeneratedId(string? id, string directory, string subdirectory)
         {
-            string hash = GetSHA256Hash(Path.Combine(directory, subdirectory));
-            return id == "owd" + hash || id == "owc" + hash;
+            var path = Path.Combine(directory, subdirectory);
+            string hash = GetSHA256Hash(path);
+            return id == "owd" + hash || id == "owc" + hash || id == GroupScopedId(path);
         }
 
         private bool DirectoryExists(string directory, string subdirectory) =>

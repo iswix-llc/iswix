@@ -406,9 +406,15 @@ namespace IsWiX.Designer
                     // Toolbars, including the PropertyGrid's own.
                     Apply(strip);
                     break;
-                case WinForms.TextBoxBase or WinForms.ComboBox:
+                case WinForms.TextBoxBase:
                     control.BackColor = input;
                     control.ForeColor = inputText;
+                    break;
+                case WinForms.ComboBox comboBox:
+                    // A drop-down list in the system style ignores its colors; the flat style draws them, in the list too.
+                    comboBox.FlatStyle = WinForms.FlatStyle.Flat;
+                    comboBox.BackColor = input;
+                    comboBox.ForeColor = inputText;
                     break;
                 case WinForms.Button button:
                     button.FlatStyle = WinForms.FlatStyle.Flat;
