@@ -100,8 +100,9 @@
     <ItemGroup Condition=" Exists('$(_IsWiXAssetsFile)') ">
       <_IsWiXResolvedPackageReference Include="@(PackageReference)">
         <OriginalItemSpec>%(PackageReference.Identity)</OriginalItemSpec>
+        <!-- Name matches each to its PackageReference. No Type: the Dependencies node takes items with a Type to be
+             packages' own dependencies and doesn't match them. -->
         <Name>%(PackageReference.Identity)</Name>
-        <Type>Package</Type>
       </_IsWiXResolvedPackageReference>
     </ItemGroup>
   </Target>
