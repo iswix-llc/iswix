@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<Rule Name="EmbeddedResource" DisplayName="WiX localization" PageTemplate="generic" Description="A .wxl file of localized strings." xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="EmbeddedResource" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="Advanced" DisplayName="Advanced" />
+    <Category Name="Misc" DisplayName="Misc" />
+  </Rule.Categories>
+
+  <DynamicEnumProperty Name="{}{ItemType}" DisplayName="Build Action" Category="Advanced" EnumProvider="ItemTypes"
+                       Description="How the file relates to the build." />
+
+  <StringProperty Name="FileNameAndExtension" DisplayName="File Name" ReadOnly="true" Category="Misc">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="EmbeddedResource" PersistedName="FileNameAndExtension" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="FullPath" DisplayName="Full Path" ReadOnly="true" Category="Misc">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="EmbeddedResource" PersistedName="FullPath" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="Identity" DisplayName="Identity" ReadOnly="true" Category="Misc" Visible="false">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="EmbeddedResource" PersistedName="Identity" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="Extension" DisplayName="Extension" ReadOnly="true" Category="Misc" Visible="false">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="EmbeddedResource" PersistedName="Extension" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="DependentUpon" Visible="false" />
+  <StringProperty Name="Link" Visible="false" />
+  <BoolProperty Name="Visible" Visible="false" />
+</Rule>

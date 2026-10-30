@@ -1,0 +1,10 @@
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!--
+  Installed by the IsWiX extension into Visual Studio's MSBuild\Current\Microsoft.Common.targets\ImportAfter folder, so
+  Visual Studio's MSBuild imports it into every project that imports Microsoft.Common.targets (the WiX SDK does). It
+  brings in IsWiX's design-time support for .iswixproj projects only; command-line builds never see it.
+-->
+<Project>
+  <Import Project="$(MSBuildExtensionsPath)\IsWiX\IsWiX.DesignTime.targets"
+          Condition=" '$(MSBuildProjectExtension)' == '.iswixproj' and '$(IsWiXDesignTimeTargetsImported)' != 'true' and Exists('$(MSBuildExtensionsPath)\IsWiX\IsWiX.DesignTime.targets') " />
+</Project>

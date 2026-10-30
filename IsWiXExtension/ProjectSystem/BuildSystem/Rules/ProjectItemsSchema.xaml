@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- The item types an IsWiX project holds and the content type of each file extension, which decide what Solution
+     Explorer shows and what Add > New/Existing Item creates. The WiX SDK compiles .wxs files (Compile) and embeds
+     .wxl files (EmbeddedResource). -->
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <ContentType Name="WixSource" DisplayName="WiX source" ItemType="Compile" />
+  <ContentType Name="WixLocalization" DisplayName="WiX localization" ItemType="EmbeddedResource" />
+  <ContentType Name="WixInclude" DisplayName="WiX include" ItemType="None" />
+  <ContentType Name="Default" DisplayName="File" ItemType="None" />
+
+  <ItemType Name="Compile" DisplayName="WiX source" />
+  <ItemType Name="EmbeddedResource" DisplayName="WiX localization" />
+  <ItemType Name="Content" DisplayName="Content" />
+  <ItemType Name="None" DisplayName="None" />
+
+  <FileExtension Name=".wxs" ContentType="WixSource" />
+  <FileExtension Name=".wxl" ContentType="WixLocalization" />
+  <FileExtension Name=".wxi" ContentType="WixInclude" />
+</ProjectSchemaDefinitions>

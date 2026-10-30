@@ -1,0 +1,17 @@
+; Registers .iswixproj as a Visual Studio project type opened by the Common Project System (CPS). What a project can do
+; comes from its MSBuild evaluation: the capabilities and rules in IsWiX.DesignTime.targets, which Visual Studio's
+; MSBuild imports into every .iswixproj (see IsWiX.ImportAfter.targets).
+;
+; {3A7B4E67-3CBB-402A-AC31-8EF9DCCEF68E}  IsWiX project type (written into .sln files; never change it)
+; {6037b2ce-4508-478c-a49e-c361ca5cba63}  IsWiXPackage, which provides the type's resources
+; {3347BEE8-D7A1-4082-95E4-38A439553CC2}  the CPS package, which creates the projects
+[$RootKey$\Projects\{3A7B4E67-3CBB-402A-AC31-8EF9DCCEF68E}]
+@="IsWiXProjectFactory"
+"DisplayName"="IsWiX Project"
+"DisplayProjectFileExtensions"="IsWiX Project Files (*.iswixproj);*.iswixproj"
+"DefaultProjectExtension"="iswixproj"
+"PossibleProjectExtensions"="iswixproj"
+"Language(VsTemplate)"="IsWiX"
+"Package"="{6037b2ce-4508-478c-a49e-c361ca5cba63}"
+"ProjectFactoryPackage"="{3347BEE8-D7A1-4082-95E4-38A439553CC2}"
+"DisableAsynchronousProjectTreeLoad"=dword:00000001

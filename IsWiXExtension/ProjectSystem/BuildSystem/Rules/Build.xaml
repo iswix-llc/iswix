@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- The Build property page: the WiX SDK properties most often changed per configuration. -->
+<Rule Name="IsWiXBuild" DisplayName="Build" PageTemplate="generic" Description="Build" Order="2" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration" HasConfigurationCondition="true" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="General" DisplayName="General" />
+    <Category Name="Warnings" DisplayName="Errors and warnings" />
+    <Category Name="Validation" DisplayName="Validation" />
+  </Rule.Categories>
+
+  <StringProperty Name="DefineConstants" DisplayName="Preprocessor variables" Category="General"
+                  Description="Variables for the WiX preprocessor, as name=value pairs separated by semicolons." />
+  <StringProperty Name="Cultures" DisplayName="Cultures to build" Category="General"
+                  Description="The cultures to build, separated by semicolons; empty builds every culture the project has." />
+  <StringProperty Name="WixVariables" DisplayName="WiX variables" Category="General"
+                  Description="WiX variables, as name=value pairs separated by semicolons." />
+
+  <BoolProperty Name="TreatWarningsAsErrors" DisplayName="Treat warnings as errors" Category="Warnings" />
+  <StringProperty Name="SuppressSpecificWarnings" DisplayName="Suppress specific warnings" Category="Warnings"
+                  Description="Warning numbers to suppress, separated by semicolons." />
+
+  <BoolProperty Name="SuppressValidation" DisplayName="Suppress validation" Category="Validation"
+                Description="Skip ICE validation of the built package." />
+  <StringProperty Name="SuppressIces" DisplayName="Suppress specific ICEs" Category="Validation"
+                  Description="ICEs to skip, separated by semicolons (for example ICE64)." />
+</Rule>

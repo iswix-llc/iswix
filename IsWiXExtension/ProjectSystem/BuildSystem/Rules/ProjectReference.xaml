@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- A project reference as written in the project file. -->
+<Rule Name="ProjectReference" DisplayName="Project Reference" PageTemplate="generic" Description="Project reference properties" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="ProjectReference" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="General" DisplayName="General" />
+  </Rule.Categories>
+  <StringProperty Name="Name" DisplayName="Name" Category="General" />
+  <StringProperty Name="Project" DisplayName="Project" Category="General" Visible="false" />
+  <StringProperty Name="Identity" DisplayName="Path" ReadOnly="true" Category="General">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="ProjectReference" PersistedName="Identity" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="FullPath" DisplayName="Full Path" ReadOnly="true" Category="General">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="ProjectReference" PersistedName="FullPath" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <BoolProperty Name="Visible" Visible="false" />
+</Rule>

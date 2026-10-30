@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- A project reference as the References node shows it, from IsWiXResolveProjectReferencesDesignTime. -->
+<Rule Name="ResolvedProjectReference" DisplayName="Project Reference" PageTemplate="generic" Description="Project reference properties" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="ProjectReference"
+                SourceType="TargetResults" MSBuildTarget="IsWiXResolveProjectReferencesDesignTime" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="General" DisplayName="General" />
+  </Rule.Categories>
+  <StringProperty Name="OriginalItemSpec" Visible="false" ReadOnly="true" />
+  <StringProperty Name="Name" DisplayName="Name" ReadOnly="true" Category="General" />
+  <StringProperty Name="Identity" DisplayName="Full Path" ReadOnly="true" Category="General" />
+  <BoolProperty Name="Visible" Visible="false" />
+</Rule>

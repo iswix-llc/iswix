@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- What the Properties window shows for the project node. -->
+<Rule Name="ConfiguredBrowseObject" DisplayName="General" PageTemplate="generic" Description="General" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="Misc" DisplayName="Misc" />
+  </Rule.Categories>
+  <StringProperty Name="MSBuildProjectFile" DisplayName="Project File" ReadOnly="true" Category="Misc" />
+  <StringProperty Name="MSBuildProjectDirectory" DisplayName="Project Folder" ReadOnly="true" Category="Misc" />
+  <StringProperty Name="OutputType" DisplayName="Output Type" ReadOnly="true" Category="Misc" />
+</Rule>

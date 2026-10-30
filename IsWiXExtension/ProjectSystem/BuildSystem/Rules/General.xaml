@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- ConfigurationGeneral: the project-wide properties CPS reads, and the General property page. -->
+<Rule Name="ConfigurationGeneral" DisplayName="General" PageTemplate="generic" Description="General" Order="1" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="General" DisplayName="General" />
+    <Category Name="Output" DisplayName="Output" />
+  </Rule.Categories>
+
+  <EnumProperty Name="OutputType" DisplayName="Output type" Category="General"
+                Description="What the project builds.">
+    <EnumProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+    </EnumProperty.DataSource>
+    <EnumValue Name="Package" DisplayName="Windows Installer package (.msi)" />
+    <EnumValue Name="Bundle" DisplayName="Bundle (.exe)" />
+    <EnumValue Name="Module" DisplayName="Merge module (.msm)" />
+    <EnumValue Name="Library" DisplayName="WiX library (.wixlib)" />
+    <EnumValue Name="Patch" DisplayName="Patch (.msp)" />
+    <EnumValue Name="PatchCreation" DisplayName="Patch creation (.pcp)" />
+  </EnumProperty>
+  <StringProperty Name="OutputName" DisplayName="Output name" Category="General"
+                  Description="The output file's name, without its extension.">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="OutputPath" DisplayName="Output path" Category="Output" Subtype="folder"
+                  Description="Where the output is written." />
+  <StringProperty Name="IntermediateOutputPath" DisplayName="Intermediate output path" Category="Output" Subtype="folder"
+                  Description="Where intermediate files are written." />
+
+  <!-- Read by CPS and Visual Studio; not shown. -->
+  <StringProperty Name="ProjectGuid" Visible="false">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" Label="Globals" HasConfigurationCondition="false" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="TargetPath" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetFileName" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetDir" Visible="false" ReadOnly="true" />
+  <StringProperty Name="MSBuildProjectDirectory" Visible="false" ReadOnly="true" />
+  <StringProperty Name="MSBuildProjectFullPath" Visible="false" ReadOnly="true" />
+  <StringProperty Name="Configuration" Visible="false" ReadOnly="true" />
+  <StringProperty Name="Platform" Visible="false" ReadOnly="true" />
+  <StringProperty Name="DefaultContentType" Visible="false" ReadOnly="true" />
+</Rule>

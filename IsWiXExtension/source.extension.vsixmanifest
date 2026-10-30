@@ -11,7 +11,7 @@
 		<PreviewImage>IsWiX.png</PreviewImage>
 		<Tags>iswix, wix, wixtoolset, msi, installer, setup</Tags>
 	</Metadata>
-	<Installation>
+	<Installation AllUsers="true">
 		<InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.12,19.0)">
 			<ProductArchitecture>amd64</ProductArchitecture>
 		</InstallationTarget>
@@ -19,12 +19,10 @@
 			<ProductArchitecture>arm64</ProductArchitecture>
 		</InstallationTarget>
 	</Installation>
-	<Dependencies>
-		<Dependency d:Source="Installed" Id="FireGiant.HeatWave.Dev17" DisplayName="HeatWave for VS2022" Version="[1.0.6,2.0)" d:InstallSource="Download" Location="https://marketplace.visualstudio.com/items?itemName=FireGiant.FireGiantWiXDev17" />
-	</Dependencies>
 	<Assets>
 		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
 		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="IsWiXTemplates.pkgdef" />
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="ProjectSystem\IsWiXProjectSystem.pkgdef" />
 	</Assets>
 	<Prerequisites>
 		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.12.35410.122,19.0)" DisplayName="Visual Studio core editor" />
