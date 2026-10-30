@@ -32,6 +32,10 @@ namespace IsWiX
     [ProvideEditorFactory(typeof(Designer.WixDesignerEditorFactory), 110, TrustLevel = __VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
     [ProvideEditorExtension(typeof(Designer.WixDesignerEditorFactory), ".wxs", 0x40, NameResourceID = 110)]
     [ProvideEditorLogicalView(typeof(Designer.WixDesignerEditorFactory), VSConstants.LOGVIEWID.Designer_string)]
+    // The Convert to IsWiX Project / Convert to WiX Project commands (IsWiXCommands.vsct). The package loads, in the
+    // background, when a solution opens, so the commands can show only on the projects they convert.
+    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
     public sealed class IsWiXPackage : AsyncPackage
     {
         /// <summary>
@@ -54,6 +58,7 @@ namespace IsWiX
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             RegisterEditorFactory(new Designer.WixDesignerEditorFactory(this));
+            await Commands.ConvertCommands.InitializeAsync(this);
         }
 
         #endregion

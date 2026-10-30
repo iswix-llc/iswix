@@ -57,6 +57,10 @@
     <Compile Include="Designer\VsTheme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsWiXExtensionPackage.cs" />
+    <Compile Include="Commands\ConvertCommands.cs" />
+    <Compile Include="..\Shared\Conversion\ProjectConverter.cs">
+      <Link>Conversion\ProjectConverter.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MS-PL.txt">
@@ -87,6 +91,9 @@
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>IsWiX\Rules</VSIXSubPath>
     </Content>
+    <VSCTCompile Include="IsWiXCommands.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

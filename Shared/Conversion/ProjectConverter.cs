@@ -124,6 +124,11 @@ namespace IsWiX.Conversion
             foreach (var target in renames.Values.Where(File.Exists))
                 throw new ConversionException($"{Relative(root, target)} already exists.");
 
+            // Each project's .user file goes with it, unless one is already there for the new name.
+            var userFiles = renames
+                .Where(r => File.Exists(r.Key + ".user") && !File.Exists(r.Value + ".user"))
+                .ToDictionary(r => r.Key + ".user", r => r.Value + ".user", StringComparer.OrdinalIgnoreCase);
+
             if (options.SdkVersion != null)
             {
                 if (!Regex.IsMatch(options.SdkVersion, @"^\d+(\.\d+){1,3}(-[0-9A-Za-z.\-]+)?$"))
@@ -198,6 +203,12 @@ namespace IsWiX.Conversion
             {
                 result.Renamed.Add(rename);
                 if (!options.DryRun) File.Move(rename.Key, rename.Value);
+            }
+
+            if (!options.DryRun)
+            {
+                foreach (var userFile in userFiles)
+                    File.Move(userFile.Key, userFile.Value);
             }
 
             return result;
@@ -299,6 +310,7 @@ namespace IsWiX.Conversion
             string.Equals(Path.GetExtension(path), extension, StringComparison.OrdinalIgnoreCase);
 
         static bool IsProjectFile(string path) => Path.GetExtension(path).EndsWith("proj", StringComparison.OrdinalIgnoreCase);
+
 
         // The full path a path written in a file under folder refers to. Project files use either separator.
         static string Resolve(string folder, string path) =>

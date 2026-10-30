@@ -227,6 +227,18 @@ public class ProjectConverterTests : IDisposable
     }
 
     [Fact]
+    public void A_projects_user_file_goes_with_it()
+    {
+        Write("Pkg/Pkg.wixproj", "<Project />");
+        Write("Pkg/Pkg.wixproj.user", "<Project><PropertyGroup><ShowAllFiles>true</ShowAllFiles></PropertyGroup></Project>");
+
+        Convert(ProjectKind.IsWiX);
+
+        Assert.True(File.Exists(P("Pkg/Pkg.iswixproj.user")));
+        Assert.False(File.Exists(P("Pkg/Pkg.wixproj.user")));
+    }
+
+    [Fact]
     public void Build_output_folders_are_left_alone()
     {
         Write("Pkg/Pkg.wixproj", "<Project />");
