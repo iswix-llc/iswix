@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- A package reference, read for NuGet nomination and edited when packages are added or updated (Manage NuGet Packages). -->
+<Rule Name="PackageReference" DisplayName="Package Reference" PageTemplate="generic" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="PackageReference" />
+  </Rule.DataSource>
+  <StringProperty Name="Version" Visible="false" />
+  <StringProperty Name="VersionOverride" Visible="false" />
+  <StringProperty Name="IncludeAssets" Visible="false" />
+  <StringProperty Name="ExcludeAssets" Visible="false" />
+  <StringProperty Name="PrivateAssets" Visible="false" />
+  <StringProperty Name="NoWarn" Visible="false" />
+  <StringProperty Name="GeneratePathProperty" Visible="false" />
+  <StringProperty Name="Aliases" Visible="false" />
+  <StringProperty Name="IsImplicitlyDefined" ReadOnly="true" Visible="false" />
+</Rule>

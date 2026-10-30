@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- The properties NuGet restores an IsWiX project with, read by IsWiX's NuGet nomination
+     (ProjectSystem/IsWiXNuGetNominator.cs). Not shown anywhere. -->
+<Rule Name="IsWiXNuGetRestore" DisplayName="NuGet restore" PageTemplate="generic" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+  </Rule.DataSource>
+  <StringProperty Name="TargetFramework" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetFrameworks" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetFrameworkIdentifier" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetFrameworkVersion" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetFrameworkMoniker" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetFrameworkProfile" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetPlatformIdentifier" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetPlatformVersion" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetPlatformMoniker" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TargetPlatformMinVersion" ReadOnly="true" Visible="false" />
+  <StringProperty Name="NuGetTargetMoniker" ReadOnly="true" Visible="false" />
+  <StringProperty Name="MSBuildProjectExtensionsPath" ReadOnly="true" Visible="false" />
+  <StringProperty Name="ProjectAssetsFile" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreProjectStyle" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreOutputPath" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreSources" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestorePackagesPath" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreFallbackFolders" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreAdditionalProjectSources" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreAdditionalProjectFallbackFolders" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreAdditionalProjectFallbackFoldersExcludes" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreConfigFile" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreRootConfigDirectory" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreLockedMode" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestorePackagesWithLockFile" ReadOnly="true" Visible="false" />
+  <StringProperty Name="NuGetLockFilePath" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreUseLegacyDependencyResolver" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RestoreEnablePackagePruning" ReadOnly="true" Visible="false" />
+  <StringProperty Name="ManagePackageVersionsCentrally" ReadOnly="true" Visible="false" />
+  <StringProperty Name="CentralPackageVersionOverrideEnabled" ReadOnly="true" Visible="false" />
+  <StringProperty Name="CentralPackageTransitivePinningEnabled" ReadOnly="true" Visible="false" />
+  <StringProperty Name="CentralPackageFloatingVersionsEnabled" ReadOnly="true" Visible="false" />
+  <StringProperty Name="NuGetAudit" ReadOnly="true" Visible="false" />
+  <StringProperty Name="NuGetAuditLevel" ReadOnly="true" Visible="false" />
+  <StringProperty Name="NuGetAuditMode" ReadOnly="true" Visible="false" />
+  <StringProperty Name="SdkAnalysisLevel" ReadOnly="true" Visible="false" />
+  <StringProperty Name="UsingMicrosoftNETSdk" ReadOnly="true" Visible="false" />
+  <StringProperty Name="AssetTargetFallback" ReadOnly="true" Visible="false" />
+  <StringProperty Name="PackageTargetFallback" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RuntimeIdentifier" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RuntimeIdentifiers" ReadOnly="true" Visible="false" />
+  <StringProperty Name="RuntimeSupports" ReadOnly="true" Visible="false" />
+  <StringProperty Name="TreatWarningsAsErrors" ReadOnly="true" Visible="false" />
+  <StringProperty Name="WarningsAsErrors" ReadOnly="true" Visible="false" />
+  <StringProperty Name="WarningsNotAsErrors" ReadOnly="true" Visible="false" />
+  <StringProperty Name="NoWarn" ReadOnly="true" Visible="false" />
+  <StringProperty Name="PackageId" ReadOnly="true" Visible="false" />
+  <StringProperty Name="PackageVersion" ReadOnly="true" Visible="false" />
+  <StringProperty Name="Version" ReadOnly="true" Visible="false" />
+  <StringProperty Name="AssemblyName" ReadOnly="true" Visible="false" />
+  <StringProperty Name="IsWiXNuGetNomination" ReadOnly="true" Visible="false" />
+</Rule>

@@ -59,6 +59,7 @@
     <Compile Include="IsWiXExtensionPackage.cs" />
     <Compile Include="Commands\ConvertCommands.cs" />
     <Compile Include="ProjectSystem\IsWiXProjectTreePropertiesProvider.cs" />
+    <Compile Include="ProjectSystem\IsWiXNuGetNominator.cs" />
     <Compile Include="..\Shared\Conversion\ProjectConverter.cs">
       <Link>Conversion\ProjectConverter.cs</Link>
     </Compile>
@@ -168,6 +169,9 @@
     <!-- The Common Project System's API, for the .iswixproj project system's MEF components. Visual Studio provides it at
          run time. -->
     <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="17.9.380" ExcludeAssets="runtime" NoWarn="NU1604" />
+    <!-- NuGet's solution restore service (IVsSolutionRestoreService5), which IsWiX nominates .iswixproj projects to.
+         Visual Studio provides it, with binding redirects. -->
+    <PackageReference Include="NuGet.VisualStudio" Version="17.14.0" ExcludeAssets="runtime" NoWarn="NU1604" />
     <!-- The designer's theming styles Xceed's property grid (General Information). The same version the designers
          are built against; without a reference of its own the extension only finds it through them, which depends on
          the build. -->

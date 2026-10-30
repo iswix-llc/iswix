@@ -34,6 +34,9 @@
     <ProjectCapability Include="ReferencesFolder" />
     <ProjectCapability Include="ProjectReferences" />
     <ProjectCapability Include="ReferenceManagerProjects" />
+    <!-- NuGet: IsWiX nominates the project to NuGet (IsWiXNuGetNominator), which restores it and lists it in
+         Manage NuGet Packages. -->
+    <ProjectCapability Include="PackageReferences" Condition=" '$(IsWiXNuGetNomination)' != 'false' " />
     <ProjectCapability Include="DeclaredSourceItems" />
     <ProjectCapability Include="UserSourceItems" />
     <ProjectCapability Include="OutputGroups" />
@@ -56,7 +59,14 @@
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectReference.xaml;$(IsWiXRulesDirectory)ResolvedProjectReference.xaml">
       <Context>ProjectSubscriptionService;BrowseObject</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)IsWiXDesignTimeRestore.xaml">
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)IsWiXNuGetRestore.xaml;$(IsWiXRulesDirectory)PackageVersion.xaml;$(IsWiXRulesDirectory)PackageDownload.xaml">
+      <Context>ProjectSubscriptionService</Context>
+    </PropertyPageSchema>
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)PackageReference.xaml">
+      <Context>ProjectSubscriptionService;BrowseObject</Context>
+    </PropertyPageSchema>
+    <!-- Restore with MSBuild in design-time builds, for a project that has turned NuGet nomination off. -->
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)IsWiXDesignTimeRestore.xaml" Condition=" '$(IsWiXNuGetNomination)' == 'false' ">
       <Context>ProjectSubscriptionService</Context>
     </PropertyPageSchema>
   </ItemGroup>
@@ -75,7 +85,8 @@
 
   <!--
     NuGet restore. The WiX SDK needs the project's PackageReferences restored before it builds (they bring in its
-    extensions), and in Visual Studio nothing else restores an .iswixproj, so IsWiX does it in design-time builds:
+    extensions). In Visual Studio IsWiX nominates the project to NuGet, which restores it. A project that sets
+    IsWiXNuGetNomination to false is restored here instead, with MSBuild, in design-time builds:
     when the project has packages and has not been restored since it, or the Directory.Build.props or
     Directory.Packages.props it uses, last changed. A stamp file records when IsWiX last restored it, since NuGet
     leaves project.assets.json alone when nothing it restores has changed.
