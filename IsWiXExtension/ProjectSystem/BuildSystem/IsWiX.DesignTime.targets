@@ -31,7 +31,10 @@
     <ProjectCapability Include="HandlesOwnReload" />
     <ProjectCapability Include="PersistDesignTimeDataOutOfProject" />
     <ProjectCapability Include="ProjectConfigurationsDeclaredDimensions" />
-    <ProjectCapability Include="ReferencesFolder" />
+    <!-- The .NET project system's Dependencies node, with Projects and Packages under it (as Visual Studio's Windows
+         Application Packaging projects have it; its pieces apply to DependenciesTree with ProjectReferences or
+         PackageReferences, not only to .NET projects). -->
+    <ProjectCapability Include="DependenciesTree" />
     <ProjectCapability Include="ProjectReferences" />
     <ProjectCapability Include="ReferenceManagerProjects" />
     <!-- NuGet: with this capability the .NET project system's package restore nominates the project to NuGet (its
@@ -57,11 +60,17 @@
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)ConfigurationGeneralFile.xaml;$(IsWiXRulesDirectory)Compile.xaml;$(IsWiXRulesDirectory)EmbeddedResource.xaml;$(IsWiXRulesDirectory)Content.xaml;$(IsWiXRulesDirectory)None.xaml;$(IsWiXRulesDirectory)Folder.xaml">
       <Context>File;BrowseObject</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectReference.xaml;$(IsWiXRulesDirectory)ResolvedProjectReference.xaml">
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectReference.xaml">
+      <Context>Project;BrowseObject</Context>
+    </PropertyPageSchema>
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ResolvedProjectReference.xaml">
       <Context>ProjectSubscriptionService;BrowseObject</Context>
     </PropertyPageSchema>
-    <!-- Package references as CPS edits them for Manage NuGet Packages. -->
+    <!-- Package references, as the Dependencies node shows them and CPS edits them for Manage NuGet Packages. -->
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)PackageReference.xaml">
+      <Context>Project;BrowseObject</Context>
+    </PropertyPageSchema>
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ResolvedPackageReference.xaml">
       <Context>ProjectSubscriptionService;BrowseObject</Context>
     </PropertyPageSchema>
     <!-- Restore with MSBuild in design-time builds, for a project that has turned NuGet nomination off. -->
@@ -71,14 +80,29 @@
   </ItemGroup>
 
   <!--
-    The project references the References node shows, as resolved at design time: the ProjectReference items
-    themselves. Nothing is built; the WiX SDK resolves them for real when the project builds.
+    The project references the Dependencies node shows as resolved: the ProjectReference items themselves. MSBuild's
+    own ResolveProjectReferencesDesignTime returns only references whose assemblies are referenced, and the WiX SDK
+    references none (ReferenceOutputAssembly is false). Nothing is built; the WiX SDK resolves them when it builds.
   -->
   <Target Name="IsWiXResolveProjectReferencesDesignTime" Returns="@(_IsWiXResolvedProjectReference)">
     <ItemGroup>
       <_IsWiXResolvedProjectReference Include="@(ProjectReference->'%(FullPath)')">
         <OriginalItemSpec>%(ProjectReference.Identity)</OriginalItemSpec>
       </_IsWiXResolvedProjectReference>
+    </ItemGroup>
+  </Target>
+
+  <!--
+    The package references the Dependencies node shows as resolved: all of them, once NuGet has restored the
+    project. (The .NET SDK's ResolvePackageDependenciesDesignTime reads the assets file; WiX projects don't have it.)
+  -->
+  <Target Name="IsWiXResolvePackageReferencesDesignTime" Returns="@(_IsWiXResolvedPackageReference)">
+    <ItemGroup Condition=" Exists('$(_IsWiXAssetsFile)') ">
+      <_IsWiXResolvedPackageReference Include="@(PackageReference)">
+        <OriginalItemSpec>%(PackageReference.Identity)</OriginalItemSpec>
+        <Name>%(PackageReference.Identity)</Name>
+        <Type>Package</Type>
+      </_IsWiXResolvedPackageReference>
     </ItemGroup>
   </Target>
 

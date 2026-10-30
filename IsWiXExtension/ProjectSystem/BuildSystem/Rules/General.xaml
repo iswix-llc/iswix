@@ -48,6 +48,16 @@
   <StringProperty Name="Configuration" Visible="false" ReadOnly="true" />
   <StringProperty Name="Platform" Visible="false" ReadOnly="true" />
   <StringProperty Name="DefaultContentType" Visible="false" ReadOnly="true" />
+  <!-- Read by the Dependencies node; the WiX SDK sets the framework to "native". -->
+  <StringProperty Name="TargetFramework" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetFrameworks" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetFrameworkIdentifier" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetFrameworkVersion" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetFrameworkMoniker" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetPlatformIdentifier" Visible="false" ReadOnly="true" />
+  <StringProperty Name="TargetPlatformVersion" Visible="false" ReadOnly="true" />
+  <StringProperty Name="ProjectAssetsFile" Visible="false" ReadOnly="true" />
+  <StringProperty Name="MSBuildProjectExtensionsPath" Visible="false" ReadOnly="true" />
 
   <!-- Solution Explorer's per-user view settings, kept in the .user file. -->
   <BoolProperty Name="ShowAllFiles" Visible="false">
