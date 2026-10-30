@@ -25,6 +25,18 @@ that version, with the matching `.wixext` packages; WixToolset.Sdk v7 and later 
 WiX Toolset's [Open Source Maintenance Fee EULA](https://wixtoolset.org/osmf/). Converting there and back restores the
 files.
 
+## WiX XML schemas
+
+The extension installs the WiX XML schemas (`IsWiXExtension/Schemas/iswix_*.xsd`) into Visual Studio's XML schema cache,
+for IntelliSense and validation in `.wxs`, `.wxi` and `.wxl` files. The WiX Toolset keeps its schemas as one fragment
+per element under `src/xsd`; regenerate the combined schemas from a WiX checkout at the release IsWiX ships with:
+
+```
+dotnet run --project Tools/IsWiXSchemas -- <wix>/src/xsd IsWiXExtension/Schemas
+```
+
+It compiles the schemas it writes and fails on any error.
+
 ## Building and releasing
 
 The version lives in `Directory.Build.props`; the release workflow also writes it into the VSIX manifest
