@@ -27,6 +27,8 @@
 	</Assets>
 	<Prerequisites>
 		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.12.35410.122,19.0)" DisplayName="Visual Studio core editor" />
+		<!-- The .NET project system, whose package restore restores .iswixproj projects and gives them Manage NuGet Packages. -->
+		<Prerequisite Id="Microsoft.VisualStudio.Workload.ManagedDesktop" Version="[17.0,19.0)" DisplayName=".NET desktop development" />
 		<Prerequisite Id="Microsoft.NetCore.Component.Runtime.8.0" Version="[17.12.35410.122,19.0)" DisplayName=".NET 8.0 Runtime (Long Term Support)" />
 	</Prerequisites>
 </PackageManifest>

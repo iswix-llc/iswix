@@ -50,7 +50,15 @@ namespace IsWiX.Commands
 
         void Add(OleMenuCommandService commands, int id, ProjectKind to, bool wholeSolution)
         {
-            var command = new OleMenuCommand((s, e) => Execute(to, wholeSolution), new CommandID(CommandIds.CommandSet, id));
+            // Run after Solution Explorer has finished routing the command: converting closes the solution, and with it
+            // the hierarchy the command came from.
+            var command = new OleMenuCommand(
+                (s, e) => _package.JoinableTaskFactory.RunAsync(async () =>
+                {
+                    await _package.JoinableTaskFactory.SwitchToMainThreadAsync(alwaysYield: true);
+                    Execute(to, wholeSolution);
+                }).FileAndForget("IsWiX/ConvertCommands"),
+                new CommandID(CommandIds.CommandSet, id));
             command.BeforeQueryStatus += (s, e) => QueryStatus(command, to, wholeSolution);
             commands.AddCommand(command);
         }
@@ -123,13 +131,15 @@ namespace IsWiX.Commands
                 message = ex.Message + "\n\nNothing was changed.";
                 icon = OLEMSGICON.OLEMSGICON_WARNING;
             }
-            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+            catch (Exception ex) when (!(ex is OutOfMemoryException))
             {
+                // The solution is closed: whatever went wrong, open it again and say so.
                 message = "The conversion stopped partway: " + ex.Message + "\n\nCheck the projects and solution in " + solutionFolder + ".";
                 icon = OLEMSGICON.OLEMSGICON_CRITICAL;
             }
 
-            solution.OpenSolutionFile((uint)__VSSLNOPENOPTIONS.SLNOPENOPT_Silent, solutionFile);
+            if (ErrorHandler.Failed(solution.OpenSolutionFile(0, solutionFile)))
+                message += "\n\nVisual Studio could not open " + solutionFile + " again.";
             Show(message, icon, OLEMSGBUTTON.OLEMSGBUTTON_OK);
         }
 

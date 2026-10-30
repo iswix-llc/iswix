@@ -34,8 +34,9 @@
     <ProjectCapability Include="ReferencesFolder" />
     <ProjectCapability Include="ProjectReferences" />
     <ProjectCapability Include="ReferenceManagerProjects" />
-    <!-- NuGet: IsWiX nominates the project to NuGet (IsWiXNuGetNominator), which restores it and lists it in
-         Manage NuGet Packages. -->
+    <!-- NuGet: with this capability the .NET project system's package restore nominates the project to NuGet (its
+         components and rules apply to PackageReferences, not only to .NET projects). NuGet then restores it and lists
+         it in Manage NuGet Packages. -->
     <ProjectCapability Include="PackageReferences" Condition=" '$(IsWiXNuGetNomination)' != 'false' " />
     <ProjectCapability Include="DeclaredSourceItems" />
     <ProjectCapability Include="UserSourceItems" />
@@ -59,9 +60,7 @@
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectReference.xaml;$(IsWiXRulesDirectory)ResolvedProjectReference.xaml">
       <Context>ProjectSubscriptionService;BrowseObject</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)IsWiXNuGetRestore.xaml;$(IsWiXRulesDirectory)PackageVersion.xaml;$(IsWiXRulesDirectory)PackageDownload.xaml">
-      <Context>ProjectSubscriptionService</Context>
-    </PropertyPageSchema>
+    <!-- Package references as CPS edits them for Manage NuGet Packages. -->
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)PackageReference.xaml">
       <Context>ProjectSubscriptionService;BrowseObject</Context>
     </PropertyPageSchema>
@@ -85,7 +84,7 @@
 
   <!--
     NuGet restore. The WiX SDK needs the project's PackageReferences restored before it builds (they bring in its
-    extensions). In Visual Studio IsWiX nominates the project to NuGet, which restores it. A project that sets
+    extensions). In Visual Studio the .NET project system nominates it to NuGet, which restores it. A project that sets
     IsWiXNuGetNomination to false is restored here instead, with MSBuild, in design-time builds:
     when the project has packages and has not been restored since it, or the Directory.Build.props or
     Directory.Packages.props it uses, last changed. A stamp file records when IsWiX last restored it, since NuGet
