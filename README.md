@@ -4,6 +4,23 @@ Starting with v6, IsWiX is only distributed via the Visual Studio Marketplace as
 
 Please see our [tutorials](https://github.com/iswix-llc/iswix-tutorials) to learn how to get started.
 
+## IsWiX projects (.iswixproj)
+
+IsWiX opens its own project type, `.iswixproj`, without HeatWave. An `.iswixproj` is an ordinary WiX SDK project: it
+builds with `dotnet build` or MSBuild on either `WixToolset.Sdk` or `IsWiX.Sdk`, and the IsWiX project templates create
+them. In Visual Studio, IsWiX's project system (`IsWiXExtension/ProjectSystem`) gives it Solution Explorer, property
+pages, project references and NuGet restore. `.wixproj` projects still open with HeatWave if it is installed; the IsWiX
+designers work in either.
+
+To convert existing `.wixproj` projects, run from a clone of this repository (needs the .NET 10 SDK):
+
+```
+dotnet run Tools/ConvertToIsWiX.cs -- <folder> [--iswix-sdk <version>] [--dry-run]
+```
+
+It renames the projects under the folder, updates project references and solutions, and with `--iswix-sdk` moves them
+from WixToolset.Sdk to IsWiX.Sdk.
+
 ## Building and releasing
 
 The version lives in `Directory.Build.props`; the release workflow also writes it into the VSIX manifest
