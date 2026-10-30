@@ -65,7 +65,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>CustomAction.def</ModuleDefinitionFile>
-      <AdditionalDependencies>msi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>msi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition=" '$(Configuration)' == 'Debug' ">
