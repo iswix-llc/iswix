@@ -47,4 +47,16 @@
   <StringProperty Name="Configuration" Visible="false" ReadOnly="true" />
   <StringProperty Name="Platform" Visible="false" ReadOnly="true" />
   <StringProperty Name="DefaultContentType" Visible="false" ReadOnly="true" />
+
+  <!-- Solution Explorer's per-user view settings, kept in the .user file. -->
+  <BoolProperty Name="ShowAllFiles" Visible="false">
+    <BoolProperty.DataSource>
+      <DataSource Persistence="UserFile" HasConfigurationCondition="false" />
+    </BoolProperty.DataSource>
+  </BoolProperty>
+  <BoolProperty Name="AutoRefresh" Visible="false">
+    <BoolProperty.DataSource>
+      <DataSource Persistence="UserFile" HasConfigurationCondition="false" />
+    </BoolProperty.DataSource>
+  </BoolProperty>
 </Rule>

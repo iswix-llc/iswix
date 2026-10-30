@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- Not shown anywhere. Its target, IsWiXRestoreDesignTime, restores the project's NuGet packages when they need it;
+     subscribing to the rule is what makes CPS run it in design-time builds. -->
+<Rule Name="IsWiXDesignTimeRestore" DisplayName="NuGet restore" PageTemplate="generic" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" SourceType="TargetResults"
+                MSBuildTarget="IsWiXRestoreDesignTime" ItemType="IsWiXDesignTimeRestore" />
+  </Rule.DataSource>
+</Rule>

@@ -3,7 +3,7 @@
 <!-- A project reference as the References node shows it, from IsWiXResolveProjectReferencesDesignTime. -->
 <Rule Name="ResolvedProjectReference" DisplayName="Project Reference" PageTemplate="generic" Description="Project reference properties" xmlns="http://schemas.microsoft.com/build/2009/properties">
   <Rule.DataSource>
-    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="ProjectReference"
+    <DataSource Persistence="ResolvedReference" HasConfigurationCondition="false" ItemType="ProjectReference"
                 SourceType="TargetResults" MSBuildTarget="IsWiXResolveProjectReferencesDesignTime" />
   </Rule.DataSource>
   <Rule.Categories>

@@ -10,10 +10,6 @@
     <IsWiXDesignTimeTargetsImported>true</IsWiXDesignTimeTargetsImported>
     <IsWiXRulesDirectory>$(MSBuildThisFileDirectory)Rules\</IsWiXRulesDirectory>
 
-    <!-- Microsoft.Common.targets declares capabilities for assembly and COM references, which a WiX project has no use
-         for; the ones that apply are declared below instead. -->
-    <DefineCommonCapabilities>false</DefineCommonCapabilities>
-
     <!-- The configurations and platforms Visual Studio offers. Projects can set either to change them. -->
     <IsWiXConfigurations Condition=" '$(Configurations)' != '' ">$(Configurations)</IsWiXConfigurations>
     <IsWiXConfigurations Condition=" '$(IsWiXConfigurations)' == '' ">Debug;Release</IsWiXConfigurations>
@@ -23,6 +19,10 @@
 
     <!-- What Solution Explorer adds when a file has no known type. -->
     <DefaultContentType Condition=" '$(DefaultContentType)' == '' ">Default</DefaultContentType>
+
+    <!-- The WiX SDK makes every file under the project a None item; leave the project's own files, user files and
+         solutions out of Solution Explorer, as SDK-style .NET projects do. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/*.user;**/*.*proj;**/*.sln;**/*.slnx</DefaultItemExcludes>
   </PropertyGroup>
 
   <!-- Capabilities: what CPS lights up for the project. IsWiXProject is the one IsWiX's own components key on. -->
@@ -31,10 +31,11 @@
     <ProjectCapability Include="UseFileGlobs" />
     <ProjectCapability Include="OpenProjectFile" />
     <ProjectCapability Include="HandlesOwnReload" />
+    <ProjectCapability Include="PersistDesignTimeDataOutOfProject" />
     <ProjectCapability Include="ProjectConfigurationsDeclaredAsItems" />
-    <ProjectCapability Include="ProjectImportsTree" />
     <ProjectCapability Include="ReferencesFolder" />
     <ProjectCapability Include="ProjectReferences" />
+    <ProjectCapability Include="ReferenceManagerProjects" />
     <ProjectCapability Include="DeclaredSourceItems" />
     <ProjectCapability Include="UserSourceItems" />
     <ProjectCapability Include="OutputGroups" />
@@ -60,42 +61,31 @@
     </ProjectConfiguration>
   </ItemGroup>
 
-  <!-- Rules: what Solution Explorer shows, what the property pages edit, and the References node. -->
+  <!-- Rules: what Solution Explorer shows, what the property pages edit, the References node, and NuGet restore. -->
   <ItemGroup>
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectItemsSchema.xaml" />
     <PropertyPageSchema Include="$(IsWiXRulesDirectory)General.xaml;$(IsWiXRulesDirectory)Build.xaml">
       <Context>Project</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)GeneralBrowseObject.xaml">
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ConfigurationGeneralBrowseObject.xaml">
       <Context>BrowseObject</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)Compile.xaml;$(IsWiXRulesDirectory)EmbeddedResource.xaml;$(IsWiXRulesDirectory)Content.xaml;$(IsWiXRulesDirectory)None.xaml">
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ConfigurationGeneralFile.xaml;$(IsWiXRulesDirectory)Compile.xaml;$(IsWiXRulesDirectory)EmbeddedResource.xaml;$(IsWiXRulesDirectory)Content.xaml;$(IsWiXRulesDirectory)None.xaml;$(IsWiXRulesDirectory)Folder.xaml">
       <Context>File;BrowseObject</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)Folder.xaml">
-      <Context>File;BrowseObject</Context>
-    </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectReference.xaml">
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ProjectReference.xaml;$(IsWiXRulesDirectory)ResolvedProjectReference.xaml">
       <Context>ProjectSubscriptionService;BrowseObject</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(IsWiXRulesDirectory)ResolvedProjectReference.xaml">
-      <Context>ProjectSubscriptionService;BrowseObject</Context>
+    <PropertyPageSchema Include="$(IsWiXRulesDirectory)IsWiXDesignTimeRestore.xaml">
+      <Context>ProjectSubscriptionService</Context>
     </PropertyPageSchema>
   </ItemGroup>
-
-  <!--
-    CPS runs CompileDesignTime in its design-time builds. There is nothing to compile at design time; it is where the
-    project's packages get restored when they need to be (see IsWiXRestoreDesignTime).
-  -->
-  <Target Name="CompileDesignTime" DependsOnTargets="IsWiXRestoreDesignTime" />
 
   <!--
     The project references the References node shows, as resolved at design time: the ProjectReference items
     themselves. Nothing is built; the WiX SDK resolves them for real when the project builds.
   -->
-  <Target Name="IsWiXResolveProjectReferencesDesignTime"
-          DependsOnTargets="IsWiXRestoreDesignTime"
-          Returns="@(_IsWiXResolvedProjectReference)">
+  <Target Name="IsWiXResolveProjectReferencesDesignTime" Returns="@(_IsWiXResolvedProjectReference)">
     <ItemGroup>
       <_IsWiXResolvedProjectReference Include="@(ProjectReference->'%(FullPath)')">
         <OriginalItemSpec>%(ProjectReference.Identity)</OriginalItemSpec>
@@ -105,37 +95,58 @@
 
   <!--
     NuGet restore. The WiX SDK needs the project's PackageReferences restored before it builds (they bring in its
-    extensions), and in Visual Studio nothing else restores an .iswixproj, so IsWiX does it: in design-time builds
-    when the project has packages and either has never been restored or has changed since it last was.
+    extensions), and in Visual Studio nothing else restores an .iswixproj, so IsWiX does it in design-time builds:
+    when the project has packages and has not been restored since it, or the Directory.Build.props or
+    Directory.Packages.props it uses, last changed. A stamp file records when IsWiX last restored it, since NuGet
+    leaves project.assets.json alone when nothing it restores has changed.
   -->
   <PropertyGroup>
     <_IsWiXAssetsFile>$(ProjectAssetsFile)</_IsWiXAssetsFile>
     <_IsWiXAssetsFile Condition=" '$(_IsWiXAssetsFile)' == '' ">$(MSBuildProjectExtensionsPath)project.assets.json</_IsWiXAssetsFile>
+    <_IsWiXRestoreStamp>$(MSBuildProjectExtensionsPath)$(MSBuildProjectFile).iswix.restore</_IsWiXRestoreStamp>
   </PropertyGroup>
 
+  <!-- Re-evaluate the project when restore writes these, so it picks up the packages' imports. -->
+  <ItemGroup>
+    <AdditionalDesignTimeBuildInput Include="$(_IsWiXAssetsFile)" ContentSensitive="true" />
+    <AdditionalDesignTimeBuildInput Include="$(MSBuildProjectExtensionsPath)$(MSBuildProjectFile).nuget.g.props;$(MSBuildProjectExtensionsPath)$(MSBuildProjectFile).nuget.g.targets" ContentSensitive="true" />
+  </ItemGroup>
+
   <Target Name="_IsWiXCheckRestore">
+    <ItemGroup>
+      <_IsWiXRestoreInput Include="$(MSBuildProjectFullPath)" />
+      <_IsWiXRestoreInput Include="$(DirectoryBuildPropsPath)" Condition=" '$(DirectoryBuildPropsPath)' != '' and Exists('$(DirectoryBuildPropsPath)') " />
+      <_IsWiXRestoreInput Include="$(DirectoryPackagesPropsPath)" Condition=" '$(DirectoryPackagesPropsPath)' != '' and Exists('$(DirectoryPackagesPropsPath)') " />
+      <_IsWiXChangedRestoreInput Include="@(_IsWiXRestoreInput)" Condition=" Exists('$(_IsWiXRestoreStamp)') and $([System.IO.File]::GetLastWriteTime('%(FullPath)').Ticks) &gt; $([System.IO.File]::GetLastWriteTime('$(_IsWiXRestoreStamp)').Ticks) " />
+    </ItemGroup>
     <PropertyGroup>
       <_IsWiXNeedsRestore>false</_IsWiXNeedsRestore>
-      <_IsWiXNeedsRestore Condition=" '@(PackageReference)' != '' and !Exists('$(_IsWiXAssetsFile)') ">true</_IsWiXNeedsRestore>
-      <_IsWiXNeedsRestore Condition=" '@(PackageReference)' != '' and Exists('$(_IsWiXAssetsFile)') and $([System.IO.File]::GetLastWriteTime('$(MSBuildProjectFullPath)').Ticks) &gt; $([System.IO.File]::GetLastWriteTime('$(_IsWiXAssetsFile)').Ticks) ">true</_IsWiXNeedsRestore>
+      <_IsWiXNeedsRestore Condition=" '@(PackageReference)' != '' and (!Exists('$(_IsWiXAssetsFile)') or !Exists('$(_IsWiXRestoreStamp)') or '@(_IsWiXChangedRestoreInput)' != '') ">true</_IsWiXNeedsRestore>
       <_IsWiXNeedsRestore Condition=" '$(_IsWiXRestoring)' == 'true' ">false</_IsWiXNeedsRestore>
     </PropertyGroup>
   </Target>
 
   <Target Name="_IsWiXRestore" DependsOnTargets="_IsWiXCheckRestore" Condition=" '$(IsWiXRestoreInVisualStudio)' != 'false' ">
     <!-- Restore runs in an evaluation of its own, as "msbuild -restore" does, so the packages' imports are left out
-         while they are being restored. -->
+         while they are being restored. Referenced projects are left to whatever restores them. -->
     <MSBuild Projects="$(MSBuildProjectFullPath)"
              Targets="Restore"
-             Properties="_IsWiXRestoring=true;ExcludeRestorePackageImports=true;MSBuildRestoreSessionId=$([System.Guid]::NewGuid())"
+             Properties="_IsWiXRestoring=true;ExcludeRestorePackageImports=true;RestoreRecursive=false;MSBuildRestoreSessionId=$([System.Guid]::NewGuid())"
              Condition=" '$(_IsWiXNeedsRestore)' == 'true' " />
+    <Touch Files="$(_IsWiXRestoreStamp)" AlwaysCreate="true" Condition=" '$(_IsWiXNeedsRestore)' == 'true' " />
   </Target>
 
-  <Target Name="IsWiXRestoreDesignTime" DependsOnTargets="_IsWiXRestore" />
+  <!-- Run in design-time builds through the IsWiXDesignTimeRestore rule. -->
+  <Target Name="IsWiXRestoreDesignTime" DependsOnTargets="_IsWiXRestore" Returns="@(_IsWiXRestoreMarker)">
+    <ItemGroup>
+      <_IsWiXRestoreMarker Include="$(MSBuildProjectFullPath)" />
+    </ItemGroup>
+  </Target>
 
   <!--
     A build in Visual Studio before any design-time build has restored the project: restore it now. This build
-    evaluated the project without the packages' imports, so it stops and asks for another, which will have them.
+    evaluated the project without the packages' imports, so it stops; Visual Studio re-evaluates the project once
+    restore has written them, and the next build has them.
   -->
   <Target Name="_IsWiXRestoreBeforeBuild"
           BeforeTargets="_ValidateProjectAssetsFile"

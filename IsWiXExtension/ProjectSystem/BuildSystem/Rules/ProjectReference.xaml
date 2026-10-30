@@ -20,5 +20,7 @@
       <DataSource Persistence="Intrinsic" ItemType="ProjectReference" PersistedName="FullPath" />
     </StringProperty.DataSource>
   </StringProperty>
+  <BoolProperty Name="Private" DisplayName="Copy Local" Category="General" Visible="false" />
+  <BoolProperty Name="ReferenceOutputAssembly" DisplayName="Reference Output Assembly" Category="General" Visible="false" />
   <BoolProperty Name="Visible" Visible="false" />
 </Rule>

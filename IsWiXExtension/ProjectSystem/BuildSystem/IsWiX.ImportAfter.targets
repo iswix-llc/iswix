@@ -2,7 +2,8 @@
 <!--
   Installed by the IsWiX extension into Visual Studio's MSBuild\Current\Microsoft.Common.targets\ImportAfter folder, so
   Visual Studio's MSBuild imports it into every project that imports Microsoft.Common.targets (the WiX SDK does). It
-  brings in IsWiX's design-time support for .iswixproj projects only; command-line builds never see it.
+  brings in IsWiX's design-time support for .iswixproj projects only. Builds with Visual Studio's msbuild.exe see it
+  too, harmlessly; "dotnet build" uses the .NET SDK's MSBuild and doesn't.
 -->
 <Project>
   <Import Project="$(MSBuildExtensionsPath)\IsWiX\IsWiX.DesignTime.targets"

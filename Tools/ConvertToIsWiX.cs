@@ -6,7 +6,8 @@
 //   dotnet run Tools/ConvertToIsWiX.cs -- <folder> [--iswix-sdk <version>] [--dry-run]
 //
 // Under <folder> (build output and hidden folders aside) it:
-//   - renames every .wixproj to .iswixproj;
+//   - renames every .wixproj to .iswixproj, and sets its DefaultProjectTypeGuid to IsWiX's, which "dotnet sln add"
+//     writes into solutions;
 //   - points ProjectReferences to the renamed projects, in every project file;
 //   - updates the solutions (.sln and .slnx): the projects' paths, and in .sln files their project type, to IsWiX's;
 //   - with --iswix-sdk, also moves the projects from WixToolset.Sdk to IsWiX.Sdk at that version: the Sdk, the
@@ -68,6 +69,12 @@ foreach (var project in files.Where(IsProjectFile))
             Converts(Path.GetDirectoryName(project)!, m.Groups[2].Value + ".wixproj")
                 ? m.Groups[1].Value + m.Groups[2].Value + ".iswixproj" + m.Groups[3].Value
                 : m.Value, RegexOptions.IgnoreCase);
+        if (renames.ContainsKey(project) && !text.Contains("<DefaultProjectTypeGuid>", StringComparison.OrdinalIgnoreCase))
+        {
+            // The WiX SDK's default project type is HeatWave's, which "dotnet sln add" would write into solutions.
+            text = new Regex(@"<PropertyGroup>(\r?\n)([ \t]*)").Replace(text, m =>
+                $"<PropertyGroup>{m.Groups[1].Value}{m.Groups[2].Value}<DefaultProjectTypeGuid>{IsWiXProjectType}</DefaultProjectTypeGuid>{m.Groups[1].Value}{m.Groups[2].Value}", 1);
+        }
         if (isWiXSdkVersion != null && renames.ContainsKey(project))
         {
             text = Regex.Replace(text, @"(\bSdk\s*=\s*"")WixToolset\.Sdk(/[^""]*)?("")", $"${{1}}IsWiX.Sdk/{isWiXSdkVersion}${{3}}");

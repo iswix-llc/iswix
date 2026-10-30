@@ -68,21 +68,24 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <!-- The .iswixproj project system: its registration, and the MSBuild files Visual Studio's MSBuild imports into
-         .iswixproj projects (the VSIX installs $MSBuild content into Visual Studio's MSBuild folder). -->
+         .iswixproj projects (the VSIX installs InstallRoot=MSBuild content into Visual Studio's MSBuild folder). -->
     <Content Include="ProjectSystem\IsWiXProjectSystem.pkgdef">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="ProjectSystem\BuildSystem\IsWiX.ImportAfter.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>$MSBuild\Current\Microsoft.Common.targets\ImportAfter</VSIXSubPath>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>Current\Microsoft.Common.targets\ImportAfter</VSIXSubPath>
     </Content>
     <Content Include="ProjectSystem\BuildSystem\IsWiX.DesignTime.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>$MSBuild\IsWiX</VSIXSubPath>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>IsWiX</VSIXSubPath>
     </Content>
     <Content Include="ProjectSystem\BuildSystem\Rules\*.xaml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>$MSBuild\IsWiX\Rules</VSIXSubPath>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>IsWiX\Rules</VSIXSubPath>
     </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>

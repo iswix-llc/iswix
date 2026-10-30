@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) ISWIX LLC. Licensed under the MS-PL. -->
+<!-- Properties every file has, whatever its item type. -->
+<Rule Name="ConfigurationGeneralFile" DisplayName="General" PageTemplate="generic" Description="File properties" xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="{}{AnyType}" />
+  </Rule.DataSource>
+  <StringProperty Name="FullPath" ReadOnly="true" Visible="false">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="{}{AnyType}" PersistedName="FullPath" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="Extension" ReadOnly="true" Visible="false">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="{}{AnyType}" PersistedName="Extension" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="DependentUpon" Visible="false" />
+  <BoolProperty Name="Visible" Visible="false" />
+</Rule>

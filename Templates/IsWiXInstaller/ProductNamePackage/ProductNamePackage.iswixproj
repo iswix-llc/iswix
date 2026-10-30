@@ -1,5 +1,7 @@
 ﻿<Project Sdk="WIXPREFIX.Sdk/WIXVERSION">
 	<PropertyGroup>
+		<!-- The IsWiX project type, which "dotnet sln add" writes into solutions (the WiX SDK would give HeatWave's). -->
+		<DefaultProjectTypeGuid>{3A7B4E67-3CBB-402A-AC31-8EF9DCCEF68E}</DefaultProjectTypeGuid>
 		<!--#if (osmfAccepted) -->
 		<AcceptEula>wix7</AcceptEula>
 		<!--#endif -->
