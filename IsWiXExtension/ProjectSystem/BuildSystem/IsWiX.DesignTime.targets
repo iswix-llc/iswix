@@ -113,6 +113,7 @@
              Targets="Restore"
              Properties="_IsWiXRestoring=true;ExcludeRestorePackageImports=true;RestoreRecursive=false;MSBuildRestoreSessionId=$([System.Guid]::NewGuid())"
              Condition=" '$(_IsWiXNeedsRestore)' == 'true' " />
+    <MakeDir Directories="$(MSBuildProjectExtensionsPath)" Condition=" '$(_IsWiXNeedsRestore)' == 'true' " />
     <Touch Files="$(_IsWiXRestoreStamp)" AlwaysCreate="true" Condition=" '$(_IsWiXNeedsRestore)' == 'true' " />
   </Target>
 
@@ -124,16 +125,31 @@
   </Target>
 
   <!--
-    A build in Visual Studio before any design-time build has restored the project: restore it now. This build
-    evaluated the project without the packages' imports, so it stops; Visual Studio re-evaluates the project once
-    restore has written them, and the next build has them.
+    A build in Visual Studio that starts before the project has been restored (say, right after it was created, before
+    the design-time build got to it). This build's evaluation of the project has none of the packages' imports, so it
+    can't build a project that has packages: it restores them, then builds the project in a fresh evaluation that has
+    them, in place of its own Build. A project without packages builds as usual.
   -->
-  <Target Name="_IsWiXRestoreBeforeBuild"
-          BeforeTargets="_ValidateProjectAssetsFile"
-          Condition=" '$(BuildingInsideVisualStudio)' == 'true' and '$(DesignTimeBuild)' != 'true' and '@(PackageReference)' != '' and !Exists('$(_IsWiXAssetsFile)') ">
-    <CallTarget Targets="_IsWiXRestore" />
-    <Error Code="ISWIX0001"
-           Text="IsWiX restored this project's NuGet packages because they had not been restored yet. Build again to build it with them."
-           Condition="Exists('$(_IsWiXAssetsFile)')" />
+  <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' and '$(DesignTimeBuild)' != 'true' and '$(_IsWiXRestoring)' != 'true' and '$(_IsWiXBuildingAfterRestore)' != 'true' and '$(IsWiXRestoreInVisualStudio)' != 'false' and !Exists('$(_IsWiXAssetsFile)') ">
+    <_IsWiXBuildDependsOn>$(BuildDependsOn)</_IsWiXBuildDependsOn>
+    <BuildDependsOn>_IsWiXRestoreThenBuild</BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="_IsWiXRestoreThenBuild" DependsOnTargets="_IsWiXRestoreAndBuildAgain;_IsWiXBuildWithoutPackages" />
+
+  <Target Name="_IsWiXRestoreAndBuildAgain" Condition=" '@(PackageReference)' != '' " Returns="@(TargetPathWithTargetPlatformMoniker)">
+    <MSBuild Projects="$(MSBuildProjectFullPath)"
+             Targets="Restore"
+             Properties="_IsWiXRestoring=true;ExcludeRestorePackageImports=true;RestoreRecursive=false;MSBuildRestoreSessionId=$([System.Guid]::NewGuid())" />
+    <MakeDir Directories="$(MSBuildProjectExtensionsPath)" />
+    <Touch Files="$(_IsWiXRestoreStamp)" AlwaysCreate="true" />
+
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Build" Properties="_IsWiXBuildingAfterRestore=true">
+      <Output TaskParameter="TargetOutputs" ItemName="TargetPathWithTargetPlatformMoniker" />
+    </MSBuild>
+  </Target>
+
+  <Target Name="_IsWiXBuildWithoutPackages" Condition=" '@(PackageReference)' == '' ">
+    <CallTarget Targets="$(_IsWiXBuildDependsOn)" />
   </Target>
 </Project>
