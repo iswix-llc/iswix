@@ -92,6 +92,8 @@
     <Content Include="Schemas\*.xsd">
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>Schemas</InstallRoot>
+      <!-- Straight into Xml\Schemas: the XML editor doesn't look in subfolders (VSIXSubPath defaults to the item's folder). -->
+      <Link>%(Filename)%(Extension)</Link>
     </Content>
     <Content Include="ProjectSystem\BuildSystem\Rules\*.xaml">
       <IncludeInVSIX>true</IncludeInVSIX>
