@@ -10,12 +10,10 @@
     <IsWiXDesignTimeTargetsImported>true</IsWiXDesignTimeTargetsImported>
     <IsWiXRulesDirectory>$(MSBuildThisFileDirectory)Rules\</IsWiXRulesDirectory>
 
-    <!-- The configurations and platforms Visual Studio offers. Projects can set either to change them. -->
-    <IsWiXConfigurations Condition=" '$(Configurations)' != '' ">$(Configurations)</IsWiXConfigurations>
-    <IsWiXConfigurations Condition=" '$(IsWiXConfigurations)' == '' ">Debug;Release</IsWiXConfigurations>
-    <IsWiXPlatforms Condition=" '$(Platforms)' != '' ">$(Platforms)</IsWiXPlatforms>
-    <IsWiXPlatforms Condition=" '$(IsWiXPlatforms)' == '' ">x86;x64;ARM64</IsWiXPlatforms>
-    <_IsWiXPlatformList>;$(IsWiXPlatforms.ToLowerInvariant());</_IsWiXPlatformList>
+    <!-- The configurations and platforms Visual Studio offers, read through the ProjectConfigurationsDeclaredDimensions
+         capability as for SDK-style .NET projects. Projects can set either to change them. -->
+    <Configurations Condition=" '$(Configurations)' == '' ">Debug;Release</Configurations>
+    <Platforms Condition=" '$(Platforms)' == '' ">x86;x64;ARM64</Platforms>
 
     <!-- What Solution Explorer adds when a file has no known type. -->
     <DefaultContentType Condition=" '$(DefaultContentType)' == '' ">Default</DefaultContentType>
@@ -32,7 +30,7 @@
     <ProjectCapability Include="OpenProjectFile" />
     <ProjectCapability Include="HandlesOwnReload" />
     <ProjectCapability Include="PersistDesignTimeDataOutOfProject" />
-    <ProjectCapability Include="ProjectConfigurationsDeclaredAsItems" />
+    <ProjectCapability Include="ProjectConfigurationsDeclaredDimensions" />
     <ProjectCapability Include="ReferencesFolder" />
     <ProjectCapability Include="ProjectReferences" />
     <ProjectCapability Include="ReferenceManagerProjects" />
@@ -41,24 +39,6 @@
     <ProjectCapability Include="OutputGroups" />
     <ProjectCapability Include="AllTargetOutputGroups" />
     <ProjectCapability Include="VisualStudioWellKnownOutputGroups" />
-  </ItemGroup>
-
-  <!-- Every configuration on every platform. Each item keeps its configuration's Configuration metadata. -->
-  <ItemGroup>
-    <_IsWiXConfiguration Include="$(IsWiXConfigurations)">
-      <Configuration>%(Identity)</Configuration>
-    </_IsWiXConfiguration>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectConfiguration Include="@(_IsWiXConfiguration->'%(Identity)|x86')" Condition=" $(_IsWiXPlatformList.Contains(';x86;')) ">
-      <Platform>x86</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="@(_IsWiXConfiguration->'%(Identity)|x64')" Condition=" $(_IsWiXPlatformList.Contains(';x64;')) ">
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="@(_IsWiXConfiguration->'%(Identity)|ARM64')" Condition=" $(_IsWiXPlatformList.Contains(';arm64;')) ">
-      <Platform>ARM64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
 
   <!-- Rules: what Solution Explorer shows, what the property pages edit, the References node, and NuGet restore. -->
