@@ -262,7 +262,8 @@ namespace IsWiX.Conversion
             {
                 var include = Regex.Match(element.Value, $@"(\bInclude\s*=\s*""){fromPrefix}\.([\w.]+?\.wixext)("")", RegexOptions.IgnoreCase, RegexTimeout);
                 if (!include.Success) return element.Value;
-                var converted = element.Value.Substring(0, include.Index) + $"{include.Groups[1].Value}{toPrefix}.{include.Groups[2].Value}{include.Groups[3].Value}" + element.Value.Substring(include.Index + include.Length);
+                var name = ExtensionName(include.Groups[2].Value, options.To);
+                var converted = element.Value.Substring(0, include.Index) + $"{include.Groups[1].Value}{toPrefix}.{name}{include.Groups[3].Value}" + element.Value.Substring(include.Index + include.Length);
                 return Replace(converted, @"(\bVersion\s*=\s*"")[^""]*("")", v => $"{v.Groups[1].Value}{version}{v.Groups[2].Value}");
             });
 
@@ -274,6 +275,14 @@ namespace IsWiX.Conversion
                 text = InsertProperty(text, "<AcceptEula>wix7</AcceptEula>", newLine);
             return text;
         }
+
+        // An extension package's name after the IsWiX. or WixToolset. prefix, for the kind it's converted to. The WiX
+        // Toolset renamed Bal.wixext to BootstrapperApplications.wixext and kept Bal.wixext as a compatibility shim;
+        // IsWiX publishes only BootstrapperApplications.wixext, so Bal.wixext moves to it.
+        static string ExtensionName(string name, ProjectKind to) =>
+            to == ProjectKind.IsWiX && string.Equals(name, "Bal.wixext", StringComparison.OrdinalIgnoreCase)
+                ? "BootstrapperApplications.wixext"
+                : name;
 
         // Adds a property at the top of the project's first unconditioned PropertyGroup, or in a new one.
         static string InsertProperty(string text, string property, string newLine)

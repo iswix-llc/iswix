@@ -81,6 +81,19 @@
       },
       "replaces": "WIXPREFIX"
     },
+    "wixBalPackage": {
+      "type": "generated",
+      "generator": "switch",
+      "parameters": {
+        "evaluator": "C++",
+        "datatype": "string",
+        "cases": [
+          { "condition": "(useIsWiXSdk)", "value": "IsWiX.BootstrapperApplications.wixext" },
+          { "condition": "(!useIsWiXSdk)", "value": "WixToolset.Bal.wixext" }
+        ]
+      },
+      "replaces": "WIXBALPACKAGE"
+    },
     "HostIdentifier": {
       "type": "bind",
       "binding": "HostIdentifier"

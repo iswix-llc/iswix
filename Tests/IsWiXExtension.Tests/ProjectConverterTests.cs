@@ -152,6 +152,22 @@ public class ProjectConverterTests : IDisposable
     }
 
     [Fact]
+    public void The_Bal_extension_moves_to_IsWiXs_BootstrapperApplications_extension()
+    {
+        Write("Bundle/Bundle.wixproj", "<Project Sdk=\"WixToolset.Sdk/7.0.1\">\n  <ItemGroup>\n    <PackageReference Include=\"WixToolset.Bal.wixext\" Version=\"7.0.1\" />\n    <PackageReference Include=\"WixToolset.BootstrapperApplications.wixext\" Version=\"7.0.1\" />\n  </ItemGroup>\n</Project>\n");
+
+        Convert(ProjectKind.IsWiX, sdk: "7.0.1");
+
+        var bundle = Read("Bundle/Bundle.iswixproj");
+        Assert.DoesNotContain("Bal.wixext", bundle);
+        Assert.Contains("<PackageReference Include=\"IsWiX.BootstrapperApplications.wixext\" Version=\"7.0.1\" />", bundle);
+
+        Convert(ProjectKind.Wix, sdk: "7.0.1", eula: true);
+
+        Assert.Contains("<PackageReference Include=\"WixToolset.BootstrapperApplications.wixext\" Version=\"7.0.1\" />", Read("Bundle/Bundle.wixproj"));
+    }
+
+    [Fact]
     public void Moving_to_WixToolset_Sdk_5_needs_no_EULA()
     {
         Write("Pkg/Pkg.iswixproj", "<Project Sdk=\"IsWiX.Sdk/7.0.1\">\n  <ItemGroup>\n    <PackageReference Include=\"IsWiX.Bal.wixext\" Version=\"7.0.1\"></PackageReference>\n  </ItemGroup>\n</Project>\n");

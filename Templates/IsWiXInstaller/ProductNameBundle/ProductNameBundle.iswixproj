@@ -34,7 +34,7 @@
     <DefineConstants>MSIProductVersion=$(MSIProductVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WIXPREFIX.Bal.wixext" Version="WIXVERSION" />
+    <PackageReference Include="WIXBALPACKAGE" Version="WIXVERSION" />
     <PackageReference Include="WIXPREFIX.Netfx.wixext" Version="WIXVERSION" />
   </ItemGroup>
   <ItemGroup>
