@@ -15,3 +15,8 @@
 "Package"="{6037b2ce-4508-478c-a49e-c361ca5cba63}"
 "ProjectFactoryPackage"="{3347BEE8-D7A1-4082-95E4-38A439553CC2}"
 "DisableAsynchronousProjectTreeLoad"=dword:00000001
+
+; Open .iswixproj files (Edit Project File, Open With) in Visual Studio's XML editor,
+; {FA3CD31E-987B-443A-9B81-186104E8DAC1}, as .csproj files are.
+[$RootKey$\Editors\{FA3CD31E-987B-443A-9B81-186104E8DAC1}\Extensions]
+"iswixproj"=dword:00000032

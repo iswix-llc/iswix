@@ -33,10 +33,11 @@
   <StringProperty Name="IntermediateOutputPath" DisplayName="Intermediate output path" Category="Output" Subtype="folder"
                   Description="Where intermediate files are written." />
 
-  <!-- Read by CPS and Visual Studio; not shown. -->
+  <!-- Read by CPS and Visual Studio; not shown. The project's GUID, which Visual Studio otherwise writes into the
+       project file: kept in the .user file instead (Visual Studio takes it from the solution when there is none). -->
   <StringProperty Name="ProjectGuid" Visible="false">
     <StringProperty.DataSource>
-      <DataSource Persistence="ProjectFile" Label="Globals" HasConfigurationCondition="false" />
+      <DataSource Persistence="UserFile" HasConfigurationCondition="false" />
     </StringProperty.DataSource>
   </StringProperty>
   <StringProperty Name="TargetPath" Visible="false" ReadOnly="true" />
