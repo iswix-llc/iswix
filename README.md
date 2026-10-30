@@ -12,14 +12,18 @@ them. In Visual Studio, IsWiX's project system (`IsWiXExtension/ProjectSystem`) 
 pages, project references and NuGet restore. `.wixproj` projects still open with HeatWave if it is installed; the IsWiX
 designers work in either.
 
-To convert existing `.wixproj` projects, run from a clone of this repository (needs the .NET 10 SDK):
+To convert projects either way, use **Convert to IsWiX Project** or **Convert to WiX Project** on a project or the solution
+in Solution Explorer, or run from a clone of this repository (needs the .NET 10 SDK):
 
 ```
-dotnet run Tools/ConvertToIsWiX.cs -- <folder> [--iswix-sdk <version>] [--dry-run]
+dotnet run --project Tools/IsWiXConvert -- <folder> --to iswix|wix [--sdk <version>] [--accept-eula] [--project <path>]... [--dry-run]
 ```
 
-It renames the projects under the folder, updates project references and solutions, and with `--iswix-sdk` moves them
-from WixToolset.Sdk to IsWiX.Sdk.
+It renames the projects under the folder (or just those given with `--project`) and updates the project references and
+solutions there to match. `--sdk` also moves the projects to IsWiX.Sdk (`--to iswix`) or WixToolset.Sdk (`--to wix`) at
+that version, with the matching `.wixext` packages; WixToolset.Sdk v7 and later need `--accept-eula`, which accepts the
+WiX Toolset's [Open Source Maintenance Fee EULA](https://wixtoolset.org/osmf/). Converting there and back restores the
+files.
 
 ## Building and releasing
 

@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Include="..\..\IsWiXExtension\Designer\XmlPositions.cs" Link="XmlPositions.cs" />
     <Compile Include="..\..\Shared\FireworksFramework\Services\ProjectComponentGroups.cs" Link="ProjectComponentGroups.cs" />
+    <Compile Include="..\..\Shared\Conversion\ProjectConverter.cs" Link="ProjectConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>

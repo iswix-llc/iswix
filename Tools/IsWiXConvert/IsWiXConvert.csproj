@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Converts WiX SDK projects between .wixproj and .iswixproj. The conversion itself is
+       Shared/Conversion/ProjectConverter.cs, which the extension's Convert commands use too. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Shared\Conversion\ProjectConverter.cs" Link="ProjectConverter.cs" />
+  </ItemGroup>
+
+</Project>
