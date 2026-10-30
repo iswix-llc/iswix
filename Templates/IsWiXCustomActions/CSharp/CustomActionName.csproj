@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- A managed custom action: the build packs the assembly, its CopyLocal references and its Content items into
+       CustomActionName.CA.dll, the file the installer references (<Binary SourceFile="...CustomActionName.CA.dll" />). -->
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <!--#if (osmfAccepted) -->
+    <AcceptEula>wix7</AcceptEula>
+    <!--#endif -->
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="CustomAction.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WIXPREFIX.Dtf.CustomAction" Version="WIXVERSION" />
+  </ItemGroup>
+</Project>

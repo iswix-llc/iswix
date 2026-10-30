@@ -37,6 +37,17 @@ dotnet run --project Tools/IsWiXSchemas -- <wix>/src/xsd IsWiXExtension/Schemas
 
 It compiles the schemas it writes and fails on any error.
 
+## Custom action templates
+
+The template pack also has two custom action projects, which ask for IsWiX's or the WiX Toolset's packages the same way
+the installer template does:
+
+- **IsWiX C# Custom Action** (`dotnet new iswix-ca-cs`): a .NET Framework 4.7.2 class library on the `Dtf.CustomAction`
+  package. The build packs it into `<name>.CA.dll`, the file the installer's `Binary` element references.
+- **IsWiX C++ Custom Action** (`dotnet new iswix-ca-cpp`): a native DLL on the `WcaUtil` and `DUtil` packages, restored
+  with `packages.config`. Restore NuGet packages for the solution before the first build. IsWiX's 7.x native libraries
+  are built with the v145 toolset (Visual Studio 2026).
+
 ## Building and releasing
 
 The version lives in `Directory.Build.props`; the release workflow also writes it into the VSIX manifest

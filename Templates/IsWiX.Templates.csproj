@@ -7,8 +7,8 @@
     <PackageType>Template</PackageType>
     <PackageId>IsWiX.Templates</PackageId>
     <Title>IsWiX Templates</Title>
-    <Description>Templates for IsWiX: a Windows installer package (.msi) and, optionally, an EXE bootstrapper bundle, and WiX source, localization and include files.</Description>
-    <PackageTags>wix;installer;msi;bootstrapper;dotnet-new;templates</PackageTags>
+    <Description>Templates for IsWiX: a Windows installer package (.msi) and, optionally, an EXE bootstrapper bundle, WiX source, localization and include files, and C# and C++ custom actions.</Description>
+    <PackageTags>wix;installer;msi;bootstrapper;customaction;dotnet-new;templates</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeContentInPack>true</IncludeContentInPack>
@@ -21,6 +21,7 @@
   <ItemGroup>
     <Content Include="IsWiXInstaller\**\*" Exclude="IsWiXInstaller\**\bin\**;IsWiXInstaller\**\obj\**;IsWiXInstaller\**\.vs\**;IsWiXInstaller\**\*.user" PackagePath="content\IsWiXInstaller\" />
     <Content Include="IsWiXItems\**\*" Exclude="IsWiXItems\**\.vs\**" PackagePath="content\IsWiXItems\" />
+    <Content Include="IsWiXCustomActions\**\*" Exclude="IsWiXCustomActions\**\bin\**;IsWiXCustomActions\**\obj\**;IsWiXCustomActions\**\.vs\**;IsWiXCustomActions\**\*.user" PackagePath="content\IsWiXCustomActions\" />
     <Compile Remove="**\*" />
   </ItemGroup>
 

@@ -1,0 +1,4 @@
+LIBRARY "CustomActionName"
+
+EXPORTS
+    CustomAction1
