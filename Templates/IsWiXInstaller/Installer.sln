@@ -2,10 +2,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.0.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "ProductNamePackage", "ProductNamePackage\ProductNamePackage.wixproj", "{298D4875-B9CE-4CDC-BE4A-C3573226727E}"
+Project("{3A7B4E67-3CBB-402A-AC31-8EF9DCCEF68E}") = "ProductNamePackage", "ProductNamePackage\ProductNamePackage.iswixproj", "{298D4875-B9CE-4CDC-BE4A-C3573226727E}"
 EndProject
 #if (bundle)
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "ProductNameBundle", "ProductNameBundle\ProductNameBundle.wixproj", "{6F1D2A9C-4B7E-4E3A-9C55-8A2B1D0E7F34}"
+Project("{3A7B4E67-3CBB-402A-AC31-8EF9DCCEF68E}") = "ProductNameBundle", "ProductNameBundle\ProductNameBundle.iswixproj", "{6F1D2A9C-4B7E-4E3A-9C55-8A2B1D0E7F34}"
 EndProject
 #endif
 Global

@@ -146,14 +146,14 @@
     }
   ],
   "primaryOutputs": [
-    { "path": "ProductNamePackage/ProductNamePackage.wixproj", "condition": "(!vsOwnSolutionDirectory)" },
-    { "path": "ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle && !vsOwnSolutionDirectory)" },
-    { "path": "../ProductNamePackage/ProductNamePackage.wixproj", "condition": "(vsOwnSolutionDirectory)" },
-    { "path": "../ProductNameBundle/ProductNameBundle.wixproj", "condition": "(bundle && vsOwnSolutionDirectory)" }
+    { "path": "ProductNamePackage/ProductNamePackage.iswixproj", "condition": "(!vsOwnSolutionDirectory)" },
+    { "path": "ProductNameBundle/ProductNameBundle.iswixproj", "condition": "(bundle && !vsOwnSolutionDirectory)" },
+    { "path": "../ProductNamePackage/ProductNamePackage.iswixproj", "condition": "(vsOwnSolutionDirectory)" },
+    { "path": "../ProductNameBundle/ProductNameBundle.iswixproj", "condition": "(bundle && vsOwnSolutionDirectory)" }
   ],
   "SpecialCustomOperations": {
     "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
-    "**/*.wixproj": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
+    "**/*.iswixproj": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
     "**/*.sln": { "operations": [ { "type": "conditional", "configuration": { "if": [ "#if" ], "else": [ "#else" ], "elseif": [ "#elseif" ], "endif": [ "#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] }
   }
 }

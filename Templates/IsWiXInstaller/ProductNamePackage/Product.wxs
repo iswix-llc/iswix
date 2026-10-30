@@ -4,7 +4,7 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 <!--#endif -->
   <!--
-  MSIProductVersion is defined in ProductName.wixproj as 0.0.1 for local desktop builds.  
+  MSIProductVersion is defined in ProductNamePackage.iswixproj as 0.0.1 for local desktop builds.  
   You should pass in the MSBuild Property 'MSIProductVersion' to override it during an automated build.
   See http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859%28v=vs.85%29.aspx for information on allowable values.
   
