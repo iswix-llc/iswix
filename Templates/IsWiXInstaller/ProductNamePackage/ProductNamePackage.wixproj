@@ -1,6 +1,6 @@
-﻿<Project Sdk="WixToolset.Sdk/WIXVERSION">
+﻿<Project Sdk="WIXPREFIX.Sdk/WIXVERSION">
 	<PropertyGroup>
-		<!--#if (AcceptEula) -->
+		<!--#if (osmfAccepted) -->
 		<AcceptEula>wix7</AcceptEula>
 		<!--#endif -->
 		<ProductVersion>3.7</ProductVersion>
@@ -64,7 +64,7 @@
 	<!--#endif -->
 	<ItemGroup>
 		<!--#if (packageUI) -->
-		<PackageReference Include="WixToolset.UI.wixext" Version="WIXVERSION" />
+		<PackageReference Include="WIXPREFIX.UI.wixext" Version="WIXVERSION" />
 		<!--#endif -->
 	</ItemGroup>
 </Project>

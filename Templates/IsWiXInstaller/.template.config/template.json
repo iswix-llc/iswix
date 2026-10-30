@@ -3,7 +3,7 @@
   "author": "IsWiX",
   "classifications": [ "WiX", "IsWiX", "Installer" ],
   "identity": "IsWiX.Installer",
-  "name": "IsWiX Installer (WiX v5 or v7)",
+  "name": "IsWiX Installer",
   "shortName": "iswix-installer",
   "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
   "tags": {
@@ -27,12 +27,24 @@
         { "choice": "internalui", "description": "WixInternalUIBootstrapperApplication: the .msi shows the user interface", "displayName": "WixInternalUIBootstrapperApplication" }
       ]
     },
+    "Sdk": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "Which WiX MSBuild SDK the projects use. IsWiX.Sdk is ISWIX LLC's build of the WiX Toolset and has no Open Source Maintenance Fee; WixToolset.Sdk is the upstream WiX Toolset.",
+      "displayName": "WiX SDK",
+      "defaultValue": "iswix",
+      "choices": [
+        { "choice": "iswix", "description": "IsWiX.Sdk: no Open Source Maintenance Fee (OSMF)", "displayName": "IsWiX.Sdk" },
+        { "choice": "wixtoolset", "description": "WixToolset.Sdk: WiX v7 if you accept its OSMF EULA, otherwise WiX v5", "displayName": "WixToolset.Sdk" }
+      ]
+    },
     "AcceptEula": {
       "type": "parameter",
       "datatype": "bool",
+      "isEnabled": "(Sdk == \"wixtoolset\")",
       "defaultValue": "false",
       "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
-      "description": "WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the projects use WiX 7.0.1 and get <AcceptEula>wix7</AcceptEula>; if you don't, they use WiX 5.0.2, which doesn't require it."
+      "description": "Only for WixToolset.Sdk; ignored for IsWiX.Sdk. WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the projects use WiX 7.0.1 and get <AcceptEula>wix7</AcceptEula>; if you don't, they use WiX 5.0.2, which doesn't require it."
     },
     "wixVersion": {
       "type": "generated",
@@ -41,11 +53,33 @@
         "evaluator": "C++",
         "datatype": "string",
         "cases": [
-          { "condition": "(AcceptEula)", "value": "7.0.1" },
-          { "condition": "(!AcceptEula)", "value": "5.0.2" }
+          { "condition": "(useIsWiXSdk)", "value": "7.0.1" },
+          { "condition": "(osmfAccepted)", "value": "7.0.1" },
+          { "condition": "(!useIsWiXSdk && !osmfAccepted)", "value": "5.0.2" }
         ]
       },
       "replaces": "WIXVERSION"
+    },
+    "useIsWiXSdk": {
+      "type": "computed",
+      "value": "(Sdk == \"iswix\")"
+    },
+    "osmfAccepted": {
+      "type": "computed",
+      "value": "(Sdk == \"wixtoolset\" && AcceptEula)"
+    },
+    "wixPackagePrefix": {
+      "type": "generated",
+      "generator": "switch",
+      "parameters": {
+        "evaluator": "C++",
+        "datatype": "string",
+        "cases": [
+          { "condition": "(useIsWiXSdk)", "value": "IsWiX" },
+          { "condition": "(!useIsWiXSdk)", "value": "WixToolset" }
+        ]
+      },
+      "replaces": "WIXPREFIX"
     },
     "HostIdentifier": {
       "type": "bind",
