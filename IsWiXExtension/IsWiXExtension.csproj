@@ -68,7 +68,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-
     <Content Include="IsWiXTemplates.pkgdef">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -154,7 +153,6 @@
       <Name>ShortCutsDesigner</Name>
       <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
     </ProjectReference>
-
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
