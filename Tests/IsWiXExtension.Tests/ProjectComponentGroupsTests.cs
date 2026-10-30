@@ -63,6 +63,17 @@ public class ProjectComponentGroupsTests : IDisposable
         }
 
         [Fact]
+        public void An_iswixproj_makes_its_folder_a_project()
+        {
+            Write("Setup/Setup.iswixproj", "<Project />");
+            Write("Setup/Product/Features.wxs", Wxs());
+
+            var root = ProjectComponentGroups.ProjectRoot(Path.Combine(_root, "Setup", "Product", "Features.wxs"));
+
+            Assert.Equal(Path.Combine(_root, "Setup"), root);
+        }
+
+        [Fact]
         public void With_no_project_above_the_root_is_the_files_own_folder()
         {
             var file = Write("Loose/Product.wxs", Wxs());
@@ -88,6 +99,18 @@ public class ProjectComponentGroupsTests : IDisposable
             var files = ProjectComponentGroups.ProjectFiles(main);
 
             Assert.Equal(new[] { "Parts/Deep/More.wxs", "Parts/Files.wxs", "Product.wxs" }, Names(files, _root));
+        }
+
+        [Fact]
+        public void All_the_wxs_files_under_an_iswixproj_are_found()
+        {
+            Write("Setup.iswixproj", "<Project />");
+            var main = Write("Product.wxs", Wxs());
+            Write("Parts/Files.wxs", Wxs());
+
+            var files = ProjectComponentGroups.ProjectFiles(main);
+
+            Assert.Equal(new[] { "Parts/Files.wxs", "Product.wxs" }, Names(files, _root));
         }
 
         [Fact]

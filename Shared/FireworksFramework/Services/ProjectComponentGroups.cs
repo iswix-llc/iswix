@@ -26,7 +26,7 @@ namespace FireworksFramework.Services
 
     /// <summary>
     /// Finds the component groups a feature can reference. They can be defined in the file being edited or in any other
-    /// .wxs file of its project, which is taken to be what is under the folder of the nearest .wixproj above the file
+    /// .wxs file of its project, which is taken to be what is under the folder of the nearest .wixproj or .iswixproj above the file
     /// (the WiX SDK compiles every .wxs under it); a file with no project above it stands alone, with the files in its
     /// own folder.
     /// </summary>
@@ -37,6 +37,9 @@ namespace FireworksFramework.Services
         {
             "bin", "obj", "node_modules", "packages",
         };
+
+        // The project files whose folder is a project: WiX SDK projects (.wixproj) and IsWiX projects (.iswixproj).
+        static readonly string[] ProjectFilePatterns = { "*.wixproj", "*.iswixproj" };
 
         // What was read from a file, for as long as the file is as it was.
         static readonly ConcurrentDictionary<string, CachedFile> Cache = new ConcurrentDictionary<string, CachedFile>(StringComparer.OrdinalIgnoreCase);
@@ -49,7 +52,7 @@ namespace FireworksFramework.Services
         }
 
         /// <summary>
-        /// Gets the folder of the project the file belongs to: the nearest one, going up, that holds a .wixproj; the
+        /// Gets the folder of the project the file belongs to: the nearest one, going up, that holds a .wixproj or .iswixproj; the
         /// file's own folder if none does.
         /// </summary>
         public static string ProjectRoot(string documentPath)
@@ -59,7 +62,7 @@ namespace FireworksFramework.Services
             {
                 try
                 {
-                    if (Directory.EnumerateFiles(folder, "*.wixproj").Any())
+                    if (HoldsProject(folder))
                     {
                         return folder;
                     }
@@ -79,7 +82,7 @@ namespace FireworksFramework.Services
             var files = new List<string>();
             var root = ProjectRoot(documentPath);
             // A file with no project above it stands with the files in its folder, not everything below it.
-            var hasProject = Directory.Exists(root) && SafeEnumerateFiles(root, "*.wixproj").Any();
+            var hasProject = Directory.Exists(root) && ProjectFilePatterns.Any(pattern => SafeEnumerateFiles(root, pattern).Any());
             Collect(root, hasProject, files);
             files.Sort(StringComparer.OrdinalIgnoreCase);
             return files;
@@ -127,6 +130,10 @@ namespace FireworksFramework.Services
                 Collect(subfolder, true, files);
             }
         }
+
+        // Whether the folder holds a project file. Throws when the folder can't be read, for the caller to decide.
+        static bool HoldsProject(string folder) =>
+            ProjectFilePatterns.Any(pattern => Directory.EnumerateFiles(folder, pattern).Any());
 
         static IEnumerable<string> SafeEnumerateFiles(string folder, string pattern)
         {
