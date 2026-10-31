@@ -339,9 +339,13 @@ namespace FilesAndFoldersDesigner
                 foreach (var fileElement in FindFiles(file).ToList())
                 {
                     var component = (Wxs.Component)fileElement.Parent!;
+                    // The key file of a service's component is the service: without it the ServiceInstall and
+                    // ServiceControl have nothing to install or control, so the whole component goes.
+                    var isServiceKeyFile = IsKeyPath(fileElement.KeyPath) &&
+                        component.Xml.Elements().Any(e => e.Name == Wxs.ServiceInstall.ElementName || e.Name == Wxs.ServiceControl.ElementName);
                     fileElement.RemoveFromParent();
                     // A component with no files left is dropped whole.
-                    if (!component.Xml.Elements(Wxs.File.ElementName).Any())
+                    if (isServiceKeyFile || !component.Xml.Elements(Wxs.File.ElementName).Any())
                     {
                         component.RemoveFromParent();
                     }
