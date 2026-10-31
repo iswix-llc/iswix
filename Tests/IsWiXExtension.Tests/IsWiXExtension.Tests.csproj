@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <!-- The registry designer's value converter names Windows-only registry types; the tests only use their names. -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
   </PropertyGroup>
 
   <!-- The extension is a .NET Framework VSIX that only Visual Studio can load. The code under test uses nothing of
@@ -15,10 +17,16 @@
     <Compile Include="..\..\Shared\FireworksFramework\Services\ProjectComponentGroups.cs" Link="ProjectComponentGroups.cs" />
     <Compile Include="..\..\Shared\Conversion\ProjectConverter.cs" Link="ProjectConverter.cs" />
     <Compile Include="..\..\Shared\FireworksFramework\Managers\XmlIndentation.cs" Link="XmlIndentation.cs" />
+    <!-- The registry designer's document logic uses nothing of Windows Forms or Visual Studio, so its files are compiled in too. -->
+    <Compile Include="..\..\Designers\RegistryDesigner\RegFile.cs" Link="RegFile.cs" />
+    <Compile Include="..\..\Designers\RegistryDesigner\RegistryDocument.cs" Link="RegistryDocument.cs" />
+    <Compile Include="..\..\Designers\RegistryDesigner\RegistryValidation.cs" Link="RegistryValidation.cs" />
+    <Compile Include="..\..\Designers\RegistryDesigner\SourceValues.cs" Link="SourceValues.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="IsWiX.WiXModel" Version="0.5.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>

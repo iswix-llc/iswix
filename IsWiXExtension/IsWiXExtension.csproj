@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="Designer\WixDesignerEditorFactory.cs" />
     <Compile Include="Designer\WixDesignerPane.cs" />
+    <Compile Include="Designer\WixDesignerPane.Layout.cs" />
+    <Compile Include="Designer\DesignerLayout.cs" />
     <Compile Include="Designer\SaveIndentationHook.cs" />
     <Compile Include="Designer\CodeWindowHost.cs" />
     <Compile Include="Designer\XmlPositions.cs" />
@@ -153,6 +155,10 @@
     </ProjectReference>
     <ProjectReference Include="..\Designers\PropertiesDesigner\PropertiesDesigner.csproj">
       <Name>PropertiesDesigner</Name>
+      <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\Designers\RegistryDesigner\RegistryDesigner.csproj">
+      <Name>RegistryDesigner</Name>
       <SetTargetFramework>TargetFramework=net48</SetTargetFramework>
     </ProjectReference>
     <ProjectReference Include="..\Designers\ServicesDesigner\ServicesDesigner.csproj">

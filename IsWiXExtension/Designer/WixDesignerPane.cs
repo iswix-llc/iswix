@@ -35,7 +35,7 @@ namespace IsWiX.Designer
     /// the buffer as one edit covering only the text that changed; text edits (typing, undo, a merge) reach the designers
     /// once they pause.
     /// </summary>
-    internal sealed class WixDesignerPane : WindowPane, IOleCommandTarget, IPublishable, IVsTextBufferDataEvents
+    internal sealed partial class WixDesignerPane : WindowPane, IOleCommandTarget, IPublishable, IVsTextBufferDataEvents
     {
         // How long text changes must pause before a showing Design view reloads.
         static readonly TimeSpan ReloadDelay = TimeSpan.FromMilliseconds(400);
@@ -49,8 +49,7 @@ namespace IsWiX.Designer
         readonly object _editTag = new object();
         readonly DispatcherTimer _reloadTimer;
 
-        // Both views are always shown, the Design view above the XML view, with a splitter between them to resize.
-        readonly Grid _root = new Grid();
+        // The Design and XML views share the editor with a splitter between them (WixDesignerPane.Layout.cs).
         readonly GridSplitter _splitter = new GridSplitter { Height = 5, HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Center, ResizeDirection = GridResizeDirection.Rows };
         readonly DockPanel _designView = new DockPanel { LastChildFill = true };
         readonly Border _xmlView = new Border();
@@ -123,15 +122,7 @@ namespace IsWiX.Designer
             };
 
             BuildDesignView();
-            _root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star), MinHeight = 80 });
-            _root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            _root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star), MinHeight = 80 });
-            Grid.SetRow(_splitter, 1);
-            Grid.SetRow(_xmlView, 2);
-            _splitter.SetResourceReference(Control.BackgroundProperty, EnvironmentColors.ToolWindowBorderBrushKey);
-            _root.Children.Add(_designView);
-            _root.Children.Add(_splitter);
-            _root.Children.Add(_xmlView);
+            BuildLayout();
             _root.IsVisibleChanged += OnRootVisibleChanged;
             _themeApplied = VsTheme.Background;
             Content = _root;
@@ -1032,6 +1023,11 @@ namespace IsWiX.Designer
         int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            if (TryLayoutQuery(pguidCmdGroup, cCmds, prgCmds))
+            {
+                return VSConstants.S_OK;
+            }
+
             if (cCmds == 1 && IsGoToDefinition(pguidCmdGroup, prgCmds[0].cmdID))
             {
                 Tracing.Write("Command", () => $"Go to Definition queried; the XML editor {(XmlFocused ? "has" : "does not have")} the focus");
@@ -1064,6 +1060,11 @@ namespace IsWiX.Designer
         int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            if (TryLayoutExec(pguidCmdGroup, nCmdID))
+            {
+                return VSConstants.S_OK;
+            }
+
             if (IsGoToDefinition(pguidCmdGroup, nCmdID))
             {
                 Tracing.Write("Command", () => $"Go to Definition run; the XML editor {(XmlFocused ? "has" : "does not have")} the focus");
@@ -1166,6 +1167,7 @@ namespace IsWiX.Designer
                     _dataEventsPoint = null;
                 }
 
+                CloseFloatingWindows();
                 _codeWindowHost?.Dispose();
                 _codeWindow?.Close();
                 foreach (var host in _winFormsHosts.Values)
