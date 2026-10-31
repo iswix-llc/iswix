@@ -73,6 +73,7 @@ namespace IsWiX.Designer
 
         IReadOnlyList<IFireworksDesigner> _designers = Array.Empty<IFireworksDesigner>();
         ITextBuffer? _buffer;
+        SaveIndentationHook? _saveHook;
         IWpfTextView? _wpfView;
         // Set while one side's selection is being moved to follow the other's, so that doesn't move it back.
         bool _syncing;
@@ -254,6 +255,11 @@ namespace IsWiX.Designer
 
             _buffer.Changed += OnBufferChanged;
             Log("Attached to the text buffer of " + _filePath);
+
+            if (GetService(typeof(SVsRunningDocumentTable)) is IVsRunningDocumentTable documentTable)
+            {
+                _saveHook = new SaveIndentationHook(documentTable, _filePath, IndentBeforeSave);
+            }
 
             try
             {
@@ -881,7 +887,17 @@ namespace IsWiX.Designer
                 return;
             }
 
-            // Replace only the span that differs, so the rest of the buffer is untouched and the change is one undo step.
+            ReplaceChangedSpan(oldText, newText, "Wrote a designer change to the buffer");
+        }
+
+        // Replaces only the span that differs, so the rest of the buffer is untouched and the change is one undo step.
+        void ReplaceChangedSpan(string oldText, string newText, string what)
+        {
+            if (_buffer is null)
+            {
+                return;
+            }
+
             var prefix = 0;
             var max = Math.Min(oldText.Length, newText.Length);
             while (prefix < max && oldText[prefix] == newText[prefix])
@@ -901,7 +917,25 @@ namespace IsWiX.Designer
                 edit.Apply();
             }
 
-            Log($"Wrote a designer change to the buffer: {oldText.Length - prefix - suffix} characters replaced at {prefix}");
+            Log($"{what}: {oldText.Length - prefix - suffix} characters replaced at {prefix}");
+        }
+
+        // Visual Studio is about to save the file: indent the whole text in the style the file mostly uses, so the saved
+        // file is evenly indented whatever was typed, pasted or merged in. Text that is not well-formed XML is left alone.
+        void IndentBeforeSave()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_buffer is null)
+            {
+                return;
+            }
+
+            var oldText = _buffer.CurrentSnapshot.GetText();
+            var newText = XmlIndentation.Format(oldText);
+            if (newText != oldText)
+            {
+                ReplaceChangedSpan(oldText, newText, "Indented the document before saving");
+            }
         }
 
         void IPublishable.Publish(DocumentStates documentState)
@@ -1122,6 +1156,9 @@ namespace IsWiX.Designer
                 {
                     _buffer.Changed -= OnBufferChanged;
                 }
+
+                _saveHook?.Dispose();
+                _saveHook = null;
 
                 if (_dataEventsPoint != null)
                 {

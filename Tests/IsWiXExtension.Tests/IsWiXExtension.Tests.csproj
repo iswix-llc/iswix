@@ -14,6 +14,7 @@
     <Compile Include="..\..\IsWiXExtension\Designer\XmlPositions.cs" Link="XmlPositions.cs" />
     <Compile Include="..\..\Shared\FireworksFramework\Services\ProjectComponentGroups.cs" Link="ProjectComponentGroups.cs" />
     <Compile Include="..\..\Shared\Conversion\ProjectConverter.cs" Link="ProjectConverter.cs" />
+    <Compile Include="..\..\Shared\FireworksFramework\Managers\XmlIndentation.cs" Link="XmlIndentation.cs" />
   </ItemGroup>
 
   <ItemGroup>

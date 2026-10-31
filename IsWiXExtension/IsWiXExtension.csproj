@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Designer\WixDesignerEditorFactory.cs" />
     <Compile Include="Designer\WixDesignerPane.cs" />
+    <Compile Include="Designer\SaveIndentationHook.cs" />
     <Compile Include="Designer\CodeWindowHost.cs" />
     <Compile Include="Designer\XmlPositions.cs" />
     <Compile Include="Designer\DefinitionNavigator.cs" />
