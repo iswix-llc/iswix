@@ -423,6 +423,13 @@ namespace IsWiX.Designer
                     button.ForeColor = Color(CommonControlsColors.ButtonTextColorKey);
                     button.FlatAppearance.BorderColor = Color(CommonControlsColors.ButtonBorderColorKey);
                     break;
+                case WinForms.CheckBox:
+                case WinForms.RadioButton:
+                    control.BackColor = background;
+                    control.ForeColor = text;
+                    // Windows draws a disabled one's text in its gray, dark on a dark theme.
+                    DisabledText((WinForms.ButtonBase)control);
+                    break;
                 case WinForms.PropertyGrid grid:
                     grid.BackColor = background;
                     grid.ForeColor = text;
@@ -837,6 +844,11 @@ namespace IsWiX.Designer
 
                 var selected = (e.State & WinForms.DrawItemState.Selected) != 0;
                 var (back, fore) = ItemColors(selected, listBox.Focused, listBox.BackColor, listBox.ForeColor);
+                if (!listBox.Enabled)
+                {
+                    fore = Dimmed(fore, back);
+                }
+
                 using (var brush = new Drawing.SolidBrush(back))
                 {
                     e.Graphics.FillRectangle(brush, e.Bounds);
@@ -845,8 +857,51 @@ namespace IsWiX.Designer
                 var text = new Drawing.Rectangle(e.Bounds.X + 3, e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
                 WinForms.TextRenderer.DrawText(e.Graphics, listBox.GetItemText(listBox.Items[e.Index]), listBox.Font, text, fore, TextFlags(WinForms.HorizontalAlignment.Left));
             };
+            listBox.EnabledChanged += (s, e) => listBox.Invalidate();
             listBox.GotFocus += (s, e) => listBox.Invalidate();
             listBox.LostFocus += (s, e) => listBox.Invalidate();
+        }
+
+        // Text in the colors of the theme, dimmed toward the background: what a disabled control's text looks like.
+        static Drawing.Color Dimmed(Drawing.Color fore, Drawing.Color back) =>
+            Drawing.Color.FromArgb(fore.A, (fore.R * 6 + back.R * 4) / 10, (fore.G * 6 + back.G * 4) / 10, (fore.B * 6 + back.B * 4) / 10);
+
+        // A disabled check box or radio button has its text drawn again in the theme's dimmed text: the system draws it
+        // in its own gray, whatever ForeColor is, and that is hard to read on a dark theme. The glyph is left as drawn.
+        static void DisabledText(WinForms.ButtonBase box)
+        {
+            if (OwnerDrawn.TryGetValue(box, out _))
+            {
+                box.Invalidate();
+                return;
+            }
+
+            OwnerDrawn.Add(box, new object());
+            box.EnabledChanged += (s, e) => box.Invalidate();
+            box.Paint += (s, e) =>
+            {
+                var checkBox = box as WinForms.CheckBox;
+                var radio = box as WinForms.RadioButton;
+                var align = checkBox?.CheckAlign ?? radio?.CheckAlign ?? Drawing.ContentAlignment.MiddleLeft;
+                var onLeft = align == Drawing.ContentAlignment.MiddleLeft || align == Drawing.ContentAlignment.TopLeft || align == Drawing.ContentAlignment.BottomLeft;
+                if (box.Enabled || !onLeft || string.IsNullOrEmpty(box.Text) || box.TextAlign != Drawing.ContentAlignment.MiddleLeft)
+                {
+                    return;
+                }
+
+                var glyph = checkBox != null
+                    ? WinForms.CheckBoxRenderer.GetGlyphSize(e.Graphics, WinForms.VisualStyles.CheckBoxState.UncheckedDisabled)
+                    : WinForms.RadioButtonRenderer.GetGlyphSize(e.Graphics, WinForms.VisualStyles.RadioButtonState.UncheckedDisabled);
+                var left = box.Padding.Left + glyph.Width + 3;
+                var area = new Drawing.Rectangle(left, 0, Math.Max(0, box.ClientSize.Width - left), box.ClientSize.Height);
+                using (var brush = new Drawing.SolidBrush(box.BackColor))
+                {
+                    e.Graphics.FillRectangle(brush, area);
+                }
+
+                WinForms.TextRenderer.DrawText(e.Graphics, box.Text, box.Font, area, Dimmed(box.ForeColor, box.BackColor),
+                    WinForms.TextFormatFlags.VerticalCenter | WinForms.TextFormatFlags.Left | WinForms.TextFormatFlags.EndEllipsis);
+            };
         }
 
         static void OwnerDraw(WinForms.ComboBox comboBox)
@@ -858,6 +913,7 @@ namespace IsWiX.Designer
             }
 
             OwnerDrawn.Add(comboBox, new object());
+            comboBox.EnabledChanged += (s, e) => comboBox.Invalidate();
             comboBox.DrawMode = WinForms.DrawMode.OwnerDrawFixed;
             comboBox.DrawItem += (s, e) =>
             {
@@ -870,6 +926,11 @@ namespace IsWiX.Designer
                 var inBox = (e.State & WinForms.DrawItemState.ComboBoxEdit) != 0;
                 var selected = !inBox && (e.State & WinForms.DrawItemState.Selected) != 0;
                 var (back, fore) = ItemColors(selected, true, comboBox.BackColor, comboBox.ForeColor);
+                if (!comboBox.Enabled)
+                {
+                    fore = Dimmed(fore, back);
+                }
+
                 using (var brush = new Drawing.SolidBrush(back))
                 {
                     e.Graphics.FillRectangle(brush, e.Bounds);

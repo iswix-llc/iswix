@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Private>false</Private>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="License.txt" />
+    <None Remove="Registry.ico" />
+    <None Remove="Registry.dark.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="License.txt" />
+    <EmbeddedResource Include="Registry.ico" />
+    <!-- The designer list's icon in Visual Studio's dark themes. -->
+    <EmbeddedResource Include="Registry.dark.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The message box Files and Folders shows its warnings in, themed by the host. -->
+    <Compile Include="..\FilesAndFoldersDesigner\ThemedMessageBox.cs" Link="ThemedMessageBox.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- FireworksFramework also brings IsWiX.WiXModel, so every designer uses the same version. -->
+    <ProjectReference Include="..\..\Shared\FireworksFramework\FireworksFramework.csproj" />
+  </ItemGroup>
+
+</Project>

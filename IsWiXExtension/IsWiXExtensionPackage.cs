@@ -34,6 +34,8 @@ namespace IsWiX
     [ProvideEditorLogicalView(typeof(Designer.WixDesignerEditorFactory), VSConstants.LOGVIEWID.Designer_string)]
     // The Convert to IsWiX Project / Convert to WiX Project commands (IsWiXCommands.vsct). The package loads, in the
     // background, when a solution opens, so the commands can show only on the projects they convert.
+    // The windows the Design and XML views float in (View > IsWiX Designer Layout, or the bar over the views).
+    [ProvideToolWindow(typeof(Designer.FloatingViewWindow), Style = VsDockStyle.Float, Transient = true, MultiInstances = true)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
     public sealed class IsWiXPackage : AsyncPackage

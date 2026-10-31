@@ -1,25 +1,25 @@
 {
-  "$schema": "http://json.schemastore.org/template",
-  "author": "IsWiX",
-  "classifications": [
-    "WiX",
-    "IsWiX",
-    "Installer"
-  ],
-  "identity": "IsWiX.Item.Include",
-  "name": "WiX Include File",
-  "shortName": "iswix-wxi",
-  "description": "A WiX include file (.wxi), for preprocessor definitions shared between .wxs files.",
-  "tags": {
-    "language": "WiX",
-    "type": "item"
-  },
-  "sourceName": "ItemName",
-  "defaultName": "Include",
-  "preferNameDirectory": false,
-  "primaryOutputs": [
-    {
-      "path": "ItemName.wxi"
-    }
-  ]
+    "$schema": "http://json.schemastore.org/template",
+    "author": "IsWiX",
+    "classifications": [
+        "WiX",
+        "IsWiX",
+        "Installer"
+    ],
+    "identity": "IsWiX.Item.Include",
+    "name": "WiX Include File",
+    "shortName": "iswix-wxi",
+    "description": "A WiX include file (.wxi), for preprocessor definitions shared between .wxs files.",
+    "tags": {
+        "language": "WiX",
+        "type": "item"
+    },
+    "sourceName": "ItemName",
+    "defaultName": "Include",
+    "preferNameDirectory": false,
+    "primaryOutputs": [
+        {
+            "path": "ItemName.wxi"
+        }
+    ]
 }

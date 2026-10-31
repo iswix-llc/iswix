@@ -1389,78 +1389,66 @@ namespace Designers.FilesAndFolders
 
         }
 
-        private void removeFileFromProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void removeFileFromProjectToolStripMenuItem_Click(object sender, EventArgs e) => DeleteSelectedFiles();
+
+        // Removes the files selected in the destination list from the project, after the user confirms. The confirmation
+        // says when a file is the key file of a service's component, which goes whole with it.
+        private void DeleteSelectedFiles()
         {
-            if (lvDestination.SelectedItems.Count > 0)
+            if (lvDestination.SelectedItems.Count == 0)
             {
-                var result = ThemedMessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (DialogResult.OK != result) return;
-                using var wait = Waiting();
-                List<FileMeta> files = new List<FileMeta>();
-                string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
-                if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
-                {
-                    destination = destination.Replace("[", "").Replace("]", "");
-                }
+                return;
+            }
+
+            List<FileMeta> files = new List<FileMeta>();
+            string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
+            if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
+            {
+                destination = destination.Replace("[", "").Replace("]", "");
+            }
+            foreach (ListViewItem item in lvDestination.SelectedItems)
+            {
+                files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
+            }
+
+            var message = "Do you really want to delete the selected file(s)?";
+            var services = _isWiXComponentGroup.CountServiceComponents(files);
+            if (services > 0)
+            {
+                message += string.Format("\r\n\r\n{0} of the selected {1} the key file of a component with a service (ServiceInstall or ServiceControl). " +
+                    "{2} removed whole, with the service and any other files in {3}.",
+                    services, services == 1 ? "files is" : "files are", services == 1 ? "That component is" : "Those components are", services == 1 ? "it" : "them");
+            }
+
+            if (DialogResult.OK != ThemedMessageBox.Show(message, "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning))
+            {
+                return;
+            }
+
+            using var wait = Waiting();
+            _isWiXComponentGroup.DeleteFiles(files);
+            // Batched, so the list is drawn once rather than after each item is removed.
+            lvDestination.BeginUpdate();
+            try
+            {
                 foreach (ListViewItem item in lvDestination.SelectedItems)
                 {
-                    files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
+                    item.Remove();
                 }
-                _isWiXComponentGroup.DeleteFiles(files);
-                // Batched, so the list is drawn once rather than after each item is removed.
-                lvDestination.BeginUpdate();
-                try
-                {
-                    foreach (ListViewItem item in lvDestination.SelectedItems)
-                    {
-                        item.Remove();
-                    }
-                }
-                finally
-                {
-                    lvDestination.EndUpdate();
-                }
-                // Nothing in the folder is selected now, so the XML shows the folder.
-                ShowSelectionInXml(false);
             }
+            finally
+            {
+                lvDestination.EndUpdate();
+            }
+            // Nothing in the folder is selected now, so the XML shows the folder.
+            ShowSelectionInXml(false);
         }
 
         private void lvDestination_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if (lvDestination.SelectedItems.Count > 0)
-                {
-                    var result = ThemedMessageBox.Show("Do you really want to delete the selected file(s)?", "File Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    if (DialogResult.OK != result) return;
-                using var wait = Waiting();
-                    List<FileMeta> files = new List<FileMeta>();
-                    string destination = tvDestination.SelectedNode.FullPath.Replace("Destination Computer\\", "");
-                    if (tvDestination.SelectedNode.Parent.Text == "Destination Computer")
-                    {
-                        destination = destination.Replace("[", "").Replace("]", "");
-                    }
-                    foreach (ListViewItem item in lvDestination.SelectedItems)
-                    {
-                        files.Add(new FileMeta() { Destination = destination, Source = item.SubItems[2].Text });
-                    }
-                    _isWiXComponentGroup.DeleteFiles(files);
-                    // Batched, so the list is drawn once rather than after each item is removed.
-                    lvDestination.BeginUpdate();
-                    try
-                    {
-                        foreach (ListViewItem item in lvDestination.SelectedItems)
-                        {
-                            item.Remove();
-                        }
-                    }
-                    finally
-                    {
-                        lvDestination.EndUpdate();
-                    }
-                    // Nothing in the folder is selected now, so the XML shows the folder.
-                    ShowSelectionInXml(false);
-                }
+                DeleteSelectedFiles();
             }
             else if (e.KeyCode == Keys.A && e.Control)
             {
@@ -1515,9 +1503,39 @@ namespace Designers.FilesAndFolders
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // This path has not asked before; it does when the folder holds a service or registry entries, which are removed with it.
+            var folder = tvDestination.SelectedNode.FullPath.Replace(@"Destination Computer\", "");
+            if ((_isWiXComponentGroup.CountServiceComponentsInFolder(folder) > 0 || _isWiXComponentGroup.CountRegistryComponentsInFolder(folder) > 0) &&
+                !ConfirmFolderDelete(tvDestination.SelectedNode))
+            {
+                return;
+            }
+
             using var wait = Waiting();
             _isWiXComponentGroup.DeleteDirectory(tvDestination.SelectedNode.FullPath, tvDestination.SelectedNode.Parent.FullPath);
             tvDestination.SelectedNode.Remove();
+        }
+
+        // Asks the user to confirm deleting the folder, saying when components with a service go with it.
+        private bool ConfirmFolderDelete(TreeNode node)
+        {
+            var message = string.Format("Do you really want to delete the {0} folder?", node.Text);
+            var path = node.FullPath.Replace(@"Destination Computer\", "");
+            var services = _isWiXComponentGroup.CountServiceComponentsInFolder(path);
+            if (services > 0)
+            {
+                message += string.Format("\r\n\r\nIt holds {0} component{1} with a service (ServiceInstall or ServiceControl), which {2} removed with it.",
+                    services, services == 1 ? "" : "s", services == 1 ? "is" : "are");
+            }
+
+            var registry = _isWiXComponentGroup.CountRegistryComponentsInFolder(path);
+            if (registry > 0)
+            {
+                message += string.Format("\r\n\r\nIt holds {0} component{1} with registry entries, which {2} removed with it.",
+                    registry, registry == 1 ? "" : "s", "are");
+            }
+
+            return DialogResult.OK == ThemedMessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
         }
 
         private void lvDestination_SelectedIndexChanged(object sender, EventArgs e)
@@ -1537,9 +1555,7 @@ namespace Designers.FilesAndFolders
                 }
                 else
                 {
-                    var message = string.Format("Do you really want to delete the {0} folder?", tvDestination.SelectedNode.Text);
-                    var result = ThemedMessageBox.Show(message, "Folder Deletion Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    if (DialogResult.OK != result)
+                    if (!ConfirmFolderDelete(tvDestination.SelectedNode))
                     {
                         return;
                     }

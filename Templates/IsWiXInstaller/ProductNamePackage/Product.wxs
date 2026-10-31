@@ -3,35 +3,35 @@
 <!--#else -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 <!--#endif -->
-  <!--
-  MSIProductVersion is defined in ProductNamePackage.iswixproj as 0.0.1 for local desktop builds.  
-  You should pass in the MSBuild Property 'MSIProductVersion' to override it during an automated build.
-  See http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859%28v=vs.85%29.aspx for information on allowable values.
+    <!--
+    MSIProductVersion is defined in ProductNamePackage.iswixproj as 0.0.1 for local desktop builds.  
+    You should pass in the MSBuild Property 'MSIProductVersion' to override it during an automated build.
+    See http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859%28v=vs.85%29.aspx for information on allowable values.
   
-  The Product@Id attribute (ProductCode Property) will be a random GUID for each build.  This is to support "Major Upgrades" where each install 
-  is a seamless uninstall/reinstall.
-  -->
-<Package Name="ProductName" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ProductName" UpgradeCode="00000000-0000-0000-0000-000000000003">
-    <MediaTemplate EmbedCab="yes" />
-    <!-- Major Upgrade Rule to disallow downgrades -->
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-    <!--#if (packageUI) -->
-    <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
-    <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
-	<UI Id="UI">
-		<ui:WixUI Id="WixUI_FeatureTree" />
-		<UIRef Id="WixUI_ErrorProgressText" />
-	</UI>
-    <!--#endif -->
-	<Property Id="DISABLEADVTSHORTCUTS" Value="1"></Property>
-	<StandardDirectory Id="ProgramFiles6432Folder">
-      <Directory Id="CompanyFolder" Name="My Company">
-        <Directory Id="INSTALLLOCATION" Name="ProductName">
-        </Directory>
-      </Directory>
-    </StandardDirectory>
-    <Feature Id="ProductName" Title="ProductName" Description="Installs all the files needed for ProductName" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
-    </Feature>
-    <EnsureTable Id="FeatureComponents"/>
-  </Package>
+    The Product@Id attribute (ProductCode Property) will be a random GUID for each build.  This is to support "Major Upgrades" where each install 
+    is a seamless uninstall/reinstall.
+    -->
+    <Package Name="ProductName" Language="1033" Version="$(var.MSIProductVersion)" Manufacturer="ProductName" UpgradeCode="00000000-0000-0000-0000-000000000003">
+        <MediaTemplate EmbedCab="yes" />
+        <!-- Major Upgrade Rule to disallow downgrades -->
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <!--#if (packageUI) -->
+        <Icon Id="Icon.ico" SourceFile="Resources\Icon.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="Icon.ico"></Property>
+        <UI Id="UI">
+            <ui:WixUI Id="WixUI_FeatureTree" />
+            <UIRef Id="WixUI_ErrorProgressText" />
+        </UI>
+        <!--#endif -->
+        <Property Id="DISABLEADVTSHORTCUTS" Value="1"></Property>
+        <StandardDirectory Id="ProgramFiles6432Folder">
+            <Directory Id="CompanyFolder" Name="My Company">
+                <Directory Id="INSTALLLOCATION" Name="ProductName">
+                </Directory>
+            </Directory>
+        </StandardDirectory>
+        <Feature Id="ProductName" Title="ProductName" Description="Installs all the files needed for ProductName" Level="1" AllowAdvertise="no" ConfigurableDirectory="INSTALLLOCATION">
+        </Feature>
+        <EnsureTable Id="FeatureComponents"/>
+    </Package>
 </Wix>

@@ -203,6 +203,18 @@ namespace Designers.FilesAndFolders
                 ? $"Delete the component group '{id}'?"
                 : $"Delete the component group '{id}' and its {count} component{(count == 1 ? "" : "s")}?";
 
+            var services = _isWiXComponentGroup.ServiceComponentCount;
+            if (services > 0)
+            {
+                message += string.Format("\r\n\r\n{0} of the components {1} a service (ServiceInstall or ServiceControl).", services, services == 1 ? "has" : "have");
+            }
+
+            var registry = _isWiXComponentGroup.RegistryComponentCount;
+            if (registry > 0)
+            {
+                message += string.Format("\r\n\r\n{0} of the components {1} registry entries, which go with the group.", registry, registry == 1 ? "has" : "have");
+            }
+
             // References to it, here or in the project's other files, are left as they are and stop resolving.
             Cursor = Cursors.WaitCursor;
             List<string> referencedBy;

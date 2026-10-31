@@ -7,7 +7,24 @@
   <Extern href="vsshlids.h" />
 
   <Commands package="guidIsWiXPackage">
+    <!-- View > IsWiX Designer Layout: how the .wxs editor shows its Design and XML views. The editor answers these
+         (Designer/WixDesignerPane.Layout.cs), so they show only while a .wxs editor is the active document. -->
+    <Menus>
+      <Menu guid="guidIsWiXCommandSet" id="DesignerLayoutMenu" priority="0x0200" type="Menu">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutMenuGroup" />
+        <Strings>
+          <ButtonText>IsWiX Designer Layout</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
     <Groups>
+      <Group guid="guidIsWiXCommandSet" id="DesignerLayoutMenuGroup" priority="0x0700">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW" />
+      </Group>
+      <Group guid="guidIsWiXCommandSet" id="DesignerLayoutGroup" priority="0x0100">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutMenu" />
+      </Group>
       <Group guid="guidIsWiXCommandSet" id="ProjectConvertGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
       </Group>
@@ -49,8 +66,56 @@
           <ButtonText>Convert IsWiX Projects to WiX Projects</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidIsWiXCommandSet" id="cmdidLayoutHorizontal" priority="0x0100" type="Button">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Horizontal Split (Design above XML)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidIsWiXCommandSet" id="cmdidLayoutVertical" priority="0x0101" type="Button">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Vertical Split (Design beside XML)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidIsWiXCommandSet" id="cmdidLayoutCycle" priority="0x0102" type="Button">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Show &amp;Both, Design or XML View</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidIsWiXCommandSet" id="cmdidLayoutFloatDesign" priority="0x0105" type="Button">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Float D&amp;esign View</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidIsWiXCommandSet" id="cmdidLayoutFloatXml" priority="0x0106" type="Button">
+        <Parent guid="guidIsWiXCommandSet" id="DesignerLayoutGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Float XM&amp;L View</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
   </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="guidIsWiXCommandSet" id="cmdidLayoutHorizontal" editor="guidWixDesignerEditor" mod1="Alt Shift" key1="1" />
+    <KeyBinding guid="guidIsWiXCommandSet" id="cmdidLayoutVertical" editor="guidWixDesignerEditor" mod1="Alt Shift" key1="2" />
+    <KeyBinding guid="guidIsWiXCommandSet" id="cmdidLayoutCycle" editor="guidWixDesignerEditor" mod1="Alt Shift" key1="3" />
+    <KeyBinding guid="guidIsWiXCommandSet" id="cmdidLayoutFloatDesign" editor="guidWixDesignerEditor" mod1="Alt Shift" key1="4" />
+    <KeyBinding guid="guidIsWiXCommandSet" id="cmdidLayoutFloatXml" editor="guidWixDesignerEditor" mod1="Alt Shift" key1="5" />
+  </KeyBindings>
 
   <!-- The project group on unloaded projects too: a .wixproj is unloaded when HeatWave isn't installed. -->
   <CommandPlacements>
@@ -68,6 +133,16 @@
       <IDSymbol name="cmdidConvertProjectToWix" value="0x0101" />
       <IDSymbol name="cmdidConvertSolutionToIsWiX" value="0x0102" />
       <IDSymbol name="cmdidConvertSolutionToWix" value="0x0103" />
+      <IDSymbol name="DesignerLayoutMenuGroup" value="0x1030" />
+      <IDSymbol name="DesignerLayoutMenu" value="0x1031" />
+      <IDSymbol name="DesignerLayoutGroup" value="0x1032" />
+      <IDSymbol name="cmdidLayoutHorizontal" value="0x0110" />
+      <IDSymbol name="cmdidLayoutVertical" value="0x0111" />
+      <IDSymbol name="cmdidLayoutCycle" value="0x0112" />
+      <IDSymbol name="cmdidLayoutFloatDesign" value="0x0115" />
+      <IDSymbol name="cmdidLayoutFloatXml" value="0x0116" />
     </GuidSymbol>
+    <!-- The .wxs editor (Designer/WixDesignerEditorFactory.cs): the shortcuts apply while it is the active editor. -->
+    <GuidSymbol name="guidWixDesignerEditor" value="{2c930e52-76a4-4f4d-b21d-e231228d788c}" />
   </Symbols>
 </CommandTable>

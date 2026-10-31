@@ -195,12 +195,12 @@ namespace FilesAndFoldersDesigner
             if (string.IsNullOrEmpty(directoryMeta.Subdirectory))
             {
                 directoryComponent = peFile
-                    ? Components.FirstOrDefault(c => c.Directory == directoryMeta.Directory)
-                    : Components.FirstOrDefault(c => c.Directory == directoryMeta.Directory && IsKeyPath(c.KeyPath));
+                    ? ShownComponents.FirstOrDefault(c => c.Directory == directoryMeta.Directory)
+                    : ShownComponents.FirstOrDefault(c => c.Directory == directoryMeta.Directory && IsKeyPath(c.KeyPath));
             }
             else
             {
-                directoryComponent = Components.FirstOrDefault(c => c.Directory == directoryMeta.Directory &&
+                directoryComponent = ShownComponents.FirstOrDefault(c => c.Directory == directoryMeta.Directory &&
                     Subdirectory(c) == directoryMeta.Subdirectory && IsKeyPath(c.KeyPath));
             }
 
@@ -339,8 +339,13 @@ namespace FilesAndFoldersDesigner
                 foreach (var fileElement in FindFiles(file).ToList())
                 {
                     var component = (Wxs.Component)fileElement.Parent!;
+                    // The key file of a service's component is the service: without it the ServiceInstall and
+                    // ServiceControl have nothing to install or control, so the whole component goes.
+                    var isServiceKeyFile = IsServiceKeyFile(fileElement);
                     fileElement.RemoveFromParent();
-                    if (!component.Xml.HasElements)
+                    // A component with nothing left is dropped whole: no files, and nothing else that was not the file's
+                    // (registry values, say, which another designer put there) to lose with it.
+                    if (isServiceKeyFile || (!component.Xml.Elements(Wxs.File.ElementName).Any() && !HasOtherContent(component)))
                     {
                         component.RemoveFromParent();
                     }
@@ -348,6 +353,55 @@ namespace FilesAndFoldersDesigner
                 UnpruneDirectory(file.Destination);
             }
         }
+
+        // Something in the component that is not a file or a folder to create: registry values, a service, an
+        // environment variable. The files' own children (shortcuts, say) are inside the File, so not counted.
+        static bool HasOtherContent(Wxs.Component component) =>
+            component.Xml.Elements().Any(e => e.Name != Wxs.File.ElementName && e.Name != Wxs.CreateFolder.ElementName);
+
+        static readonly string[] RegistryElements = { "RegistryKey", "RegistryValue", "RemoveRegistryKey", "RemoveRegistryValue" };
+
+        // A component with registry entries of its own: they go when the component does.
+        static bool HasRegistry(Wxs.Component component) =>
+            component.Xml.Elements().Any(e => Array.IndexOf(RegistryElements, e.Name.LocalName) >= 0);
+
+        /// <summary>Gets how many components of the folder and the folders below it have registry entries.</summary>
+        public int CountRegistryComponentsInFolder(string directoryPath) => ComponentsInFolder(new DirectoryMeta(directoryPath)).Count(HasRegistry);
+
+        /// <summary>Gets how many components of the group shown have registry entries.</summary>
+        public int RegistryComponentCount => Components.Count(HasRegistry);
+
+        // A component that installs or controls a service: it has a ServiceInstall or a ServiceControl.
+        static bool HasService(Wxs.Component component) =>
+            component.Xml.Elements().Any(e => e.Name == Wxs.ServiceInstall.ElementName || e.Name == Wxs.ServiceControl.ElementName);
+
+        // The key file of a component that has a service. Deleting it deletes the component (DeleteFiles).
+        static bool IsServiceKeyFile(Wxs.File file) =>
+            IsKeyPath(file.KeyPath) && file.Parent is Wxs.Component component && HasService(component);
+
+        /// <summary>
+        /// Gets how many components with a service <see cref="DeleteFiles"/> would remove whole for these files: those
+        /// whose key file is one of them.
+        /// </summary>
+        public int CountServiceComponents(List<FileMeta> files) => files
+            .SelectMany(f => FindFiles(f))
+            .Where(IsServiceKeyFile)
+            .Select(f => f.Parent!.Xml)
+            .Distinct()
+            .Count();
+
+        /// <summary>Gets how many components of the folder and the folders below it have a service.</summary>
+        public int CountServiceComponentsInFolder(string directoryPath) => ComponentsInFolder(new DirectoryMeta(directoryPath)).Count(HasService);
+
+        /// <summary>Gets how many components of the group shown have a service.</summary>
+        public int ServiceComponentCount => Components.Count(HasService);
+
+        // The components of the folder and of the folders below it that the designer shows. One it doesn't (it has no
+        // File or CreateFolder: registry values alone, say) belongs to another designer, so counting, pruning and
+        // deleting a folder leave it alone, whatever its Directory.
+        IEnumerable<Wxs.Component> ComponentsInFolder(DirectoryMeta directoryMeta) => string.IsNullOrEmpty(directoryMeta.Subdirectory)
+            ? ShownComponents.Where(c => c.Directory == directoryMeta.Directory)
+            : ShownComponents.Where(c => c.Directory == directoryMeta.Directory && IsInFolder(c, directoryMeta.Subdirectory));
 
         public void AddFiles(List<FileMeta> files)
         {
@@ -371,7 +425,7 @@ namespace FilesAndFoldersDesigner
             // group is put in canonical order once at the end. A folder's component for non-PE files is found in a table
             // rather than by scanning every component for each file.
             var directoryComponents = new Dictionary<string, Wxs.Component>(StringComparer.Ordinal);
-            foreach (var component in Components)
+            foreach (var component in ShownComponents)
             {
                 if (component.Directory is string directory && IsKeyPath(component.KeyPath))
                 {
@@ -561,9 +615,7 @@ namespace FilesAndFoldersDesigner
         {
             using var batch = _documentManager.Batch();
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
-            var components = string.IsNullOrEmpty(directoryMeta.Subdirectory)
-                ? Components.Where(c => c.Directory == directoryMeta.Directory)
-                : Components.Where(c => c.Directory == directoryMeta.Directory && IsInFolder(c, directoryMeta.Subdirectory));
+            var components = ComponentsInFolder(directoryMeta);
 
             foreach (var component in components.ToList())
             {
@@ -617,7 +669,7 @@ namespace FilesAndFoldersDesigner
             id != null && GeneratedIdPattern.IsMatch(id);
 
         private bool DirectoryExists(string directory, string subdirectory) =>
-            Components.Any(c => c.Directory == directory && IsInFolder(c, subdirectory));
+            ShownComponents.Any(c => c.Directory == directory && IsInFolder(c, subdirectory));
 
         // A folder's empty (CreateFolder only) component is no longer needed once the folder has something else.
         public void PruneDirectory(string directoryPath) => TryPruneDirectory(directoryPath);
@@ -630,7 +682,8 @@ namespace FilesAndFoldersDesigner
         {
             using var batch = _documentManager.Batch();
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
-            int componentCount = Components.Count(c => c.Directory == directoryMeta.Directory && Subdirectory(c).StartsWith(directoryMeta.Subdirectory));
+            // The folder's components and its subfolders': matched on whole path parts, so "bin" is not "bin2".
+            int componentCount = ComponentsInFolder(directoryMeta).Count();
 
             if (componentCount > 1)
             {
@@ -653,7 +706,7 @@ namespace FilesAndFoldersDesigner
         private void UnpruneDirectory(string directoryPath)
         {
             DirectoryMeta directoryMeta = new DirectoryMeta(directoryPath);
-            int componentCount = Components.Count(c => c.Directory == directoryMeta.Directory && Subdirectory(c).StartsWith(directoryMeta.Subdirectory));
+            int componentCount = ComponentsInFolder(directoryMeta).Count();
             if (componentCount < 1 && directoryPath != "Destination Computer")
             {
                 GetOrCreateDirectoryComponent(directoryPath);

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using FireworksFramework.Interfaces;
 using FireworksFramework.Types;
@@ -229,12 +230,49 @@ namespace FireworksFramework.Managers
         public void Save(string filePath)
         {
             // Only what the designers changed is rewritten; new elements are indented like their siblings. The file
-            // is written to a temporary file and swapped in, so a failed save never truncates it.
+            // is written to a temporary file and swapped in, so a failed save never truncates it. The whole file is
+            // then brought to the indentation it mostly uses, so it is evenly indented after every save.
             LosslessXml.Save(_document, filePath);
+            EnforceIndentation(filePath);
             _savedDocument = new XDocument(_document);
             _documentPath = filePath;
             _documentState = DocumentStates.Clean;
             PublishToSubscriber();
+        }
+
+        // Re-indents a saved file to the style it mostly uses. Best effort: the save itself has already succeeded, so a
+        // file that is locked or not UTF-8 is left as saved.
+        static void EnforceIndentation(string filePath)
+        {
+            var temp = filePath + ".indent.tmp";
+            try
+            {
+                var bytes = File.ReadAllBytes(filePath);
+                var bom = bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF ? 3 : 0;
+                var text = new UTF8Encoding(false, true).GetString(bytes, bom, bytes.Length - bom);
+                var formatted = XmlIndentation.Format(text);
+                if (formatted == text)
+                {
+                    return;
+                }
+
+                var body = new UTF8Encoding(false).GetBytes(formatted);
+                var output = new byte[bom + body.Length];
+                Array.Copy(bytes, output, bom);
+                Array.Copy(body, 0, output, bom, body.Length);
+                File.WriteAllBytes(temp, output);
+                File.Replace(temp, filePath, null);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException || ex is DecoderFallbackException)
+            {
+                try
+                {
+                    File.Delete(temp);
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
 
         public void Close()
