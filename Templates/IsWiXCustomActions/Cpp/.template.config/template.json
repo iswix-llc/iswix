@@ -1,160 +1,160 @@
 {
-  "$schema": "http://json.schemastore.org/template",
-  "author": "IsWiX",
-  "classifications": [
-    "WiX",
-    "IsWiX",
-    "Installer",
-    "Custom Action"
-  ],
-  "identity": "IsWiX.CustomAction.Cpp",
-  "name": "IsWiX C++ Custom Action",
-  "shortName": "iswix-ca-cpp",
-  "description": "A native Windows Installer custom action DLL written in C++ with the WiX Toolset's custom action library (WcaUtil and DUtil).",
-  "tags": {
-    "language": "C++",
-    "type": "project"
-  },
-  "sourceName": "CustomActionName",
-  "preferNameDirectory": true,
-  "guids": [
-    "3F7C2A55-1B9E-4E0D-9C6A-7D2E5B8A4C11"
-  ],
-  "symbols": {
-    "Sdk": {
-      "type": "parameter",
-      "datatype": "choice",
-      "description": "Which WiX packages the custom action uses: IsWiX's (no Open Source Maintenance Fee) or the WiX Toolset's. Use the same as the installer that runs it.",
-      "displayName": "WiX packages",
-      "defaultValue": "iswix",
-      "choices": [
+    "$schema": "http://json.schemastore.org/template",
+    "author": "IsWiX",
+    "classifications": [
+        "WiX",
+        "IsWiX",
+        "Installer",
+        "Custom Action"
+    ],
+    "identity": "IsWiX.CustomAction.Cpp",
+    "name": "IsWiX C++ Custom Action",
+    "shortName": "iswix-ca-cpp",
+    "description": "A native Windows Installer custom action DLL written in C++ with the WiX Toolset's custom action library (WcaUtil and DUtil).",
+    "tags": {
+        "language": "C++",
+        "type": "project"
+    },
+    "sourceName": "CustomActionName",
+    "preferNameDirectory": true,
+    "guids": [
+        "3F7C2A55-1B9E-4E0D-9C6A-7D2E5B8A4C11"
+    ],
+    "symbols": {
+        "Sdk": {
+            "type": "parameter",
+            "datatype": "choice",
+            "description": "Which WiX packages the custom action uses: IsWiX's (no Open Source Maintenance Fee) or the WiX Toolset's. Use the same as the installer that runs it.",
+            "displayName": "WiX packages",
+            "defaultValue": "iswix",
+            "choices": [
+                {
+                    "choice": "iswix",
+                    "description": "IsWiX packages: no Open Source Maintenance Fee (OSMF)",
+                    "displayName": "IsWiX"
+                },
+                {
+                    "choice": "wixtoolset",
+                    "description": "WiX Toolset packages: v7 if you accept its OSMF EULA, otherwise v5",
+                    "displayName": "WiX Toolset"
+                }
+            ]
+        },
+        "AcceptEula": {
+            "type": "parameter",
+            "datatype": "bool",
+            "isEnabled": "(Sdk == \"wixtoolset\")",
+            "defaultValue": "false",
+            "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
+            "description": "Only for the WiX Toolset's packages; ignored for IsWiX's. WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the project uses WiX 7.0.1; if you don't, WiX 5.0.2."
+        },
+        "useIsWiXSdk": {
+            "type": "computed",
+            "value": "(Sdk == \"iswix\")"
+        },
+        "osmfAccepted": {
+            "type": "computed",
+            "value": "(Sdk == \"wixtoolset\" && AcceptEula)"
+        },
+        "wixVersion": {
+            "type": "generated",
+            "generator": "switch",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    {
+                        "condition": "(useIsWiXSdk)",
+                        "value": "7.0.1"
+                    },
+                    {
+                        "condition": "(osmfAccepted)",
+                        "value": "7.0.1"
+                    },
+                    {
+                        "condition": "(!useIsWiXSdk && !osmfAccepted)",
+                        "value": "5.0.2"
+                    }
+                ]
+            },
+            "replaces": "WIXVERSION"
+        },
+        "wixPackagePrefix": {
+            "type": "generated",
+            "generator": "switch",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    {
+                        "condition": "(useIsWiXSdk)",
+                        "value": "IsWiX"
+                    },
+                    {
+                        "condition": "(!useIsWiXSdk)",
+                        "value": "WixToolset"
+                    }
+                ]
+            },
+            "replaces": "WIXPREFIX"
+        }
+    },
+    "primaryOutputs": [
         {
-          "choice": "iswix",
-          "description": "IsWiX packages: no Open Source Maintenance Fee (OSMF)",
-          "displayName": "IsWiX"
+            "path": "CustomActionName.vcxproj"
         },
         {
-          "choice": "wixtoolset",
-          "description": "WiX Toolset packages: v7 if you accept its OSMF EULA, otherwise v5",
-          "displayName": "WiX Toolset"
+            "path": "CustomAction.cpp"
         }
-      ]
-    },
-    "AcceptEula": {
-      "type": "parameter",
-      "datatype": "bool",
-      "isEnabled": "(Sdk == \"wixtoolset\")",
-      "defaultValue": "false",
-      "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
-      "description": "Only for the WiX Toolset's packages; ignored for IsWiX's. WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the project uses WiX 7.0.1; if you don't, WiX 5.0.2."
-    },
-    "useIsWiXSdk": {
-      "type": "computed",
-      "value": "(Sdk == \"iswix\")"
-    },
-    "osmfAccepted": {
-      "type": "computed",
-      "value": "(Sdk == \"wixtoolset\" && AcceptEula)"
-    },
-    "wixVersion": {
-      "type": "generated",
-      "generator": "switch",
-      "parameters": {
-        "evaluator": "C++",
-        "datatype": "string",
-        "cases": [
-          {
-            "condition": "(useIsWiXSdk)",
-            "value": "7.0.1"
-          },
-          {
-            "condition": "(osmfAccepted)",
-            "value": "7.0.1"
-          },
-          {
-            "condition": "(!useIsWiXSdk && !osmfAccepted)",
-            "value": "5.0.2"
-          }
-        ]
-      },
-      "replaces": "WIXVERSION"
-    },
-    "wixPackagePrefix": {
-      "type": "generated",
-      "generator": "switch",
-      "parameters": {
-        "evaluator": "C++",
-        "datatype": "string",
-        "cases": [
-          {
-            "condition": "(useIsWiXSdk)",
-            "value": "IsWiX"
-          },
-          {
-            "condition": "(!useIsWiXSdk)",
-            "value": "WixToolset"
-          }
-        ]
-      },
-      "replaces": "WIXPREFIX"
-    }
-  },
-  "primaryOutputs": [
-    {
-      "path": "CustomActionName.vcxproj"
-    },
-    {
-      "path": "CustomAction.cpp"
-    }
-  ],
-  "SpecialCustomOperations": {
-    "**/*.vcxproj": {
-      "operations": [
-        {
-          "type": "conditional",
-          "configuration": {
-            "if": [
-              "<!--#if"
-            ],
-            "else": [
-              "<!--#else"
-            ],
-            "elseif": [
-              "<!--#elseif"
-            ],
-            "endif": [
-              "<!--#endif"
-            ],
-            "trim": true,
-            "wholeLine": true,
-            "evaluator": "C++"
-          }
+    ],
+    "SpecialCustomOperations": {
+        "**/*.vcxproj": {
+            "operations": [
+                {
+                    "type": "conditional",
+                    "configuration": {
+                        "if": [
+                            "<!--#if"
+                        ],
+                        "else": [
+                            "<!--#else"
+                        ],
+                        "elseif": [
+                            "<!--#elseif"
+                        ],
+                        "endif": [
+                            "<!--#endif"
+                        ],
+                        "trim": true,
+                        "wholeLine": true,
+                        "evaluator": "C++"
+                    }
+                }
+            ]
+        },
+        "**/*.config": {
+            "operations": [
+                {
+                    "type": "conditional",
+                    "configuration": {
+                        "if": [
+                            "<!--#if"
+                        ],
+                        "else": [
+                            "<!--#else"
+                        ],
+                        "elseif": [
+                            "<!--#elseif"
+                        ],
+                        "endif": [
+                            "<!--#endif"
+                        ],
+                        "trim": true,
+                        "wholeLine": true,
+                        "evaluator": "C++"
+                    }
+                }
+            ]
         }
-      ]
-    },
-    "**/*.config": {
-      "operations": [
-        {
-          "type": "conditional",
-          "configuration": {
-            "if": [
-              "<!--#if"
-            ],
-            "else": [
-              "<!--#else"
-            ],
-            "elseif": [
-              "<!--#elseif"
-            ],
-            "endif": [
-              "<!--#endif"
-            ],
-            "trim": true,
-            "wholeLine": true,
-            "evaluator": "C++"
-          }
-        }
-      ]
     }
-  }
 }

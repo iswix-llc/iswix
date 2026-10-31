@@ -1,172 +1,172 @@
 {
-  "$schema": "http://json.schemastore.org/template",
-  "author": "IsWiX",
-  "classifications": [ "WiX", "IsWiX", "Installer" ],
-  "identity": "IsWiX.Installer",
-  "name": "IsWiX Installer",
-  "shortName": "iswix-installer",
-  "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
-  "tags": {
-    "language": "WiX",
-    "type": "project"
-  },
-  "guids": [ "298D4875-B9CE-4CDC-BE4A-C3573226727E", "6F1D2A9C-4B7E-4E3A-9C55-8A2B1D0E7F34" ],
-  "sourceName": "ProductName",
-  "preferNameDirectory": true,
-  "icon": "icon.ico",
-  "symbols": {
-    "Bootstrapper": {
-      "type": "parameter",
-      "datatype": "choice",
-      "description": "Whether to also create an EXE bootstrapper (.exe) that installs the .msi, and which bootstrapper application it uses.",
-      "displayName": "EXE bootstrapper",
-      "defaultValue": "none",
-      "choices": [
-        { "choice": "none", "description": "No bootstrapper: just the Windows installer package (.msi)", "displayName": "None (MSI only)" },
-        { "choice": "standard", "description": "Standard Bootstrapper Application: the bootstrapper shows the user interface", "displayName": "Standard Bootstrapper Application" },
-        { "choice": "internalui", "description": "WixInternalUIBootstrapperApplication: the .msi shows the user interface", "displayName": "WixInternalUIBootstrapperApplication" }
-      ]
+    "$schema": "http://json.schemastore.org/template",
+    "author": "IsWiX",
+    "classifications": [ "WiX", "IsWiX", "Installer" ],
+    "identity": "IsWiX.Installer",
+    "name": "IsWiX Installer",
+    "shortName": "iswix-installer",
+    "description": "A Windows installation package (.msi) and, if you want one, an EXE bootstrapper bundle that uses the WiX Standard Bootstrapper Application or the WixInternalUIBootstrapperApplication.",
+    "tags": {
+        "language": "WiX",
+        "type": "project"
     },
-    "Sdk": {
-      "type": "parameter",
-      "datatype": "choice",
-      "description": "Which WiX MSBuild SDK the projects use. IsWiX.Sdk is ISWIX LLC's build of the WiX Toolset and has no Open Source Maintenance Fee; WixToolset.Sdk is the upstream WiX Toolset.",
-      "displayName": "WiX SDK",
-      "defaultValue": "iswix",
-      "choices": [
-        { "choice": "iswix", "description": "IsWiX.Sdk: no Open Source Maintenance Fee (OSMF)", "displayName": "IsWiX.Sdk" },
-        { "choice": "wixtoolset", "description": "WixToolset.Sdk: WiX v7 if you accept its OSMF EULA, otherwise WiX v5", "displayName": "WixToolset.Sdk" }
-      ]
+    "guids": [ "298D4875-B9CE-4CDC-BE4A-C3573226727E", "6F1D2A9C-4B7E-4E3A-9C55-8A2B1D0E7F34" ],
+    "sourceName": "ProductName",
+    "preferNameDirectory": true,
+    "icon": "icon.ico",
+    "symbols": {
+        "Bootstrapper": {
+            "type": "parameter",
+            "datatype": "choice",
+            "description": "Whether to also create an EXE bootstrapper (.exe) that installs the .msi, and which bootstrapper application it uses.",
+            "displayName": "EXE bootstrapper",
+            "defaultValue": "none",
+            "choices": [
+                { "choice": "none", "description": "No bootstrapper: just the Windows installer package (.msi)", "displayName": "None (MSI only)" },
+                { "choice": "standard", "description": "Standard Bootstrapper Application: the bootstrapper shows the user interface", "displayName": "Standard Bootstrapper Application" },
+                { "choice": "internalui", "description": "WixInternalUIBootstrapperApplication: the .msi shows the user interface", "displayName": "WixInternalUIBootstrapperApplication" }
+            ]
+        },
+        "Sdk": {
+            "type": "parameter",
+            "datatype": "choice",
+            "description": "Which WiX MSBuild SDK the projects use. IsWiX.Sdk is ISWIX LLC's build of the WiX Toolset and has no Open Source Maintenance Fee; WixToolset.Sdk is the upstream WiX Toolset.",
+            "displayName": "WiX SDK",
+            "defaultValue": "iswix",
+            "choices": [
+                { "choice": "iswix", "description": "IsWiX.Sdk: no Open Source Maintenance Fee (OSMF)", "displayName": "IsWiX.Sdk" },
+                { "choice": "wixtoolset", "description": "WixToolset.Sdk: WiX v7 if you accept its OSMF EULA, otherwise WiX v5", "displayName": "WixToolset.Sdk" }
+            ]
+        },
+        "AcceptEula": {
+            "type": "parameter",
+            "datatype": "bool",
+            "isEnabled": "(Sdk == \"wixtoolset\")",
+            "defaultValue": "false",
+            "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
+            "description": "Only for WixToolset.Sdk; ignored for IsWiX.Sdk. WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the projects use WiX 7.0.1 and get <AcceptEula>wix7</AcceptEula>; if you don't, they use WiX 5.0.2, which doesn't require it."
+        },
+        "wixVersion": {
+            "type": "generated",
+            "generator": "switch",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    { "condition": "(useIsWiXSdk)", "value": "7.0.1" },
+                    { "condition": "(osmfAccepted)", "value": "7.0.1" },
+                    { "condition": "(!useIsWiXSdk && !osmfAccepted)", "value": "5.0.2" }
+                ]
+            },
+            "replaces": "WIXVERSION"
+        },
+        "useIsWiXSdk": {
+            "type": "computed",
+            "value": "(Sdk == \"iswix\")"
+        },
+        "osmfAccepted": {
+            "type": "computed",
+            "value": "(Sdk == \"wixtoolset\" && AcceptEula)"
+        },
+        "wixPackagePrefix": {
+            "type": "generated",
+            "generator": "switch",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    { "condition": "(useIsWiXSdk)", "value": "IsWiX" },
+                    { "condition": "(!useIsWiXSdk)", "value": "WixToolset" }
+                ]
+            },
+            "replaces": "WIXPREFIX"
+        },
+        "wixBalPackage": {
+            "type": "generated",
+            "generator": "switch",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    { "condition": "(useIsWiXSdk)", "value": "IsWiX.BootstrapperApplications.wixext" },
+                    { "condition": "(!useIsWiXSdk)", "value": "WixToolset.Bal.wixext" }
+                ]
+            },
+            "replaces": "WIXBALPACKAGE"
+        },
+        "HostIdentifier": {
+            "type": "bind",
+            "binding": "HostIdentifier"
+        },
+        "createSolutionDirectory": {
+            "type": "bind",
+            "binding": "context:CreateSolutionDirectory",
+            "datatype": "bool",
+            "defaultValue": "false"
+        },
+        "vsOwnSolutionDirectory": {
+            "type": "computed",
+            "value": "(HostIdentifier == \"vs\" && createSolutionDirectory)"
+        },
+        "bundle": {
+            "type": "computed",
+            "value": "(Bootstrapper != \"none\")"
+        },
+        "internalUI": {
+            "type": "computed",
+            "value": "(Bootstrapper == \"internalui\")"
+        },
+        "packageUI": {
+            "type": "computed",
+            "value": "(Bootstrapper != \"standard\")"
+        },
+        "upgradeCode": {
+            "type": "generated",
+            "generator": "guid",
+            "parameters": { "defaultFormat": "D" },
+            "replaces": "00000000-0000-0000-0000-000000000003"
+        },
+        "iisCode": {
+            "type": "generated",
+            "generator": "guid",
+            "parameters": { "defaultFormat": "D" },
+            "replaces": "00000000-0000-0000-0000-000000000004"
+        }
     },
-    "AcceptEula": {
-      "type": "parameter",
-      "datatype": "bool",
-      "isEnabled": "(Sdk == \"wixtoolset\")",
-      "defaultValue": "false",
-      "displayName": "I accept the WiX Toolset v7 Open Source Maintenance Fee (OSMF) EULA",
-      "description": "Only for WixToolset.Sdk; ignored for IsWiX.Sdk. WiX Toolset v7 requires accepting its OSMF EULA (https://wixtoolset.org/osmf/). If you accept, the projects use WiX 7.0.1 and get <AcceptEula>wix7</AcceptEula>; if you don't, they use WiX 5.0.2, which doesn't require it."
-    },
-    "wixVersion": {
-      "type": "generated",
-      "generator": "switch",
-      "parameters": {
-        "evaluator": "C++",
-        "datatype": "string",
-        "cases": [
-          { "condition": "(useIsWiXSdk)", "value": "7.0.1" },
-          { "condition": "(osmfAccepted)", "value": "7.0.1" },
-          { "condition": "(!useIsWiXSdk && !osmfAccepted)", "value": "5.0.2" }
-        ]
-      },
-      "replaces": "WIXVERSION"
-    },
-    "useIsWiXSdk": {
-      "type": "computed",
-      "value": "(Sdk == \"iswix\")"
-    },
-    "osmfAccepted": {
-      "type": "computed",
-      "value": "(Sdk == \"wixtoolset\" && AcceptEula)"
-    },
-    "wixPackagePrefix": {
-      "type": "generated",
-      "generator": "switch",
-      "parameters": {
-        "evaluator": "C++",
-        "datatype": "string",
-        "cases": [
-          { "condition": "(useIsWiXSdk)", "value": "IsWiX" },
-          { "condition": "(!useIsWiXSdk)", "value": "WixToolset" }
-        ]
-      },
-      "replaces": "WIXPREFIX"
-    },
-    "wixBalPackage": {
-      "type": "generated",
-      "generator": "switch",
-      "parameters": {
-        "evaluator": "C++",
-        "datatype": "string",
-        "cases": [
-          { "condition": "(useIsWiXSdk)", "value": "IsWiX.BootstrapperApplications.wixext" },
-          { "condition": "(!useIsWiXSdk)", "value": "WixToolset.Bal.wixext" }
-        ]
-      },
-      "replaces": "WIXBALPACKAGE"
-    },
-    "HostIdentifier": {
-      "type": "bind",
-      "binding": "HostIdentifier"
-    },
-    "createSolutionDirectory": {
-      "type": "bind",
-      "binding": "context:CreateSolutionDirectory",
-      "datatype": "bool",
-      "defaultValue": "false"
-    },
-    "vsOwnSolutionDirectory": {
-      "type": "computed",
-      "value": "(HostIdentifier == \"vs\" && createSolutionDirectory)"
-    },
-    "bundle": {
-      "type": "computed",
-      "value": "(Bootstrapper != \"none\")"
-    },
-    "internalUI": {
-      "type": "computed",
-      "value": "(Bootstrapper == \"internalui\")"
-    },
-    "packageUI": {
-      "type": "computed",
-      "value": "(Bootstrapper != \"standard\")"
-    },
-    "upgradeCode": {
-      "type": "generated",
-      "generator": "guid",
-      "parameters": { "defaultFormat": "D" },
-      "replaces": "00000000-0000-0000-0000-000000000003"
-    },
-    "iisCode": {
-      "type": "generated",
-      "generator": "guid",
-      "parameters": { "defaultFormat": "D" },
-      "replaces": "00000000-0000-0000-0000-000000000004"
+    "sources": [
+        {
+            "condition": "(!vsOwnSolutionDirectory)",
+            "exclude": [ "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
+            "modifiers": [
+                { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
+                { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
+                { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
+                { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] },
+                { "condition": "(HostIdentifier == \"vs\")", "exclude": [ "Installer.sln" ] },
+                { "condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")", "rename": { "Installer.sln": "ProductName.sln" } }
+            ]
+        },
+        {
+            "condition": "(vsOwnSolutionDirectory)",
+            "target": "../",
+            "exclude": [ "Installer.sln", "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
+            "modifiers": [
+                { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
+                { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
+                { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
+                { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] }
+            ]
+        }
+    ],
+    "primaryOutputs": [
+        { "path": "ProductNamePackage/ProductNamePackage.iswixproj", "condition": "(!vsOwnSolutionDirectory)" },
+        { "path": "ProductNameBundle/ProductNameBundle.iswixproj", "condition": "(bundle && !vsOwnSolutionDirectory)" },
+        { "path": "../ProductNamePackage/ProductNamePackage.iswixproj", "condition": "(vsOwnSolutionDirectory)" },
+        { "path": "../ProductNameBundle/ProductNameBundle.iswixproj", "condition": "(bundle && vsOwnSolutionDirectory)" }
+    ],
+    "SpecialCustomOperations": {
+        "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
+        "**/*.iswixproj": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
+        "**/*.sln": { "operations": [ { "type": "conditional", "configuration": { "if": [ "#if" ], "else": [ "#else" ], "elseif": [ "#elseif" ], "endif": [ "#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] }
     }
-  },
-  "sources": [
-    {
-      "condition": "(!vsOwnSolutionDirectory)",
-      "exclude": [ "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
-      "modifiers": [
-        { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
-        { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
-        { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
-        { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] },
-        { "condition": "(HostIdentifier == \"vs\")", "exclude": [ "Installer.sln" ] },
-        { "condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")", "rename": { "Installer.sln": "ProductName.sln" } }
-      ]
-    },
-    {
-      "condition": "(vsOwnSolutionDirectory)",
-      "target": "../",
-      "exclude": [ "Installer.sln", "**/.vs/**", "**/[Bb]in/**", "**/[Oo]bj/**", "**/.template.config/**", "**/*.filelist", "**/*.user", "**/*.lock.json" ],
-      "modifiers": [
-        { "condition": "(!bundle)", "exclude": [ "ProductNameBundle/**" ] },
-        { "condition": "(!packageUI)", "exclude": [ "ProductNamePackage/Resources/**" ] },
-        { "condition": "(bundle && !internalUI)", "exclude": [ "ProductNameBundle/Resources/iuipreq.*", "ProductNameBundle/Resources/splash.bmp" ] },
-        { "condition": "(bundle && internalUI)", "exclude": [ "ProductNameBundle/Resources/RtfTheme.*" ] }
-      ]
-    }
-  ],
-  "primaryOutputs": [
-    { "path": "ProductNamePackage/ProductNamePackage.iswixproj", "condition": "(!vsOwnSolutionDirectory)" },
-    { "path": "ProductNameBundle/ProductNameBundle.iswixproj", "condition": "(bundle && !vsOwnSolutionDirectory)" },
-    { "path": "../ProductNamePackage/ProductNamePackage.iswixproj", "condition": "(vsOwnSolutionDirectory)" },
-    { "path": "../ProductNameBundle/ProductNameBundle.iswixproj", "condition": "(bundle && vsOwnSolutionDirectory)" }
-  ],
-  "SpecialCustomOperations": {
-    "**/*.wxs": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
-    "**/*.iswixproj": { "operations": [ { "type": "conditional", "configuration": { "if": [ "<!--#if" ], "else": [ "<!--#else" ], "elseif": [ "<!--#elseif" ], "endif": [ "<!--#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] },
-    "**/*.sln": { "operations": [ { "type": "conditional", "configuration": { "if": [ "#if" ], "else": [ "#else" ], "elseif": [ "#elseif" ], "endif": [ "#endif" ], "trim": true, "wholeLine": true, "evaluator": "C++" } } ] }
-  }
 }
