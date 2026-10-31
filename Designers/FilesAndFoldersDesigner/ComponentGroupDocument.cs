@@ -340,7 +340,8 @@ namespace FilesAndFoldersDesigner
                 {
                     var component = (Wxs.Component)fileElement.Parent!;
                     fileElement.RemoveFromParent();
-                    if (!component.Xml.HasElements)
+                    // A component with no files left is dropped whole.
+                    if (!component.Xml.Elements(Wxs.File.ElementName).Any())
                     {
                         component.RemoveFromParent();
                     }
